@@ -1,0 +1,151 @@
+<config baseURL="resources/">
+
+	<scene baseURL="map/" name="propmap" propmap="map.bin" dynamics="Door">
+		<proplibs baseURL="library2/">
+			<proplib url="builds/" priority="2"/>
+			<proplib url="landscape/" priority="1"/>
+			<proplib url="hangar/" priority="0"/>
+		</proplibs>
+	</scene>
+
+	<scene name="skybox">
+		<skybox baseURL="bitmaps/">
+			<bitmap url="skybox/01.jpg"/>
+			<bitmap url="skybox/02.jpg"/>
+			<bitmap url="skybox/03.jpg"/>
+			<bitmap url="skybox/04.jpg"/>
+			<bitmap url="skybox/05.jpg"/>
+			<bitmap url="skybox/06.jpg"/>
+		</skybox>
+	</scene>
+
+	<scene name="tutorial">
+		<bitmaps baseURL="bitmaps/">
+			<bitmap id="green" url="player.png"/>
+			<bitmap id="arrow" url="arrow.gif"/>
+			<bitmap id="shadow" url="shadow.gif"/>
+		</bitmaps>
+	</scene>
+
+	<scene name="viking">
+		<hulls baseURL="hulls/">
+			<hull id="viking"
+				  health="400" mass="3016" damping="2000"
+				  speed="769" acceleration="1390" reverseAcceleration="1558" sideAcceleration="1542"
+				  turnSpeed="77.1" turnAcceleration="147.1" reverseTurnAcceleration="214.2"
+				  url="viking.3dz" lightmap="viking.jpg" details="viking.bin"/>
+		</hulls>
+	</scene>
+
+	<scene name="thunder">
+		<turrets baseURL="turrets/">
+			<turret id="thunder" damage="390" maxTurnSpeed="1.6" turnAcceleration="2.25" url="thunder.3dz"
+					lightmap="thunder_low.jpg"
+					details="thunder.bin"/>
+		</turrets>
+	</scene>
+
+	<scene name="tank_death">
+		<effects baseURL="effects/">
+			<effect id="tank_explosion/shockwave" url="shock_wave.bin" frameWidth="128" frameHeight="128"/>
+			<effect id="tank_explosion/explosion" url="explosion.bin" frameWidth="170" frameHeight="170"/>
+			<effect id="tank_explosion/smoke" url="smoke.bin" frameWidth="64" frameHeight="64"/>
+			<effect id="smoky_explosion" url="TH_M3.bin" frameWidth="170" frameHeight="170"/>
+		</effects>
+		<bitmaps baseURL="bitmaps/">
+			<bitmap id="dead" url="dead.jpg"/>
+			<bitmap id="smoky_shot" url="shot_m3.bin"/>
+		</bitmaps>
+	</scene>
+
+	<scene name="enemy">
+		<bitmaps baseURL="bitmaps/">
+			<bitmap id="target_pointer" url="target_pointer.gif"/>
+			<bitmap id="red" url="red.png"/>
+			<bitmap id="blue" url="blue.gif"/>
+		</bitmaps>
+	</scene>
+
+	<scene name="bonuses">
+		<bitmaps baseURL="bitmaps/">
+			<bitmap id="cords" url="cords.gif"/>
+		</bitmaps>
+		<meshes baseURL="meshes/">
+			<mesh id="parachute" url="parachute.3ds" texture="para.jpg"/>
+			<mesh id="parachute_inner" url="parachute_inner.3ds" texture="para.jpg"/>
+			<mesh id="med" url="box_med.3ds" texture="box_med.jpg"/>
+			<mesh id="crystal" url="box_med.3ds" texture="box_crystal.jpg"/>
+		</meshes>
+	</scene>
+
+	<scene name="hornet">
+		<hulls baseURL="hulls/">
+			<hull id="hornet"
+				  health="200" mass="1791" damping="1250"
+				  speed="1400" acceleration="1214" reverseAcceleration="2156" sideAcceleration="1128"
+				  turnSpeed="110.1" turnAcceleration="166.6" reverseTurnAcceleration="278.8"
+				  url="hornet.3dz" lightmap="hornet.jpg" details="hornet.bin"/>
+		</hulls>
+	</scene>
+
+	<scene name="sounds">
+		<sounds baseURL="sounds/">
+			<sound id="engine_idle" url="engineidle.swf"/>
+			<sound id="engine_start" url="startmoving.swf"/>
+			<sound id="engine_moving" url="move.swf"/>
+			<sound id="engine_turret" url="turret.swf"/>
+			<sound id="bonus" url="bonus.swf"/>
+			<sound id="checkpoint" url="checkpoint.swf"/>
+			<sound id="smoky_shot" url="thunder_shot.swf"/>
+			<sound id="smoky_explosion" url="thunder_fire.swf"/>
+			<sound id="tank_explosion" url="tank_death.swf"/>
+			<sound id="plasma_shot" url="plazma_shot.swf"/>
+			<sound id="flame" url="flamethrower.swf"/>
+		</sounds>
+	</scene>
+
+	<scene name="mammoth">
+		<hulls baseURL="hulls/">
+			<hull id="mammoth"
+				  health="800" mass="5188" damping="2000"
+				  speed="519" acceleration="922" reverseAcceleration="922" sideAcceleration="1922"
+				  turnSpeed="33.5" turnAcceleration="95.3" reverseTurnAcceleration="95.3"
+				  url="mammoth.3dz" lightmap="mammoth_low.jpg" details="mammoth.bin"/>
+		</hulls>
+		<bitmaps baseURL="bitmaps/">
+			<bitmap id="black" url="black.jpg"/>
+		</bitmaps>
+	</scene>
+
+	<scene name="twins">
+		<turrets baseURL="turrets/">
+			<turret id="twins" damage="50" maxTurnSpeed="2.1" turnAcceleration="3.5" url="twins.3dz"
+					lightmap="twins_low.jpg" details="twins.bin"/>
+		</turrets>
+		<effects baseURL="effects/">
+			<effect id="plasma" url="shot.bin" frameWidth="128" frameHeight="128" numFrames="10"/>
+			<effect id="plasma_exp" url="twins_explosion.bin" frameWidth="256" frameHeight="256" numFrames="12"/>
+		</effects>
+	</scene>
+
+	<scene name="flamethrower">
+		<turrets baseURL="turrets/">
+			<turret id="flamethrower" damage="300" url="firebird.3dz" maxTurnSpeed="3" turnAcceleration="4"
+					lightmap="firebird_low.jpg" details="firebird.bin"/>
+		</turrets>
+		<effects baseURL="effects/">
+			<effect id="flame" url="fireball.bin" frameWidth="64" frameHeight="64" numFrames="51"/>
+			<effect id="flame_muzzle" url="FBZm3.bin" frameWidth="256" frameHeight="51"/>
+		</effects>
+	</scene>
+
+	<scene name="finish">
+		<movies baseURL="movies/">
+			<movie id="finish" url="finish.swf"/>
+		</movies>
+		<fonts baseURL="fonts/">
+			<font id="Quadrat" url="font.swf"/>
+		</fonts>
+	</scene>
+	<scripts url="scripts.xml"/>
+</config>

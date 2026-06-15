@@ -1,0 +1,38 @@
+{
+	"config": "air",
+	"compilerOptions": {
+		"source-path": [
+			"."
+		],
+		"output": "bin/tutorial.swf",
+		"default-background-color": "#000000",
+		"default-frame-rate": 60,
+		"default-size": {
+			"width": 1200,
+			"height": 700
+		},
+		"swf-version": 17
+	},
+	"airOptions": {
+		"files": [
+			{
+				"file": "../../resources/resources",
+				"path": "resources"
+			},
+			{
+				"file": "../../resources/config.xml",
+				"path": "config.xml"
+			},
+			{
+				"file": "../../resources/scripts.xml",
+				"path": "scripts.xml"
+			},
+			{
+				"file": "../../resources/hardware.swf",
+				"path": "hardware.swf"
+			}
+		]
+	},
+	"mainClass": "TutorialLoader",
+	"application": "TutorialLoader-app.xml"
+}
