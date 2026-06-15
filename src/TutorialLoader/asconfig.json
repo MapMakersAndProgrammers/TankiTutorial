@@ -2,7 +2,8 @@
 	"config": "air",
 	"compilerOptions": {
 		"source-path": [
-			"."
+			".",
+			"../../external/BulkLoader/src"
 		],
 		"output": "bin/tutorial.swf",
 		"default-background-color": "#000000",

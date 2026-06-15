@@ -1,0 +1,3 @@
+[submodule "external/BulkLoader"]
+	path = external/BulkLoader
+	url = https://github.com/arthur-debert/BulkLoader
