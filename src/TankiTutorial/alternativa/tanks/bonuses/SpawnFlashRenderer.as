@@ -18,7 +18,7 @@ package alternativa.tanks.bonuses
       
       private var fur:AnimatedColorTransform = new AnimatedColorTransform();
       
-      private var zeg:KeyFrameAnimation = new KeyFrameAnimation(cyn,this.fur);
+      private var zeg:KeyFrameAnimation = new KeyFrameAnimation(cyn,fur);
       
       private var nasybugo:BattleBonus;
       

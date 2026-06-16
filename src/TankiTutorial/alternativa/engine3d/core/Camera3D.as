@@ -238,7 +238,7 @@ package alternativa.engine3d.core
       
       private var debugSet:Object = new Object();
       
-      private var _diagram:Sprite = this.createDiagram();
+      private var _diagram:Sprite = createDiagram();
       
       public var fpsUpdatePeriod:int = 10;
       
@@ -288,11 +288,11 @@ package alternativa.engine3d.core
       
       private var firstWrapper:Wrapper = new Wrapper();
       
-      alternativa3d var lastWrapper:Wrapper = this.firstWrapper;
+      alternativa3d var lastWrapper:Wrapper = firstWrapper;
       
-      alternativa3d var lastVertex:Vertex = this.firstVertex;
+      alternativa3d var lastVertex:Vertex = firstVertex;
       
-      alternativa3d var lastFace:Face = this.firstFace;
+      alternativa3d var lastFace:Face = firstFace;
       
       public function Camera3D()
       {

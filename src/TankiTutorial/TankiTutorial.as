@@ -29,6 +29,7 @@ package
       
       private function onAddedToStage(param1:Event) : void
       {
+         trace("added to stage");
          removeEventListener(Event.ADDED_TO_STAGE,this.onAddedToStage);
          stage.scaleMode = StageScaleMode.NO_SCALE;
          stage.align = StageAlign.TOP_LEFT;

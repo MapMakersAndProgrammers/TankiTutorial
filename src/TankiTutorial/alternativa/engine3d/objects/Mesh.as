@@ -1091,13 +1091,464 @@ package alternativa.engine3d.objects
       
       public function weldFaces(angleThreshold:Number = 0, uvThreshold:Number = 0, convexThreshold:Number = 0, pairWeld:Boolean = false) : void
       {
-         /*
-          * Decompilation error
-          * Code may be obfuscated
-          * Tip: You can try enabling "Deobfuscate code" option in Settings
-          * Error type: ArrayIndexOutOfBoundsException (Index 4 out of bounds for length 4)
-          */
-         throw new IllegalOperationError("Not decompiled due to error");
+         var _loc5_:int = 0;
+         var _loc6_:int = 0;
+         var _loc7_:* = undefined;
+         var _loc8_:Face = null;
+         var _loc9_:Face = null;
+         var _loc10_:Face = null;
+         var _loc11_:Wrapper = null;
+         var _loc12_:Wrapper = null;
+         var _loc13_:Wrapper = null;
+         var _loc14_:Wrapper = null;
+         var _loc15_:Wrapper = null;
+         var _loc16_:Wrapper = null;
+         var _loc17_:Wrapper = null;
+         var _loc18_:Wrapper = null;
+         var _loc19_:Vertex = null;
+         var _loc20_:Vertex = null;
+         var _loc21_:Vertex = null;
+         var _loc22_:Vertex = null;
+         var _loc23_:Number = NaN;
+         var _loc24_:Number = NaN;
+         var _loc25_:Number = NaN;
+         var _loc26_:Number = NaN;
+         var _loc27_:Number = NaN;
+         var _loc28_:Number = NaN;
+         var _loc29_:Number = NaN;
+         var _loc30_:Number = NaN;
+         var _loc31_:Number = NaN;
+         var _loc32_:Number = NaN;
+         var _loc33_:Number = NaN;
+         var _loc34_:Number = NaN;
+         var _loc35_:Number = NaN;
+         var _loc36_:Number = NaN;
+         var _loc37_:Dictionary = null;
+         var _loc44_:int = 0;
+         var _loc45_:Number = NaN;
+         var _loc46_:Number = NaN;
+         var _loc47_:Number = NaN;
+         var _loc48_:Number = NaN;
+         var _loc49_:Number = NaN;
+         var _loc50_:Number = NaN;
+         var _loc51_:Number = NaN;
+         var _loc52_:Number = NaN;
+         var _loc53_:Number = NaN;
+         var _loc54_:Number = NaN;
+         var _loc55_:Number = NaN;
+         var _loc56_:Number = NaN;
+         var _loc57_:Number = NaN;
+         var _loc58_:Number = NaN;
+         var _loc59_:Number = NaN;
+         var _loc60_:Number = NaN;
+         var _loc61_:Number = NaN;
+         var _loc62_:Number = NaN;
+         var _loc63_:Number = NaN;
+         var _loc64_:Boolean = false;
+         var _loc65_:Face = null;
+         this.deleteResources();
+         var _loc38_:Number = 0.001;
+         angleThreshold = Math.cos(angleThreshold) - _loc38_;
+         uvThreshold += _loc38_;
+         convexThreshold = Math.cos(Math.PI - convexThreshold) - _loc38_;
+         var _loc39_:Dictionary = new Dictionary();
+         var _loc40_:Dictionary = new Dictionary();
+         _loc9_ = this.faceList;
+         while(_loc9_ != null)
+         {
+            _loc10_ = _loc9_.next;
+            _loc9_.next = null;
+            _loc20_ = _loc9_.wrapper.vertex;
+            _loc21_ = _loc9_.wrapper.next.vertex;
+            _loc22_ = _loc9_.wrapper.next.next.vertex;
+            _loc23_ = _loc21_.x - _loc20_.x;
+            _loc24_ = _loc21_.y - _loc20_.y;
+            _loc25_ = _loc21_.z - _loc20_.z;
+            _loc28_ = _loc22_.x - _loc20_.x;
+            _loc29_ = _loc22_.y - _loc20_.y;
+            _loc30_ = _loc22_.z - _loc20_.z;
+            _loc33_ = _loc30_ * _loc24_ - _loc29_ * _loc25_;
+            _loc34_ = _loc28_ * _loc25_ - _loc30_ * _loc23_;
+            _loc35_ = _loc29_ * _loc23_ - _loc28_ * _loc24_;
+            _loc36_ = _loc33_ * _loc33_ + _loc34_ * _loc34_ + _loc35_ * _loc35_;
+            if(_loc36_ > _loc38_)
+            {
+               _loc36_ = 1 / Math.sqrt(_loc36_);
+               _loc33_ *= _loc36_;
+               _loc34_ *= _loc36_;
+               _loc35_ *= _loc36_;
+               _loc9_.normalX = _loc33_;
+               _loc9_.normalY = _loc34_;
+               _loc9_.normalZ = _loc35_;
+               _loc9_.offset = _loc20_.x * _loc33_ + _loc20_.y * _loc34_ + _loc20_.z * _loc35_;
+               _loc39_[_loc9_] = true;
+               _loc15_ = _loc9_.wrapper;
+               while(_loc15_ != null)
+               {
+                  _loc19_ = _loc15_.vertex;
+                  _loc37_ = _loc40_[_loc19_];
+                  if(_loc37_ == null)
+                  {
+                     _loc37_ = new Dictionary();
+                     _loc40_[_loc19_] = _loc37_;
+                  }
+                  _loc37_[_loc9_] = true;
+                  _loc15_ = _loc15_.next;
+               }
+            }
+            _loc9_ = _loc10_;
+         }
+         this.faceList = null;
+         var _loc41_:Vector.<Face> = new Vector.<Face>();
+         var _loc42_:Dictionary = new Dictionary();
+         var _loc43_:Dictionary = new Dictionary();
+         while(true)
+         {
+            _loc9_ = null;
+            var _loc66_:int = 0;
+            var _loc67_:* = _loc39_;
+            for(_loc7_ in _loc67_)
+            {
+               _loc9_ = _loc7_;
+               delete _loc39_[_loc7_];
+            }
+            if(_loc9_ == null)
+            {
+               break;
+            }
+            _loc44_ = 0;
+            _loc41_[_loc44_] = _loc9_;
+            _loc44_++;
+            _loc20_ = _loc9_.wrapper.vertex;
+            _loc21_ = _loc9_.wrapper.next.vertex;
+            _loc22_ = _loc9_.wrapper.next.next.vertex;
+            _loc23_ = _loc21_.x - _loc20_.x;
+            _loc24_ = _loc21_.y - _loc20_.y;
+            _loc25_ = _loc21_.z - _loc20_.z;
+            _loc26_ = _loc21_.u - _loc20_.u;
+            _loc27_ = _loc21_.v - _loc20_.v;
+            _loc28_ = _loc22_.x - _loc20_.x;
+            _loc29_ = _loc22_.y - _loc20_.y;
+            _loc30_ = _loc22_.z - _loc20_.z;
+            _loc31_ = _loc22_.u - _loc20_.u;
+            _loc32_ = _loc22_.v - _loc20_.v;
+            _loc33_ = _loc9_.normalX;
+            _loc34_ = _loc9_.normalY;
+            _loc35_ = _loc9_.normalZ;
+            _loc45_ = -_loc33_ * _loc29_ * _loc25_ + _loc28_ * _loc34_ * _loc25_ + _loc33_ * _loc24_ * _loc30_ - _loc23_ * _loc34_ * _loc30_ - _loc28_ * _loc24_ * _loc35_ + _loc23_ * _loc29_ * _loc35_;
+            _loc46_ = (-_loc34_ * _loc30_ + _loc29_ * _loc35_) / _loc45_;
+            _loc47_ = (_loc33_ * _loc30_ - _loc28_ * _loc35_) / _loc45_;
+            _loc48_ = (-_loc33_ * _loc29_ + _loc28_ * _loc34_) / _loc45_;
+            _loc49_ = (_loc20_.x * _loc34_ * _loc30_ - _loc33_ * _loc20_.y * _loc30_ - _loc20_.x * _loc29_ * _loc35_ + _loc28_ * _loc20_.y * _loc35_ + _loc33_ * _loc29_ * _loc20_.z - _loc28_ * _loc34_ * _loc20_.z) / _loc45_;
+            _loc50_ = (_loc34_ * _loc25_ - _loc24_ * _loc35_) / _loc45_;
+            _loc51_ = (-_loc33_ * _loc25_ + _loc23_ * _loc35_) / _loc45_;
+            _loc52_ = (_loc33_ * _loc24_ - _loc23_ * _loc34_) / _loc45_;
+            _loc53_ = (_loc33_ * _loc20_.y * _loc25_ - _loc20_.x * _loc34_ * _loc25_ + _loc20_.x * _loc24_ * _loc35_ - _loc23_ * _loc20_.y * _loc35_ - _loc33_ * _loc24_ * _loc20_.z + _loc23_ * _loc34_ * _loc20_.z) / _loc45_;
+            _loc54_ = _loc26_ * _loc46_ + _loc31_ * _loc50_;
+            _loc55_ = _loc26_ * _loc47_ + _loc31_ * _loc51_;
+            _loc56_ = _loc26_ * _loc48_ + _loc31_ * _loc52_;
+            _loc57_ = _loc26_ * _loc49_ + _loc31_ * _loc53_ + _loc20_.u;
+            _loc58_ = _loc27_ * _loc46_ + _loc32_ * _loc50_;
+            _loc59_ = _loc27_ * _loc47_ + _loc32_ * _loc51_;
+            _loc60_ = _loc27_ * _loc48_ + _loc32_ * _loc52_;
+            _loc61_ = _loc27_ * _loc49_ + _loc32_ * _loc53_ + _loc20_.v;
+            for(_loc7_ in _loc43_)
+            {
+               delete _loc43_[_loc7_];
+            }
+            _loc5_ = 0;
+            while(_loc5_ < _loc44_)
+            {
+               _loc9_ = _loc41_[_loc5_];
+               for(_loc7_ in _loc42_)
+               {
+                  delete _loc42_[_loc7_];
+               }
+               _loc13_ = _loc9_.wrapper;
+               while(_loc13_ != null)
+               {
+                  for(_loc7_ in _loc40_[_loc13_.vertex])
+                  {
+                     if(Boolean(_loc39_[_loc7_]) && !_loc43_[_loc7_])
+                     {
+                        _loc42_[_loc7_] = true;
+                     }
+                  }
+                  _loc13_ = _loc13_.next;
+               }
+               for(_loc7_ in _loc42_)
+               {
+                  _loc8_ = _loc7_;
+                  if(_loc33_ * _loc8_.normalX + _loc34_ * _loc8_.normalY + _loc35_ * _loc8_.normalZ >= angleThreshold)
+                  {
+                     _loc14_ = _loc8_.wrapper;
+                     while(_loc14_ != null)
+                     {
+                        _loc19_ = _loc14_.vertex;
+                        _loc62_ = _loc54_ * _loc19_.x + _loc55_ * _loc19_.y + _loc56_ * _loc19_.z + _loc57_ - _loc19_.u;
+                        _loc63_ = _loc58_ * _loc19_.x + _loc59_ * _loc19_.y + _loc60_ * _loc19_.z + _loc61_ - _loc19_.v;
+                        if(_loc62_ > uvThreshold || _loc62_ < -uvThreshold || _loc63_ > uvThreshold || _loc63_ < -uvThreshold)
+                        {
+                           break;
+                        }
+                        _loc14_ = _loc14_.next;
+                     }
+                     if(_loc14_ == null)
+                     {
+                        _loc13_ = _loc9_.wrapper;
+                        while(_loc13_ != null)
+                        {
+                           _loc15_ = _loc13_.next != null ? _loc13_.next : _loc9_.wrapper;
+                           _loc14_ = _loc8_.wrapper;
+                           while(_loc14_ != null)
+                           {
+                              _loc16_ = _loc14_.next != null ? _loc14_.next : _loc8_.wrapper;
+                              if(_loc13_.vertex == _loc16_.vertex && _loc15_.vertex == _loc14_.vertex)
+                              {
+                                 break;
+                              }
+                              _loc14_ = _loc14_.next;
+                           }
+                           if(_loc14_ != null)
+                           {
+                              break;
+                           }
+                           _loc13_ = _loc13_.next;
+                        }
+                        if(_loc13_ != null)
+                        {
+                           _loc41_[_loc44_] = _loc8_;
+                           _loc44_++;
+                           delete _loc39_[_loc8_];
+                        }
+                     }
+                     else
+                     {
+                        _loc43_[_loc8_] = true;
+                     }
+                  }
+                  else
+                  {
+                     _loc43_[_loc8_] = true;
+                  }
+               }
+               _loc5_++;
+            }
+            if(_loc44_ == 1)
+            {
+               _loc9_ = _loc41_[0];
+               _loc9_.next = this.faceList;
+               this.faceList = _loc9_;
+            }
+            else
+            {
+               while(true)
+               {
+                  _loc64_ = false;
+                  _loc5_ = 0;
+                  while(_loc5_ < _loc44_ - 1)
+                  {
+                     _loc9_ = _loc41_[_loc5_];
+                     if(_loc9_ != null)
+                     {
+                        _loc6_ = 1;
+                        for(; _loc6_ < _loc44_; _loc6_++)
+                        {
+                           _loc8_ = _loc41_[_loc6_];
+                           if(_loc8_ != null)
+                           {
+                              _loc13_ = _loc9_.wrapper;
+                              while(_loc13_ != null)
+                              {
+                                 _loc15_ = _loc13_.next != null ? _loc13_.next : _loc9_.wrapper;
+                                 _loc14_ = _loc8_.wrapper;
+                                 while(_loc14_ != null)
+                                 {
+                                    _loc16_ = _loc14_.next != null ? _loc14_.next : _loc8_.wrapper;
+                                    if(_loc13_.vertex == _loc16_.vertex && _loc15_.vertex == _loc14_.vertex)
+                                    {
+                                       break;
+                                    }
+                                    _loc14_ = _loc14_.next;
+                                 }
+                                 if(_loc14_ != null)
+                                 {
+                                    break;
+                                 }
+                                 _loc13_ = _loc13_.next;
+                              }
+                              if(_loc13_ != null)
+                              {
+                                 while(true)
+                                 {
+                                    _loc17_ = _loc15_.next != null ? _loc15_.next : _loc9_.wrapper;
+                                    _loc12_ = _loc8_.wrapper;
+                                    while(_loc12_.next != _loc14_ && _loc12_.next != null)
+                                    {
+                                       _loc12_ = _loc12_.next;
+                                    }
+                                    if(_loc17_.vertex != _loc12_.vertex)
+                                    {
+                                       break;
+                                    }
+                                    _loc15_ = _loc17_;
+                                    _loc14_ = _loc12_;
+                                 }
+                                 while(true)
+                                 {
+                                    _loc11_ = _loc9_.wrapper;
+                                    while(_loc11_.next != _loc13_ && _loc11_.next != null)
+                                    {
+                                       _loc11_ = _loc11_.next;
+                                    }
+                                    _loc18_ = _loc16_.next != null ? _loc16_.next : _loc8_.wrapper;
+                                    if(_loc11_.vertex != _loc18_.vertex)
+                                    {
+                                       break;
+                                    }
+                                    _loc13_ = _loc11_;
+                                    _loc16_ = _loc18_;
+                                 }
+                                 _loc20_ = _loc13_.vertex;
+                                 _loc21_ = _loc18_.vertex;
+                                 _loc22_ = _loc11_.vertex;
+                                 _loc23_ = _loc21_.x - _loc20_.x;
+                                 _loc24_ = _loc21_.y - _loc20_.y;
+                                 _loc25_ = _loc21_.z - _loc20_.z;
+                                 _loc28_ = _loc22_.x - _loc20_.x;
+                                 _loc29_ = _loc22_.y - _loc20_.y;
+                                 _loc30_ = _loc22_.z - _loc20_.z;
+                                 _loc33_ = _loc30_ * _loc24_ - _loc29_ * _loc25_;
+                                 _loc34_ = _loc28_ * _loc25_ - _loc30_ * _loc23_;
+                                 _loc35_ = _loc29_ * _loc23_ - _loc28_ * _loc24_;
+                                 if(_loc33_ < _loc38_ && _loc33_ > -_loc38_ && _loc34_ < _loc38_ && _loc34_ > -_loc38_ && _loc35_ < _loc38_ && _loc35_ > -_loc38_)
+                                 {
+                                    if(_loc23_ * _loc28_ + _loc24_ * _loc29_ + _loc25_ * _loc30_ > 0)
+                                    {
+                                       continue;
+                                    }
+                                 }
+                                 else if(_loc9_.normalX * _loc33_ + _loc9_.normalY * _loc34_ + _loc9_.normalZ * _loc35_ < 0)
+                                 {
+                                    continue;
+                                 }
+                                 _loc36_ = 1 / Math.sqrt(_loc23_ * _loc23_ + _loc24_ * _loc24_ + _loc25_ * _loc25_);
+                                 _loc23_ *= _loc36_;
+                                 _loc24_ *= _loc36_;
+                                 _loc25_ *= _loc36_;
+                                 _loc36_ = 1 / Math.sqrt(_loc28_ * _loc28_ + _loc29_ * _loc29_ + _loc30_ * _loc30_);
+                                 _loc28_ *= _loc36_;
+                                 _loc29_ *= _loc36_;
+                                 _loc30_ *= _loc36_;
+                                 if(_loc23_ * _loc28_ + _loc24_ * _loc29_ + _loc25_ * _loc30_ >= convexThreshold)
+                                 {
+                                    _loc20_ = _loc14_.vertex;
+                                    _loc21_ = _loc17_.vertex;
+                                    _loc22_ = _loc12_.vertex;
+                                    _loc23_ = _loc21_.x - _loc20_.x;
+                                    _loc24_ = _loc21_.y - _loc20_.y;
+                                    _loc25_ = _loc21_.z - _loc20_.z;
+                                    _loc28_ = _loc22_.x - _loc20_.x;
+                                    _loc29_ = _loc22_.y - _loc20_.y;
+                                    _loc30_ = _loc22_.z - _loc20_.z;
+                                    _loc33_ = _loc30_ * _loc24_ - _loc29_ * _loc25_;
+                                    _loc34_ = _loc28_ * _loc25_ - _loc30_ * _loc23_;
+                                    _loc35_ = _loc29_ * _loc23_ - _loc28_ * _loc24_;
+                                    if(_loc33_ < _loc38_ && _loc33_ > -_loc38_ && _loc34_ < _loc38_ && _loc34_ > -_loc38_ && _loc35_ < _loc38_ && _loc35_ > -_loc38_)
+                                    {
+                                       if(_loc23_ * _loc28_ + _loc24_ * _loc29_ + _loc25_ * _loc30_ > 0)
+                                       {
+                                          continue;
+                                       }
+                                    }
+                                    else if(_loc9_.normalX * _loc33_ + _loc9_.normalY * _loc34_ + _loc9_.normalZ * _loc35_ < 0)
+                                    {
+                                       continue;
+                                    }
+                                    _loc36_ = 1 / Math.sqrt(_loc23_ * _loc23_ + _loc24_ * _loc24_ + _loc25_ * _loc25_);
+                                    _loc23_ *= _loc36_;
+                                    _loc24_ *= _loc36_;
+                                    _loc25_ *= _loc36_;
+                                    _loc36_ = 1 / Math.sqrt(_loc28_ * _loc28_ + _loc29_ * _loc29_ + _loc30_ * _loc30_);
+                                    _loc28_ *= _loc36_;
+                                    _loc29_ *= _loc36_;
+                                    _loc30_ *= _loc36_;
+                                    if(_loc23_ * _loc28_ + _loc24_ * _loc29_ + _loc25_ * _loc30_ >= convexThreshold)
+                                    {
+                                       _loc64_ = true;
+                                       _loc65_ = new Face();
+                                       _loc65_.material = _loc9_.material;
+                                       _loc65_.smoothingGroups = _loc9_.smoothingGroups;
+                                       _loc65_.normalX = _loc9_.normalX;
+                                       _loc65_.normalY = _loc9_.normalY;
+                                       _loc65_.normalZ = _loc9_.normalZ;
+                                       _loc65_.offset = _loc9_.offset;
+                                       _loc65_.id = _loc9_.id;
+                                       _loc17_ = null;
+                                       while(_loc15_ != _loc13_)
+                                       {
+                                          _loc18_ = new Wrapper();
+                                          _loc18_.vertex = _loc15_.vertex;
+                                          if(_loc17_ != null)
+                                          {
+                                             _loc17_.next = _loc18_;
+                                          }
+                                          else
+                                          {
+                                             _loc65_.wrapper = _loc18_;
+                                          }
+                                          _loc17_ = _loc18_;
+                                          _loc15_ = _loc15_.next != null ? _loc15_.next : _loc9_.wrapper;
+                                       }
+                                       while(_loc16_ != _loc14_)
+                                       {
+                                          _loc18_ = new Wrapper();
+                                          _loc18_.vertex = _loc16_.vertex;
+                                          if(_loc17_ != null)
+                                          {
+                                             _loc17_.next = _loc18_;
+                                          }
+                                          else
+                                          {
+                                             _loc65_.wrapper = _loc18_;
+                                          }
+                                          _loc17_ = _loc18_;
+                                          _loc16_ = _loc16_.next != null ? _loc16_.next : _loc8_.wrapper;
+                                       }
+                                       _loc41_[_loc5_] = _loc65_;
+                                       _loc41_[_loc6_] = null;
+                                       _loc9_ = _loc65_;
+                                       if(pairWeld)
+                                       {
+                                          break;
+                                       }
+                                    }
+                                 }
+                              }
+                           }
+                        }
+                     }
+                     _loc5_++;
+                  }
+                  if(!_loc64_)
+                  {
+                     break;
+                  }
+               }
+               _loc5_ = 0;
+               while(_loc5_ < _loc44_)
+               {
+                  _loc9_ = _loc41_[_loc5_];
+                  if(_loc9_ != null)
+                  {
+                     _loc9_.calculateBestSequenceAndNormal();
+                     _loc9_.next = this.faceList;
+                     this.faceList = _loc9_;
+                  }
+                  _loc5_++;
+               }
+            }
+         }
       }
       
       private function group(verts:Vector.<Vertex>, begin:int, end:int, depth:int, distanceThreshold:Number, uvThreshold:Number, stack:Vector.<int>) : void
