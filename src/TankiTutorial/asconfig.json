@@ -1,0 +1,18 @@
+{
+	"config": "flex",
+	"compilerOptions": {
+		"source-path": [
+			".",
+			"../../external/BulkLoader/src"
+		],
+		"output": "bin/hardware.swf",
+		"default-background-color": "#1B1B19",
+		"default-frame-rate": 60,
+		"default-size": {
+			"width": 900,
+			"height": 700
+		},
+		"swf-version": 17
+	},
+	"mainClass": "TankiTutorial"
+}
