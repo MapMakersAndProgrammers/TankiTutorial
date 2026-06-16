@@ -74,7 +74,7 @@ package zimeko
          var _loc3_:dovabaf = null;
          for each(_loc3_ in param1)
          {
-            _loc3_.pakewewo = this.kobet;
+            _loc3_.body = this.kobet;
          }
          this.nyseh.hoc(param1,param2);
       }
@@ -146,7 +146,7 @@ package zimeko
          var _loc3_:int = 0;
          var _loc4_:int = 0;
          var _loc5_:hah = null;
-         if(!param1.pakewewo.vowymov)
+         if(!param1.body.vowymov)
          {
             _loc3_ = int(param1.kodasy.length);
             _loc4_ = 0;
@@ -157,8 +157,8 @@ package zimeko
             }
             if(this.pupicic.length > 0)
             {
-               _loc5_ = hah.leqame();
-               _loc5_.rukowicyp = param1.pakewewo;
+               _loc5_ = hah.create();
+               _loc5_.rukowicyp = param1.body;
                _loc5_.zata = this.kobet;
                _loc5_.zuqy(this.pupicic);
                this.pupicic.length = 0;
@@ -183,19 +183,19 @@ package zimeko
          while(_loc5_ < _loc4_)
          {
             _loc6_ = this.cubajedid[_loc5_];
-            _loc7_ = param1.pakewewo;
-            _loc8_ = _loc6_.pakewewo;
+            _loc7_ = param1.body;
+            _loc8_ = _loc6_.body;
             if(!(Boolean(_loc7_.vowymov) && Boolean(_loc8_.vowymov)) && Boolean(_loc7_.raruluk.hoguqatec(_loc8_.raruluk,luculeqa)))
             {
                this.pabegyqo(param1.kyripama,_loc6_.kyripama,this.pupicic);
                _loc9_ = int(this.pupicic.length);
                if(_loc9_ > 0)
                {
-                  _loc10_ = _loc7_.fosa == null || Boolean(_loc7_.fosa.vyreha(_loc7_,_loc8_));
-                  _loc11_ = _loc8_.fosa == null || Boolean(_loc8_.fosa.vyreha(_loc8_,_loc7_));
+                  _loc10_ = _loc7_.fosa == null || Boolean(_loc7_.fosa.considerBodies(_loc7_,_loc8_));
+                  _loc11_ = _loc8_.fosa == null || Boolean(_loc8_.fosa.considerBodies(_loc8_,_loc7_));
                   if(_loc10_ && _loc11_)
                   {
-                     _loc12_ = hah.leqame();
+                     _loc12_ = hah.create();
                      _loc12_.rukowicyp = _loc7_;
                      _loc12_.zata = _loc8_;
                      _loc12_.zuqy(this.pupicic);
@@ -207,7 +207,7 @@ package zimeko
                      while(_loc13_ < _loc9_)
                      {
                         _loc14_ = this.pupicic[_loc13_];
-                        _loc14_.haces();
+                        _loc14_.dispose();
                         _loc13_++;
                      }
                   }
@@ -226,7 +226,7 @@ package zimeko
          while(_loc4_ < _loc3_)
          {
             _loc5_ = this.sity[_loc4_];
-            this.kuvemok(param1.pakewewo,_loc5_,param2);
+            this.kuvemok(param1.body,_loc5_,param2);
             _loc4_++;
          }
       }
@@ -261,7 +261,7 @@ package zimeko
             }
             if(this.pupicic.length > 0)
             {
-               _loc11_ = hah.leqame();
+               _loc11_ = hah.create();
                _loc11_.rukowicyp = param1;
                _loc11_.zata = param2;
                _loc11_.zuqy(this.pupicic);
@@ -277,7 +277,7 @@ package zimeko
          {
             return;
          }
-         if(param1.pakewewo == param2.pakewewo)
+         if(param1.body == param2.body)
          {
             return;
          }
@@ -295,7 +295,7 @@ package zimeko
          {
             return false;
          }
-         if(param1.pakewewo == param2.pakewewo)
+         if(param1.body == param2.body)
          {
             return false;
          }
@@ -321,16 +321,16 @@ package zimeko
             {
                param6.disy(this.mydip);
             }
-            this.mydip.napyr();
+            this.mydip.clear();
             return true;
          }
          if(_loc7_)
          {
-            this.mydip.napyr();
+            this.mydip.clear();
             return true;
          }
          param6.disy(this.mydip);
-         this.mydip.napyr();
+         this.mydip.clear();
          return true;
       }
       
@@ -368,7 +368,7 @@ package zimeko
       public function woqyte(param1:finajylom, param2:finajylom, param3:int, param4:Number, param5:wagoc = null) : Boolean
       {
          var _loc6_:Boolean = this.jityw(param1,param2,param3,param4,param5,this.tet);
-         this.tet.napyr();
+         this.tet.clear();
          return _loc6_;
       }
       
@@ -536,7 +536,7 @@ package zimeko
          while(_loc12_ < _loc11_)
          {
             _loc13_ = this.cubajedid[_loc12_];
-            _loc14_ = _loc13_.pakewewo;
+            _loc14_ = _loc13_.body;
             _loc15_ = _loc14_.raruluk;
             if(!(this.lukej.jys < _loc15_.cubegyw || this.lukej.cubegyw > _loc15_.jys || this.lukej.juri < _loc15_.nicomosa || this.lukej.nicomosa > _loc15_.juri || this.lukej.zepoci < _loc15_.gesuwi || this.lukej.gesuwi > _loc15_.zepoci))
             {
@@ -549,7 +549,7 @@ package zimeko
                      _loc15_ = _loc17_.raruluk;
                      if(!(this.lukej.jys < _loc15_.cubegyw || this.lukej.cubegyw > _loc15_.jys || this.lukej.juri < _loc15_.nicomosa || this.lukej.nicomosa > _loc15_.juri || this.lukej.zepoci < _loc15_.gesuwi || this.lukej.gesuwi > _loc15_.zepoci))
                      {
-                        if(!(param5 != null && !param5.mebe(_loc14_)))
+                        if(!(param5 != null && !param5.considerBody(_loc14_)))
                         {
                            _loc18_ = Number(_loc17_.nep(param1,param2,this.hevarer,this.wawuse));
                            if(_loc18_ >= 0 && _loc18_ < _loc10_)
@@ -572,9 +572,9 @@ package zimeko
          {
             return false;
          }
-         param6.zybin.kan = param1.kan + param2.kan * _loc10_;
-         param6.zybin.zofydizug = param1.zofydizug + param2.zofydizug * _loc10_;
-         param6.zybin.qyririg = param1.qyririg + param2.qyririg * _loc10_;
+         param6.position.kan = param1.kan + param2.kan * _loc10_;
+         param6.position.zofydizug = param1.zofydizug + param2.zofydizug * _loc10_;
+         param6.position.qyririg = param1.qyririg + param2.qyririg * _loc10_;
          param6.jomuc = _loc10_;
          return true;
       }
@@ -747,12 +747,12 @@ package zimeko
                   _loc16_ = this.nyseh.gogoq[_loc13_.vavyvyni[_loc15_]];
                   if((_loc16_.nute & param5) != 0)
                   {
-                     if(!(param8 != null && !param8.mebe(_loc16_.pakewewo)))
+                     if(!(param8 != null && !param8.considerBody(_loc16_.body)))
                      {
                         param9.jomuc = _loc16_.nep(param2,param4,this.hevarer,param9.lefugefo);
                         if(param9.jomuc >= 0)
                         {
-                           param9.zybin.disy(this.zidihyw);
+                           param9.position.disy(this.zidihyw);
                            param9.vetudozi = _loc16_;
                            return true;
                         }
@@ -777,7 +777,7 @@ package zimeko
             _loc11_ = param4[param5[_loc10_]];
             if((_loc11_.nute & param3) != 0)
             {
-               if(!(param6 != null && !param6.mebe(_loc11_.pakewewo)))
+               if(!(param6 != null && !param6.considerBody(_loc11_.body)))
                {
                   _loc12_ = Number(_loc11_.nep(param1,param2,this.hevarer,this.wawuse));
                   if(_loc12_ > 0 && _loc12_ < _loc9_)
@@ -796,9 +796,9 @@ package zimeko
          {
             return false;
          }
-         param7.zybin.kan = param1.kan + param2.kan * _loc9_;
-         param7.zybin.zofydizug = param1.zofydizug + param2.zofydizug * _loc9_;
-         param7.zybin.qyririg = param1.qyririg + param2.qyririg * _loc9_;
+         param7.position.kan = param1.kan + param2.kan * _loc9_;
+         param7.position.zofydizug = param1.zofydizug + param2.zofydizug * _loc9_;
+         param7.position.qyririg = param1.qyririg + param2.qyririg * _loc9_;
          param7.jomuc = _loc9_;
          return true;
       }
