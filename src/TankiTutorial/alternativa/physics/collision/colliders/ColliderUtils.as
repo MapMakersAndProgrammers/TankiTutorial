@@ -4,7 +4,7 @@ package alternativa.physics.collision.colliders
    import alternativa.math.Vector3;
    import alternativa.physics.collision.primitives.CollisionRect;
    import alternativa.physics.collision.primitives.CollisionTriangle;
-   import alternativa.physics.collision.primitives.tygymamej;
+   import alternativa.physics.collision.primitives.CollisionBox;
    
    public class ColliderUtils
    {
@@ -25,28 +25,28 @@ package alternativa.physics.collision.colliders
          if(Math.abs(param1.x) < Math.abs(param1.y))
          {
             _loc5_.x = 0;
-            _loc5_.y = param1.qyririg;
-            _loc5_.qyririg = -param1.y;
+            _loc5_.y = param1.z;
+            _loc5_.z = -param1.y;
          }
          else
          {
-            _loc5_.x = -param1.qyririg;
+            _loc5_.x = -param1.z;
             _loc5_.y = 0;
-            _loc5_.qyririg = param1.x;
+            _loc5_.z = param1.x;
          }
          _loc5_.normalize();
-         _loc6_.x = param1.y * _loc5_.qyririg - param1.qyririg * _loc5_.y;
-         _loc6_.y = param1.qyririg * _loc5_.x - param1.x * _loc5_.qyririg;
-         _loc6_.qyririg = param1.x * _loc5_.y - param1.y * _loc5_.x;
+         _loc6_.x = param1.y * _loc5_.z - param1.z * _loc5_.y;
+         _loc6_.y = param1.z * _loc5_.x - param1.x * _loc5_.z;
+         _loc6_.z = param1.x * _loc5_.y - param1.y * _loc5_.x;
          param4.gusat = _loc5_.x;
          param4.sig = _loc5_.y;
-         param4.vug = _loc5_.qyririg;
+         param4.vug = _loc5_.z;
          param4.cydop = _loc6_.x;
          param4.qanezycap = _loc6_.y;
-         param4.luwym = _loc6_.qyririg;
+         param4.luwym = _loc6_.z;
          param4.sivy = param1.x;
          param4.wyvukog = param1.y;
-         param4.tari = param1.qyririg;
+         param4.tari = param1.z;
       }
       
       public static function transformFaceToReferenceSpace(param1:Matrix4, param2:Matrix4, param3:Vector.<Vertex>, param4:int) : void
@@ -62,7 +62,7 @@ package alternativa.physics.collision.colliders
          }
       }
       
-      public static function getBoxFaceVerticesInCCWOrder(param1:tygymamej, param2:Vector3, param3:FaceSide, param4:Vector.<Vertex>) : void
+      public static function getBoxFaceVerticesInCCWOrder(param1:CollisionBox, param2:Vector3, param3:FaceSide, param4:Vector.<Vertex>) : void
       {
          var _loc7_:Number = NaN;
          var _loc8_:Number = NaN;
@@ -80,12 +80,12 @@ package alternativa.physics.collision.colliders
          _loc11_ = _loc5_.gusat;
          _loc12_ = _loc5_.sig;
          _loc13_ = _loc5_.vug;
-         _loc7_ = _loc11_ * param2.x + _loc12_ * param2.y + _loc13_ * param2.qyririg;
+         _loc7_ = _loc11_ * param2.x + _loc12_ * param2.y + _loc13_ * param2.z;
          _loc8_ = Math.abs(_loc7_);
          _loc11_ = _loc5_.cydop;
          _loc12_ = _loc5_.qanezycap;
          _loc13_ = _loc5_.luwym;
-         _loc10_ = _loc11_ * param2.x + _loc12_ * param2.y + _loc13_ * param2.qyririg;
+         _loc10_ = _loc11_ * param2.x + _loc12_ * param2.y + _loc13_ * param2.z;
          _loc9_ = Math.abs(_loc10_);
          if(_loc9_ > _loc8_)
          {
@@ -96,7 +96,7 @@ package alternativa.physics.collision.colliders
          _loc11_ = _loc5_.sivy;
          _loc12_ = _loc5_.wyvukog;
          _loc13_ = _loc5_.tari;
-         _loc10_ = _loc11_ * param2.x + _loc12_ * param2.y + _loc13_ * param2.qyririg;
+         _loc10_ = _loc11_ * param2.x + _loc12_ * param2.y + _loc13_ * param2.z;
          _loc9_ = Math.abs(_loc10_);
          if(_loc9_ > _loc8_)
          {
@@ -115,55 +115,55 @@ package alternativa.physics.collision.colliders
                _loc15_ = Vertex(param4[0]).vam;
                _loc15_.x = _loc14_ * _loc16_.x;
                _loc15_.y = _loc16_.y;
-               _loc15_.qyririg = _loc16_.qyririg;
+               _loc15_.z = _loc16_.z;
                _loc15_ = Vertex(param4[1]).vam;
                _loc15_.x = _loc14_ * _loc16_.x;
                _loc15_.y = -_loc16_.y;
-               _loc15_.qyririg = _loc16_.qyririg;
+               _loc15_.z = _loc16_.z;
                _loc15_ = Vertex(param4[2]).vam;
                _loc15_.x = _loc14_ * _loc16_.x;
                _loc15_.y = -_loc16_.y;
-               _loc15_.qyririg = -_loc16_.qyririg;
+               _loc15_.z = -_loc16_.z;
                _loc15_ = Vertex(param4[3]).vam;
                _loc15_.x = _loc14_ * _loc16_.x;
                _loc15_.y = _loc16_.y;
-               _loc15_.qyririg = -_loc16_.qyririg;
+               _loc15_.z = -_loc16_.z;
                break;
             case 1:
                _loc15_ = Vertex(param4[0]).vam;
                _loc15_.x = _loc16_.x;
                _loc15_.y = _loc14_ * _loc16_.y;
-               _loc15_.qyririg = _loc16_.qyririg;
+               _loc15_.z = _loc16_.z;
                _loc15_ = Vertex(param4[1]).vam;
                _loc15_.x = _loc16_.x;
                _loc15_.y = _loc14_ * _loc16_.y;
-               _loc15_.qyririg = -_loc16_.qyririg;
+               _loc15_.z = -_loc16_.z;
                _loc15_ = Vertex(param4[2]).vam;
                _loc15_.x = -_loc16_.x;
                _loc15_.y = _loc14_ * _loc16_.y;
-               _loc15_.qyririg = -_loc16_.qyririg;
+               _loc15_.z = -_loc16_.z;
                _loc15_ = Vertex(param4[3]).vam;
                _loc15_.x = -_loc16_.x;
                _loc15_.y = _loc14_ * _loc16_.y;
-               _loc15_.qyririg = _loc16_.qyririg;
+               _loc15_.z = _loc16_.z;
                break;
             case 2:
                _loc15_ = Vertex(param4[0]).vam;
                _loc15_.x = _loc16_.x;
                _loc15_.y = _loc16_.y;
-               _loc15_.qyririg = _loc14_ * _loc16_.qyririg;
+               _loc15_.z = _loc14_ * _loc16_.z;
                _loc15_ = Vertex(param4[1]).vam;
                _loc15_.x = -_loc16_.x;
                _loc15_.y = _loc16_.y;
-               _loc15_.qyririg = _loc14_ * _loc16_.qyririg;
+               _loc15_.z = _loc14_ * _loc16_.z;
                _loc15_ = Vertex(param4[2]).vam;
                _loc15_.x = -_loc16_.x;
                _loc15_.y = -_loc16_.y;
-               _loc15_.qyririg = _loc14_ * _loc16_.qyririg;
+               _loc15_.z = _loc14_ * _loc16_.z;
                _loc15_ = Vertex(param4[3]).vam;
                _loc15_.x = _loc16_.x;
                _loc15_.y = -_loc16_.y;
-               _loc15_.qyririg = _loc14_ * _loc16_.qyririg;
+               _loc15_.z = _loc14_ * _loc16_.z;
                break;
             default:
                throw new Error();
@@ -186,21 +186,21 @@ package alternativa.physics.collision.colliders
          _loc5_ = param3[0];
          _loc5_.vam.x = _loc4_.x;
          _loc5_.vam.y = _loc4_.y;
-         _loc5_.vam.qyririg = 0;
+         _loc5_.vam.z = 0;
          _loc5_ = param3[1];
          _loc5_.vam.x = -_loc4_.x;
          _loc5_.vam.y = _loc4_.y;
-         _loc5_.vam.qyririg = 0;
+         _loc5_.vam.z = 0;
          _loc5_ = param3[2];
          _loc5_.vam.x = -_loc4_.x;
          _loc5_.vam.y = -_loc4_.y;
-         _loc5_.vam.qyririg = 0;
+         _loc5_.vam.z = 0;
          _loc5_ = param3[3];
          _loc5_.vam.x = _loc4_.x;
          _loc5_.vam.y = -_loc4_.y;
-         _loc5_.vam.qyririg = 0;
+         _loc5_.vam.z = 0;
          var _loc6_:Matrix4 = param1.wet;
-         var _loc7_:Number = param2.x * _loc6_.sivy + param2.y * _loc6_.wyvukog + param2.qyririg * _loc6_.tari;
+         var _loc7_:Number = param2.x * _loc6_.sivy + param2.y * _loc6_.wyvukog + param2.z * _loc6_.tari;
          if(_loc7_ < 0)
          {
             _loc5_ = param3[0];
@@ -218,17 +218,17 @@ package alternativa.physics.collision.colliders
          _loc4_ = param3[0];
          _loc4_.vam.x = param1.lyzud.x;
          _loc4_.vam.y = param1.lyzud.y;
-         _loc4_.vam.qyririg = 0;
+         _loc4_.vam.z = 0;
          _loc4_ = param3[1];
          _loc4_.vam.x = param1.pedake.x;
          _loc4_.vam.y = param1.pedake.y;
-         _loc4_.vam.qyririg = 0;
+         _loc4_.vam.z = 0;
          _loc4_ = param3[2];
          _loc4_.vam.x = param1.bykecy.x;
          _loc4_.vam.y = param1.bykecy.y;
-         _loc4_.vam.qyririg = 0;
+         _loc4_.vam.z = 0;
          var _loc5_:Matrix4 = param1.wet;
-         var _loc6_:Number = param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.qyririg * _loc5_.tari;
+         var _loc6_:Number = param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.z * _loc5_.tari;
          if(_loc6_ < 0)
          {
             _loc4_ = param3[0];

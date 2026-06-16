@@ -2,21 +2,25 @@ package alternativa.tanks.sfx
 {
    import alternativa.engine3d.core.Object3DContainer;
    import alternativa.engine3d.lights.OmniLight;
-   import gafaduzuw.finajylom;
-   import hygal.nufaneqog;
-   import kefy.Wopowur;
-   import kefy.fare;
+   import alternativa.math.Vector3;
+   import alternativa.tanks.shared.camera.GameCamera;
+   import alternativa.tanks.utils.objectpool.PooledObject;
+   import alternativa.tanks.utils.objectpool.Pool;
+   import alternativa.engine3d.alternativa3d;
    
-   public final class AnimatedLightEffect extends Wopowur implements bowu
+   // XXX: this is needed for some object3d properties
+   use namespace alternativa3d;
+
+   public final class AnimatedLightEffect extends PooledObject implements GraphicEffect
    {
       
       public static const nimowu:Number = 99999;
       
       public var qarehop:OmniLight;
       
-      private var toz:hebis;
+      private var toz:Object3DPositionProvider;
       
-      private var zeg:virah;
+      private var zeg:LightAnimation;
       
       private var wyzunime:int;
       
@@ -30,20 +34,20 @@ package alternativa.tanks.sfx
       
       private var jawyn:Number;
       
-      private var position:finajylom = new finajylom();
+      private var position:Vector3 = new Vector3();
       
-      public function AnimatedLightEffect(param1:fare)
+      public function AnimatedLightEffect(param1:Pool)
       {
          super(param1);
          this.qarehop = new OmniLight(0,0,0);
       }
       
-      public function init(param1:hebis, param2:virah, param3:Number = 99999, param4:Boolean = false) : void
+      public function init(param1:Object3DPositionProvider, param2:LightAnimation, param3:Number = 99999, param4:Boolean = false) : void
       {
-         this.initFromTime(param1,param2.doz(),param2,param3,param4);
+         this.initFromTime(param1,param2.getLiveTime(),param2,param3,param4);
       }
       
-      public function initFromTime(param1:hebis, param2:int, param3:virah, param4:Number = 99999, param5:Boolean = false) : void
+      public function initFromTime(param1:Object3DPositionProvider, param2:int, param3:LightAnimation, param4:Number = 99999, param5:Boolean = false) : void
       {
          this.toz = param1;
          this.sef = param2;
@@ -56,9 +60,9 @@ package alternativa.tanks.sfx
          param1.initPosition(this.qarehop);
       }
       
-      public function initFromAnimation(param1:hebis, param2:dosu, param3:virah, param4:Number = 99999, param5:Boolean = false) : void
+      public function initFromAnimation(param1:Object3DPositionProvider, param2:TextureAnimation, param3:LightAnimation, param4:Number = 99999, param5:Boolean = false) : void
       {
-         this.initFromTime(param1,param2.qyvoladeg.length / param2.macoqaka * 1000,param3,param4,param5);
+         this.initFromTime(param1,param2.qyvoladeg.length / param2.fps * 1000,param3,param4,param5);
       }
       
       public function addedToScene(param1:Object3DContainer) : void
@@ -66,13 +70,13 @@ package alternativa.tanks.sfx
          param1.addChild(this.qarehop);
       }
       
-      public function play(param1:int, param2:nufaneqog) : Boolean
+      public function play(param1:int, param2:GameCamera) : Boolean
       {
          var _loc3_:Number = NaN;
          var _loc4_:Number = NaN;
          if(this.kat)
          {
-            this.zeg.pepare(this.qarehop,this.wyzunime,this.sef);
+            this.zeg.updateByTime(this.qarehop,this.wyzunime,this.sef);
             this.toz.updateObjectPosition(this.qarehop,param2,param1);
             this.wyzunime += param1;
             if(this.wyzunime > this.sef)
@@ -86,10 +90,10 @@ package alternativa.tanks.sfx
                   this.kat = false;
                }
             }
-            this.position.kan = this.qarehop.x;
-            this.position.zofydizug = this.qarehop.y;
-            this.position.qyririg = this.qarehop.z;
-            _loc3_ = Number(this.position.jepik(param2.position));
+            this.position.x = this.qarehop.x;
+            this.position.y = this.qarehop.y;
+            this.position.z = this.qarehop.z;
+            _loc3_ = Number(this.position.distanceTo(param2.position));
             if(_loc3_ > this.jawyn)
             {
                _loc4_ = 1 - (_loc3_ - this.jawyn) / (this.gog - this.jawyn);

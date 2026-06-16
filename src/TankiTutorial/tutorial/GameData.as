@@ -17,7 +17,7 @@ package tutorial
    import alternativa.tanks.battle.Dust;
    import alternativa.tanks.shared.camera.CameraController;
    import alternativa.tanks.shared.camera.GameCamera;
-   import alternativa.tanks.shared.physics.mebiw;
+   import alternativa.tanks.shared.physics.TanksCollisionDetector;
    import alternativa.tanks.sound.ISoundManager;
    import alternativa.tanks.sound.SoundManager;
    import alternativa.tanks.utils.objectpool.ObjectPool;
@@ -59,7 +59,7 @@ package tutorial
       
       public static var gov:TanksPhysicsScene;
       
-      public static var kymaqos:mebiw;
+      public static var kymaqos:TanksCollisionDetector;
       
       public static var dazupuzif:ScreenBitmapManager;
       

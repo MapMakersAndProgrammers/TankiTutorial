@@ -72,8 +72,8 @@ package alternativa.tanks.vehicles.tank
       {
          var _loc3_:Number = param2.y * 0.8;
          var _loc4_:Number = param2.x - 40;
-         this.vapal = new Track(this.body,param1,new Vector3(-0.5 * _loc4_,0,-0.5 * param2.qyririg + TankConst.kyr),_loc3_,this.gobo,-1);
-         this.mof = new Track(this.body,param1,new Vector3(0.5 * _loc4_,0,-0.5 * param2.qyririg + TankConst.kyr),_loc3_,this.gobo,1);
+         this.vapal = new Track(this.body,param1,new Vector3(-0.5 * _loc4_,0,-0.5 * param2.z + TankConst.kyr),_loc3_,this.gobo,-1);
+         this.mof = new Track(this.body,param1,new Vector3(0.5 * _loc4_,0,-0.5 * param2.z + TankConst.kyr),_loc3_,this.gobo,1);
       }
       
       public function setAcceleration(param1:Number) : void
@@ -178,37 +178,37 @@ package alternativa.tanks.vehicles.tank
          _loc8_ = this.body.jefe;
          dibi.x = _loc8_.gusat;
          dibi.y = _loc8_.sig;
-         dibi.qyririg = _loc8_.vug;
+         dibi.z = _loc8_.vug;
          domypujag.x = _loc8_.cydop;
          domypujag.y = _loc8_.qanezycap;
-         domypujag.qyririg = _loc8_.luwym;
+         domypujag.z = _loc8_.luwym;
          jidovivo.x = _loc8_.sivy;
          jidovivo.y = _loc8_.wyvukog;
-         jidovivo.qyririg = _loc8_.tari;
+         jidovivo.z = _loc8_.tari;
          _loc9_ = 1;
          var _loc10_:Number = Math.PI / 4;
          var _loc11_:Number = Math.PI / 3;
-         if(jidovivo.qyririg < Math.cos(_loc10_))
+         if(jidovivo.z < Math.cos(_loc10_))
          {
-            if(jidovivo.qyririg < Math.cos(_loc11_))
+            if(jidovivo.z < Math.cos(_loc11_))
             {
                _loc9_ = 0;
             }
             else
             {
-               _loc9_ = (_loc11_ - Math.acos(jidovivo.qyririg)) / (_loc11_ - _loc10_);
+               _loc9_ = (_loc11_ - Math.acos(jidovivo.z)) / (_loc11_ - _loc10_);
             }
          }
          this.calculateSurfaceVelocities(mavejok,jeke);
          jyz.x = _loc6_.x - mavejok.x;
          jyz.y = _loc6_.y - mavejok.y;
-         jyz.qyririg = _loc6_.qyririg - mavejok.qyririg;
+         jyz.z = _loc6_.z - mavejok.z;
          qupe.x = _loc7_.x - jeke.x;
          qupe.y = _loc7_.y - jeke.y;
-         qupe.qyririg = _loc7_.qyririg - jeke.qyririg;
-         var _loc12_:Number = jyz.x * domypujag.x + jyz.y * domypujag.y + jyz.qyririg * domypujag.qyririg;
-         var _loc13_:Number = qupe.x * jidovivo.x + qupe.y * jidovivo.y + qupe.qyririg * jidovivo.qyririg;
-         var _loc14_:Number = jyz.x * dibi.x + jyz.y * dibi.y + jyz.qyririg * dibi.qyririg;
+         qupe.z = _loc7_.z - jeke.z;
+         var _loc12_:Number = jyz.x * domypujag.x + jyz.y * domypujag.y + jyz.z * domypujag.z;
+         var _loc13_:Number = qupe.x * jidovivo.x + qupe.y * jidovivo.y + qupe.z * jidovivo.z;
+         var _loc14_:Number = jyz.x * dibi.x + jyz.y * dibi.y + jyz.z * dibi.z;
          var _loc15_:Number = this.hageb * _loc9_ * param3;
          if(_loc14_ < 0)
          {
@@ -235,7 +235,7 @@ package alternativa.tanks.vehicles.tank
          jyz.setLengthAlongDirection(dibi,_loc14_);
          _loc6_.x = mavejok.x + jyz.x;
          _loc6_.y = mavejok.y + jyz.y;
-         _loc6_.qyririg = mavejok.qyririg + jyz.qyririg;
+         _loc6_.z = mavejok.z + jyz.z;
          var _loc16_:int = this.vapal.jim;
          var _loc17_:int = this.mof.jim;
          var _loc18_:Number = this.dis;
@@ -315,7 +315,7 @@ package alternativa.tanks.vehicles.tank
             qupe.setLengthAlongDirection(jidovivo,_loc35_);
             _loc7_.x = jeke.x + qupe.x;
             _loc7_.y = jeke.y + qupe.y;
-            _loc7_.qyririg = jeke.qyririg + qupe.qyririg;
+            _loc7_.z = jeke.z + qupe.z;
          }
       }
       
@@ -344,7 +344,7 @@ package alternativa.tanks.vehicles.tank
                _loc6_ = _loc4_.wonuhig.position;
                _loc7_ += _loc6_.x;
                _loc8_ += _loc6_.y;
-               _loc9_ += _loc6_.qyririg;
+               _loc9_ += _loc6_.z;
             }
             _loc4_ = this.mof.mofovoti[_loc5_];
             if(_loc4_.vivi)
@@ -352,7 +352,7 @@ package alternativa.tanks.vehicles.tank
                _loc6_ = _loc4_.wonuhig.position;
                _loc7_ += _loc6_.x;
                _loc8_ += _loc6_.y;
-               _loc9_ += _loc6_.qyririg;
+               _loc9_ += _loc6_.z;
             }
             _loc5_++;
          }
@@ -361,13 +361,13 @@ package alternativa.tanks.vehicles.tank
          _loc9_ *= _loc3_;
          vejavus.x = _loc7_;
          vejavus.y = _loc8_;
-         vejavus.qyririg = _loc9_;
+         vejavus.z = _loc9_;
          param1.x = 0;
          param1.y = 0;
-         param1.qyririg = 0;
+         param1.z = 0;
          param2.x = 0;
          param2.y = 0;
-         param2.qyririg = 0;
+         param2.z = 0;
          _loc5_ = 0;
          while(_loc5_ < TankConst.nybi)
          {
@@ -377,10 +377,10 @@ package alternativa.tanks.vehicles.tank
          }
          param1.x *= _loc3_;
          param1.y *= _loc3_;
-         param1.qyririg *= _loc3_;
+         param1.z *= _loc3_;
          param2.x *= _loc3_;
          param2.y *= _loc3_;
-         param2.qyririg *= _loc3_;
+         param2.z *= _loc3_;
       }
       
       private function addVelocitiesFromRay(param1:SuspensionRay, param2:Vector3, param3:Vector3, param4:Vector3) : void
@@ -399,22 +399,22 @@ package alternativa.tanks.vehicles.tank
          {
             param3.x += param1.poseze.x;
             param3.y += param1.poseze.y;
-            param3.qyririg += param1.poseze.qyririg;
+            param3.z += param1.poseze.z;
             _loc5_ = param1.wonuhig.position;
             _loc6_ = _loc5_.x - param2.x;
             _loc7_ = _loc5_.y - param2.y;
-            _loc8_ = _loc5_.qyririg - param2.qyririg;
+            _loc8_ = _loc5_.z - param2.z;
             _loc9_ = _loc6_ * _loc6_ + _loc7_ * _loc7_ + _loc8_ * _loc8_;
             if(_loc9_ > 1)
             {
                _loc10_ = 1 / _loc9_;
                _loc11_ = param1.poseze;
-               _loc12_ = (_loc7_ * _loc11_.qyririg - _loc8_ * _loc11_.y) * _loc10_;
-               _loc13_ = (_loc8_ * _loc11_.x - _loc6_ * _loc11_.qyririg) * _loc10_;
+               _loc12_ = (_loc7_ * _loc11_.z - _loc8_ * _loc11_.y) * _loc10_;
+               _loc13_ = (_loc8_ * _loc11_.x - _loc6_ * _loc11_.z) * _loc10_;
                _loc14_ = (_loc6_ * _loc11_.y - _loc7_ * _loc11_.x) * _loc10_;
                param4.x += _loc12_;
                param4.y += _loc13_;
-               param4.qyririg += _loc14_;
+               param4.z += _loc14_;
             }
          }
       }
@@ -431,11 +431,11 @@ package alternativa.tanks.vehicles.tank
          {
             _loc6_ = param2.x;
             _loc7_ = param2.y;
-            _loc8_ = param2.qyririg;
+            _loc8_ = param2.z;
             _loc9_ = _loc6_ * _loc6_ + _loc7_ * _loc7_ + _loc8_ * _loc8_;
             if(_loc9_ > 0.00001)
             {
-               _loc10_ = Math.acos(param1.wonuhig.lefugefo.qyririg);
+               _loc10_ = Math.acos(param1.wonuhig.lefugefo.z);
                if(_loc10_ < 0)
                {
                   _loc10_ = -_loc10_;
@@ -449,7 +449,7 @@ package alternativa.tanks.vehicles.tank
                   }
                   kugariz.x = _loc6_ * _loc11_;
                   kugariz.y = _loc7_ * _loc11_;
-                  kugariz.qyririg = _loc8_ * _loc11_;
+                  kugariz.z = _loc8_ * _loc11_;
                   this.body.addWorldForceAtLocalPoint(param1.getOrigin(),kugariz);
                }
             }
@@ -470,14 +470,14 @@ package alternativa.tanks.vehicles.tank
          {
             _loc1_ = this.body.jefe;
             _loc2_ = this.body.tuce.tem;
-            _loc3_ = _loc2_.x * _loc1_.sivy + _loc2_.y * _loc1_.wyvukog + _loc2_.qyririg * _loc1_.tari;
+            _loc3_ = _loc2_.x * _loc1_.sivy + _loc2_.y * _loc1_.wyvukog + _loc2_.z * _loc1_.tari;
             _loc4_ = _loc2_.length();
             _loc5_ = Math.SQRT1_2 * _loc4_;
             if(_loc3_ < -_loc5_ || _loc3_ > _loc5_)
             {
                _loc6_ = (_loc1_.sivy * _loc3_ - _loc2_.x) * this.body.tuwykus;
                _loc7_ = (_loc1_.wyvukog * _loc3_ - _loc2_.y) * this.body.tuwykus;
-               _loc8_ = (_loc1_.tari * _loc3_ - _loc2_.qyririg) * this.body.tuwykus;
+               _loc8_ = (_loc1_.tari * _loc3_ - _loc2_.z) * this.body.tuwykus;
                this.body.addForceXYZ(_loc6_,_loc7_,_loc8_);
             }
          }

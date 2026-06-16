@@ -1,7 +1,7 @@
 package movieclips
 {
-   import §'n§.§,f§;
-   import §^O§.§3Y§;
+   import tutorial.GameData;
+   import tutorial.utils.Text;
    import flash.display.Bitmap;
    import flash.display.BitmapData;
    import flash.display.MovieClip;
@@ -49,9 +49,9 @@ package movieclips
          this.arrowsGlow.alpha = 0.43;
          this.spaceGlow.alpha = 0.43;
          var _loc3_:Sprite = new Sprite();
-         var _loc4_:TextField = §3Y§.§#6§(Lang.getText(LocalizedStrings.TURRET),12,100,"center");
-         var _loc5_:TextField = §3Y§.§#6§(Lang.getText(LocalizedStrings.FIRE),12,100,"center");
-         var _loc6_:TextField = §3Y§.§#6§(Lang.getText(LocalizedStrings.MOVING),12,100,"center");
+         var _loc4_:TextField = Text.getTextField(Lang.getText(LocalizedStrings.TURRET),12,100,"center");
+         var _loc5_:TextField = Text.getTextField(Lang.getText(LocalizedStrings.FIRE),12,100,"center");
+         var _loc6_:TextField = Text.getTextField(Lang.getText(LocalizedStrings.MOVING),12,100,"center");
          _loc4_.x = 4;
          _loc4_.y = 65;
          _loc5_.x = 115;
@@ -61,7 +61,7 @@ package movieclips
          _loc3_.addChild(_loc4_);
          _loc3_.addChild(_loc5_);
          _loc3_.addChild(_loc6_);
-         this.text = §3Y§.§#6§(Lang.getText(LocalizedStrings.CONTROL_SEPARATOR),12);
+         this.text = Text.getTextField(Lang.getText(LocalizedStrings.CONTROL_SEPARATOR),12);
          var _loc7_:BitmapData = new BitmapData(_loc1_.width,_loc1_.height,true,0);
          _loc7_.draw(_loc1_);
          _loc7_.draw(_loc3_);
@@ -70,7 +70,7 @@ package movieclips
          _loc7_ = new BitmapData(_loc2_.width,_loc2_.height,true,0);
          _loc7_.draw(_loc2_);
          _loc7_.draw(_loc3_);
-         if(§,f§.§ k§)
+         if(GameData.vucofena)
          {
             this.mouseBitmap = new Bitmap(_loc7_);
             addChild(this.text);

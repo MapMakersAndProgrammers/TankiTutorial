@@ -8,7 +8,11 @@ package alternativa.tanks.sfx.flamethrower
    import alternativa.tanks.shared.camera.GameCamera;
    import alternativa.tanks.utils.objectpool.Pool;
    import alternativa.tanks.utils.objectpool.PooledObject;
+   import alternativa.engine3d.alternativa3d;
    
+   // XXX: needed to access an object3d function
+   use namespace alternativa3d;
+
    public class StreamLightEffect extends PooledObject implements GraphicEffect
    {
       

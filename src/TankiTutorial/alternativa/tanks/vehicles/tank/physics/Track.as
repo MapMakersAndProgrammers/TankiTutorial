@@ -40,7 +40,7 @@ package alternativa.tanks.vehicles.tank.physics
          var _loc6_:int = 0;
          while(_loc6_ < param1)
          {
-            _loc7_ = new Vector3(param2.x,param2.y + 0.5 * param3 - _loc6_ * _loc5_,param2.qyririg);
+            _loc7_ = new Vector3(param2.x,param2.y + 0.5 * param3 - _loc6_ * _loc5_,param2.z);
             this.mofovoti[_loc6_] = new SuspensionRay(this.body,_loc7_,Vector3.lasis,param4);
             _loc6_++;
          }
@@ -66,7 +66,7 @@ package alternativa.tanks.vehicles.tank.physics
          this.jim = 0;
          this.hetofefu.x = 0;
          this.hetofefu.y = 0;
-         this.hetofefu.qyririg = 0;
+         this.hetofefu.z = 0;
          _loc2_ = this.body.kejo.zerus;
          var _loc3_:int = 0;
          while(_loc3_ < this.wavi)
@@ -79,10 +79,10 @@ package alternativa.tanks.vehicles.tank.physics
                this.body.addWorldForceScaled(_loc4_.getGlobalOrigin(),_loc4_.getGlobalDirection(),-_loc4_.vys);
                this.hetofefu.x += _loc4_.poseze.x;
                this.hetofefu.y += _loc4_.poseze.y;
-               this.hetofefu.qyririg += _loc4_.poseze.qyririg;
+               this.hetofefu.z += _loc4_.poseze.z;
                _loc5_ = _loc2_.x - _loc4_.poseze.x;
                _loc6_ = _loc2_.y - _loc4_.poseze.y;
-               _loc7_ = _loc2_.qyririg - _loc4_.poseze.qyririg;
+               _loc7_ = _loc2_.z - _loc4_.poseze.z;
                _loc4_.wiciqy = Math.sqrt(_loc5_ * _loc5_ + _loc6_ * _loc6_ + _loc7_ * _loc7_);
             }
             else
@@ -95,7 +95,7 @@ package alternativa.tanks.vehicles.tank.physics
          {
             this.hetofefu.x /= this.jim;
             this.hetofefu.y /= this.jim;
-            this.hetofefu.qyririg /= this.jim;
+            this.hetofefu.z /= this.jim;
          }
       }
       

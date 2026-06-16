@@ -29,7 +29,7 @@ package tutorial.tasks
          this.qecuhygy.z -= 5;
          if(this.body != null)
          {
-            this.body.kejo.position.qyririg -= 5;
+            this.body.kejo.position.z -= 5;
          }
          return false;
       }

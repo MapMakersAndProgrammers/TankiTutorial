@@ -2,97 +2,97 @@ package alternativa.tanks.vehicles.tank
 {
    import alternativa.engine3d.containers.KDContainer;
    import alternativa.engine3d.objects.Mesh;
-   import befifijoj.jarod;
-   import danufabo.let;
-   import daz.fyweci;
-   import daz.hivymop;
-   import daz.vywamy;
-   import duqy.lozuqywi;
-   import duqy.sizud;
+   import alternativa.tanks.shared.usertitle.UserTitle;
+   import alternativa.tanks.vehicles.tank.controllers.TurretController;
+   import alternativa.physics.Body;
+   import alternativa.physics.TanksPhysicsScene;
+   import alternativa.physics.PhysicsUtils;
+   import alternativa.tanks.vehicles.tank.physics.SuspensionParams;
+   import alternativa.tanks.vehicles.tank.physics.Track;
    import flash.display.BitmapData;
    import flash.media.Sound;
    import flash.utils.setTimeout;
-   import fyf.nygujygaw;
-   import fyf.qon;
-   import fyf.vuteci;
-   import gafaduzuw.finajylom;
-   import gafaduzuw.fode;
-   import gafaduzuw.kyhewil;
-   import gafaduzuw.zybek;
-   import hygal.nufaneqog;
-   import jem.viqyr;
-   import kefy.lalyna;
-   import kodoq.hapafal;
-   import alternativa.tanks.battle.litavepot;
-   import alternativa.tanks.battle.qujimowo;
-   import alternativa.tanks.battle.zocikydo;
-   import alternativa.tanks.sfx.hefova;
-   import alternativa.tanks.sfx.hubumeno;
-   import alternativa.tanks.sfx.kulog;
+   import tutorial.Turrets;
+   import tutorial.Hulls;
+   import tutorial.GameData;
+   import alternativa.math.Vector3;
+   import alternativa.math.Matrix3;
+   import alternativa.math.Matrix4;
+   import alternativa.math.Quaternion;
+   import alternativa.tanks.shared.camera.GameCamera;
+   import alternativa.tanks.sound.ISoundManager;
+   import alternativa.tanks.utils.objectpool.ObjectPool;
+   import tutorial.tasks.ChangeCameraAngleTask;
+   import alternativa.tanks.battle.Renderer;
+   import alternativa.tanks.battle.PhysicsController;
+   import alternativa.tanks.battle.PhysicsInterpolator;
+   import alternativa.tanks.sfx.TankExplosionFactory;
+   import alternativa.tanks.sfx.SoundOptions;
+   import alternativa.tanks.sfx.TankSounds;
    import alternativa.tanks.sfx.Sound3D;
    import alternativa.tanks.sfx.Sound3DEffect;
-   import pekiv.sumik;
-   import qoweve.benesihys;
-   import tup.detamonuk;
+   import alternativa.tanks.physics.CollisionGroup;
+   import alternativa.tanks.RenderGroup;
+   import alternativa.tanks.vehicles.tank.skin.TankSkin;
    import tutorial.commons.Assets;
-   import zicy.Peruvec;
-   import zimeko.sagokibo;
-   import zur.qaselo;
+   import alternativa.physics.collision.BodyCollisionFilter;
+   import alternativa.tanks.shared.physics.TankBody;
+   import alternativa.tanks.vehicles.tank.weapons.Weapon;
    
-   public class Tank implements Lifa, zocikydo, qujimowo, litavepot, Peruvec
+   public class Tank implements CameraTarget, PhysicsInterpolator, PhysicsController, Renderer, BodyCollisionFilter
    {
       
       private static const radanigys:Number = 0.4;
       
-      private static const lilotes:finajylom = new finajylom();
+      private static const lilotes:Vector3 = new Vector3();
       
-      private static const wokymityf:fode = new fode();
+      private static const wokymityf:Matrix3 = new Matrix3();
       
-      private static const qef:kyhewil = new kyhewil();
+      private static const qef:Matrix4 = new Matrix4();
       
-      private static const rizy:kyhewil = new kyhewil();
+      private static const rizy:Matrix4 = new Matrix4();
       
-      private static const qalolyris:finajylom = new finajylom();
+      private static const qalolyris:Vector3 = new Vector3();
       
-      private static const dedit:finajylom = new finajylom();
+      private static const dedit:Vector3 = new Vector3();
       
-      private static const hyqirufy:finajylom = new finajylom();
+      private static const hyqirufy:Vector3 = new Vector3();
       
-      private static const jygef:finajylom = new finajylom();
+      private static const jygef:Vector3 = new Vector3();
       
-      private static const baven:finajylom = new finajylom();
+      private static const baven:Vector3 = new Vector3();
       
-      private static const gof:finajylom = new finajylom();
+      private static const gof:Vector3 = new Vector3();
       
-      private const zeneti:finajylom = new finajylom();
+      private const zeneti:Vector3 = new Vector3();
       
-      private const lobozofeh:zybek = new zybek();
+      private const lobozofeh:Quaternion = new Quaternion();
       
-      private var jifav:pulunad = new paco(100,1000,0,0);
+      private var jifav:ValueSmoother = new SimpleValueSmoother(100,1000,0,0);
       
-      private var vibewyge:pulunad = new paco(0.3,10,0,0);
+      private var vibewyge:ValueSmoother = new SimpleValueSmoother(0.3,10,0,0);
       
-      private const bijatil:viqyr = vuteci.bijatil;
+      private const bijatil:ISoundManager = GameData.bijatil;
       
-      private const guzinizub:KDContainer = vuteci.guzinizub;
+      private const guzinizub:KDContainer = GameData.guzinizub;
       
-      private const butefu:nufaneqog = vuteci.butefu;
+      private const butefu:GameCamera = GameData.butefu;
       
-      private const gov:hivymop = vuteci.gov;
+      private const gov:TanksPhysicsScene = GameData.gov;
       
-      private const murow:lalyna = vuteci.murow;
+      private const murow:ObjectPool = GameData.murow;
       
-      private const jypadif:benesihys = vuteci.jypadif;
+      private const jypadif:RenderGroup = GameData.jypadif;
       
-      private var civacofo:Vector.<finajylom>;
+      private var civacofo:Vector.<Vector3>;
       
       private var nyryp:Number = 0;
       
-      public var nariw:fohynopil;
+      public var nariw:TankHull;
       
-      public var firaqe:pezynopo;
+      public var firaqe:TankTurret;
       
-      public var hogys:sagokibo;
+      public var hogys:TankBody;
       
       private var tuwykus:Number;
       
@@ -100,7 +100,7 @@ package alternativa.tanks.vehicles.tank
       
       private var bedepidy:Number = 0;
       
-      public var kuca:detamonuk;
+      public var kuca:TankSkin;
       
       private var quj:Number;
       
@@ -108,45 +108,45 @@ package alternativa.tanks.vehicles.tank
       
       public var kat:Boolean;
       
-      private var tasapupat:qaselo;
+      private var tasapupat:Weapon;
       
-      public var kakow:jarod;
+      public var kakow:UserTitle;
       
-      public var lysecof:kulog;
+      public var lysecof:TankSounds;
       
       private var wom:Boolean;
       
       private var zafutonaz:String;
       
-      private const zywanywy:finajylom = new finajylom();
+      private const zywanywy:Vector3 = new Vector3();
       
-      private const josi:zybek = new zybek();
+      private const josi:Quaternion = new Quaternion();
       
-      private const faqes:finajylom = new finajylom();
+      private const faqes:Vector3 = new Vector3();
       
-      private const wykuc:zybek = new zybek();
+      private const wykuc:Quaternion = new Quaternion();
       
-      private var mum:let;
+      private var mum:TurretController;
       
       private var momomafoj:Number = 0;
       
       public var fysa:Number;
       
-      private var gobo:lozuqywi = new lozuqywi();
+      private var gobo:SuspensionParams = new SuspensionParams();
       
-      private var hag:makyfa;
+      private var hag:TrackedChassis;
       
-      private var viqi:bydewyhij;
+      private var viqi:TracksAnimator;
       
       private var diniqu:Boolean = false;
       
       public function Tank()
       {
          super();
-         this.kuca = new detamonuk();
+         this.kuca = new TankSkin();
       }
       
-      public function get body() : fyweci
+      public function get body() : Body
       {
          if(this.hogys == null)
          {
@@ -171,7 +171,7 @@ package alternativa.tanks.vehicles.tank
       
       public function substructHealth(param1:Number) : void
       {
-         if(this == vuteci.jifom && this.quj <= this.wibo * 0.5)
+         if(this == GameData.jifom && this.quj <= this.wibo * 0.5)
          {
             this.quj -= this.quj / this.wibo * param1;
          }
@@ -185,7 +185,7 @@ package alternativa.tanks.vehicles.tank
          }
          if(this.kakow != null)
          {
-            this.kakow.feb(this.quj,this.wibo);
+            this.kakow.setHealth(this.quj,this.wibo);
          }
       }
       
@@ -209,8 +209,8 @@ package alternativa.tanks.vehicles.tank
       public function setHull(param1:String) : void
       {
          var _loc3_:Mesh = null;
-         var _loc4_:finajylom = null;
-         var _loc2_:fohynopil = qon.leqib[param1];
+         var _loc4_:Vector3 = null;
+         var _loc2_:TankHull = Hulls.leqib[param1];
          if(_loc2_ == null)
          {
             throw new ArgumentError("Hull is null");
@@ -226,70 +226,70 @@ package alternativa.tanks.vehicles.tank
             this.setMaxTurnSpeed(_loc2_.pyfika,true);
             _loc3_ = _loc2_.kuca;
             _loc3_.calculateBounds();
-            _loc4_ = new finajylom(2 * _loc3_.boundMaxX,2 * _loc3_.boundMaxY,_loc3_.boundMaxZ);
+            _loc4_ = new Vector3(2 * _loc3_.boundMaxX,2 * _loc3_.boundMaxY,_loc3_.boundMaxZ);
             this.createBody(this.tuwykus,_loc4_);
             this.createChassis(_loc4_,_loc2_);
             this.setOptimalZCorrection(_loc4_);
-            this.setBodyCollisionGroup(sumik.pisyse | sumik.bywowe | sumik.deli | sumik.nuqa);
-            this.setTracksCollisionGroup(sumik.bywowe);
+            this.setBodyCollisionGroup(CollisionGroup.pisyse | CollisionGroup.bywowe | CollisionGroup.deli | CollisionGroup.nuqa);
+            this.setTracksCollisionGroup(CollisionGroup.bywowe);
          }
       }
       
-      private function createBody(param1:Number, param2:finajylom) : void
+      private function createBody(param1:Number, param2:Vector3) : void
       {
-         var _loc4_:fyweci = null;
+         var _loc4_:Body = null;
          if(this.hogys == null)
          {
-            _loc4_ = new fyweci(param1,fode.nyra);
+            _loc4_ = new Body(param1,Matrix3.nyra);
             _loc4_.katuf = this;
-            this.hogys = new sagokibo(_loc4_);
+            this.hogys = new TankBody(_loc4_);
          }
-         var _loc3_:finajylom = param2.clone();
-         _loc3_.rudi(0.5);
-         vywamy.fyb(param1,_loc3_,this.hogys.body.wofurys);
+         var _loc3_:Vector3 = param2.clone();
+         _loc3_.scale(0.5);
+         PhysicsUtils.setBoxInvInertia(param1,_loc3_,this.hogys.body.wofurys);
          this.hogys.body.tuwykus = param1;
          this.hogys.body.jutelycu = 1 / param1;
          this.createCollisionPrimitives(_loc3_);
          this.createVisibilityPoints(_loc3_);
       }
       
-      private function createCollisionPrimitives(param1:finajylom) : void
+      private function createCollisionPrimitives(param1:Vector3) : void
       {
-         this.hogys.vaf();
-         var _loc2_:Number = 2 * param1.qyririg - (this.gobo.vocuqih - leja.kyr);
-         sof.vof(param1,_loc2_,this.hogys);
-         sof.lyl(param1,_loc2_,this.hogys);
+         this.hogys.clearCollisionShapes();
+         var _loc2_:Number = 2 * param1.z - (this.gobo.vocuqih - TankConst.kyr);
+         CollisionBoxesBuilder.createTankCollisionBox(param1,_loc2_,this.hogys);
+         CollisionBoxesBuilder.createStaticCollisionBoxes(param1,_loc2_,this.hogys);
          this.setBoundSphereRadius(param1,_loc2_);
       }
       
-      private function setBoundSphereRadius(param1:finajylom, param2:Number) : void
+      private function setBoundSphereRadius(param1:Vector3, param2:Number) : void
       {
-         var _loc3_:finajylom = new finajylom(param1.kan,param1.zofydizug,param2 / 2);
-         var _loc4_:kyhewil = this.hogys.kyripama.koma;
-         this.fysa = _loc3_.nyhuguty() + Math.abs(_loc4_.sunafepo);
+         var _loc3_:Vector3 = new Vector3(param1.x,param1.y,param2 / 2);
+         var _loc4_:Matrix4 = this.hogys.kyripama.koma;
+         this.fysa = _loc3_.length() + Math.abs(_loc4_.sunafepo);
       }
       
-      private function createVisibilityPoints(param1:finajylom) : void
+      private function createVisibilityPoints(param1:Vector3) : void
       {
-         var _loc2_:Number = Number(param1.kan);
-         var _loc3_:Number = Number(param1.zofydizug);
-         this.civacofo = Vector.<finajylom>([new finajylom(-_loc2_,_loc3_,0),new finajylom(_loc2_,_loc3_,0),new finajylom(-_loc2_,0,0),new finajylom(_loc2_,0,0),new finajylom(-_loc2_,-_loc3_,0),new finajylom(_loc2_,-_loc3_,0)]);
+         var _loc2_:Number = Number(param1.x);
+         var _loc3_:Number = Number(param1.y);
+         this.civacofo = Vector.<Vector3>([new Vector3(-_loc2_,_loc3_,0),new Vector3(_loc2_,_loc3_,0),new Vector3(-_loc2_,0,0),new Vector3(_loc2_,0,0),new Vector3(-_loc2_,-_loc3_,0),new Vector3(_loc2_,-_loc3_,0)]);
       }
       
-      private function createChassis(param1:finajylom, param2:fohynopil) : void
+      private function createChassis(param1:Vector3, param2:TankHull) : void
       {
-         this.hag = new makyfa(this.hogys.body,this.gobo,this.jifav,param1);
-         this.hag.wiwewiq(param2.cozo);
-         this.hag.cofo(param2.qezuw);
-         this.hag.valita(param2.wito);
-         this.hag.zyko(param2.qupi);
-         this.hag.ziryd(param2.beg);
-         this.viqi = new bydewyhij(this.hag,this.kuca,this.jifav);
+         this.hag = new TrackedChassis(this.hogys.body,this.gobo,this.jifav,param1);
+         this.hag.setAcceleration(param2.cozo);
+         this.hag.setReverseAcceleration(param2.qezuw);
+         this.hag.setSideAcceleration(param2.wito);
+         this.hag.setTurnAcceleration(param2.qupi);
+         this.hag.setReverseTurnAcceleration(param2.beg);
+         this.viqi = new TracksAnimator(this.hag,this.kuca,this.jifav);
       }
       
       public function setTurret(param1:String) : void
       {
-         var _loc2_:pezynopo = nygujygaw.leqib[param1];
+         var _loc2_:TankTurret = Turrets.leqib[param1];
          if(_loc2_ == null)
          {
             throw new ArgumentError("Turret is null");
@@ -300,42 +300,42 @@ package alternativa.tanks.vehicles.tank
             {
                this.tasapupat.stop();
             }
-            this.tasapupat = nygujygaw.getWeapon(param1);
+            this.tasapupat = Turrets.getWeapon(param1);
             if(this.mum != null)
             {
                this.mum.setMaxTurnSpeed(_loc2_.gejebuke,false);
-               this.mum.zyko(_loc2_.qupi);
+               this.mum.setTurnAcceleration(_loc2_.qupi);
             }
-            this.tasapupat.pad(this);
+            this.tasapupat.setTank(this);
             this.firaqe = _loc2_;
             this.kuca.setTurret(_loc2_);
          }
       }
       
-      public function getCameraParams(param1:finajylom, param2:finajylom) : void
+      public function getCameraParams(param1:Vector3, param2:Vector3) : void
       {
-         this.lobozofeh.jolujeni(wokymityf);
-         lilotes.disy(this.zeneti);
-         lilotes.kan += this.nyryp * wokymityf.sivy;
-         lilotes.zofydizug += this.nyryp * wokymityf.wyvukog;
-         lilotes.qyririg += this.nyryp * wokymityf.tari;
-         qef.natam(wokymityf,lilotes);
-         var _loc3_:finajylom = this.kuca.cypagy().sih;
-         rizy.lowefuwi(_loc3_.kan,_loc3_.zofydizug,_loc3_.qyririg,0,0,vuteci.kumiteva ? Number(this.mum.voza()) : Number(this.mum.wako()));
-         rizy.codaz(qef);
-         param1.variq(rizy.kyvuru,rizy.zumidynip,rizy.sunafepo);
-         param2.variq(rizy.cydop,rizy.qanezycap,rizy.luwym);
+         this.lobozofeh.toMatrix3(wokymityf);
+         lilotes.copy(this.zeneti);
+         lilotes.x += this.nyryp * wokymityf.sivy;
+         lilotes.y += this.nyryp * wokymityf.wyvukog;
+         lilotes.z += this.nyryp * wokymityf.tari;
+         qef.setFromMatrix3(wokymityf,lilotes);
+         var _loc3_:Vector3 = this.kuca.getHull().sih;
+         rizy.setMatrix(_loc3_.x,_loc3_.y,_loc3_.z,0,0,GameData.kumiteva ? Number(this.mum.getCameraDirection()) : Number(this.mum.getDirection()));
+         rizy.append(qef);
+         param1.reset(rizy.kyvuru,rizy.zumidynip,rizy.sunafepo);
+         param2.reset(rizy.cydop,rizy.qanezycap,rizy.luwym);
       }
       
       public function setMaxSpeed(param1:Number, param2:Boolean) : void
       {
          if(param2)
          {
-            this.jifav.variq(param1);
+            this.jifav.reset(param1);
          }
          else
          {
-            this.jifav.calokyteb(param1);
+            this.jifav.setTargetValue(param1);
          }
       }
       
@@ -343,20 +343,20 @@ package alternativa.tanks.vehicles.tank
       {
          if(param2)
          {
-            this.vibewyge.variq(param1);
+            this.vibewyge.reset(param1);
          }
          else
          {
-            this.vibewyge.calokyteb(param1);
+            this.vibewyge.setTargetValue(param1);
          }
       }
       
       public function setCheckpoint() : void
       {
-         this.zywanywy.disy(this.faqes);
-         this.josi.disy(this.wykuc);
-         this.faqes.disy(this.hogys.body.kejo.position);
-         this.wykuc.disy(this.hogys.body.kejo.bej);
+         this.zywanywy.copy(this.faqes);
+         this.josi.copy(this.wykuc);
+         this.faqes.copy(this.hogys.body.kejo.position);
+         this.wykuc.copy(this.hogys.body.kejo.bej);
       }
       
       public function setColormap(param1:String) : void
@@ -369,67 +369,67 @@ package alternativa.tanks.vehicles.tank
       {
          if(this.mum != null)
          {
-            this.mum.neqykud(1);
+            this.mum.lock(1);
          }
          this.kat = false;
-         this.bijatil.tucuqokeq(this.lysecof);
-         hefova.hyw(this);
+         this.bijatil.removeEffect(this.lysecof);
+         TankExplosionFactory.createEffect(this);
          this.setColormap("dead");
          if(this.kakow != null)
          {
-            this.kakow.von();
+            this.kakow.hide();
          }
-         this.hogys.body.kejo.zerus.qyririg += 500;
-         this.hogys.body.kejo.fev.variq(2,2,2);
-         var _loc1_:Sound3D = Sound3D.create(Assets.getData("tank_explosion",Sound),hubumeno.suwyc,hubumeno.bapewa,hubumeno.fyvilyv,radanigys);
-         this.bijatil.jyqinosi(Sound3DEffect.create(this.murow,this.hogys.body.kejo.position,_loc1_,0,0));
+         this.hogys.body.kejo.zerus.z += 500;
+         this.hogys.body.kejo.fev.reset(2,2,2);
+         var _loc1_:Sound3D = Sound3D.create(Assets.getData("tank_explosion",Sound),SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,radanigys);
+         this.bijatil.addEffect(Sound3DEffect.create(this.murow,this.hogys.body.kejo.position,_loc1_,0,0));
       }
       
       public function respawn() : void
       {
-         this.kuca.citygebal.visible = false;
-         this.kuca.pyjikilyr.visible = false;
+         this.kuca.turretMesh.visible = false;
+         this.kuca.hullMesh.visible = false;
          this.kuca.nuvyma.alpha = 0;
-         this.bijatil.jyqinosi(this.lysecof);
+         this.bijatil.addEffect(this.lysecof);
          this.setColormap(this.zafutonaz);
          this.quj = this.wibo;
-         this.hogys.body.nihyhyr(0,0,0);
+         this.hogys.body.setVelocityXYZ(0,0,0);
          this.hogys.body.setPosition(this.zywanywy);
          this.hogys.body.setOrientation(this.josi);
          if(this.mum != null)
          {
-            this.mum.variq();
-            this.mum.gys(1);
+            this.mum.reset();
+            this.mum.unlock(1);
          }
-         vuteci.namab.nidodyp(new hapafal(0.2,2));
+         GameData.namab.addTask(new ChangeCameraAngleTask(0.2,2));
          setTimeout(this.showAfterRespawn,1000);
       }
       
       private function showAfterRespawn() : void
       {
-         this.kuca.citygebal.visible = true;
-         this.kuca.pyjikilyr.visible = true;
+         this.kuca.turretMesh.visible = true;
+         this.kuca.hullMesh.visible = true;
          this.kuca.nuvyma.alpha = 1;
          if(this.kakow != null)
          {
-            this.kakow.kyrir();
+            this.kakow.show();
          }
          this.kat = true;
       }
       
       public function addToGame() : void
       {
-         this.gov.fusofe(this.hogys);
-         this.gov.dufuredi(this);
-         this.gov.gyvefohip(this);
+         this.gov.addTankBody(this.hogys);
+         this.gov.addPhysicsController(this);
+         this.gov.addPhysicsInterpolator(this);
          this.kat = true;
-         this.jypadif.dopus(this);
-         this.kuca.bil(this.guzinizub,this.butefu);
-         vuteci.gido.addTank(this);
+         this.jypadif.addRenderer(this);
+         this.kuca.addToContainer(this.guzinizub,this.butefu);
+         GameData.gido.addTank(this);
          this.wom = true;
-         this.lysecof = new kulog();
-         this.lysecof.pad(this);
-         this.lysecof.lepuqa = true;
+         this.lysecof = new TankSounds();
+         this.lysecof.setTank(this);
+         this.lysecof.turretSoundEnabled = true;
          this.addSoundToSoundManager();
       }
       
@@ -437,19 +437,19 @@ package alternativa.tanks.vehicles.tank
       {
          if(!this.diniqu)
          {
-            this.diniqu = this.bijatil.jyqinosi(this.lysecof);
+            this.diniqu = this.bijatil.addEffect(this.lysecof);
          }
       }
       
       public function removeFromGame() : void
       {
-         this.bijatil.tucuqokeq(this.lysecof);
-         this.gov.rehef(this.hogys);
-         this.gov.buj(this);
-         this.gov.wizosigy(this);
-         this.jypadif.gebi(this);
-         this.kuca.qeze();
-         vuteci.gido.removeTank(this);
+         this.bijatil.removeEffect(this.lysecof);
+         this.gov.removeTankBody(this.hogys);
+         this.gov.removePhysicsInterpolator(this);
+         this.gov.removePhysicsController(this);
+         this.jypadif.removeRenderer(this);
+         this.kuca.removeFromContainer();
+         GameData.gido.removeTank(this);
          this.wom = false;
       }
       
@@ -470,82 +470,82 @@ package alternativa.tanks.vehicles.tank
       {
          if(this.hag.dajy)
          {
-            this.lysecof.norak();
+            this.lysecof.setIdleMode();
          }
          else if(this.hag.rucumopak != 0)
          {
-            this.lysecof.baz();
+            this.lysecof.setAccelerationMode();
          }
          else if(this.hag.wuzyvodew != 0)
          {
-            this.lysecof.kuw();
+            this.lysecof.setTurningMode();
          }
          else
          {
-            this.lysecof.norak();
+            this.lysecof.setIdleMode();
          }
       }
       
       public function interpolatePhysicsState(param1:Number) : void
       {
-         this.hogys.body.lir(param1,this.zeneti,this.lobozofeh);
-         this.lobozofeh.behy();
+         this.hogys.body.interpolate(param1,this.zeneti,this.lobozofeh);
+         this.lobozofeh.normalize();
          if(this.mum != null)
          {
-            this.bedepidy = -this.mum.gifagoku(param1);
+            this.bedepidy = -this.mum.getInterpolatedDirection(param1);
          }
       }
       
       public function render(param1:int, param2:int) : void
       {
-         this.lobozofeh.jolujeni(wokymityf);
-         lilotes.disy(this.zeneti);
-         lilotes.kan += this.nyryp * wokymityf.sivy;
-         lilotes.zofydizug += this.nyryp * wokymityf.wyvukog;
-         lilotes.qyririg += this.nyryp * wokymityf.tari;
-         this.kuca.luhizoh(lilotes,this.lobozofeh,this.bedepidy);
+         this.lobozofeh.toMatrix3(wokymityf);
+         lilotes.copy(this.zeneti);
+         lilotes.x += this.nyryp * wokymityf.sivy;
+         lilotes.y += this.nyryp * wokymityf.wyvukog;
+         lilotes.z += this.nyryp * wokymityf.tari;
+         this.kuca.updateTransform(lilotes,this.lobozofeh,this.bedepidy);
          var _loc3_:Number = param2 * 0.001;
-         this.viqi.hylij(_loc3_);
-         lilotes.kan = this.kuca.citygebal.x;
-         lilotes.zofydizug = this.kuca.citygebal.y;
-         lilotes.qyririg = this.kuca.citygebal.z;
+         this.viqi.animate(_loc3_);
+         lilotes.x = this.kuca.turretMesh.x;
+         lilotes.y = this.kuca.turretMesh.y;
+         lilotes.z = this.kuca.turretMesh.z;
          if(this.tasapupat != null)
          {
             this.tasapupat.update(param1,param2);
          }
          if(this.kakow != null)
          {
-            this.kakow.dugujiri(100 * this.tasapupat.tucyjyfid);
-            this.kakow.feb(this.quj,this.wibo);
+            this.kakow.setWeaponStatus(100 * this.tasapupat.status);
+            this.kakow.setHealth(this.quj,this.wibo);
             this.kakow.update(lilotes);
          }
          if(this.mum != null)
          {
-            this.mum.mazyja(this.calculateTankDirection());
+            this.mum.setTankDirection(this.calculateTankDirection());
          }
       }
       
       private function calculateTankDirection() : Number
       {
-         this.lobozofeh.jolujeni(wokymityf);
-         wokymityf.japoniw(finajylom.nesicuryn,dedit);
-         dedit.behy();
-         qalolyris.qyririg = this.nyryp;
-         lilotes.variq();
-         lilotes.jec(wokymityf);
-         lilotes.kyluwuzi(this.zeneti);
-         qef.natam(wokymityf,lilotes);
-         hyqirufy.variq(qef.kyvuru,qef.zumidynip,qef.sunafepo);
-         jygef.variq(qef.cydop,qef.qanezycap,qef.luwym);
-         jygef.behy();
-         baven.disy(finajylom.giv);
-         gof.disy(finajylom.pypymu);
-         baven.himyfuvyd(dedit);
-         gof.himyfuvyd(dedit);
-         baven.behy();
-         gof.behy();
-         var _loc1_:Number = Number(gof.zyfav(jygef));
-         var _loc2_:Number = Number(baven.zyfav(jygef));
+         this.lobozofeh.toMatrix3(wokymityf);
+         wokymityf.transformVector(Vector3.nesicuryn,dedit);
+         dedit.normalize();
+         qalolyris.z = this.nyryp;
+         lilotes.reset();
+         lilotes.transform3(wokymityf);
+         lilotes.add(this.zeneti);
+         qef.setFromMatrix3(wokymityf,lilotes);
+         hyqirufy.reset(qef.kyvuru,qef.zumidynip,qef.sunafepo);
+         jygef.reset(qef.cydop,qef.qanezycap,qef.luwym);
+         jygef.normalize();
+         baven.copy(Vector3.giv);
+         gof.copy(Vector3.pypymu);
+         baven.projectOnPlane(dedit);
+         gof.projectOnPlane(dedit);
+         baven.normalize();
+         gof.normalize();
+         var _loc1_:Number = Number(gof.dot(jygef));
+         var _loc2_:Number = Number(baven.dot(jygef));
          return Math.acos(_loc1_) * (_loc2_ > 0 ? -1 : 1);
       }
       
@@ -554,7 +554,7 @@ package alternativa.tanks.vehicles.tank
          this.fusisywa = 0;
          var _loc2_:Number = Number(this.jifav.update(param1));
          var _loc3_:Number = Number(this.vibewyge.update(param1));
-         this.hag.mudicyle(_loc2_,_loc3_,param1);
+         this.hag.applyForces(_loc2_,_loc3_,param1);
          this.rotateTurret(param1);
       }
       
@@ -562,17 +562,17 @@ package alternativa.tanks.vehicles.tank
       {
          if(this.mum != null)
          {
-            this.mum.juhyzika(param1);
-            this.lysecof.wafejazi(this.mum.ralamiqu());
+            this.mum.rotate(param1);
+            this.lysecof.playTurretSound(this.mum.isRotating());
          }
       }
       
-      private function setOptimalZCorrection(param1:finajylom) : void
+      private function setOptimalZCorrection(param1:Vector3) : void
       {
          this.nyryp = 0;
       }
       
-      public function getWeapon() : qaselo
+      public function getWeapon() : Weapon
       {
          return this.tasapupat;
       }
@@ -582,7 +582,7 @@ package alternativa.tanks.vehicles.tank
          return this.wom;
       }
       
-      public function considerBodies(param1:fyweci, param2:fyweci) : Boolean
+      public function considerBodies(param1:Body, param2:Body) : Boolean
       {
          if(param1.fosa != null && param2.fosa == null)
          {
@@ -605,18 +605,18 @@ package alternativa.tanks.vehicles.tank
          this.hogys.kyripama.nute = param1;
       }
       
-      public function get turretController() : let
+      public function get turretController() : TurretController
       {
          return this.mum;
       }
       
-      public function set turretController(param1:let) : void
+      public function set turretController(param1:TurretController) : void
       {
          this.mum = param1;
          if(this.firaqe != null)
          {
             this.mum.setMaxTurnSpeed(this.firaqe.gejebuke,false);
-            this.mum.zyko(this.firaqe.qupi);
+            this.mum.setTurnAcceleration(this.firaqe.qupi);
          }
       }
       
@@ -632,28 +632,28 @@ package alternativa.tanks.vehicles.tank
          this.updateEngineSound();
       }
       
-      public function getLeftTrack() : sizud
+      public function getLeftTrack() : Track
       {
          return this.hag.vapal;
       }
       
-      public function getRightTrack() : sizud
+      public function getRightTrack() : Track
       {
          return this.hag.mof;
       }
       
-      public function setPosition(param1:finajylom) : void
+      public function setPosition(param1:Vector3) : void
       {
          this.hogys.body.setPosition(param1);
-         this.hogys.body.rudahy();
-         this.zeneti.disy(param1);
+         this.hogys.body.saveState();
+         this.zeneti.copy(param1);
       }
       
-      public function setOrientation(param1:zybek) : void
+      public function setOrientation(param1:Quaternion) : void
       {
          this.hogys.body.setOrientation(param1);
-         this.hogys.body.rudahy();
-         this.lobozofeh.disy(param1);
+         this.hogys.body.saveState();
+         this.lobozofeh.copy(param1);
       }
    }
 }

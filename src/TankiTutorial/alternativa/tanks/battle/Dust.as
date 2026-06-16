@@ -1,13 +1,13 @@
 package alternativa.tanks.battle
 {
-   import duqy.homyv;
-   import duqy.sizud;
+   import alternativa.tanks.vehicles.tank.physics.SuspensionRay;
+   import alternativa.tanks.vehicles.tank.physics.Track;
    import flash.display.BlendMode;
    import flash.utils.Dictionary;
-   import fyf.vuteci;
-   import gafaduzuw.finajylom;
-   import gafaduzuw.fode;
-   import hygal.nufaneqog;
+   import tutorial.GameData;
+   import alternativa.math.Vector3;
+   import alternativa.math.Matrix3;
+   import alternativa.tanks.shared.camera.GameCamera;
    import alternativa.tanks.sfx.*;
    import alternativa.tanks.vehicles.tank.Tank;
    
@@ -18,19 +18,19 @@ package alternativa.tanks.battle
       
       private static const pame:Number = 1;
       
-      private static const lesu:finajylom = new finajylom(100,0,0);
+      private static const lesu:Vector3 = new Vector3(100,0,0);
       
-      private static const mazilynu:finajylom = new finajylom();
+      private static const mazilynu:Vector3 = new Vector3();
       
-      private static const dizecoca:finajylom = new finajylom();
+      private static const dizecoca:Vector3 = new Vector3();
       
       private var jujygiw:Number = 0;
       
-      private var zeg:dosu;
+      private var zeg:TextureAnimation;
       
       private var bim:Dictionary = new Dictionary();
       
-      private var butefu:nufaneqog;
+      private var butefu:GameCamera;
       
       private var kyfyjyril:Number;
       
@@ -42,20 +42,20 @@ package alternativa.tanks.battle
       
       private var zymugypu:Number;
       
-      public function Dust(param1:nufaneqog)
+      public function Dust(param1:GameCamera)
       {
          super();
          this.butefu = param1;
       }
       
-      private static function addJitter(param1:finajylom, param2:Number) : void
+      private static function addJitter(param1:Vector3, param2:Number) : void
       {
-         param1.kan += (Math.random() - 0.5) * 2 * param2;
-         param1.zofydizug += (Math.random() - 0.5) * 2 * param2;
-         param1.qyririg += (Math.random() - 0.5) * 2 * param2;
+         param1.x += (Math.random() - 0.5) * 2 * param2;
+         param1.y += (Math.random() - 0.5) * 2 * param2;
+         param1.z += (Math.random() - 0.5) * 2 * param2;
       }
       
-      public function init(param1:dosu, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number) : void
+      public function init(param1:TextureAnimation, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number) : void
       {
          this.zeg = param1;
          this.ziqel = param2;
@@ -95,26 +95,26 @@ package alternativa.tanks.battle
       public function addTankDust(param1:Tank, param2:Number = 100, param3:Number = 0.2) : void
       {
          var _loc4_:Number = NaN;
-         var _loc7_:fode = null;
+         var _loc7_:Matrix3 = null;
          _loc4_ = Number(this.bim[param1]);
-         var _loc5_:sizud = param1.getLeftTrack();
-         var _loc6_:sizud = param1.getRightTrack();
+         var _loc5_:Track = param1.getLeftTrack();
+         var _loc6_:Track = param1.getRightTrack();
          if(_loc5_.zigebota * _loc6_.zigebota < 0)
          {
             param2 = 5;
          }
          _loc7_ = param1.body.jefe;
-         lesu.kan *= -1;
-         _loc7_.japoniw(lesu,mazilynu);
+         lesu.x *= -1;
+         _loc7_.transformVector(lesu,mazilynu);
          this.addTrackDust(_loc5_,_loc4_,mazilynu,param2,param3);
-         lesu.kan *= -1;
-         _loc7_.japoniw(lesu,mazilynu);
+         lesu.x *= -1;
+         _loc7_.transformVector(lesu,mazilynu);
          this.addTrackDust(_loc6_,_loc4_,mazilynu,param2,param3);
       }
       
-      private function addTrackDust(param1:sizud, param2:Number, param3:finajylom, param4:Number, param5:Number) : void
+      private function addTrackDust(param1:Track, param2:Number, param3:Vector3, param4:Number, param5:Number) : void
       {
-         var _loc7_:homyv = null;
+         var _loc7_:SuspensionRay = null;
          var _loc8_:Number = NaN;
          var _loc9_:Number = NaN;
          var _loc6_:int = 0;
@@ -125,9 +125,9 @@ package alternativa.tanks.battle
             if(_loc8_ > param4 && Math.random() < param5)
             {
                _loc9_ = _loc8_ > 500 ? 1 : 0.3 + _loc8_ / 712;
-               dizecoca.disy(_loc7_.sene());
+               dizecoca.copy(_loc7_.getGlobalOrigin());
                addJitter(dizecoca,50);
-               param3.qyririg = 100;
+               param3.z = 100;
                addJitter(param3,20);
                this.createDustParticle(param2,dizecoca,param3,_loc9_);
             }
@@ -135,7 +135,7 @@ package alternativa.tanks.battle
          }
       }
       
-      private function createDustParticle(param1:Number, param2:finajylom, param3:finajylom, param4:Number) : void
+      private function createDustParticle(param1:Number, param2:Vector3, param3:Vector3, param4:Number) : void
       {
          var _loc6_:ScalingObject3DPositionProvider = null;
          var _loc7_:LimitedDistanceAnimatedSpriteEffect = null;
@@ -143,12 +143,12 @@ package alternativa.tanks.battle
          var _loc5_:Number = this.tywad * param4 * this.butefu.softTransparencyStrength;
          if(this.enabled && Boolean(this.butefu.softTransparency) && _loc5_ > 0)
          {
-            _loc6_ = ScalingObject3DPositionProvider(vuteci.murow.loq(ScalingObject3DPositionProvider));
+            _loc6_ = ScalingObject3DPositionProvider(GameData.murow.getObject(ScalingObject3DPositionProvider));
             _loc6_.init(param2,param3,0.01);
-            _loc7_ = LimitedDistanceAnimatedSpriteEffect(vuteci.murow.loq(LimitedDistanceAnimatedSpriteEffect));
+            _loc7_ = LimitedDistanceAnimatedSpriteEffect(GameData.murow.getObject(LimitedDistanceAnimatedSpriteEffect));
             _loc8_ = this.jujygiw * param1 * (1 + pame * Math.random());
             _loc7_.init(_loc8_,_loc8_,this.zeg,Math.random() * 2 * Math.PI,_loc6_,0.5,0.5,null,130,BlendMode.NORMAL,this.kyfyjyril,this.ziqel,_loc5_);
-            vuteci.hobuna.jyqinosi(_loc7_);
+            GameData.hobuna.addEffect(_loc7_);
          }
       }
    }

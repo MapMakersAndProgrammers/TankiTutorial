@@ -108,11 +108,11 @@ package alternativa.physics
          _loc5_ = this.ciqymaciv.body.kejo.position;
          this.divute.x = this.position.x - _loc5_.x;
          this.divute.y = this.position.y - _loc5_.y;
-         this.divute.qyririg = this.position.qyririg - _loc5_.qyririg;
+         this.divute.z = this.position.z - _loc5_.z;
          _loc5_ = this.dizad.body.kejo.position;
          this.bamod.x = this.position.x - _loc5_.x;
          this.bamod.y = this.position.y - _loc5_.y;
-         this.bamod.qyririg = this.position.qyririg - _loc5_.qyririg;
+         this.bamod.z = this.position.z - _loc5_.z;
          if(Math.abs(this.lefugefo.x) < Math.abs(this.lefugefo.y))
          {
             this.cabuhyjyp.cross2(this.lefugefo,Vector3.giv).normalize();
@@ -155,37 +155,37 @@ package alternativa.physics
       
       private function calculateAngularInertiaTerm(param1:Vector3, param2:Vector3, param3:Matrix3) : Number
       {
-         var _loc4_:Number = param2.y * param1.qyririg - param2.qyririg * param1.y;
-         var _loc5_:Number = param2.qyririg * param1.x - param2.x * param1.qyririg;
+         var _loc4_:Number = param2.y * param1.z - param2.z * param1.y;
+         var _loc5_:Number = param2.z * param1.x - param2.x * param1.z;
          var _loc6_:Number = param2.x * param1.y - param2.y * param1.x;
          var _loc7_:Number = param3.gusat * _loc4_ + param3.cydop * _loc5_ + param3.sivy * _loc6_;
          var _loc8_:Number = param3.sig * _loc4_ + param3.qanezycap * _loc5_ + param3.wyvukog * _loc6_;
          var _loc9_:Number = param3.vug * _loc4_ + param3.luwym * _loc5_ + param3.tari * _loc6_;
-         _loc4_ = _loc8_ * param2.qyririg - _loc9_ * param2.y;
-         _loc5_ = _loc9_ * param2.x - _loc7_ * param2.qyririg;
+         _loc4_ = _loc8_ * param2.z - _loc9_ * param2.y;
+         _loc5_ = _loc9_ * param2.x - _loc7_ * param2.z;
          _loc6_ = _loc7_ * param2.y - _loc8_ * param2.x;
-         return _loc4_ * param1.x + _loc5_ * param1.y + _loc6_ * param1.qyririg;
+         return _loc4_ * param1.x + _loc5_ * param1.y + _loc6_ * param1.z;
       }
       
       public function getSeparationVelocity() : Number
       {
          var _loc1_:Vector3 = this.ciqymaciv.body.kejo.fev;
-         var _loc2_:Number = _loc1_.y * this.divute.qyririg - _loc1_.qyririg * this.divute.y;
-         var _loc3_:Number = _loc1_.qyririg * this.divute.x - _loc1_.x * this.divute.qyririg;
+         var _loc2_:Number = _loc1_.y * this.divute.z - _loc1_.z * this.divute.y;
+         var _loc3_:Number = _loc1_.z * this.divute.x - _loc1_.x * this.divute.z;
          var _loc4_:Number = _loc1_.x * this.divute.y - _loc1_.y * this.divute.x;
          var _loc5_:Vector3 = this.ciqymaciv.body.kejo.zerus;
          var _loc6_:Number = _loc5_.x + _loc2_;
          var _loc7_:Number = _loc5_.y + _loc3_;
-         var _loc8_:Number = _loc5_.qyririg + _loc4_;
+         var _loc8_:Number = _loc5_.z + _loc4_;
          _loc1_ = this.dizad.body.kejo.fev;
-         _loc2_ = _loc1_.y * this.bamod.qyririg - _loc1_.qyririg * this.bamod.y;
-         _loc3_ = _loc1_.qyririg * this.bamod.x - _loc1_.x * this.bamod.qyririg;
+         _loc2_ = _loc1_.y * this.bamod.z - _loc1_.z * this.bamod.y;
+         _loc3_ = _loc1_.z * this.bamod.x - _loc1_.x * this.bamod.z;
          _loc4_ = _loc1_.x * this.bamod.y - _loc1_.y * this.bamod.x;
          _loc5_ = this.dizad.body.kejo.zerus;
          _loc6_ -= _loc5_.x + _loc2_;
          _loc7_ -= _loc5_.y + _loc3_;
-         _loc8_ -= _loc5_.qyririg + _loc4_;
-         return _loc6_ * this.lefugefo.x + _loc7_ * this.lefugefo.y + _loc8_ * this.lefugefo.qyririg;
+         _loc8_ -= _loc5_.z + _loc4_;
+         return _loc6_ * this.lefugefo.x + _loc7_ * this.lefugefo.y + _loc8_ * this.lefugefo.z;
       }
       
       public function calcualteDynamicFrameData(param1:Number, param2:Number, param3:Number, param4:Number) : void

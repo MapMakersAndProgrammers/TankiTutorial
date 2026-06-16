@@ -33,14 +33,14 @@ package alternativa.object
          this.calculateABC();
          this.kiw.x = param5;
          this.kiw.y = param6;
-         this.kiw.qyririg = param7;
+         this.kiw.z = param7;
       }
       
       public function isPointInEnvironmentOfWall(param1:Vector3, param2:Number) : Boolean
       {
          var _loc3_:Number = param1.x;
          var _loc4_:Number = param1.y;
-         var _loc5_:Number = param1.qyririg;
+         var _loc5_:Number = param1.z;
          var _loc6_:Number = Math.abs(this.gar * _loc3_ + this.nityt * _loc4_ + this.fysu) / this.ciguz;
          if(_loc6_ <= param2)
          {

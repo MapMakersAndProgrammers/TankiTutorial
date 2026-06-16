@@ -54,7 +54,7 @@ package tutorial.tasks
          this.hon = param3;
          this.qivevu = param1;
          this.pyqunady = param1.kiw;
-         this.pyqunady.qyririg += 200;
+         this.pyqunady.z += 200;
          this.dodycoli = 0;
       }
       
@@ -67,7 +67,7 @@ package tutorial.tasks
             this.gomys = new Sprite3D(200,400,domihyv);
             this.gomys.x = this.pyqunady.x;
             this.gomys.y = this.pyqunady.y;
-            this.gomys.z = this.pyqunady.qyririg;
+            this.gomys.z = this.pyqunady.z;
             this.gomys.originY = 1;
             this.gomys.useShadowMap = false;
             this.gomys.useLight = false;
@@ -75,7 +75,7 @@ package tutorial.tasks
             this.nuvyma = new Plane(300,300,1,1,true,false,false,boqa,boqa);
             this.nuvyma.x = this.pyqunady.x;
             this.nuvyma.y = this.pyqunady.y;
-            this.nuvyma.z = this.pyqunady.qyririg - 190;
+            this.nuvyma.z = this.pyqunady.z - 190;
             this.nuvyma.useShadowMap = false;
             this.nuvyma.useLight = false;
             this.nuvyma.visible = false;
@@ -102,12 +102,12 @@ package tutorial.tasks
          {
             this.dodycoli += 5 * _loc1_.ziqod;
             _loc2_ = Math.sin(this.dodycoli);
-            this.gomys.z = this.pyqunady.qyririg + _loc2_ * 100;
+            this.gomys.z = this.pyqunady.z + _loc2_ * 100;
             if(Boolean(this.citacir.inGame) && Boolean(this.citacir.kat))
             {
                this.hyqirufy.x = this.citacir.kuca.hullMesh.x;
                this.hyqirufy.y = this.citacir.kuca.hullMesh.y;
-               this.hyqirufy.qyririg = this.citacir.kuca.hullMesh.z;
+               this.hyqirufy.z = this.citacir.kuca.hullMesh.z;
                if(this.qivevu.isPointInEnvironmentOfWall(this.hyqirufy,this.range))
                {
                   this.dusy = true;

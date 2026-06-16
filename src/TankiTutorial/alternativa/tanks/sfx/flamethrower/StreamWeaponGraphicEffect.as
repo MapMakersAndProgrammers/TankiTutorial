@@ -2,45 +2,49 @@ package alternativa.tanks.sfx.flamethrower
 {
    import alternativa.engine3d.core.Object3D;
    import alternativa.engine3d.core.Object3DContainer;
-   import daz.fyweci;
+   import alternativa.physics.Body;
    import flash.geom.ColorTransform;
    import flash.utils.getTimer;
-   import gafaduzuw.finajylom;
-   import gafaduzuw.fode;
-   import gafaduzuw.kyhewil;
-   import hygal.nufaneqog;
-   import kefy.Wopowur;
-   import kefy.fare;
-   import alternativa.physics.collision.types.qedozeze;
-   import alternativa.tanks.sfx.bowu;
-   import alternativa.tanks.sfx.dosu;
-   import alternativa.tanks.sfx.pybalutu;
-   import pekiv.sumik;
+   import alternativa.math.Vector3;
+   import alternativa.math.Matrix3;
+   import alternativa.math.Matrix4;
+   import alternativa.tanks.shared.camera.GameCamera;
+   import alternativa.tanks.utils.objectpool.PooledObject;
+   import alternativa.tanks.utils.objectpool.Pool;
+   import alternativa.physics.collision.types.RayHit;
+   import alternativa.tanks.sfx.GraphicEffect;
+   import alternativa.tanks.sfx.TextureAnimation;
+   import alternativa.tanks.sfx.SFXUtils;
+   import alternativa.tanks.physics.CollisionGroup;
    import tutorial.commons.Assets;
-   import zicy.nocyquk;
+   import alternativa.physics.collision.CollisionDetector;
+   import alternativa.engine3d.alternativa3d;
    
-   public class StreamWeaponGraphicEffect extends Wopowur implements bowu
+   // XXX: needed to access and object3d property
+   use namespace alternativa3d;
+
+   public class StreamWeaponGraphicEffect extends PooledObject implements GraphicEffect
    {
       
       private static const migeru:int = 20;
       
       private static const dygusuf:Number = 3;
       
-      private static const gijalatyt:fode = new fode();
+      private static const gijalatyt:Matrix3 = new Matrix3();
       
-      private static const bul:kyhewil = new kyhewil();
+      private static const bul:Matrix4 = new Matrix4();
       
-      private static const fybumu:finajylom = new finajylom();
+      private static const fybumu:Vector3 = new Vector3();
       
-      private static const ruda:finajylom = new finajylom();
+      private static const ruda:Vector3 = new Vector3();
       
-      private static const rygapyv:finajylom = new finajylom();
+      private static const rygapyv:Vector3 = new Vector3();
       
-      private static const dizecoca:finajylom = new finajylom();
+      private static const dizecoca:Vector3 = new Vector3();
       
-      private static const rinego:finajylom = new finajylom();
+      private static const rinego:Vector3 = new Vector3();
       
-      private static const tefydiw:qedozeze = new qedozeze();
+      private static const tefydiw:RayHit = new RayHit();
       
       private var judawohof:Number;
       
@@ -48,15 +52,15 @@ package alternativa.tanks.sfx.flamethrower
       
       private var niq:Number;
       
-      private var toqumyc:finajylom = new finajylom();
+      private var toqumyc:Vector3 = new Vector3();
       
       private var firaqe:Object3D;
       
-      private var dymojes:govo;
+      private var dymojes:StreamWeaponSFXData;
       
-      private var kymaqos:nocyquk;
+      private var kymaqos:CollisionDetector;
       
-      private var kygipiz:Vector.<lyhyzi> = new Vector.<lyhyzi>(migeru);
+      private var kygipiz:Vector.<StreamWeaponParticle> = new Vector.<StreamWeaponParticle>(migeru);
       
       private var jadeqy:Number;
       
@@ -74,7 +78,7 @@ package alternativa.tanks.sfx.flamethrower
       
       private var fyqih:StreamWeaponMuzzlePlane;
       
-      private var taramuty:fyweci;
+      private var taramuty:Body;
       
       private var molehyzuv:Number;
       
@@ -84,19 +88,19 @@ package alternativa.tanks.sfx.flamethrower
       
       private var tizymaku:Number;
       
-      public function StreamWeaponGraphicEffect(param1:fare)
+      public function StreamWeaponGraphicEffect(param1:Pool)
       {
          super(param1);
          this.fyqih = new StreamWeaponMuzzlePlane();
       }
       
-      public function init(param1:fyweci, param2:Number, param3:Number, param4:Number, param5:finajylom, param6:Object3D, param7:govo, param8:nocyquk, param9:Number, param10:Number, param11:Number, param12:Number, param13:Number, param14:Number) : void
+      public function init(param1:Body, param2:Number, param3:Number, param4:Number, param5:Vector3, param6:Object3D, param7:StreamWeaponSFXData, param8:CollisionDetector, param9:Number, param10:Number, param11:Number, param12:Number, param13:Number, param14:Number) : void
       {
          this.taramuty = param1;
          this.judawohof = param2;
          this.marehod = Math.tan(0.5 * param3);
          this.niq = param4;
-         this.toqumyc.disy(param5);
+         this.toqumyc.copy(param5);
          this.firaqe = param6;
          this.dymojes = param7;
          this.kymaqos = param8;
@@ -104,8 +108,8 @@ package alternativa.tanks.sfx.flamethrower
          this.binijosom = param12;
          this.nel = param13;
          this.tizymaku = param14;
-         param7.tazequd = Assets.getData("flame_muzzle",dosu);
-         this.fyqih.hijowase(param9,param10);
+         param7.tazequd = Assets.getData("flame_muzzle",TextureAnimation);
+         this.fyqih.resize(param9,param10);
          this.jadeqy = 2 * (param12 - param11) / param2;
          this.qyz = 1000 * param2 / (migeru * param4);
          this.gutebovu = 0;
@@ -114,9 +118,9 @@ package alternativa.tanks.sfx.flamethrower
          this.huzoqeq = false;
       }
       
-      private function initMuzzlePlane(param1:govo) : void
+      private function initMuzzlePlane(param1:StreamWeaponSFXData) : void
       {
-         var _loc2_:siwewuvu = null;
+         var _loc2_:ColorTransformEntry = null;
          var _loc3_:ColorTransform = null;
          this.fyqih.init(param1.tazequd);
          if(param1.jowufeq != null)
@@ -155,23 +159,23 @@ package alternativa.tanks.sfx.flamethrower
          recycle();
       }
       
-      public function play(param1:int, param2:nufaneqog) : Boolean
+      public function play(param1:int, param2:GameCamera) : Boolean
       {
          var _loc3_:Number = NaN;
-         var _loc5_:lyhyzi = null;
-         var _loc6_:finajylom = null;
+         var _loc5_:StreamWeaponParticle = null;
+         var _loc6_:Vector3 = null;
          var _loc7_:Number = NaN;
          this.calculateParameters();
          _loc3_ = param1 / 1000;
-         if(this.kymaqos.jityw(fybumu,ruda,sumik.neli,this.toqumyc.zofydizug + this.fyqih.nyhuguty,null,tefydiw))
+         if(this.kymaqos.raycastStatic(fybumu,ruda,CollisionGroup.neli,this.toqumyc.y + this.fyqih.length,null,tefydiw))
          {
             this.fyqih.visible = false;
          }
          else
          {
             this.fyqih.visible = true;
-            this.fyqih.update(_loc3_,this.dymojes.tazequd.macoqaka);
-            pybalutu.teg(this.fyqih,rinego,ruda,param2.position);
+            this.fyqih.update(_loc3_,this.dymojes.tazequd.fps);
+            SFXUtils.alignObjectPlaneToView(this.fyqih,rinego,ruda,param2.position);
          }
          if(!this.huzoqeq && this.gutebovu < migeru && this.lecopojen >= this.bumypaz)
          {
@@ -182,23 +186,23 @@ package alternativa.tanks.sfx.flamethrower
          while(_loc4_ < this.gutebovu)
          {
             _loc5_ = this.kygipiz[_loc4_];
-            dizecoca.kan = _loc5_.x;
-            dizecoca.zofydizug = _loc5_.y;
-            dizecoca.qyririg = _loc5_.z;
-            if(_loc5_.hyn > this.judawohof || Boolean(this.kymaqos.jityw(dizecoca,_loc5_.zerus,sumik.deli,_loc3_,null,tefydiw)))
+            dizecoca.x = _loc5_.x;
+            dizecoca.y = _loc5_.y;
+            dizecoca.z = _loc5_.z;
+            if(_loc5_.hyn > this.judawohof || Boolean(this.kymaqos.raycastStatic(dizecoca,_loc5_.zerus,CollisionGroup.deli,_loc3_,null,tefydiw)))
             {
                this.removeParticle(_loc4_--);
             }
             else
             {
                _loc6_ = _loc5_.zerus;
-               _loc5_.x += _loc6_.kan * _loc3_;
-               _loc5_.y += _loc6_.zofydizug * _loc3_;
-               _loc5_.z += _loc6_.qyririg * _loc3_;
+               _loc5_.x += _loc6_.x * _loc3_;
+               _loc5_.y += _loc6_.y * _loc3_;
+               _loc5_.z += _loc6_.z * _loc3_;
                _loc5_.hyn += this.niq * _loc3_;
                _loc5_.rotation += dygusuf * _loc3_ * _loc5_.huved;
-               _loc5_.les(_loc5_.tyfu);
-               _loc5_.tyfu += this.dymojes.qywyr.macoqaka * _loc3_;
+               _loc5_.setFrameIndex(_loc5_.tyfu);
+               _loc5_.tyfu += this.dymojes.qywyr.fps * _loc3_;
                _loc7_ = this.molehyzuv + this.jadeqy * _loc5_.hyn;
                if(_loc7_ > this.binijosom)
                {
@@ -206,7 +210,7 @@ package alternativa.tanks.sfx.flamethrower
                }
                _loc5_.width = _loc7_;
                _loc5_.height = _loc7_;
-               _loc5_.tehyqifu(this.judawohof,this.dymojes.qob);
+               _loc5_.updateColorTransofrm(this.judawohof,this.dymojes.qob);
             }
             _loc4_++;
          }
@@ -232,40 +236,40 @@ package alternativa.tanks.sfx.flamethrower
       private function calculateParameters() : void
       {
          var _loc1_:Number = NaN;
-         bul.lowefuwi(this.firaqe.x,this.firaqe.y,this.firaqe.z,this.firaqe.rotationX,this.firaqe.rotationY,this.firaqe.rotationZ);
-         rygapyv.kan = bul.gusat;
-         rygapyv.zofydizug = bul.sig;
-         rygapyv.qyririg = bul.vug;
-         ruda.kan = bul.cydop;
-         ruda.zofydizug = bul.qanezycap;
-         ruda.qyririg = bul.luwym;
-         bul.japoniw(this.toqumyc,rinego);
-         _loc1_ = Number(this.toqumyc.zofydizug);
-         fybumu.kan = rinego.kan - _loc1_ * ruda.kan;
-         fybumu.zofydizug = rinego.zofydizug - _loc1_ * ruda.zofydizug;
-         fybumu.qyririg = rinego.qyririg - _loc1_ * ruda.qyririg;
+         bul.setMatrix(this.firaqe.x,this.firaqe.y,this.firaqe.z,this.firaqe.rotationX,this.firaqe.rotationY,this.firaqe.rotationZ);
+         rygapyv.x = bul.gusat;
+         rygapyv.y = bul.sig;
+         rygapyv.z = bul.vug;
+         ruda.x = bul.cydop;
+         ruda.y = bul.qanezycap;
+         ruda.z = bul.luwym;
+         bul.transformVector(this.toqumyc,rinego);
+         _loc1_ = Number(this.toqumyc.y);
+         fybumu.x = rinego.x - _loc1_ * ruda.x;
+         fybumu.y = rinego.y - _loc1_ * ruda.y;
+         fybumu.z = rinego.z - _loc1_ * ruda.z;
       }
       
       private function addParticle() : void
       {
          var _loc1_:Number = this.nel + Math.random() * this.tizymaku;
-         if(!this.fyqih.visible && tefydiw.jomuc < this.toqumyc.zofydizug + _loc1_)
+         if(!this.fyqih.visible && tefydiw.jomuc < this.toqumyc.y + _loc1_)
          {
             return;
          }
-         var _loc2_:lyhyzi = lyhyzi.bytupugif();
-         _loc2_.vigipu(this.dymojes.qywyr);
+         var _loc2_:StreamWeaponParticle = StreamWeaponParticle.getParticle();
+         _loc2_.setAnimationData(this.dymojes.qywyr);
          _loc2_.rotation = Math.random() * Math.PI * 2;
-         _loc2_.tyfu = Math.random() * _loc2_.nawirales();
+         _loc2_.tyfu = Math.random() * _loc2_.getNumFrames();
          this.getParticleFlightDirection(ruda);
-         _loc2_.zerus.kan = this.niq * ruda.kan;
-         _loc2_.zerus.zofydizug = this.niq * ruda.zofydizug;
-         _loc2_.zerus.qyririg = this.niq * ruda.qyririg;
-         _loc2_.zerus.kyluwuzi(this.taramuty.kejo.zerus);
+         _loc2_.zerus.x = this.niq * ruda.x;
+         _loc2_.zerus.y = this.niq * ruda.y;
+         _loc2_.zerus.z = this.niq * ruda.z;
+         _loc2_.zerus.add(this.taramuty.kejo.zerus);
          _loc2_.hyn = _loc1_;
-         _loc2_.x = rinego.kan + _loc1_ * ruda.kan;
-         _loc2_.y = rinego.zofydizug + _loc1_ * ruda.zofydizug;
-         _loc2_.z = rinego.qyririg + _loc1_ * ruda.qyririg;
+         _loc2_.x = rinego.x + _loc1_ * ruda.x;
+         _loc2_.y = rinego.y + _loc1_ * ruda.y;
+         _loc2_.z = rinego.z + _loc1_ * ruda.z;
          _loc2_.huved = Math.random() < 0.5 ? 1 : -1;
          this.kygipiz[this.gutebovu++] = _loc2_;
          this.danewazam.addChild(_loc2_);
@@ -273,26 +277,26 @@ package alternativa.tanks.sfx.flamethrower
       
       private function removeParticle(param1:int) : void
       {
-         var _loc2_:lyhyzi = this.kygipiz[param1];
+         var _loc2_:StreamWeaponParticle = this.kygipiz[param1];
          this.kygipiz[param1] = this.kygipiz[--this.gutebovu];
          this.kygipiz[this.gutebovu] = null;
          _loc2_.dispose();
       }
       
-      private function getParticleFlightDirection(param1:finajylom) : void
+      private function getParticleFlightDirection(param1:Vector3) : void
       {
          var _loc3_:Number = NaN;
          var _loc2_:Number = 2 * Math.PI * Math.random();
-         gijalatyt.dekod(param1,_loc2_);
-         rygapyv.jec(gijalatyt);
+         gijalatyt.fromAxisAngle(param1,_loc2_);
+         rygapyv.transform3(gijalatyt);
          _loc3_ = this.judawohof * this.marehod * Math.random();
-         param1.kan = param1.kan * this.judawohof + rygapyv.kan * _loc3_;
-         param1.zofydizug = param1.zofydizug * this.judawohof + rygapyv.zofydizug * _loc3_;
-         param1.qyririg = param1.qyririg * this.judawohof + rygapyv.qyririg * _loc3_;
-         param1.behy();
+         param1.x = param1.x * this.judawohof + rygapyv.x * _loc3_;
+         param1.y = param1.y * this.judawohof + rygapyv.y * _loc3_;
+         param1.z = param1.z * this.judawohof + rygapyv.z * _loc3_;
+         param1.normalize();
       }
       
-      public function get particles() : Vector.<lyhyzi>
+      public function get particles() : Vector.<StreamWeaponParticle>
       {
          return this.kygipiz;
       }

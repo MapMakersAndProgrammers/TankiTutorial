@@ -24,7 +24,7 @@ package alternativa.tanks.utils
          param1.z = param2.sunafepo;
          param1.rotationX = fyqynyfy.x;
          param1.rotationY = fyqynyfy.y;
-         param1.rotationZ = fyqynyfy.qyririg;
+         param1.rotationZ = fyqynyfy.z;
       }
    }
 }

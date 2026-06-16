@@ -46,9 +46,9 @@ package tutorial.tasks
             case 1:
                this.jifom.kuca.hullMesh.colorTransform = null;
                _loc3_ = this.jifom.kuca.getHull().getSkinDimensions();
-               _loc4_ = _loc3_.qyririg * 0.5;
+               _loc4_ = _loc3_.z * 0.5;
                this.jifom.setHull(this.qyjosezir);
-               this.jifom.hogys.body.kejo.position.qyririg += _loc3_.qyririg * 0.5 - _loc4_;
+               this.jifom.hogys.body.kejo.position.z += _loc3_.z * 0.5 - _loc4_;
                this.jifom.hogys.body.saveState();
                this.jifom.kuca.hullMesh.colorTransform = this.fur;
                this.kejo = 2;

@@ -1,55 +1,55 @@
 package alternativa.tanks.sfx
 {
    import alternativa.engine3d.core.Object3D;
-   import gafaduzuw.finajylom;
-   import hygal.nufaneqog;
-   import kefy.Wopowur;
-   import kefy.fare;
+   import alternativa.math.Vector3;
+   import alternativa.tanks.shared.camera.GameCamera;
+   import alternativa.tanks.utils.objectpool.PooledObject;
+   import alternativa.tanks.utils.objectpool.Pool;
    
-   public class MovingObject3DPositionProvider extends Wopowur implements hebis
+   public class MovingObject3DPositionProvider extends PooledObject implements Object3DPositionProvider
    {
       
-      private var kiji:finajylom = new finajylom();
+      private var kiji:Vector3 = new Vector3();
       
-      private var zerus:finajylom = new finajylom();
+      private var zerus:Vector3 = new Vector3();
       
       private var cozo:Number;
       
-      public function MovingObject3DPositionProvider(param1:fare)
+      public function MovingObject3DPositionProvider(param1:Pool)
       {
          super(param1);
       }
       
       public function initPosition(param1:Object3D) : void
       {
-         param1.x = this.kiji.kan;
-         param1.y = this.kiji.zofydizug;
-         param1.z = this.kiji.qyririg;
+         param1.x = this.kiji.x;
+         param1.y = this.kiji.y;
+         param1.z = this.kiji.z;
       }
       
-      public function init(param1:finajylom, param2:finajylom, param3:Number) : void
+      public function init(param1:Vector3, param2:Vector3, param3:Number) : void
       {
-         this.kiji.disy(param1);
-         this.zerus.disy(param2);
+         this.kiji.copy(param1);
+         this.zerus.copy(param2);
          this.cozo = param3;
       }
       
-      public function updateObjectPosition(param1:Object3D, param2:nufaneqog, param3:int) : void
+      public function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void
       {
          var _loc4_:Number = 0.001 * param3;
-         param1.x += this.zerus.kan * _loc4_;
-         param1.y += this.zerus.zofydizug * _loc4_;
-         param1.z += this.zerus.qyririg * _loc4_;
-         var _loc5_:Number = Number(this.zerus.nyhuguty());
+         param1.x += this.zerus.x * _loc4_;
+         param1.y += this.zerus.y * _loc4_;
+         param1.z += this.zerus.z * _loc4_;
+         var _loc5_:Number = Number(this.zerus.length());
          _loc5_ += this.cozo * _loc4_;
          if(_loc5_ <= 0)
          {
-            this.zerus.variq();
+            this.zerus.reset();
          }
          else
          {
-            this.zerus.behy();
-            this.zerus.rudi(_loc5_);
+            this.zerus.normalize();
+            this.zerus.scale(_loc5_);
          }
       }
       

@@ -3,15 +3,15 @@ package alternativa.tanks.sfx
    import alternativa.engine3d.core.Object3D;
    import flash.events.Event;
    import flash.media.SoundChannel;
-   import gafaduzuw.finajylom;
-   import hygal.nufaneqog;
-   import kefy.Wopowur;
-   import kefy.fare;
+   import alternativa.math.Vector3;
+   import alternativa.tanks.shared.camera.GameCamera;
+   import alternativa.tanks.utils.objectpool.PooledObject;
+   import alternativa.tanks.utils.objectpool.Pool;
    
-   public class MobileSound3DEffect extends Wopowur implements rinude
+   public class MobileSound3DEffect extends PooledObject implements ISound3DEffect
    {
       
-      private static const kudyvug:finajylom = new finajylom();
+      private static const kudyvug:Vector3 = new Vector3();
       
       private var zib:Sound3D;
       
@@ -35,7 +35,7 @@ package alternativa.tanks.sfx
       
       private var qihaq:Number;
       
-      public function MobileSound3DEffect(param1:fare)
+      public function MobileSound3DEffect(param1:Pool)
       {
          super(param1);
       }
@@ -57,7 +57,7 @@ package alternativa.tanks.sfx
          this.qihaq = 0;
       }
       
-      public function play(param1:int, param2:nufaneqog) : void
+      public function play(param1:int, param2:GameCamera) : void
       {
          if(!this.letere)
          {
@@ -75,9 +75,9 @@ package alternativa.tanks.sfx
             }
             this.channel.addEventListener(Event.SOUND_COMPLETE,this.onSoundComplete);
          }
-         kudyvug.kan = this.tyjom.x;
-         kudyvug.zofydizug = this.tyjom.y;
-         kudyvug.qyririg = this.tyjom.z;
+         kudyvug.x = this.tyjom.x;
+         kudyvug.y = this.tyjom.y;
+         kudyvug.z = this.tyjom.z;
          if(this.qihaq > 0)
          {
             this.koc -= this.qihaq * param1;
@@ -120,11 +120,11 @@ package alternativa.tanks.sfx
          }
       }
       
-      public function readPosition(param1:finajylom) : void
+      public function readPosition(param1:Vector3) : void
       {
-         param1.kan = this.tyjom.x;
-         param1.zofydizug = this.tyjom.y;
-         param1.qyririg = this.tyjom.z;
+         param1.x = this.tyjom.x;
+         param1.y = this.tyjom.y;
+         param1.z = this.tyjom.z;
       }
       
       public function get numSounds() : int

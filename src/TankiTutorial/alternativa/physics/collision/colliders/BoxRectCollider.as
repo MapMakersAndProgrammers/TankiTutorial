@@ -6,7 +6,7 @@ package alternativa.physics.collision.colliders
    import alternativa.physics.collision.Collider;
    import alternativa.physics.collision.CollisionShape;
    import alternativa.physics.collision.primitives.CollisionRect;
-   import alternativa.physics.collision.primitives.tygymamej;
+   import alternativa.physics.collision.primitives.CollisionBox;
    
    public class BoxRectCollider implements Collider
    {
@@ -48,18 +48,18 @@ package alternativa.physics.collision.colliders
       public function getContacts(param1:CollisionShape, param2:CollisionShape, param3:Vector.<ShapeContact>) : void
       {
          var _loc4_:CollisionRect = null;
-         var _loc5_:tygymamej = null;
+         var _loc5_:CollisionBox = null;
          if(this.haveCollision(param1,param2))
          {
             if(param1 is CollisionRect)
             {
                _loc4_ = CollisionRect(param1);
-               _loc5_ = tygymamej(param2);
+               _loc5_ = CollisionBox(param2);
             }
             else
             {
                _loc4_ = CollisionRect(param2);
-               _loc5_ = tygymamej(param1);
+               _loc5_ = CollisionBox(param1);
             }
             this.findContacts(_loc5_,_loc4_,this.seko,param3);
          }
@@ -67,58 +67,58 @@ package alternativa.physics.collision.colliders
       
       public function haveCollision(param1:CollisionShape, param2:CollisionShape) : Boolean
       {
-         var _loc3_:tygymamej = null;
+         var _loc3_:CollisionBox = null;
          var _loc4_:CollisionRect = null;
          this.jicywos = 10000000000;
-         if(param1 is tygymamej)
+         if(param1 is CollisionBox)
          {
-            _loc3_ = tygymamej(param1);
+            _loc3_ = CollisionBox(param1);
             _loc4_ = CollisionRect(param2);
          }
          else
          {
-            _loc3_ = tygymamej(param2);
+            _loc3_ = CollisionBox(param2);
             _loc4_ = CollisionRect(param1);
          }
          var _loc5_:Matrix4 = _loc3_.wet;
          var _loc6_:Matrix4 = _loc4_.wet;
          this.tupanamer.x = _loc5_.kyvuru - _loc6_.kyvuru;
          this.tupanamer.y = _loc5_.zumidynip - _loc6_.zumidynip;
-         this.tupanamer.qyririg = _loc5_.sunafepo - _loc6_.sunafepo;
+         this.tupanamer.z = _loc5_.sunafepo - _loc6_.sunafepo;
          this.rapag.x = _loc6_.sivy;
          this.rapag.y = _loc6_.wyvukog;
-         this.rapag.qyririg = _loc6_.tari;
+         this.rapag.z = _loc6_.tari;
          if(!this.testMainAxis(_loc3_,_loc4_,this.rapag,this.tupanamer))
          {
             return false;
          }
          this.gisepimin.x = _loc5_.gusat;
          this.gisepimin.y = _loc5_.sig;
-         this.gisepimin.qyririg = _loc5_.vug;
+         this.gisepimin.z = _loc5_.vug;
          if(!this.testMainAxis(_loc3_,_loc4_,this.gisepimin,this.tupanamer))
          {
             return false;
          }
          this.zimep.x = _loc5_.cydop;
          this.zimep.y = _loc5_.qanezycap;
-         this.zimep.qyririg = _loc5_.luwym;
+         this.zimep.z = _loc5_.luwym;
          if(!this.testMainAxis(_loc3_,_loc4_,this.zimep,this.tupanamer))
          {
             return false;
          }
          this.naruqe.x = _loc5_.sivy;
          this.naruqe.y = _loc5_.wyvukog;
-         this.naruqe.qyririg = _loc5_.tari;
+         this.naruqe.z = _loc5_.tari;
          if(!this.testMainAxis(_loc3_,_loc4_,this.naruqe,this.tupanamer))
          {
             return false;
          }
          this.gizy.x = _loc6_.gusat;
          this.gizy.y = _loc6_.sig;
-         this.gizy.qyririg = _loc6_.vug;
+         this.gizy.z = _loc6_.vug;
          this.vas.x = _loc6_.cydop;
          this.vas.y = _loc6_.qanezycap;
-         this.vas.qyririg = _loc6_.luwym;
+         this.vas.z = _loc6_.luwym;
          if(!this.testDerivedAxis(_loc3_,_loc4_,this.gisepimin,this.gizy,this.tupanamer))
          {
             return false;
@@ -146,19 +146,19 @@ package alternativa.physics.collision.colliders
          return true;
       }
       
-      private function testMainAxis(param1:tygymamej, param2:CollisionRect, param3:Vector3, param4:Vector3) : Boolean
+      private function testMainAxis(param1:CollisionBox, param2:CollisionRect, param3:Vector3, param4:Vector3) : Boolean
       {
          var _loc5_:Number = this.getOverlapOnAxis(param1,param2,param3,param4);
          return this.registerOverlap(_loc5_,param3);
       }
       
-      private function testDerivedAxis(param1:tygymamej, param2:CollisionRect, param3:Vector3, param4:Vector3, param5:Vector3) : Boolean
+      private function testDerivedAxis(param1:CollisionBox, param2:CollisionRect, param3:Vector3, param4:Vector3, param5:Vector3) : Boolean
       {
          var _loc7_:Number = NaN;
-         this.nydyfi.x = param3.y * param4.qyririg - param3.qyririg * param4.y;
-         this.nydyfi.y = param3.qyririg * param4.x - param3.x * param4.qyririg;
-         this.nydyfi.qyririg = param3.x * param4.y - param3.y * param4.x;
-         var _loc6_:Number = this.nydyfi.x * this.nydyfi.x + this.nydyfi.y * this.nydyfi.y + this.nydyfi.qyririg * this.nydyfi.qyririg;
+         this.nydyfi.x = param3.y * param4.z - param3.z * param4.y;
+         this.nydyfi.y = param3.z * param4.x - param3.x * param4.z;
+         this.nydyfi.z = param3.x * param4.y - param3.y * param4.x;
+         var _loc6_:Number = this.nydyfi.x * this.nydyfi.x + this.nydyfi.y * this.nydyfi.y + this.nydyfi.z * this.nydyfi.z;
          if(_loc6_ < 1e-10)
          {
             return true;
@@ -166,46 +166,46 @@ package alternativa.physics.collision.colliders
          _loc7_ = 1 / Math.sqrt(_loc6_);
          this.nydyfi.x *= _loc7_;
          this.nydyfi.y *= _loc7_;
-         this.nydyfi.qyririg *= _loc7_;
+         this.nydyfi.z *= _loc7_;
          var _loc8_:Number = this.getOverlapOnAxis(param1,param2,this.nydyfi,param5);
          return this.registerOverlap(_loc8_,this.nydyfi);
       }
       
-      private function getOverlapOnAxis(param1:tygymamej, param2:CollisionRect, param3:Vector3, param4:Vector3) : Number
+      private function getOverlapOnAxis(param1:CollisionBox, param2:CollisionRect, param3:Vector3, param4:Vector3) : Number
       {
          var _loc5_:Matrix4 = param1.wet;
-         var _loc6_:Number = (_loc5_.gusat * param3.x + _loc5_.sig * param3.y + _loc5_.vug * param3.qyririg) * param1.nezav.x;
+         var _loc6_:Number = (_loc5_.gusat * param3.x + _loc5_.sig * param3.y + _loc5_.vug * param3.z) * param1.nezav.x;
          if(_loc6_ < 0)
          {
             _loc6_ = -_loc6_;
          }
          var _loc7_:Number = _loc6_;
-         _loc6_ = (_loc5_.cydop * param3.x + _loc5_.qanezycap * param3.y + _loc5_.luwym * param3.qyririg) * param1.nezav.y;
+         _loc6_ = (_loc5_.cydop * param3.x + _loc5_.qanezycap * param3.y + _loc5_.luwym * param3.z) * param1.nezav.y;
          if(_loc6_ < 0)
          {
             _loc6_ = -_loc6_;
          }
          _loc7_ += _loc6_;
-         _loc6_ = (_loc5_.sivy * param3.x + _loc5_.wyvukog * param3.y + _loc5_.tari * param3.qyririg) * param1.nezav.qyririg;
+         _loc6_ = (_loc5_.sivy * param3.x + _loc5_.wyvukog * param3.y + _loc5_.tari * param3.z) * param1.nezav.z;
          if(_loc6_ < 0)
          {
             _loc6_ = -_loc6_;
          }
          _loc7_ += _loc6_;
          _loc5_ = param2.wet;
-         _loc6_ = (_loc5_.gusat * param3.x + _loc5_.sig * param3.y + _loc5_.vug * param3.qyririg) * param2.nezav.x;
+         _loc6_ = (_loc5_.gusat * param3.x + _loc5_.sig * param3.y + _loc5_.vug * param3.z) * param2.nezav.x;
          if(_loc6_ < 0)
          {
             _loc6_ = -_loc6_;
          }
          _loc7_ += _loc6_;
-         _loc6_ = (_loc5_.cydop * param3.x + _loc5_.qanezycap * param3.y + _loc5_.luwym * param3.qyririg) * param2.nezav.y;
+         _loc6_ = (_loc5_.cydop * param3.x + _loc5_.qanezycap * param3.y + _loc5_.luwym * param3.z) * param2.nezav.y;
          if(_loc6_ < 0)
          {
             _loc6_ = -_loc6_;
          }
          _loc7_ += _loc6_;
-         _loc6_ = param4.x * param3.x + param4.y * param3.y + param4.qyririg * param3.qyririg;
+         _loc6_ = param4.x * param3.x + param4.y * param3.y + param4.z * param3.z;
          if(_loc6_ < 0)
          {
             _loc6_ = -_loc6_;
@@ -224,12 +224,12 @@ package alternativa.physics.collision.colliders
             this.jicywos = param1;
             this.seko.x = param2.x;
             this.seko.y = param2.y;
-            this.seko.qyririg = param2.qyririg;
+            this.seko.z = param2.z;
          }
          return true;
       }
       
-      private function findContacts(param1:tygymamej, param2:CollisionRect, param3:Vector3, param4:Vector.<ShapeContact>) : void
+      private function findContacts(param1:CollisionBox, param2:CollisionRect, param3:Vector3, param4:Vector.<ShapeContact>) : void
       {
          var _loc5_:Matrix4 = null;
          var _loc12_:ShapeContact = null;
@@ -242,12 +242,12 @@ package alternativa.physics.collision.colliders
          var _loc7_:Vector3 = this.tupanamer;
          _loc7_.x = _loc5_.kyvuru - _loc6_.kyvuru;
          _loc7_.y = _loc5_.zumidynip - _loc6_.zumidynip;
-         _loc7_.qyririg = _loc5_.sunafepo - _loc6_.sunafepo;
-         if(param3.x * _loc7_.x + param3.y * _loc7_.y + param3.qyririg * _loc7_.qyririg < 0)
+         _loc7_.z = _loc5_.sunafepo - _loc6_.sunafepo;
+         if(param3.x * _loc7_.x + param3.y * _loc7_.y + param3.z * _loc7_.z < 0)
          {
             param3.x = -param3.x;
             param3.y = -param3.y;
-            param3.qyririg = -param3.qyririg;
+            param3.z = -param3.z;
          }
          var _loc8_:Matrix4 = labisiqyg;
          ColliderUtils.buildContactBasis(param3,_loc5_,_loc6_,_loc8_);
@@ -266,7 +266,7 @@ package alternativa.physics.collision.colliders
             _loc14_ = _loc6_.sivy;
             _loc15_ = _loc6_.wyvukog;
             _loc16_ = _loc6_.tari;
-            if(_loc13_.x * _loc14_ + _loc13_.y * _loc15_ + _loc13_.qyririg * _loc16_ < 0)
+            if(_loc13_.x * _loc14_ + _loc13_.y * _loc15_ + _loc13_.z * _loc16_ < 0)
             {
                _loc12_.dispose();
                _loc10_--;
@@ -278,7 +278,7 @@ package alternativa.physics.collision.colliders
             {
                _loc13_.x = _loc14_;
                _loc13_.y = _loc15_;
-               _loc13_.qyririg = _loc16_;
+               _loc13_.z = _loc16_;
             }
             _loc11_++;
          }

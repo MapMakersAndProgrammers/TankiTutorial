@@ -1,6 +1,6 @@
 package movieclips
 {
-   import §^O§.§3Y§;
+   import tutorial.utils.Text;
    import flash.display.MovieClip;
    import flash.text.TextField;
    import flash.text.TextFieldAutoSize;
@@ -26,15 +26,15 @@ package movieclips
       {
          super();
          this.pictogram = Lang.language == Lang.DE ? new this.deleteDeMC() as MovieClip : new this.deleteMC() as MovieClip;
-         this.tf1 = §3Y§.§#6§(Lang.getText(LocalizedStrings.ROLLED_OVER),42,500,"left");
-         this.tf2 = §3Y§.§#6§(Lang.getText(LocalizedStrings.PRESS),42,500,"left");
+         this.tf1 = Text.getTextField(Lang.getText(LocalizedStrings.ROLLED_OVER),42,500,"left");
+         this.tf2 = Text.getTextField(Lang.getText(LocalizedStrings.PRESS),42,500,"left");
          if(Lang.language == Lang.CN)
          {
-            this.tf3 = §3Y§.§#6§("键就可以恢复！",42,500,"left");
+            this.tf3 = Text.getTextField("键就可以恢复！",42,500,"left");
          }
          else
          {
-            this.tf3 = §3Y§.§#6§("",42,500,"left");
+            this.tf3 = Text.getTextField("",42,500,"left");
          }
          this.tf1.autoSize = TextFieldAutoSize.LEFT;
          this.tf1.text = this.tf1.text;

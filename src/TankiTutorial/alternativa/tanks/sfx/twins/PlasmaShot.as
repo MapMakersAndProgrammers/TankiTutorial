@@ -1,41 +1,45 @@
 package alternativa.tanks.sfx.twins
 {
    import alternativa.engine3d.containers.KDContainer;
-   import daz.fyweci;
-   import daz.hivymop;
-   import fyf.dinomyvi;
-   import fyf.vuteci;
-   import gafaduzuw.finajylom;
-   import gafaduzuw.fode;
-   import kefy.Wopowur;
-   import kefy.fare;
-   import kefy.lalyna;
-   import alternativa.physics.collision.types.qedozeze;
-   import kulo.huv;
-   import alternativa.tanks.battle.litavepot;
-   import alternativa.tanks.battle.qujimowo;
-   import alternativa.tanks.battle.zocikydo;
-   import alternativa.tanks.sfx.cyp;
+   import alternativa.physics.Body;
+   import alternativa.physics.TanksPhysicsScene;
+   import tutorial.EffectsManager;
+   import tutorial.GameData;
+   import alternativa.math.Vector3;
+   import alternativa.math.Matrix3;
+   import alternativa.tanks.utils.objectpool.PooledObject;
+   import alternativa.tanks.utils.objectpool.Pool;
+   import alternativa.tanks.utils.objectpool.ObjectPool;
+   import alternativa.physics.collision.types.RayHit;
+   import alternativa.utils.MathUtils;
+   import alternativa.tanks.battle.Renderer;
+   import alternativa.tanks.battle.PhysicsController;
+   import alternativa.tanks.battle.PhysicsInterpolator;
+   import alternativa.tanks.sfx.AnimatedSprite3D;
    import alternativa.tanks.sfx.StaticObject3DPositionProvider;
-   import alternativa.tanks.sfx.dosu;
-   import alternativa.tanks.sfx.mirir;
+   import alternativa.tanks.sfx.TextureAnimation;
+   import alternativa.tanks.sfx.ExternalObject3DPositionProvider;
    import alternativa.tanks.sfx.AnimatedLightEffect;
    import alternativa.tanks.sfx.LightData;
-   import alternativa.tanks.sfx.virah;
+   import alternativa.tanks.sfx.LightAnimation;
    import alternativa.tanks.sfx.AnimatedSpriteEffect;
    import alternativa.tanks.vehicles.tank.Tank;
-   import pekiv.sumik;
-   import qoweve.benesihys;
+   import alternativa.tanks.physics.CollisionGroup;
+   import alternativa.tanks.RenderGroup;
    import tutorial.commons.Assets;
-   import zicy.nocyquk;
-   import zicy.wagoc;
+   import alternativa.physics.collision.CollisionDetector;
+   import alternativa.physics.collision.IRayCollisionFilter;
+   import alternativa.engine3d.alternativa3d;
    
-   public class PlasmaShot extends Wopowur implements qujimowo, zocikydo, wagoc, litavepot
+   // XXX: this is needed to access some object3d properties
+   use namespace alternativa3d;
+
+   public class PlasmaShot extends PooledObject implements PhysicsController, PhysicsInterpolator, IRayCollisionFilter, Renderer
    {
       
-      private static var mofibimap:dosu;
+      private static var mofibimap:TextureAnimation;
       
-      private static var fid:dosu;
+      private static var fid:TextureAnimation;
       
       public static const tezesulal:Number = 250;
       
@@ -49,13 +53,13 @@ package alternativa.tanks.sfx.twins
       
       private static const vogilyta:Number = 2 * Math.PI / fenuf;
       
-      private static const gizynuzelu:fode = new fode();
+      private static const gizynuzelu:Matrix3 = new Matrix3();
       
-      private static const hifoca:finajylom = new finajylom();
+      private static const hifoca:Vector3 = new Vector3();
       
-      private static const wonuhig:qedozeze = new qedozeze();
+      private static const wonuhig:RayHit = new RayHit();
       
-      private static const vytaf:finajylom = new finajylom();
+      private static const vytaf:Vector3 = new Vector3();
       
       public static const qyk:Number = 6000;
       
@@ -63,41 +67,41 @@ package alternativa.tanks.sfx.twins
       
       public static const japycepef:Number = 50;
       
-      private static const gov:hivymop = vuteci.gov;
+      private static const gov:TanksPhysicsScene = GameData.gov;
       
-      private static const guzinizub:KDContainer = vuteci.guzinizub;
+      private static const guzinizub:KDContainer = GameData.guzinizub;
       
-      private static const murow:lalyna = vuteci.murow;
+      private static const murow:ObjectPool = GameData.murow;
       
-      private static const hobuna:dinomyvi = vuteci.hobuna;
+      private static const hobuna:EffectsManager = GameData.hobuna;
       
-      private static const jypadif:benesihys = vuteci.jypadif;
+      private static const jypadif:RenderGroup = GameData.jypadif;
       
-      private static const neputi:finajylom = new finajylom();
+      private static const neputi:Vector3 = new Vector3();
       
-      private const kamog:finajylom = new finajylom();
+      private const kamog:Vector3 = new Vector3();
       
-      private var taramuty:fyweci;
+      private var taramuty:Body;
       
-      private var kovi:finajylom = new finajylom();
+      private var kovi:Vector3 = new Vector3();
       
       private var vedebuweb:Number;
       
       private var jac:Boolean;
       
-      private var guripovec:finajylom = new finajylom();
+      private var guripovec:Vector3 = new Vector3();
       
-      private var penybuke:finajylom = new finajylom();
+      private var penybuke:Vector3 = new Vector3();
       
-      private var fybumu:finajylom = new finajylom();
+      private var fybumu:Vector3 = new Vector3();
       
-      private var zeneti:finajylom = new finajylom();
+      private var zeneti:Vector3 = new Vector3();
       
-      private var cekyno:Vector.<finajylom>;
+      private var cekyno:Vector.<Vector3>;
       
       private var ruv:Number = 0;
       
-      private var wahy:cyp;
+      private var wahy:AnimatedSprite3D;
       
       private var nomupiz:int;
       
@@ -105,44 +109,44 @@ package alternativa.tanks.sfx.twins
       
       private var beryfitu:Number;
       
-      public var bogepulah:virah = LightData.zup;
+      public var bogepulah:LightAnimation = LightData.zup;
       
-      public var cilug:virah = LightData.fid;
+      public var cilug:LightAnimation = LightData.fid;
       
       private var veliqe:AnimatedLightEffect;
       
-      private var kig:mirir;
+      private var kig:ExternalObject3DPositionProvider;
       
-      public function PlasmaShot(param1:fare)
+      public function PlasmaShot(param1:Pool)
       {
          super(param1);
-         this.cekyno = new Vector.<finajylom>(fenuf);
+         this.cekyno = new Vector.<Vector3>(fenuf);
          var _loc2_:int = 0;
          while(_loc2_ < fenuf)
          {
-            this.cekyno[_loc2_] = new finajylom();
+            this.cekyno[_loc2_] = new Vector3();
             _loc2_++;
          }
-         this.wahy = new cyp(tezesulal,tezesulal);
+         this.wahy = new AnimatedSprite3D(tezesulal,tezesulal);
       }
       
-      private static function getMostOrthogonalAxis(param1:finajylom, param2:finajylom) : void
+      private static function getMostOrthogonalAxis(param1:Vector3, param2:Vector3) : void
       {
          var _loc3_:int = 0;
          var _loc4_:Number = 10000000000;
-         var _loc5_:Number = param1.kan < 0 ? -param1.kan : Number(param1.kan);
+         var _loc5_:Number = param1.x < 0 ? -param1.x : Number(param1.x);
          if(_loc5_ < _loc4_)
          {
             _loc4_ = _loc5_;
             _loc3_ = 0;
          }
-         _loc5_ = param1.zofydizug < 0 ? -param1.zofydizug : Number(param1.zofydizug);
+         _loc5_ = param1.y < 0 ? -param1.y : Number(param1.y);
          if(_loc5_ < _loc4_)
          {
             _loc4_ = _loc5_;
             _loc3_ = 1;
          }
-         _loc5_ = param1.qyririg < 0 ? -param1.qyririg : Number(param1.qyririg);
+         _loc5_ = param1.z < 0 ? -param1.z : Number(param1.z);
          if(_loc5_ < _loc4_)
          {
             _loc3_ = 2;
@@ -150,19 +154,19 @@ package alternativa.tanks.sfx.twins
          switch(_loc3_)
          {
             case 0:
-               param2.kan = 0;
-               param2.zofydizug = param1.qyririg;
-               param2.qyririg = -param1.zofydizug;
+               param2.x = 0;
+               param2.y = param1.z;
+               param2.z = -param1.y;
                break;
             case 1:
-               param2.kan = -param1.qyririg;
-               param2.zofydizug = 0;
-               param2.qyririg = param1.kan;
+               param2.x = -param1.z;
+               param2.y = 0;
+               param2.z = param1.x;
                break;
             case 2:
-               param2.kan = param1.zofydizug;
-               param2.zofydizug = -param1.kan;
-               param2.qyririg = 0;
+               param2.x = param1.y;
+               param2.y = -param1.x;
+               param2.z = 0;
          }
       }
       
@@ -170,43 +174,43 @@ package alternativa.tanks.sfx.twins
       {
          if(mofibimap == null)
          {
-            mofibimap = Assets.getData("plasma",dosu);
+            mofibimap = Assets.getData("plasma",TextureAnimation);
          }
          this.vedebuweb = param1;
          this.beryfitu = param2;
-         this.wahy.vigipu(mofibimap);
-         this.nomupiz = this.wahy.nawirales();
+         this.wahy.setAnimationData(mofibimap);
+         this.nomupiz = this.wahy.getNumFrames();
          this.lamutameq = this.nomupiz * Math.random();
-         this.wahy.rotation = huv.qubabyby * Math.random();
+         this.wahy.rotation = MathUtils.qubabyby * Math.random();
          this.ruv = 0;
          this.jac = true;
       }
       
-      public function addToGame(param1:finajylom, param2:finajylom, param3:finajylom, param4:fyweci) : void
+      public function addToGame(param1:Vector3, param2:Vector3, param3:Vector3, param4:Body) : void
       {
-         this.fybumu.disy(param1);
-         this.guripovec.disy(param2);
-         this.penybuke.disy(param2);
-         this.zeneti.disy(param2);
-         this.wahy.x = param2.kan;
-         this.wahy.y = param2.zofydizug;
-         this.wahy.z = param2.qyririg;
-         this.kovi.disy(param3);
+         this.fybumu.copy(param1);
+         this.guripovec.copy(param2);
+         this.penybuke.copy(param2);
+         this.zeneti.copy(param2);
+         this.wahy.x = param2.x;
+         this.wahy.y = param2.y;
+         this.wahy.z = param2.z;
+         this.kovi.copy(param3);
          this.taramuty = param4;
-         this.veliqe = AnimatedLightEffect(murow.loq(AnimatedLightEffect));
-         this.kig = mirir(murow.loq(mirir));
+         this.veliqe = AnimatedLightEffect(murow.getObject(AnimatedLightEffect));
+         this.kig = ExternalObject3DPositionProvider(murow.getObject(ExternalObject3DPositionProvider));
          this.kig.setPosition(param2);
          this.veliqe.init(this.kig,this.bogepulah,AnimatedLightEffect.nimowu,true);
-         hobuna.jyqinosi(this.veliqe);
-         gov.dufuredi(this);
-         gov.gyvefohip(this);
-         jypadif.dopus(this);
+         hobuna.addEffect(this.veliqe);
+         gov.addPhysicsController(this);
+         gov.addPhysicsInterpolator(this);
+         jypadif.addRenderer(this);
       }
       
       public function runBeforePhysicsUpdate(param1:Number) : void
       {
-         var _loc5_:finajylom = null;
-         var _loc2_:nocyquk = gov.secakesem;
+         var _loc5_:Vector3 = null;
+         var _loc2_:CollisionDetector = gov.secakesem;
          if(this.jac)
          {
             if(this.processFirstTick(_loc2_))
@@ -222,18 +226,18 @@ package alternativa.tanks.sfx.twins
          }
          var _loc3_:Number = qulif * param1;
          this.ruv += _loc3_;
-         if(_loc2_.nep(this.guripovec,this.kovi,sumik.pisyse,_loc3_,this,wonuhig))
+         if(_loc2_.raycast(this.guripovec,this.kovi,CollisionGroup.pisyse,_loc3_,this,wonuhig))
          {
             this.applyImpact(wonuhig.vetudozi.body,wonuhig.position,this.kovi,this.ruv);
             this.destroy();
             return;
          }
-         this.kamog.disy(this.kovi).rudi(_loc3_);
+         this.kamog.copy(this.kovi).scale(_loc3_);
          var _loc4_:int = 0;
          while(_loc4_ < fenuf)
          {
             _loc5_ = this.cekyno[_loc4_];
-            if(_loc2_.nep(_loc5_,this.kovi,sumik.pisyse,_loc3_,this,wonuhig))
+            if(_loc2_.raycast(_loc5_,this.kovi,CollisionGroup.pisyse,_loc3_,this,wonuhig))
             {
                if(wonuhig.vetudozi.body != null)
                {
@@ -242,11 +246,11 @@ package alternativa.tanks.sfx.twins
                   return;
                }
             }
-            _loc5_.kyluwuzi(this.kamog);
+            _loc5_.add(this.kamog);
             _loc4_++;
          }
-         this.penybuke.disy(this.guripovec);
-         this.guripovec.kyluwuzi(this.kamog);
+         this.penybuke.copy(this.guripovec);
+         this.guripovec.add(this.kamog);
       }
       
       public function render(param1:int, param2:int) : void
@@ -256,7 +260,7 @@ package alternativa.tanks.sfx.twins
             guzinizub.addChild(this.wahy);
          }
          var _loc3_:Number = param2 / zily;
-         this.wahy.les(this.lamutameq);
+         this.wahy.setFrameIndex(this.lamutameq);
          this.lamutameq += jydihab * _loc3_;
          if(this.lamutameq >= this.nomupiz)
          {
@@ -265,9 +269,9 @@ package alternativa.tanks.sfx.twins
          var _loc4_:Number = tezesulal;
          this.wahy.width = _loc4_;
          this.wahy.height = _loc4_;
-         this.wahy.x = this.zeneti.kan;
-         this.wahy.y = this.zeneti.zofydizug;
-         this.wahy.z = this.zeneti.qyririg;
+         this.wahy.x = this.zeneti.x;
+         this.wahy.y = this.zeneti.y;
+         this.wahy.z = this.zeneti.z;
          this.wahy.rotation -= 3 * _loc3_;
          this.kig.setPosition(this.zeneti);
       }
@@ -278,63 +282,63 @@ package alternativa.tanks.sfx.twins
          this.taramuty = null;
          this.wahy.material = null;
          this.wahy.colorTransform = null;
-         gov.wizosigy(this);
-         gov.buj(this);
-         jypadif.gebi(this);
+         gov.removePhysicsController(this);
+         gov.removePhysicsInterpolator(this);
+         jypadif.removeRenderer(this);
          this.veliqe.kill();
          this.veliqe = null;
          this.kig = null;
          recycle();
       }
       
-      public function considerBody(param1:fyweci) : Boolean
+      public function considerBody(param1:Body) : Boolean
       {
          return this.taramuty != param1;
       }
       
-      private function initRadialPoints(param1:finajylom, param2:finajylom, param3:Number) : void
+      private function initRadialPoints(param1:Vector3, param2:Vector3, param3:Number) : void
       {
          getMostOrthogonalAxis(param2,vytaf);
-         vytaf.behy().rudi(param3);
-         gizynuzelu.dekod(param2,vogilyta);
-         finajylom(this.cekyno[0]).disy(param1).kyluwuzi(vytaf);
+         vytaf.normalize().scale(param3);
+         gizynuzelu.fromAxisAngle(param2,vogilyta);
+         Vector3(this.cekyno[0]).copy(param1).add(vytaf);
          var _loc4_:int = 1;
          while(_loc4_ < fenuf)
          {
-            vytaf.jec(gizynuzelu);
-            finajylom(this.cekyno[_loc4_]).disy(param1).kyluwuzi(vytaf);
+            vytaf.transform3(gizynuzelu);
+            Vector3(this.cekyno[_loc4_]).copy(param1).add(vytaf);
             _loc4_++;
          }
       }
       
-      private function createExplosionEffect(param1:finajylom, param2:Number) : void
+      private function createExplosionEffect(param1:Vector3, param2:Number) : void
       {
          if(fid == null)
          {
-            fid = Assets.getData("plasma_exp",dosu);
+            fid = Assets.getData("plasma_exp",TextureAnimation);
          }
          var _loc3_:int = 50 + boker * 0.5;
-         var _loc4_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(murow.loq(StaticObject3DPositionProvider));
+         var _loc4_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(murow.getObject(StaticObject3DPositionProvider));
          _loc4_.init(param1,_loc3_);
          var _loc5_:Number = boker * (1 + param2) / 2;
-         var _loc6_:AnimatedSpriteEffect = AnimatedSpriteEffect(murow.loq(AnimatedSpriteEffect));
+         var _loc6_:AnimatedSpriteEffect = AnimatedSpriteEffect(murow.getObject(AnimatedSpriteEffect));
          var _loc7_:int = 20;
-         _loc6_.init(_loc5_,_loc5_,fid,huv.qubabyby * Math.random(),_loc7_,_loc4_,0.5,0.5,null);
-         hobuna.jyqinosi(_loc6_);
+         _loc6_.init(_loc5_,_loc5_,fid,MathUtils.qubabyby * Math.random(),_loc7_,_loc4_,0.5,0.5,null);
+         hobuna.addEffect(_loc6_);
          this.createExplsionLightEffect(param1);
       }
       
-      private function createExplsionLightEffect(param1:finajylom) : void
+      private function createExplsionLightEffect(param1:Vector3) : void
       {
          var _loc2_:int = 50 + boker * 0.5;
-         var _loc3_:AnimatedLightEffect = AnimatedLightEffect(murow.loq(AnimatedLightEffect));
-         var _loc4_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(murow.loq(StaticObject3DPositionProvider));
+         var _loc3_:AnimatedLightEffect = AnimatedLightEffect(murow.getObject(AnimatedLightEffect));
+         var _loc4_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(murow.getObject(StaticObject3DPositionProvider));
          _loc4_.init(param1,_loc2_);
          _loc3_.init(_loc4_,this.cilug);
-         hobuna.jyqinosi(_loc3_);
+         hobuna.addEffect(_loc3_);
       }
       
-      private function applyImpact(param1:fyweci, param2:finajylom, param3:finajylom, param4:Number) : void
+      private function applyImpact(param1:Body, param2:Vector3, param3:Vector3, param4:Number) : void
       {
          var _loc5_:Tank = null;
          this.createExplosionEffect(param2,1);
@@ -343,32 +347,32 @@ package alternativa.tanks.sfx.twins
             _loc5_ = param1.katuf as Tank;
             if(_loc5_ != null)
             {
-               param1.hogetuwi(param2,param3,this.vedebuweb);
+               param1.addWorldForceScaled(param2,param3,this.vedebuweb);
                _loc5_.substructHealth(this.beryfitu);
             }
          }
       }
       
-      private function processFirstTick(param1:nocyquk) : Boolean
+      private function processFirstTick(param1:CollisionDetector) : Boolean
       {
-         var _loc6_:finajylom = null;
-         var _loc7_:fyweci = null;
-         hifoca.disy(this.guripovec);
+         var _loc6_:Vector3 = null;
+         var _loc7_:Body = null;
+         hifoca.copy(this.guripovec);
          var _loc2_:Number = japycepef;
-         hifoca.qyririg += _loc2_;
-         if(param1.nep(hifoca,finajylom.lasis,sumik.neli,_loc2_,null,wonuhig))
+         hifoca.z += _loc2_;
+         if(param1.raycast(hifoca,Vector3.lasis,CollisionGroup.neli,_loc2_,null,wonuhig))
          {
             this.applyImpact(null,wonuhig.position,null,0);
             this.destroy();
             return true;
          }
-         var _loc3_:finajylom = neputi;
-         _loc3_.vaw(this.guripovec,this.fybumu);
-         var _loc4_:Number = Number(_loc3_.nyhuguty());
-         _loc3_.behy();
-         if(param1.nep(this.fybumu,_loc3_,sumik.deli,_loc4_,this,wonuhig))
+         var _loc3_:Vector3 = neputi;
+         _loc3_.diff(this.guripovec,this.fybumu);
+         var _loc4_:Number = Number(_loc3_.length());
+         _loc3_.normalize();
+         if(param1.raycast(this.fybumu,_loc3_,CollisionGroup.deli,_loc4_,this,wonuhig))
          {
-            this.fybumu.lopyvan(wonuhig.jomuc,_loc3_);
+            this.fybumu.addScaled(wonuhig.jomuc,_loc3_);
             this.applyImpact(wonuhig.vetudozi.body,this.fybumu,_loc3_,0);
             this.destroy();
             return true;
@@ -378,12 +382,12 @@ package alternativa.tanks.sfx.twins
          while(_loc5_ < fenuf)
          {
             _loc6_ = this.cekyno[_loc5_];
-            if(param1.nep(_loc6_,this.kovi,sumik.deli,_loc4_,this,wonuhig))
+            if(param1.raycast(_loc6_,this.kovi,CollisionGroup.deli,_loc4_,this,wonuhig))
             {
                _loc7_ = wonuhig.vetudozi.body;
                if(_loc7_ != null)
                {
-                  this.fybumu.lopyvan(wonuhig.jomuc,_loc3_);
+                  this.fybumu.addScaled(wonuhig.jomuc,_loc3_);
                   this.applyImpact(_loc7_,this.fybumu,_loc3_,0);
                   this.destroy();
                   return true;
@@ -397,7 +401,7 @@ package alternativa.tanks.sfx.twins
       
       public function interpolatePhysicsState(param1:Number) : void
       {
-         this.zeneti.lir(param1,this.penybuke,this.guripovec);
+         this.zeneti.interpolate(param1,this.penybuke,this.guripovec);
       }
    }
 }

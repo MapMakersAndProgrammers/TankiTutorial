@@ -71,13 +71,13 @@ package alternativa.physics.collision.primitives
          _loc5_ = this.wet;
          var _loc6_:Number = param1.x - _loc5_.kyvuru;
          var _loc7_:Number = param1.y - _loc5_.zumidynip;
-         var _loc8_:Number = param1.qyririg - _loc5_.sunafepo;
+         var _loc8_:Number = param1.z - _loc5_.sunafepo;
          var _loc9_:Number = _loc5_.gusat * _loc6_ + _loc5_.sig * _loc7_ + _loc5_.vug * _loc8_;
          var _loc10_:Number = _loc5_.cydop * _loc6_ + _loc5_.qanezycap * _loc7_ + _loc5_.luwym * _loc8_;
          var _loc11_:Number = _loc5_.sivy * _loc6_ + _loc5_.wyvukog * _loc7_ + _loc5_.tari * _loc8_;
-         _loc6_ = _loc5_.gusat * param2.x + _loc5_.sig * param2.y + _loc5_.vug * param2.qyririg;
-         _loc7_ = _loc5_.cydop * param2.x + _loc5_.qanezycap * param2.y + _loc5_.luwym * param2.qyririg;
-         _loc8_ = _loc5_.sivy * param2.x + _loc5_.wyvukog * param2.y + _loc5_.tari * param2.qyririg;
+         _loc6_ = _loc5_.gusat * param2.x + _loc5_.sig * param2.y + _loc5_.vug * param2.z;
+         _loc7_ = _loc5_.cydop * param2.x + _loc5_.qanezycap * param2.y + _loc5_.luwym * param2.z;
+         _loc8_ = _loc5_.sivy * param2.x + _loc5_.wyvukog * param2.y + _loc5_.tari * param2.z;
          if(_loc8_ > -param3 && _loc8_ < param3)
          {
             return -1;
@@ -94,17 +94,17 @@ package alternativa.physics.collision.primitives
          {
             return -1;
          }
-         if(param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.qyririg * _loc5_.tari > 0)
+         if(param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.z * _loc5_.tari > 0)
          {
             param4.x = -_loc5_.sivy;
             param4.y = -_loc5_.wyvukog;
-            param4.qyririg = -_loc5_.tari;
+            param4.z = -_loc5_.tari;
          }
          else
          {
             param4.x = _loc5_.sivy;
             param4.y = _loc5_.wyvukog;
-            param4.qyririg = _loc5_.tari;
+            param4.z = _loc5_.tari;
          }
          return _loc12_;
       }

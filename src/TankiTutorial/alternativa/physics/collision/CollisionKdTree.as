@@ -1,8 +1,8 @@
-package zicy
+package alternativa.physics.collision
 {
    import alternativa.physics.collision.types.AABB;
    
-   public class tolavoka
+   public class CollisionKdTree
    {
       
       private static const tyvak:AABB = new AABB();
@@ -21,9 +21,9 @@ package zicy
       
       public var cihi:int = 1;
       
-      public var wymyhujoq:nekusupyg;
+      public var wymyhujoq:CollisionKdNode;
       
-      public var gogoq:Vector.<dovabaf>;
+      public var gogoq:Vector.<CollisionShape>;
       
       public var pojisahyz:int;
       
@@ -35,35 +35,35 @@ package zicy
       
       private var zadarypus:Number;
       
-      public function tolavoka()
+      public function CollisionKdTree()
       {
          super();
       }
       
-      public function hoc(param1:Vector.<dovabaf>, param2:AABB = null) : void
+      public function createTree(param1:Vector.<CollisionShape>, param2:AABB = null) : void
       {
-         var _loc5_:dovabaf = null;
+         var _loc5_:CollisionShape = null;
          var _loc6_:AABB = null;
          this.gogoq = param1.concat();
          this.pojisahyz = this.gogoq.length;
-         this.wymyhujoq = new nekusupyg();
-         this.wymyhujoq.vavyvyni = new Vector.<int>();
+         this.wymyhujoq = new CollisionKdNode();
+         this.wymyhujoq.indices = new Vector.<int>();
          var _loc3_:AABB = this.wymyhujoq.taqa = param2 != null ? param2 : new AABB();
          var _loc4_:int = 0;
          while(_loc4_ < this.pojisahyz)
          {
             _loc5_ = this.gogoq[_loc4_];
-            _loc6_ = this.nyrimobo[_loc4_] = _loc5_.zety();
+            _loc6_ = this.nyrimobo[_loc4_] = _loc5_.calculateAABB();
             _loc3_.addBoundBox(_loc6_);
-            this.wymyhujoq.vavyvyni[_loc4_] = _loc4_;
+            this.wymyhujoq.indices[_loc4_] = _loc4_;
             _loc4_++;
          }
          this.nyrimobo.length = this.pojisahyz;
-         this.wyjiqel(this.wymyhujoq);
+         this.splitNode(this.wymyhujoq);
          tibuh.length = vydumu.length = zyq.length = 0;
       }
       
-      private function wyjiqel(param1:nekusupyg) : void
+      private function splitNode(param1:CollisionKdNode) : void
       {
          var _loc4_:AABB = null;
          var _loc6_:int = 0;
@@ -71,7 +71,7 @@ package zicy
          var _loc15_:AABB = null;
          var _loc16_:Number = NaN;
          var _loc17_:Number = NaN;
-         var _loc2_:Vector.<int> = param1.vavyvyni;
+         var _loc2_:Vector.<int> = param1.indices;
          var _loc3_:int = int(_loc2_.length);
          if(_loc3_ <= this.cihi)
          {
@@ -180,9 +180,9 @@ package zicy
          gaboder[3] = _loc4_.jys;
          gaboder[4] = _loc4_.juri;
          gaboder[5] = _loc4_.zepoci;
-         this.putynovu(param1,0,_loc8_,tibuh,gaboder);
-         this.putynovu(param1,1,_loc9_,vydumu,gaboder);
-         this.putynovu(param1,2,_loc10_,zyq,gaboder);
+         this.checkNodeAxis(param1,0,_loc8_,tibuh,gaboder);
+         this.checkNodeAxis(param1,1,_loc9_,vydumu,gaboder);
+         this.checkNodeAxis(param1,2,_loc10_,zyq,gaboder);
          if(this.ladoba < 0)
          {
             return;
@@ -191,10 +191,10 @@ package zicy
          var _loc12_:Boolean = this.ladoba == 1;
          param1.zekos = this.ladoba;
          param1.retycel = this.qijysa;
-         param1.hab = new nekusupyg();
+         param1.hab = new CollisionKdNode();
          param1.hab.vewu = param1;
          param1.hab.taqa = _loc4_.clone();
-         param1.gumipiw = new nekusupyg();
+         param1.gumipiw = new CollisionKdNode();
          param1.gumipiw.vewu = param1;
          param1.gumipiw.taqa = _loc4_.clone();
          if(_loc11_)
@@ -221,11 +221,11 @@ package zicy
             {
                if(_loc16_ < _loc13_)
                {
-                  if(param1.hab.vavyvyni == null)
+                  if(param1.hab.indices == null)
                   {
-                     param1.hab.vavyvyni = new Vector.<int>();
+                     param1.hab.indices = new Vector.<int>();
                   }
-                  param1.hab.vavyvyni.push(_loc2_[_loc6_]);
+                  param1.hab.indices.push(_loc2_[_loc6_]);
                   _loc2_[_loc6_] = -1;
                }
                else
@@ -240,11 +240,11 @@ package zicy
             }
             else if(_loc16_ >= _loc13_)
             {
-               if(param1.gumipiw.vavyvyni == null)
+               if(param1.gumipiw.indices == null)
                {
-                  param1.gumipiw.vavyvyni = new Vector.<int>();
+                  param1.gumipiw.indices = new Vector.<int>();
                }
-               param1.gumipiw.vavyvyni.push(_loc2_[_loc6_]);
+               param1.gumipiw.indices.push(_loc2_[_loc6_]);
                _loc2_[_loc6_] = -1;
             }
             _loc6_++;
@@ -265,24 +265,24 @@ package zicy
          }
          else
          {
-            param1.vavyvyni = null;
+            param1.indices = null;
          }
          if(param1.henanaja != null)
          {
-            param1.tuz = new diqohohi(this,param1);
-            param1.tuz.hoc();
+            param1.tuz = new CollisionKdTree2D(this,param1);
+            param1.tuz.createTree();
          }
-         if(param1.hab.vavyvyni != null)
+         if(param1.hab.indices != null)
          {
-            this.wyjiqel(param1.hab);
+            this.splitNode(param1.hab);
          }
-         if(param1.gumipiw.vavyvyni != null)
+         if(param1.gumipiw.indices != null)
          {
-            this.wyjiqel(param1.gumipiw);
+            this.splitNode(param1.gumipiw);
          }
       }
       
-      private function putynovu(param1:nekusupyg, param2:int, param3:int, param4:Vector.<Number>, param5:Vector.<Number>) : void
+      private function checkNodeAxis(param1:CollisionKdNode, param2:int, param3:int, param4:Vector.<Number>, param5:Vector.<Number>) : void
       {
          var _loc10_:Number = NaN;
          var _loc11_:Number = NaN;
@@ -312,11 +312,11 @@ package zicy
                _loc15_ = 0;
                _loc16_ = 0;
                _loc17_ = false;
-               _loc18_ = int(param1.vavyvyni.length);
+               _loc18_ = int(param1.indices.length);
                _loc19_ = 0;
                while(_loc19_ < _loc18_)
                {
-                  _loc21_ = this.nyrimobo[param1.vavyvyni[_loc19_]];
+                  _loc21_ = this.nyrimobo[param1.indices[_loc19_]];
                   pekeryf[0] = _loc21_.cubegyw;
                   pekeryf[1] = _loc21_.nicomosa;
                   pekeryf[2] = _loc21_.gesuwi;
@@ -362,19 +362,19 @@ package zicy
          }
       }
       
-      public function jiw() : void
+      public function traceTree() : void
       {
-         this.hylejotim("",this.wymyhujoq);
+         this.traceNode("",this.wymyhujoq);
       }
       
-      private function hylejotim(param1:String, param2:nekusupyg) : void
+      private function traceNode(param1:String, param2:CollisionKdNode) : void
       {
          if(param2 == null)
          {
             return;
          }
-         this.hylejotim(param1 + "-",param2.hab);
-         this.hylejotim(param1 + "+",param2.gumipiw);
+         this.traceNode(param1 + "-",param2.hab);
+         this.traceNode(param1 + "+",param2.gumipiw);
       }
    }
 }

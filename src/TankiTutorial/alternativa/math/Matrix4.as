@@ -179,19 +179,19 @@ package alternativa.math
       
       public function transformVector(param1:Vector3, param2:Vector3) : void
       {
-         param2.x = this.gusat * param1.x + this.cydop * param1.y + this.sivy * param1.qyririg + this.kyvuru;
-         param2.y = this.sig * param1.x + this.qanezycap * param1.y + this.wyvukog * param1.qyririg + this.zumidynip;
-         param2.qyririg = this.vug * param1.x + this.luwym * param1.y + this.tari * param1.qyririg + this.sunafepo;
+         param2.x = this.gusat * param1.x + this.cydop * param1.y + this.sivy * param1.z + this.kyvuru;
+         param2.y = this.sig * param1.x + this.qanezycap * param1.y + this.wyvukog * param1.z + this.zumidynip;
+         param2.z = this.vug * param1.x + this.luwym * param1.y + this.tari * param1.z + this.sunafepo;
       }
       
       public function transformVectorInverse(param1:Vector3, param2:Vector3) : void
       {
          var _loc3_:Number = param1.x - this.kyvuru;
          var _loc4_:Number = param1.y - this.zumidynip;
-         var _loc5_:Number = param1.qyririg - this.sunafepo;
+         var _loc5_:Number = param1.z - this.sunafepo;
          param2.x = this.gusat * _loc3_ + this.sig * _loc4_ + this.vug * _loc5_;
          param2.y = this.cydop * _loc3_ + this.qanezycap * _loc4_ + this.luwym * _loc5_;
-         param2.qyririg = this.sivy * _loc3_ + this.wyvukog * _loc4_ + this.tari * _loc5_;
+         param2.z = this.sivy * _loc3_ + this.wyvukog * _loc4_ + this.tari * _loc5_;
       }
       
       public function transformVectors(param1:Vector.<Vector3>, param2:Vector.<Vector3>) : void
@@ -204,9 +204,9 @@ package alternativa.math
          {
             _loc4_ = param1[_loc6_];
             _loc5_ = param2[_loc6_];
-            _loc5_.x = this.gusat * _loc4_.x + this.cydop * _loc4_.y + this.sivy * _loc4_.qyririg + this.kyvuru;
-            _loc5_.y = this.sig * _loc4_.x + this.qanezycap * _loc4_.y + this.wyvukog * _loc4_.qyririg + this.zumidynip;
-            _loc5_.qyririg = this.vug * _loc4_.x + this.luwym * _loc4_.y + this.tari * _loc4_.qyririg + this.sunafepo;
+            _loc5_.x = this.gusat * _loc4_.x + this.cydop * _loc4_.y + this.sivy * _loc4_.z + this.kyvuru;
+            _loc5_.y = this.sig * _loc4_.x + this.qanezycap * _loc4_.y + this.wyvukog * _loc4_.z + this.zumidynip;
+            _loc5_.z = this.vug * _loc4_.x + this.luwym * _loc4_.y + this.tari * _loc4_.z + this.sunafepo;
             _loc6_++;
          }
       }
@@ -220,9 +220,9 @@ package alternativa.math
          {
             _loc4_ = param1[_loc6_];
             _loc5_ = param2[_loc6_];
-            _loc5_.x = this.gusat * _loc4_.x + this.cydop * _loc4_.y + this.sivy * _loc4_.qyririg + this.kyvuru;
-            _loc5_.y = this.sig * _loc4_.x + this.qanezycap * _loc4_.y + this.wyvukog * _loc4_.qyririg + this.zumidynip;
-            _loc5_.qyririg = this.vug * _loc4_.x + this.luwym * _loc4_.y + this.tari * _loc4_.qyririg + this.sunafepo;
+            _loc5_.x = this.gusat * _loc4_.x + this.cydop * _loc4_.y + this.sivy * _loc4_.z + this.kyvuru;
+            _loc5_.y = this.sig * _loc4_.x + this.qanezycap * _loc4_.y + this.wyvukog * _loc4_.z + this.zumidynip;
+            _loc5_.z = this.vug * _loc4_.x + this.luwym * _loc4_.y + this.tari * _loc4_.z + this.sunafepo;
             _loc6_++;
          }
       }
@@ -242,10 +242,10 @@ package alternativa.math
             _loc5_ = param2[_loc6_];
             _loc7_ = _loc4_.x - this.kyvuru;
             _loc8_ = _loc4_.y - this.zumidynip;
-            _loc9_ = _loc4_.qyririg - this.sunafepo;
+            _loc9_ = _loc4_.z - this.sunafepo;
             _loc5_.x = this.gusat * _loc7_ + this.sig * _loc8_ + this.vug * _loc9_;
             _loc5_.y = this.cydop * _loc7_ + this.qanezycap * _loc8_ + this.luwym * _loc9_;
-            _loc5_.qyririg = this.sivy * _loc7_ + this.wyvukog * _loc8_ + this.tari * _loc9_;
+            _loc5_.z = this.sivy * _loc7_ + this.wyvukog * _loc8_ + this.tari * _loc9_;
             _loc6_++;
          }
       }
@@ -264,10 +264,10 @@ package alternativa.math
             _loc5_ = param2[_loc6_];
             _loc7_ = _loc4_.x - this.kyvuru;
             _loc8_ = _loc4_.y - this.zumidynip;
-            _loc9_ = _loc4_.qyririg - this.sunafepo;
+            _loc9_ = _loc4_.z - this.sunafepo;
             _loc5_.x = this.gusat * _loc7_ + this.sig * _loc8_ + this.vug * _loc9_;
             _loc5_.y = this.cydop * _loc7_ + this.qanezycap * _loc8_ + this.luwym * _loc9_;
-            _loc5_.qyririg = this.sivy * _loc7_ + this.wyvukog * _loc8_ + this.tari * _loc9_;
+            _loc5_.z = this.sivy * _loc7_ + this.wyvukog * _loc8_ + this.tari * _loc9_;
             _loc6_++;
          }
       }
@@ -279,22 +279,22 @@ package alternativa.math
             case 0:
                param2.x = this.gusat;
                param2.y = this.sig;
-               param2.qyririg = this.vug;
+               param2.z = this.vug;
                return;
             case 1:
                param2.x = this.cydop;
                param2.y = this.qanezycap;
-               param2.qyririg = this.luwym;
+               param2.z = this.luwym;
                return;
             case 2:
                param2.x = this.sivy;
                param2.y = this.wyvukog;
-               param2.qyririg = this.tari;
+               param2.z = this.tari;
                return;
             case 3:
                param2.x = this.kyvuru;
                param2.y = this.zumidynip;
-               param2.qyririg = this.sunafepo;
+               param2.z = this.sunafepo;
                return;
             default:
                return;
@@ -303,16 +303,16 @@ package alternativa.math
       
       public function deltaTransformVector(param1:Vector3, param2:Vector3) : void
       {
-         param2.x = this.gusat * param1.x + this.cydop * param1.y + this.sivy * param1.qyririg + this.kyvuru;
-         param2.y = this.sig * param1.x + this.qanezycap * param1.y + this.wyvukog * param1.qyririg + this.zumidynip;
-         param2.qyririg = this.vug * param1.x + this.luwym * param1.y + this.tari * param1.qyririg + this.sunafepo;
+         param2.x = this.gusat * param1.x + this.cydop * param1.y + this.sivy * param1.z + this.kyvuru;
+         param2.y = this.sig * param1.x + this.qanezycap * param1.y + this.wyvukog * param1.z + this.zumidynip;
+         param2.z = this.vug * param1.x + this.luwym * param1.y + this.tari * param1.z + this.sunafepo;
       }
       
       public function deltaTransformVectorInverse(param1:Vector3, param2:Vector3) : void
       {
-         param2.x = this.gusat * param1.x + this.sig * param1.y + this.vug * param1.qyririg;
-         param2.y = this.cydop * param1.x + this.qanezycap * param1.y + this.luwym * param1.qyririg;
-         param2.qyririg = this.sivy * param1.x + this.wyvukog * param1.y + this.tari * param1.qyririg;
+         param2.x = this.gusat * param1.x + this.sig * param1.y + this.vug * param1.z;
+         param2.y = this.cydop * param1.x + this.qanezycap * param1.y + this.luwym * param1.z;
+         param2.z = this.sivy * param1.x + this.wyvukog * param1.y + this.tari * param1.z;
       }
       
       public function copy(param1:Matrix4) : Matrix4
@@ -345,7 +345,7 @@ package alternativa.math
          this.vug = param1.vug;
          this.luwym = param1.luwym;
          this.tari = param1.tari;
-         this.sunafepo = param2.qyririg;
+         this.sunafepo = param2.z;
          return this;
       }
       
@@ -416,14 +416,14 @@ package alternativa.math
          {
             param1.x = Math.atan2(this.luwym,this.tari);
             param1.y = -Math.asin(this.vug);
-            param1.qyririg = Math.atan2(this.sig,this.gusat);
+            param1.z = Math.atan2(this.sig,this.gusat);
          }
          else
          {
             param1.x = 0;
             param1.y = this.vug <= -1 ? Math.PI : -Math.PI;
             param1.y *= 0.5;
-            param1.qyririg = Math.atan2(-this.cydop,this.qanezycap);
+            param1.z = Math.atan2(-this.cydop,this.qanezycap);
          }
       }
       
@@ -431,7 +431,7 @@ package alternativa.math
       {
          this.kyvuru = param1.x;
          this.zumidynip = param1.y;
-         this.sunafepo = param1.qyririg;
+         this.sunafepo = param1.z;
       }
       
       public function clone() : Matrix4
@@ -451,7 +451,7 @@ package alternativa.math
          var _loc5_:Number = 1 - _loc3_;
          var _loc6_:Number = param1.x;
          var _loc7_:Number = param1.y;
-         var _loc8_:Number = param1.qyririg;
+         var _loc8_:Number = param1.z;
          this.gusat = _loc5_ * _loc6_ * _loc6_ + _loc3_;
          this.cydop = _loc5_ * _loc6_ * _loc7_ - _loc8_ * _loc4_;
          this.sivy = _loc5_ * _loc6_ * _loc8_ + _loc7_ * _loc4_;

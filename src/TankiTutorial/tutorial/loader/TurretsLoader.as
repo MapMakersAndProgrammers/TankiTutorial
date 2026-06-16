@@ -167,7 +167,7 @@ package tutorial.loader
                   _loc8_ = _loc6_.matrix.position;
                   _loc3_.luru.x = _loc8_.x;
                   _loc3_.luru.y = _loc8_.y;
-                  _loc3_.luru.qyririg = _loc8_.z;
+                  _loc3_.luru.z = _loc8_.z;
                }
                else if(_loc7_.indexOf("muzzle") == 0)
                {

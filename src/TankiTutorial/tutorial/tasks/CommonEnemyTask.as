@@ -135,9 +135,9 @@ package tutorial.tasks
                _loc2_ = this.citacir.hogys.body.kejo.position;
                this.pifyg.x = _loc2_.x;
                this.pifyg.y = _loc2_.y;
-               this.pifyg.z = _loc2_.qyririg;
+               this.pifyg.z = _loc2_.z;
                this.dodycoli += _loc1_.ziqod * 5;
-               this.pifyg.z = _loc2_.qyririg + caba + Math.sin(this.dodycoli) * 100;
+               this.pifyg.z = _loc2_.z + caba + Math.sin(this.dodycoli) * 100;
             }
             if(this.citacir.currentHealth <= 0 && Boolean(this.citacir.kat))
             {

@@ -1,33 +1,33 @@
 package alternativa.tanks.sfx
 {
    import alternativa.engine3d.core.Object3D;
-   import gafaduzuw.finajylom;
-   import gafaduzuw.kyhewil;
-   import hygal.nufaneqog;
-   import kefy.Wopowur;
-   import kefy.fare;
+   import alternativa.math.Vector3;
+   import alternativa.math.Matrix4;
+   import alternativa.tanks.shared.camera.GameCamera;
+   import alternativa.tanks.utils.objectpool.PooledObject;
+   import alternativa.tanks.utils.objectpool.Pool;
    
-   public class MuzzlePositionProvider extends Wopowur implements hebis
+   public class MuzzlePositionProvider extends PooledObject implements Object3DPositionProvider
    {
       
-      private static const bul:kyhewil = new kyhewil();
+      private static const bul:Matrix4 = new Matrix4();
       
-      private static const dogeny:finajylom = new finajylom();
+      private static const dogeny:Vector3 = new Vector3();
       
       private var firaqe:Object3D;
       
-      private var fodunuhul:finajylom = new finajylom();
+      private var fodunuhul:Vector3 = new Vector3();
       
-      public function MuzzlePositionProvider(param1:fare)
+      public function MuzzlePositionProvider(param1:Pool)
       {
          super(param1);
       }
       
-      public function init(param1:Object3D, param2:finajylom, param3:Number) : void
+      public function init(param1:Object3D, param2:Vector3, param3:Number) : void
       {
          this.firaqe = param1;
-         this.fodunuhul.disy(param2);
-         this.fodunuhul.zofydizug += param3;
+         this.fodunuhul.copy(param2);
+         this.fodunuhul.y += param3;
       }
       
       public function initPosition(param1:Object3D) : void
@@ -37,13 +37,13 @@ package alternativa.tanks.sfx
          param1.z = 0;
       }
       
-      public function updateObjectPosition(param1:Object3D, param2:nufaneqog, param3:int) : void
+      public function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void
       {
-         bul.lowefuwi(this.firaqe.x,this.firaqe.y,this.firaqe.z,this.firaqe.rotationX,this.firaqe.rotationY,this.firaqe.rotationZ);
-         bul.japoniw(this.fodunuhul,dogeny);
-         param1.x = dogeny.kan;
-         param1.y = dogeny.zofydizug;
-         param1.z = dogeny.qyririg;
+         bul.setMatrix(this.firaqe.x,this.firaqe.y,this.firaqe.z,this.firaqe.rotationX,this.firaqe.rotationY,this.firaqe.rotationZ);
+         bul.transformVector(this.fodunuhul,dogeny);
+         param1.x = dogeny.x;
+         param1.y = dogeny.y;
+         param1.z = dogeny.z;
       }
       
       public function destroy() : void

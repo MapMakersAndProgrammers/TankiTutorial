@@ -1,6 +1,6 @@
 package movieclips
 {
-   import §^O§.§3Y§;
+   import tutorial.utils.Text;
    import flash.display.MovieClip;
    import flash.display.Shape;
    import flash.events.Event;
@@ -42,14 +42,14 @@ package movieclips
          addChild(this.blur);
          this.clip = new this.finishMCClass() as MovieClip;
          addChild(this.clip);
-         this.tf1 = §3Y§.§#6§(Lang.getText(LocalizedStrings.CONGRATULATIONS),42,1000,"center");
-         this.tf2 = §3Y§.§#6§(Lang.getText(LocalizedStrings.LAST_PHRASE_1),22,1000,"center");
-         this.tf3 = §3Y§.§#6§(Lang.getText(LocalizedStrings.LAST_PHRASE_2),22,1000,"center");
+         this.tf1 = Text.getTextField(Lang.getText(LocalizedStrings.CONGRATULATIONS),42,1000,"center");
+         this.tf2 = Text.getTextField(Lang.getText(LocalizedStrings.LAST_PHRASE_1),22,1000,"center");
+         this.tf3 = Text.getTextField(Lang.getText(LocalizedStrings.LAST_PHRASE_2),22,1000,"center");
          addChild(this.tf1);
          addChild(this.tf2);
          addChild(this.tf3);
          addEventListener(Event.ADDED_TO_STAGE,this.onAddedToStage);
-         this.redirectLabel = §3Y§.§#6§(this.getTimeLeftText(),22,1000,"center");
+         this.redirectLabel = Text.getTextField(this.getTimeLeftText(),22,1000,"center");
          addChild(this.redirectLabel);
          this.redirectTimer = new Timer(DELAY_IN_SECONDS * 1000,this.repeat);
       }

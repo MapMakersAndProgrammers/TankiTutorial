@@ -132,11 +132,11 @@ package alternativa.physics
          _loc4_ = 1 - param1;
          param2.x = this.gomocyl.position.x * _loc4_ + this.kejo.position.x * param1;
          param2.y = this.gomocyl.position.y * _loc4_ + this.kejo.position.y * param1;
-         param2.qyririg = this.gomocyl.position.qyririg * _loc4_ + this.kejo.position.qyririg * param1;
+         param2.z = this.gomocyl.position.z * _loc4_ + this.kejo.position.z * param1;
          param3.dige = this.gomocyl.bej.dige * _loc4_ + this.kejo.bej.dige * param1;
          param3.x = this.gomocyl.bej.x * _loc4_ + this.kejo.bej.x * param1;
          param3.y = this.gomocyl.bej.y * _loc4_ + this.kejo.bej.y * param1;
-         param3.qyririg = this.gomocyl.bej.qyririg * _loc4_ + this.kejo.bej.qyririg * param1;
+         param3.z = this.gomocyl.bej.z * _loc4_ + this.kejo.bej.z * param1;
       }
       
       public function setPosition(param1:Vector3) : void
@@ -182,13 +182,13 @@ package alternativa.physics
          _loc4_ = param3 * this.jutelycu;
          this.kejo.zerus.x += _loc4_ * param2.x;
          this.kejo.zerus.y += _loc4_ * param2.y;
-         this.kejo.zerus.qyririg += _loc4_ * param2.qyririg;
-         _loc5_ = (param1.y * param2.qyririg - param1.qyririg * param2.y) * param3;
-         var _loc6_:Number = (param1.qyririg * param2.x - param1.x * param2.qyririg) * param3;
+         this.kejo.zerus.z += _loc4_ * param2.z;
+         _loc5_ = (param1.y * param2.z - param1.z * param2.y) * param3;
+         var _loc6_:Number = (param1.z * param2.x - param1.x * param2.z) * param3;
          _loc7_ = (param1.x * param2.y - param1.y * param2.x) * param3;
          this.kejo.fev.x += this.cobugihyh.gusat * _loc5_ + this.cobugihyh.cydop * _loc6_ + this.cobugihyh.sivy * _loc7_;
          this.kejo.fev.y += this.cobugihyh.sig * _loc5_ + this.cobugihyh.qanezycap * _loc6_ + this.cobugihyh.wyvukog * _loc7_;
-         this.kejo.fev.qyririg += this.cobugihyh.vug * _loc5_ + this.cobugihyh.luwym * _loc6_ + this.cobugihyh.tari * _loc7_;
+         this.kejo.fev.z += this.cobugihyh.vug * _loc5_ + this.cobugihyh.luwym * _loc6_ + this.cobugihyh.tari * _loc7_;
       }
       
       public function applyWorldPseudoImpulseAtLocalPoint(param1:Vector3, param2:Vector3, param3:Number) : void
@@ -199,13 +199,13 @@ package alternativa.physics
          _loc4_ = param3 * this.jutelycu;
          this.jalekiwaf.x += _loc4_ * param2.x;
          this.jalekiwaf.y += _loc4_ * param2.y;
-         this.jalekiwaf.qyririg += _loc4_ * param2.qyririg;
-         var _loc5_:Number = (param1.y * param2.qyririg - param1.qyririg * param2.y) * param3;
-         _loc6_ = (param1.qyririg * param2.x - param1.x * param2.qyririg) * param3;
+         this.jalekiwaf.z += _loc4_ * param2.z;
+         var _loc5_:Number = (param1.y * param2.z - param1.z * param2.y) * param3;
+         _loc6_ = (param1.z * param2.x - param1.x * param2.z) * param3;
          _loc7_ = (param1.x * param2.y - param1.y * param2.x) * param3;
          this.bupu.x += this.cobugihyh.gusat * _loc5_ + this.cobugihyh.cydop * _loc6_ + this.cobugihyh.sivy * _loc7_;
          this.bupu.y += this.cobugihyh.sig * _loc5_ + this.cobugihyh.qanezycap * _loc6_ + this.cobugihyh.wyvukog * _loc7_;
-         this.bupu.qyririg += this.cobugihyh.vug * _loc5_ + this.cobugihyh.luwym * _loc6_ + this.cobugihyh.tari * _loc7_;
+         this.bupu.z += this.cobugihyh.vug * _loc5_ + this.cobugihyh.luwym * _loc6_ + this.cobugihyh.tari * _loc7_;
       }
       
       public function applyImpulse(param1:Vector3, param2:Number) : void
@@ -213,7 +213,7 @@ package alternativa.physics
          var _loc3_:Number = param2 * this.jutelycu;
          this.kejo.zerus.x += _loc3_ * param1.x;
          this.kejo.zerus.y += _loc3_ * param1.y;
-         this.kejo.zerus.qyririg += _loc3_ * param1.qyririg;
+         this.kejo.zerus.z += _loc3_ * param1.z;
       }
       
       public function addForce(param1:Vector3) : void
@@ -225,7 +225,7 @@ package alternativa.physics
       {
          this.res.x += param1;
          this.res.y += param2;
-         this.res.qyririg += param3;
+         this.res.z += param3;
       }
       
       public function addWorldForceXYZ(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number) : void
@@ -233,14 +233,14 @@ package alternativa.physics
          var _loc8_:Number = NaN;
          this.res.x += param4;
          this.res.y += param5;
-         this.res.qyririg += param6;
+         this.res.z += param6;
          var _loc7_:Vector3 = this.kejo.position;
          _loc8_ = param1 - _loc7_.x;
          var _loc9_:Number = param2 - _loc7_.y;
-         var _loc10_:Number = param3 - _loc7_.qyririg;
+         var _loc10_:Number = param3 - _loc7_.z;
          this.wapab.x += _loc9_ * param6 - _loc10_ * param5;
          this.wapab.y += _loc10_ * param4 - _loc8_ * param6;
-         this.wapab.qyririg += _loc8_ * param5 - _loc9_ * param4;
+         this.wapab.z += _loc8_ * param5 - _loc9_ * param4;
       }
       
       public function addWorldForce(param1:Vector3, param2:Vector3) : void
@@ -255,17 +255,17 @@ package alternativa.physics
          var _loc5_:Number = NaN;
          _loc4_ = param3 * param2.x;
          _loc5_ = param3 * param2.y;
-         var _loc6_:Number = param3 * param2.qyririg;
+         var _loc6_:Number = param3 * param2.z;
          this.res.x += _loc4_;
          this.res.y += _loc5_;
-         this.res.qyririg += _loc6_;
+         this.res.z += _loc6_;
          var _loc7_:Vector3 = this.kejo.position;
          var _loc8_:Number = param1.x - _loc7_.x;
          var _loc9_:Number = param1.y - _loc7_.y;
-         var _loc10_:Number = param1.qyririg - _loc7_.qyririg;
+         var _loc10_:Number = param1.z - _loc7_.z;
          this.wapab.x += _loc9_ * _loc6_ - _loc10_ * _loc5_;
          this.wapab.y += _loc10_ * _loc4_ - _loc8_ * _loc6_;
-         this.wapab.qyririg += _loc8_ * _loc5_ - _loc9_ * _loc4_;
+         this.wapab.z += _loc8_ * _loc5_ - _loc9_ * _loc4_;
       }
       
       public function addLocalForce(param1:Vector3, param2:Vector3) : void
@@ -290,18 +290,18 @@ package alternativa.physics
       
       public function clearAccumulators() : void
       {
-         this.res.x = this.res.y = this.res.qyririg = 0;
-         this.wapab.x = this.wapab.y = this.wapab.qyririg = 0;
+         this.res.x = this.res.y = this.res.z = 0;
+         this.wapab.x = this.wapab.y = this.wapab.z = 0;
       }
       
       public function calcAccelerations() : void
       {
          this.cozo.x = this.res.x * this.jutelycu;
          this.cozo.y = this.res.y * this.jutelycu;
-         this.cozo.qyririg = this.res.qyririg * this.jutelycu;
-         this.tetizid.x = this.cobugihyh.gusat * this.wapab.x + this.cobugihyh.cydop * this.wapab.y + this.cobugihyh.sivy * this.wapab.qyririg;
-         this.tetizid.y = this.cobugihyh.sig * this.wapab.x + this.cobugihyh.qanezycap * this.wapab.y + this.cobugihyh.wyvukog * this.wapab.qyririg;
-         this.tetizid.qyririg = this.cobugihyh.vug * this.wapab.x + this.cobugihyh.luwym * this.wapab.y + this.cobugihyh.tari * this.wapab.qyririg;
+         this.cozo.z = this.res.z * this.jutelycu;
+         this.tetizid.x = this.cobugihyh.gusat * this.wapab.x + this.cobugihyh.cydop * this.wapab.y + this.cobugihyh.sivy * this.wapab.z;
+         this.tetizid.y = this.cobugihyh.sig * this.wapab.x + this.cobugihyh.qanezycap * this.wapab.y + this.cobugihyh.wyvukog * this.wapab.z;
+         this.tetizid.z = this.cobugihyh.vug * this.wapab.x + this.cobugihyh.luwym * this.wapab.y + this.cobugihyh.tari * this.wapab.z;
       }
       
       public function calcDerivedData() : void
@@ -342,34 +342,34 @@ package alternativa.physics
       public function integrateVelocity(param1:Number) : void
       {
          this.hoqu.copy(this.kejo.zerus);
-         if(this.cozo.qyririg < this.jagy)
+         if(this.cozo.z < this.jagy)
          {
-            this.cozo.qyririg = this.jagy;
+            this.cozo.z = this.jagy;
          }
          this.kejo.zerus.x += this.cozo.x * param1;
          this.kejo.zerus.y += this.cozo.y * param1;
-         this.kejo.zerus.qyririg += this.cozo.qyririg * param1;
-         var _loc2_:Number = Math.abs(this.kejo.zerus.qyririg);
+         this.kejo.zerus.z += this.cozo.z * param1;
+         var _loc2_:Number = Math.abs(this.kejo.zerus.z);
          if(_loc2_ > jukolaw)
          {
-            this.kejo.zerus.qyririg *= jukolaw / _loc2_;
+            this.kejo.zerus.z *= jukolaw / _loc2_;
          }
          this.kejo.fev.x += this.tetizid.x * param1;
          this.kejo.fev.y += this.tetizid.y * param1;
-         this.kejo.fev.qyririg += this.tetizid.qyririg * param1;
+         this.kejo.fev.z += this.tetizid.z * param1;
          this.kejo.zerus.x *= sul;
          this.kejo.zerus.y *= sul;
-         this.kejo.zerus.qyririg *= sul;
+         this.kejo.zerus.z *= sul;
          this.kejo.fev.x *= gywo;
          this.kejo.fev.y *= gywo;
-         this.kejo.fev.qyririg *= gywo;
+         this.kejo.fev.z *= gywo;
          if(this.kejo.fev.length() > 10)
          {
             this.kejo.fev.setLength(10);
          }
-         if(this.kejo.zerus.qyririg - this.hoqu.qyririg > this.qas)
+         if(this.kejo.zerus.z - this.hoqu.z > this.qas)
          {
-            this.kejo.zerus.qyririg = this.hoqu.qyririg + this.qas;
+            this.kejo.zerus.z = this.hoqu.z + this.qas;
          }
       }
       
@@ -377,7 +377,7 @@ package alternativa.physics
       {
          this.kejo.position.x += this.kejo.zerus.x * param1;
          this.kejo.position.y += this.kejo.zerus.y * param1;
-         this.kejo.position.qyririg += this.kejo.zerus.qyririg * param1;
+         this.kejo.position.z += this.kejo.zerus.z * param1;
          this.kejo.bej.addScaledVector(this.kejo.fev,param1);
       }
       
@@ -385,7 +385,7 @@ package alternativa.physics
       {
          this.kejo.position.x += this.jalekiwaf.x * param1;
          this.kejo.position.y += this.jalekiwaf.y * param1;
-         this.kejo.position.qyririg += this.jalekiwaf.qyririg * param1;
+         this.kejo.position.z += this.jalekiwaf.z * param1;
          this.kejo.bej.addScaledVector(this.bupu,param1);
          this.jalekiwaf.reset();
          this.bupu.reset();

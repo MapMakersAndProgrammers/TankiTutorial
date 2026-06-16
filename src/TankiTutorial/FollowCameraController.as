@@ -162,7 +162,7 @@ package
       {
          param2.x = param1.x;
          param2.y = param1.y;
-         param2.z = param1.qyririg;
+         param2.z = param1.z;
       }
       
       private static function getLinearSpeed(param1:Number) : Number
@@ -221,7 +221,7 @@ package
          this.position.copy(this.pevan.position);
          this.poluwoh.x = this.getPitchAngle(this.pevan) - 0.5 * Math.PI;
          this.poluwoh.y = 0;
-         this.poluwoh.qyririg = Math.atan2(-param2.x,param2.y);
+         this.poluwoh.z = Math.atan2(-param2.x,param2.y);
          this.setPosition(this.position);
          setOrientation(this.poluwoh);
       }
@@ -230,10 +230,10 @@ package
       {
          this.position.x = butefu.x;
          this.position.y = butefu.y;
-         this.position.qyririg = butefu.z;
+         this.position.z = butefu.z;
          this.poluwoh.x = butefu.rotationX;
          this.poluwoh.y = butefu.rotationY;
-         this.poluwoh.qyririg = butefu.rotationZ;
+         this.poluwoh.z = butefu.rotationZ;
       }
       
       public function activate() : void
@@ -321,7 +321,7 @@ package
          }
          bec.x = this.qevyc.x;
          bec.y = this.qevyc.y;
-         bec.qyririg = this.qevyc.qyririg;
+         bec.z = this.qevyc.z;
          this.run.fromAxisAngle(Vector3.nesicuryn,this.qusejov);
          bec.transform3(this.run);
          this.getCameraPositionData(this.qepajuz,bec,this.pevan);
@@ -344,7 +344,7 @@ package
          var _loc6_:Number = this.getPitchAngle(this.pevan);
          var _loc7_:Number = Math.atan2(-bec.x,bec.y);
          var _loc8_:Number = MathUtils.clampAngle(this.poluwoh.x + 0.5 * Math.PI);
-         var _loc9_:Number = MathUtils.clampAngle(this.poluwoh.qyririg);
+         var _loc9_:Number = MathUtils.clampAngle(this.poluwoh.z);
          var _loc10_:Number = MathUtils.clampAngleFast(_loc6_ - _loc8_);
          this.rapyqe = getAngularSpeed(_loc10_,this.rapyqe);
          var _loc11_:Number = this.rapyqe * _loc3_;
@@ -364,7 +364,7 @@ package
          this.pyhykusik = MathUtils.snap(this.pyhykusik,0,viwatih);
          this.position.add(wele);
          this.poluwoh.x += _loc11_;
-         this.poluwoh.qyririg += _loc13_;
+         this.poluwoh.z += _loc13_;
          gejahi.copy(this.position);
          lucykocah.copy(this.poluwoh);
          this.setPosition(gejahi);
@@ -403,7 +403,7 @@ package
       {
          this.getCameraPositionData(param1,param2,this.pevan);
          param4.x = this.getPitchAngle(this.pevan) - 0.5 * Math.PI;
-         param4.qyririg = Math.atan2(-param2.x,param2.y);
+         param4.z = Math.atan2(-param2.x,param2.y);
          param3.copy(this.pevan.position);
       }
       
@@ -453,13 +453,13 @@ package
          vector3To3D(param1,nifo);
          loqi.x = param3 * param2.x;
          loqi.y = param3 * param2.y;
-         loqi.z = param3 * param2.qyririg;
+         loqi.z = param3 * param2.z;
          if(this.kubeku.getCollision(nifo,loqi,vipo,gariv,this.sak))
          {
             _loc5_ = jokorufu + 0.1;
             param4.x = vipo.x + _loc5_ * gariv.x;
             param4.y = vipo.y + _loc5_ * gariv.y;
-            param4.qyririg = vipo.z + _loc5_ * gariv.z;
+            param4.z = vipo.z + _loc5_ * gariv.z;
          }
          else
          {

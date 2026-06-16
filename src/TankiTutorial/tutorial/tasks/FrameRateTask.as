@@ -5,7 +5,10 @@ package tutorial.tasks
    import flash.display.StageQuality;
    import tutorial.GameData;
    import tutorial.TimeData;
+   import alternativa.engine3d.alternativa3d;
    
+   use namespace alternativa3d;
+
    public class FrameRateTask extends Task
    {
       

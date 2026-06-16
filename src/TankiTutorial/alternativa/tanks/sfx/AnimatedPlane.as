@@ -15,7 +15,7 @@ package alternativa.tanks.sfx
       
       private var rok:Vertex;
       
-      private var gepoky:Vector.<haq>;
+      private var gepoky:Vector.<UVFrame>;
       
       private var nomupiz:int;
       
@@ -53,9 +53,9 @@ package alternativa.tanks.sfx
          this.rok = _loc1_[3];
       }
       
-      public function init(param1:dosu, param2:Number) : void
+      public function init(param1:TextureAnimation, param2:Number) : void
       {
-         setMaterialToAllFaces(param1.myma);
+         setMaterialToAllFaces(param1.material);
          this.gepoky = param1.qyvoladeg;
          this.nomupiz = this.gepoky.length;
          this.lelypa = param2;
@@ -83,7 +83,7 @@ package alternativa.tanks.sfx
          return this.nomupiz / this.lelypa;
       }
       
-      private function setFrame(param1:haq) : void
+      private function setFrame(param1:UVFrame) : void
       {
          this.gar.u = param1.picylyno;
          this.gar.v = param1.lesenac;

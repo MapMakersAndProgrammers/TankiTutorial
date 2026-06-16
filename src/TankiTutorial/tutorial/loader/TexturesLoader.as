@@ -6,7 +6,10 @@ package tutorial.loader
    import flash.utils.getTimer;
    import flash.utils.setInterval;
    import tutorial.commons.Assets;
+   import alternativa.engine3d.alternativa3d;
    
+   use namespace alternativa3d;
+
    public class TexturesLoader
    {
       

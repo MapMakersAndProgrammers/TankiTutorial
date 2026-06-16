@@ -59,7 +59,7 @@ package alternativa.tanks.bonuses
       {
          param1.x = x;
          param1.y = y;
-         param1.qyririg = z;
+         param1.z = z;
       }
       
       public function setAlphaMultiplier(param1:Number) : void

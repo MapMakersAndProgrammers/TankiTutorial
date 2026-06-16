@@ -6,7 +6,7 @@ package alternativa.tanks.bonuses
    import alternativa.physics.Body;
    import alternativa.physics.PhysicsMaterial;
    import alternativa.physics.collision.CollisionShape;
-   import alternativa.physics.collision.primitives.tygymamej;
+   import alternativa.physics.collision.primitives.CollisionBox;
    import alternativa.tanks.battle.BattleRunner;
    import alternativa.tanks.battle.Trigger;
    import alternativa.tanks.physics.CollisionGroup;
@@ -16,7 +16,7 @@ package alternativa.tanks.bonuses
       
       private var nasybugo:BattleBonus;
       
-      private var pyp:tygymamej;
+      private var pyp:CollisionBox;
       
       private var zepymy:BattleRunner;
       
@@ -25,7 +25,7 @@ package alternativa.tanks.bonuses
          super();
          this.nasybugo = param1;
          var _loc2_:Number = BonusConst.numij;
-         this.pyp = new tygymamej(new Vector3(_loc2_,_loc2_,_loc2_),CollisionGroup.nuqa,PhysicsMaterial.gec);
+         this.pyp = new CollisionBox(new Vector3(_loc2_,_loc2_,_loc2_),CollisionGroup.nuqa,PhysicsMaterial.gec);
       }
       
       public function enable(param1:BattleRunner) : void

@@ -100,7 +100,7 @@ package alternativa.physics
             {
                _loc3_.cozo.x += this.tem.x;
                _loc3_.cozo.y += this.tem.y;
-               _loc3_.cozo.qyririg += this.tem.qyririg;
+               _loc3_.cozo.z += this.tem.z;
             }
             _loc2_++;
          }

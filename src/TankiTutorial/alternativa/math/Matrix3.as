@@ -186,31 +186,31 @@ package alternativa.math
       
       public function transformVector(param1:Vector3, param2:Vector3) : void
       {
-         param2.x = this.gusat * param1.x + this.cydop * param1.y + this.sivy * param1.qyririg;
-         param2.y = this.sig * param1.x + this.qanezycap * param1.y + this.wyvukog * param1.qyririg;
-         param2.qyririg = this.vug * param1.x + this.luwym * param1.y + this.tari * param1.qyririg;
+         param2.x = this.gusat * param1.x + this.cydop * param1.y + this.sivy * param1.z;
+         param2.y = this.sig * param1.x + this.qanezycap * param1.y + this.wyvukog * param1.z;
+         param2.z = this.vug * param1.x + this.luwym * param1.y + this.tari * param1.z;
       }
       
       public function transformVectorInverse(param1:Vector3, param2:Vector3) : void
       {
-         param2.x = this.gusat * param1.x + this.sig * param1.y + this.vug * param1.qyririg;
-         param2.y = this.cydop * param1.x + this.qanezycap * param1.y + this.luwym * param1.qyririg;
-         param2.qyririg = this.sivy * param1.x + this.wyvukog * param1.y + this.tari * param1.qyririg;
+         param2.x = this.gusat * param1.x + this.sig * param1.y + this.vug * param1.z;
+         param2.y = this.cydop * param1.x + this.qanezycap * param1.y + this.luwym * param1.z;
+         param2.z = this.sivy * param1.x + this.wyvukog * param1.y + this.tari * param1.z;
       }
       
       public function transformVector3To3D(param1:Vector3, param2:Vector3D) : void
       {
-         param2.x = this.gusat * param1.x + this.cydop * param1.y + this.sivy * param1.qyririg;
-         param2.y = this.sig * param1.x + this.qanezycap * param1.y + this.wyvukog * param1.qyririg;
-         param2.z = this.vug * param1.x + this.luwym * param1.y + this.tari * param1.qyririg;
+         param2.x = this.gusat * param1.x + this.cydop * param1.y + this.sivy * param1.z;
+         param2.y = this.sig * param1.x + this.qanezycap * param1.y + this.wyvukog * param1.z;
+         param2.z = this.vug * param1.x + this.luwym * param1.y + this.tari * param1.z;
       }
       
       public function createSkewSymmetric(param1:Vector3) : Matrix3
       {
          this.gusat = this.qanezycap = this.tari = 0;
-         this.cydop = -param1.qyririg;
+         this.cydop = -param1.z;
          this.sivy = param1.y;
-         this.sig = param1.qyririg;
+         this.sig = param1.z;
          this.wyvukog = -param1.x;
          this.vug = -param1.y;
          this.luwym = param1.x;
@@ -260,7 +260,7 @@ package alternativa.math
          var _loc5_:Number = 1 - _loc3_;
          var _loc6_:Number = param1.x;
          var _loc7_:Number = param1.y;
-         var _loc8_:Number = param1.qyririg;
+         var _loc8_:Number = param1.z;
          this.gusat = _loc5_ * _loc6_ * _loc6_ + _loc3_;
          this.cydop = _loc5_ * _loc6_ * _loc7_ - _loc8_ * _loc4_;
          this.sivy = _loc5_ * _loc6_ * _loc8_ + _loc7_ * _loc4_;
@@ -288,14 +288,14 @@ package alternativa.math
          {
             param1.x = Math.atan2(this.luwym,this.tari);
             param1.y = -Math.asin(this.vug);
-            param1.qyririg = Math.atan2(this.sig,this.gusat);
+            param1.z = Math.atan2(this.sig,this.gusat);
          }
          else
          {
             param1.x = 0;
             param1.y = this.vug <= -1 ? Math.PI : -Math.PI;
             param1.y *= 0.5;
-            param1.qyririg = Math.atan2(-this.cydop,this.qanezycap);
+            param1.z = Math.atan2(-this.cydop,this.qanezycap);
          }
       }
       

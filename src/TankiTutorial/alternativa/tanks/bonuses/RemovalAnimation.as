@@ -1,13 +1,13 @@
 package alternativa.tanks.bonuses
 {
    import flash.utils.getTimer;
-   import kefy.Wopowur;
-   import kefy.fare;
-   import alternativa.tanks.battle.litavepot;
-   import alternativa.tanks.battle.luvaqalyr;
+   import alternativa.tanks.utils.objectpool.PooledObject;
+   import alternativa.tanks.utils.objectpool.Pool;
+   import alternativa.tanks.battle.Renderer;
+   import alternativa.tanks.battle.BattleScene3D;
    import alternativa.tanks.sfx.Blinker;
    
-   public class RemovalAnimation extends Wopowur implements litavepot
+   public class RemovalAnimation extends PooledObject implements Renderer
    {
       
       private static const vysil:int = 500;
@@ -28,7 +28,7 @@ package alternativa.tanks.bonuses
       
       private const duleruve:Blinker = new Blinker(vysil,cygybup,cavogu,myz,1,zuwujedo);
       
-      private var hyfecypi:luvaqalyr;
+      private var hyfecypi:BattleScene3D;
       
       private var giqo:BonusMesh;
       
@@ -40,16 +40,16 @@ package alternativa.tanks.bonuses
       
       private var mirocy:Boolean;
       
-      public function RemovalAnimation(param1:fare)
+      public function RemovalAnimation(param1:Pool)
       {
          super(param1);
       }
       
-      public function init(param1:luvaqalyr, param2:BattleBonus, param3:int) : void
+      public function init(param1:BattleScene3D, param2:BattleBonus, param3:int) : void
       {
          var _loc4_:int = getTimer();
          this.hyfecypi = param1;
-         this.giqo = param2.qemydyc();
+         this.giqo = param2.getBonusMesh();
          this.racefom = _loc4_ + param3 - vac;
          this.mirocy = false;
          this.jemusyvin = true;
@@ -62,9 +62,9 @@ package alternativa.tanks.bonuses
          {
             this.duleruve.setInitialInterval(vysil);
          }
-         param1.dopus(this,0);
-         param2.nuziged.gucipusid(this.onBonusPickup);
-         param2.lybaluh.gucipusid(this.onBonusRemove);
+         param1.addRenderer(this,0);
+         param2.nuziged.addOnce(this.onBonusPickup);
+         param2.lybaluh.addOnce(this.onBonusRemove);
       }
       
       private function onBonusPickup() : void
@@ -141,10 +141,10 @@ package alternativa.tanks.bonuses
       
       private function destroy() : void
       {
-         this.hyfecypi.gebi(this,0);
+         this.hyfecypi.removeRenderer(this,0);
          if(this.giqo != null)
          {
-            this.hyfecypi.behukywu(this.giqo);
+            this.hyfecypi.removeObject(this.giqo);
             this.giqo.recycle();
             this.giqo = null;
          }

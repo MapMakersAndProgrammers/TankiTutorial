@@ -24,7 +24,7 @@ package alternativa.physics
          }
          var _loc4_:Number = param2.x * param2.x;
          var _loc5_:Number = param2.y * param2.y;
-         var _loc6_:Number = param2.qyririg * param2.qyririg;
+         var _loc6_:Number = param2.z * param2.z;
          param3.gusat = 3 / (param1 * (_loc5_ + _loc6_));
          param3.qanezycap = 3 / (param1 * (_loc6_ + _loc4_));
          param3.tari = 3 / (param1 * (_loc4_ + _loc5_));

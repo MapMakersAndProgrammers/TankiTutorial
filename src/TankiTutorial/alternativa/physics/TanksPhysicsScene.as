@@ -8,7 +8,7 @@ package alternativa.physics
    import alternativa.tanks.battle.PhysicsInterpolator;
    import alternativa.tanks.battle.triggers.Triggers;
    import alternativa.tanks.shared.physics.TankBody;
-   import alternativa.tanks.shared.physics.mebiw;
+   import alternativa.tanks.shared.physics.TanksCollisionDetector;
    import tutorial.GameData;
    
    public class TanksPhysicsScene extends PhysicsScene
@@ -22,7 +22,7 @@ package alternativa.physics
       
       private var dytoc:Vector.<PhysicsInterpolator> = new Vector.<PhysicsInterpolator>();
       
-      public var secakesem:mebiw;
+      public var secakesem:TanksCollisionDetector;
       
       private var juzote:Boolean = false;
       
@@ -39,7 +39,7 @@ package alternativa.physics
       public function TanksPhysicsScene()
       {
          super();
-         this.secakesem = new mebiw();
+         this.secakesem = new TanksCollisionDetector();
          kymaqos = this.secakesem;
          this.kodasy = new Vector.<CollisionShape>();
       }
@@ -59,13 +59,13 @@ package alternativa.physics
       public function addKinematicBody(param1:Body) : void
       {
          this.addBody(param1);
-         this.secakesem.cul(param1);
+         this.secakesem.addKineamticBody(param1);
       }
       
       public function removeDynamicBody(param1:Body) : void
       {
          this.removeBody(param1);
-         this.secakesem.niryruv(param1);
+         this.secakesem.removeKinematicBody(param1);
       }
       
       override public function addBody(param1:Body) : void
@@ -106,7 +106,7 @@ package alternativa.physics
             _loc1_ = new AABB();
             _loc2_ = 200000;
             _loc1_.setSize(-_loc2_,-_loc2_,-_loc2_,_loc2_,_loc2_,_loc2_);
-            this.secakesem.nonolit(this.kodasy,_loc1_);
+            this.secakesem.buildKdTree(this.kodasy,_loc1_);
             this.juzote = false;
          }
       }

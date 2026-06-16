@@ -8,7 +8,7 @@ package tutorial.loader.proplib
    import alternativa.physics.collision.CollisionShape;
    import alternativa.physics.collision.primitives.CollisionRect;
    import alternativa.physics.collision.primitives.CollisionTriangle;
-   import alternativa.physics.collision.primitives.tygymamej;
+   import alternativa.physics.collision.primitives.CollisionBox;
    import tutorial.GameData;
    import tutorial.commons.Assets;
    
@@ -101,12 +101,12 @@ package tutorial.loader.proplib
                _loc13_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("v2")[0],"y",0);
                _loc8_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"x",0);
                _loc8_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"y",0);
-               _loc8_.qyririg = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"z",0);
+               _loc8_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"z",0);
                _loc9_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"x",0);
                _loc9_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"y",0);
-               _loc9_.qyririg = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"z",0);
+               _loc9_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"z",0);
                _loc7_ = new CollisionTriangle(_loc11_,_loc12_,_loc13_,_loc6_,biby);
-               _loc10_.setRotationMatrix(_loc9_.x,_loc9_.y,_loc9_.qyririg);
+               _loc10_.setRotationMatrix(_loc9_.x,_loc9_.y,_loc9_.z);
                _loc7_.wet.setFromMatrix3(_loc10_,_loc8_);
                this.jehi.push(_loc7_);
             }
@@ -120,15 +120,15 @@ package tutorial.loader.proplib
          {
             _loc14_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("size")[0],"x",0) * 0.5;
             _loc14_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("size")[0],"y",0) * 0.5;
-            _loc14_.qyririg = 0;
+            _loc14_.z = 0;
             _loc8_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"x",0);
             _loc8_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"y",0);
-            _loc8_.qyririg = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"z",0);
+            _loc8_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"z",0);
             _loc9_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"x",0);
             _loc9_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"y",0);
-            _loc9_.qyririg = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"z",0);
+            _loc9_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"z",0);
             _loc7_ = new CollisionRect(_loc14_,_loc6_,biby);
-            _loc10_.setRotationMatrix(_loc9_.x,_loc9_.y,_loc9_.qyririg);
+            _loc10_.setRotationMatrix(_loc9_.x,_loc9_.y,_loc9_.z);
             _loc7_.wet.setFromMatrix3(_loc10_,_loc8_);
             this.jehi.push(_loc7_);
             _loc4_++;
@@ -142,15 +142,15 @@ package tutorial.loader.proplib
             {
                _loc14_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("size")[0],"x",0) * 0.5;
                _loc14_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("size")[0],"y",0) * 0.5;
-               _loc14_.qyririg = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("size")[0],"z",0) * 0.5;
+               _loc14_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("size")[0],"z",0) * 0.5;
                _loc8_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"x",0);
                _loc8_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"y",0);
-               _loc8_.qyririg = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"z",0);
+               _loc8_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"z",0);
                _loc9_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"x",0);
                _loc9_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"y",0);
-               _loc9_.qyririg = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"z",0);
-               _loc7_ = new tygymamej(_loc14_,_loc6_,biby);
-               _loc10_.setRotationMatrix(_loc9_.x,_loc9_.y,_loc9_.qyririg);
+               _loc9_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"z",0);
+               _loc7_ = new CollisionBox(_loc14_,_loc6_,biby);
+               _loc10_.setRotationMatrix(_loc9_.x,_loc9_.y,_loc9_.z);
                _loc7_.wet.setFromMatrix3(_loc10_,_loc8_);
                this.jehi.push(_loc7_);
             }

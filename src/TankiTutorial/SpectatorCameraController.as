@@ -93,10 +93,10 @@ package
          this.butefu = param1;
          this.position.x = param1.x;
          this.position.y = param1.y;
-         this.position.qyririg = param1.z;
+         this.position.z = param1.z;
          this.poluwoh.x = param1.rotationX;
          this.poluwoh.y = param1.rotationY;
-         this.poluwoh.qyririg = param1.rotationZ;
+         this.poluwoh.z = param1.rotationZ;
       }
       
       public function update(param1:int, param2:int) : void
@@ -110,20 +110,20 @@ package
             {
                this.sema.x = this.getDirection(dad,wogop);
                this.sema.y = 0;
-               this.sema.qyririg = this.getDirection(cyjeruqa,vuhike);
+               this.sema.z = this.getDirection(cyjeruqa,vuhike);
                this.butefu.getGlobalVector(this.sema,this.ruda);
-               this.ruda.qyririg = 0;
+               this.ruda.z = 0;
                if(this.ruda.lengthSqr() > 0)
                {
                   this.ruda.normalize();
                }
-               this.ruda.qyririg = -this.getDirection(sulu,desu);
+               this.ruda.z = -this.getDirection(sulu,desu);
             }
             else
             {
                this.sema.x = this.getDirection(dad,wogop);
                this.sema.y = this.getDirection(sulu,desu);
-               this.sema.qyririg = this.getDirection(cyjeruqa,vuhike);
+               this.sema.z = this.getDirection(cyjeruqa,vuhike);
                this.butefu.getGlobalVector(this.sema,this.ruda);
             }
             if(this.ruda.lengthSqr() > 0)
@@ -140,12 +140,12 @@ package
             }
             this.position.x += this.ruda.x;
             this.position.y += this.ruda.y;
-            this.position.qyririg += this.ruda.qyririg;
+            this.position.z += this.ruda.z;
             if(this.zopuduwar)
             {
                _loc4_ = this.vucofena ? 1 : 0;
                this.poluwoh.x = this.sunopival + _loc4_ * (GameData.stage.mouseY - this.jevezete) * jofohinar.duz;
-               this.poluwoh.qyririg = this.qotok + _loc4_ * (GameData.stage.mouseX - this.byc) * gyvareve.duz;
+               this.poluwoh.z = this.qotok + _loc4_ * (GameData.stage.mouseX - this.byc) * gyvareve.duz;
                if(this.poluwoh.x > 0)
                {
                   this.poluwoh.x = 0;
@@ -157,10 +157,10 @@ package
             }
             this.butefu.x += (this.position.x - this.butefu.x) * cumu.duz;
             this.butefu.y += (this.position.y - this.butefu.y) * cumu.duz;
-            this.butefu.z += (this.position.qyririg - this.butefu.z) * cumu.duz;
+            this.butefu.z += (this.position.z - this.butefu.z) * cumu.duz;
             this.butefu.rotationX += (this.poluwoh.x - this.butefu.rotationX) * cumu.duz;
             this.butefu.rotationY += (this.poluwoh.y - this.butefu.rotationY) * cumu.duz;
-            this.butefu.rotationZ += (this.poluwoh.qyririg - this.butefu.rotationZ) * cumu.duz;
+            this.butefu.rotationZ += (this.poluwoh.z - this.butefu.rotationZ) * cumu.duz;
          }
       }
       

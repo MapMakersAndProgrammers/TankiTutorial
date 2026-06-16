@@ -3,8 +3,8 @@ package alternativa.tanks.sfx
    import flash.media.Sound;
    import flash.media.SoundChannel;
    import flash.media.SoundTransform;
-   import gafaduzuw.finajylom;
-   import jem.tove;
+   import alternativa.math.Vector3;
+   import alternativa.tanks.sound.SoundManager;
    
    public class Sound3D
    {
@@ -113,12 +113,12 @@ package alternativa.tanks.sfx
          this.updateEffectiveVolume();
       }
       
-      public function calculateSoundProperties(param1:finajylom, param2:finajylom, param3:finajylom, param4:SoundTransform) : void
+      public function calculateSoundProperties(param1:Vector3, param2:Vector3, param3:Vector3, param4:SoundTransform) : void
       {
          var _loc9_:Number = NaN;
-         var _loc5_:Number = param2.kan - param1.kan;
-         var _loc6_:Number = param2.zofydizug - param1.zofydizug;
-         var _loc7_:Number = param2.qyririg - param1.qyririg;
+         var _loc5_:Number = param2.x - param1.x;
+         var _loc6_:Number = param2.y - param1.y;
+         var _loc7_:Number = param2.z - param1.z;
          var _loc8_:Number = Math.sqrt(_loc5_ * _loc5_ + _loc6_ * _loc6_ + _loc7_ * _loc7_);
          if(_loc8_ < this.suwyc)
          {
@@ -134,11 +134,11 @@ package alternativa.tanks.sfx
             _loc5_ *= _loc8_;
             _loc6_ *= _loc8_;
             _loc7_ *= _loc8_;
-            param4.pan = (_loc5_ * param3.kan + _loc6_ * param3.zofydizug + _loc7_ * param3.qyririg) * (1 - _loc9_);
+            param4.pan = (_loc5_ * param3.x + _loc6_ * param3.y + _loc7_ * param3.z) * (1 - _loc9_);
          }
       }
       
-      public function checkVolume(param1:finajylom, param2:finajylom, param3:finajylom) : void
+      public function checkVolume(param1:Vector3, param2:Vector3, param3:Vector3) : void
       {
          this.updateEffectiveVolume();
          if(this.judymu != null)
@@ -179,7 +179,7 @@ package alternativa.tanks.sfx
       
       private function updateEffectiveVolume() : void
       {
-         this.tuc = tove.tacacihob * this.bato;
+         this.tuc = SoundManager.tacacihob * this.bato;
       }
    }
 }

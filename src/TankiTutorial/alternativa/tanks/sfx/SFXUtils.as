@@ -60,31 +60,31 @@ package alternativa.tanks.sfx
          {
             zeq.x = 0;
             zeq.y = 0;
-            zeq.qyririg = 1;
+            zeq.z = 1;
             _loc5_ = param3.y < 0 ? Math.PI : 0;
          }
          else
          {
-            zeq.x = param3.qyririg;
+            zeq.x = param3.z;
             zeq.y = 0;
-            zeq.qyririg = -param3.x;
+            zeq.z = -param3.x;
             zeq.normalize();
             _loc5_ = Math.acos(param3.y);
          }
          zob.fromAxisAngle(zeq,_loc5_);
          nywo.x = param4.x - param2.x;
          nywo.y = param4.y - param2.y;
-         nywo.qyririg = param4.qyririg - param2.qyririg;
-         _loc6_ = nywo.x * param3.x + nywo.y * param3.y + nywo.qyririg * param3.qyririg;
+         nywo.z = param4.z - param2.z;
+         _loc6_ = nywo.x * param3.x + nywo.y * param3.y + nywo.z * param3.z;
          nywo.x -= _loc6_ * param3.x;
          nywo.y -= _loc6_ * param3.y;
-         nywo.qyririg -= _loc6_ * param3.qyririg;
+         nywo.z -= _loc6_ * param3.z;
          nywo.normalize();
          zob.transformVector(Vector3.nesicuryn,qomusawe);
-         _loc6_ = qomusawe.x * nywo.x + qomusawe.y * nywo.y + qomusawe.qyririg * nywo.qyririg;
-         gik.x = qomusawe.y * nywo.qyririg - qomusawe.qyririg * nywo.y;
-         gik.y = qomusawe.qyririg * nywo.x - qomusawe.x * nywo.qyririg;
-         gik.qyririg = qomusawe.x * nywo.y - qomusawe.y * nywo.x;
+         _loc6_ = qomusawe.x * nywo.x + qomusawe.y * nywo.y + qomusawe.z * nywo.z;
+         gik.x = qomusawe.y * nywo.z - qomusawe.z * nywo.y;
+         gik.y = qomusawe.z * nywo.x - qomusawe.x * nywo.z;
+         gik.z = qomusawe.x * nywo.y - qomusawe.y * nywo.x;
          gik.normalize();
          _loc5_ = Math.acos(_loc6_);
          bohibotiq.fromAxisAngle(gik,_loc5_);
@@ -92,10 +92,10 @@ package alternativa.tanks.sfx
          zob.getEulerAngles(fyqynyfy);
          param1.rotationX = fyqynyfy.x;
          param1.rotationY = fyqynyfy.y;
-         param1.rotationZ = fyqynyfy.qyririg;
+         param1.rotationZ = fyqynyfy.z;
          param1.x = param2.x;
          param1.y = param2.y;
-         param1.z = param2.qyririg;
+         param1.z = param2.z;
       }
       
       public static function copyColorTransform(param1:ColorTransform, param2:ColorTransform) : void

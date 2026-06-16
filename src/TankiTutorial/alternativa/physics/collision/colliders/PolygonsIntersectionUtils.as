@@ -56,12 +56,12 @@ package alternativa.physics.collision.colliders
                _loc15_ = _loc14_.position;
                _loc15_.x = _loc11_.x;
                _loc15_.y = _loc11_.y;
-               _loc15_.qyririg = 0.5 * (_loc12_ + _loc13_);
+               _loc15_.z = 0.5 * (_loc12_ + _loc13_);
                _loc15_.transform4(param7);
                _loc14_.pefavo = _loc13_ - _loc12_;
                _loc14_.lefugefo.x = param7.sivy;
                _loc14_.lefugefo.y = param7.wyvukog;
-               _loc14_.lefugefo.qyririg = param7.tari;
+               _loc14_.lefugefo.z = param7.tari;
                param8[param8.length] = _loc14_;
             }
             _loc10_++;
@@ -82,13 +82,13 @@ package alternativa.physics.collision.colliders
          var _loc8_:Vector3 = _loc5_.cujeqo;
          _loc9_ = _loc7_.x - _loc6_.x;
          var _loc10_:Number = _loc7_.y - _loc6_.y;
-         _loc11_ = _loc7_.qyririg - _loc6_.qyririg;
+         _loc11_ = _loc7_.z - _loc6_.z;
          _loc12_ = _loc8_.x - _loc6_.x;
          var _loc13_:Number = _loc8_.y - _loc6_.y;
-         _loc14_ = _loc8_.qyririg - _loc6_.qyririg;
+         _loc14_ = _loc8_.z - _loc6_.z;
          param2.x = _loc10_ * _loc14_ - _loc11_ * _loc13_;
          param2.y = _loc11_ * _loc12_ - _loc9_ * _loc14_;
-         param2.qyririg = _loc9_ * _loc13_ - _loc10_ * _loc12_;
+         param2.z = _loc9_ * _loc13_ - _loc10_ * _loc12_;
          param2.normalize();
       }
       
@@ -213,7 +213,7 @@ package alternativa.physics.collision.colliders
       private static function getFaceZ(param1:Point, param2:Vector3, param3:Vector3) : Number
       {
          var _loc4_:Number = param2.dot(param3);
-         return (_loc4_ - param1.x * param3.x - param1.y * param3.y) / param3.qyririg;
+         return (_loc4_ - param1.x * param3.x - param1.y * param3.y) / param3.z;
       }
    }
 }

@@ -3,7 +3,11 @@ package alternativa.tanks.sfx.flamethrower
    import alternativa.math.Vector3;
    import alternativa.tanks.sfx.AnimatedSprite3D;
    import flash.geom.ColorTransform;
+   import alternativa.engine3d.alternativa3d;
    
+   // XXX: this is for an object3d function
+   use namespace alternativa3d;
+
    public class StreamWeaponParticle extends AnimatedSprite3D
    {
       

@@ -22,7 +22,7 @@ package alternativa.tanks.vehicles.tank.skin
       private static function getRatio(param1:Face) : Number
       {
          var _loc2_:Vector.<Vertex> = param1.vertices;
-         return nok(_loc2_[0],_loc2_[1]);
+         return getRatioForVertices(_loc2_[0],_loc2_[1]);
       }
       
       private static function getRatioForVertices(param1:Vertex, param2:Vertex) : Number
@@ -55,7 +55,7 @@ package alternativa.tanks.vehicles.tank.skin
             {
                _loc2_[_loc5_] = true;
             }
-            _loc1_ += tov(_loc3_);
+            _loc1_ += getRatio(_loc3_);
          }
          this.ryqyfi = _loc1_ / this.zakorez.length;
          this.redy = new Vector.<Vertex>();

@@ -1,13 +1,13 @@
 package alternativa.tanks.sfx.flamethrower
 {
-   import alternativa.tanks.sfx.Medima;
-   import alternativa.tanks.sfx.dosu;
-   import alternativa.tanks.sfx.haq;
+   import alternativa.tanks.sfx.SimplePlane;
+   import alternativa.tanks.sfx.TextureAnimation;
+   import alternativa.tanks.sfx.UVFrame;
    
-   internal class StreamWeaponMuzzlePlane extends Medima
+   internal class StreamWeaponMuzzlePlane extends SimplePlane
    {
       
-      private var gepoky:Vector.<haq>;
+      private var gepoky:Vector.<UVFrame>;
       
       private var nomupiz:int;
       
@@ -22,9 +22,9 @@ package alternativa.tanks.sfx.flamethrower
          useLight = false;
       }
       
-      public function init(param1:dosu) : void
+      public function init(param1:TextureAnimation) : void
       {
-         setMaterialToAllFaces(param1.myma);
+         setMaterialToAllFaces(param1.material);
          this.gepoky = param1.qyvoladeg;
          this.nomupiz = this.gepoky.length;
          this.tyfu = 0;
@@ -48,7 +48,7 @@ package alternativa.tanks.sfx.flamethrower
          this.setFrame(this.gepoky[int(this.tyfu)]);
       }
       
-      private function setFrame(param1:haq) : void
+      private function setFrame(param1:UVFrame) : void
       {
          gar.u = param1.picylyno;
          gar.v = param1.lesenac;

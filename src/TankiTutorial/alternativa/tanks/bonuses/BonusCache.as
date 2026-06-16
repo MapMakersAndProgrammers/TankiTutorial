@@ -24,7 +24,7 @@ package alternativa.tanks.bonuses
       
       public static function getParachute() : Parachute
       {
-         return Parachute(qiwozoc.ObjectCache());
+         return Parachute(qiwozoc.get());
       }
       
       public static function putParachute(param1:Parachute) : void
@@ -39,7 +39,7 @@ package alternativa.tanks.bonuses
       
       public static function getCords() : Cords
       {
-         return Cords(wykyb.ObjectCache());
+         return Cords(wykyb.get());
       }
       
       public static function putCords(param1:Cords) : void
@@ -54,7 +54,7 @@ package alternativa.tanks.bonuses
       
       public static function getBonusMesh(param1:Long) : BonusMesh
       {
-         return BonusMesh(getBonusMeshCache(param1).ObjectCache());
+         return BonusMesh(getBonusMeshCache(param1).get());
       }
       
       public static function putBonusMesh(param1:BonusMesh) : void

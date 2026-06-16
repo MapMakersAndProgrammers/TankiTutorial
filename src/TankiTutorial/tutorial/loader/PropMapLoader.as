@@ -31,7 +31,10 @@ package tutorial.loader
    import tutorial.loader.proplib.PropObject;
    import tutorial.loader.proplib.XMLUtils;
    import tutorial.script.ScriptStep;
+   import alternativa.engine3d.alternativa3d;
    
+   use namespace alternativa3d;
+
    public class PropMapLoader extends TanksLoader
    {
       
@@ -89,10 +92,10 @@ package tutorial.loader
          _loc4_.calculateVerticesNormals();
          _loc4_.x = param1.x;
          _loc4_.y = param1.y;
-         _loc4_.z = param1.qyririg;
+         _loc4_.z = param1.z;
          _loc4_.rotationX = param2.x;
          _loc4_.rotationY = param2.y;
-         _loc4_.rotationZ = param2.qyririg;
+         _loc4_.rotationZ = param2.z;
          return _loc4_;
       }
       
@@ -237,7 +240,7 @@ package tutorial.loader
             _loc6_ = Number(_loc1_.elements("rotation-z"));
             gijalatyt.identity();
             gijalatyt.appendRotation(_loc6_ * 180 / Math.PI,Vector3D.Z_AXIS);
-            gijalatyt.appendTranslation(_loc5_.x,_loc5_.y,_loc5_.qyririg);
+            gijalatyt.appendTranslation(_loc5_.x,_loc5_.y,_loc5_.z);
             _loc7_ = _loc1_.elements("texture-index").length() > 0 ? int(int(_loc1_.elements("texture-index")) + 1) : 0;
             _loc8_ = _loc3_.leqib[_loc7_];
             if(Boolean(this.bemevem[_loc3_.gepocivaj]))
@@ -279,7 +282,7 @@ package tutorial.loader
          var _loc7_:int = _loc6_.material == null ? CollisionGroup.neli : 255;
          for each(_loc8_ in param2.jehi)
          {
-            sudadu.setMatrix(param3.x,param3.y,param3.qyririg,0,0,param4);
+            sudadu.setMatrix(param3.x,param3.y,param3.z,0,0,param4);
             _loc9_ = _loc8_.clone();
             _loc9_.nute = _loc7_;
             _loc9_.wet.append(sudadu);

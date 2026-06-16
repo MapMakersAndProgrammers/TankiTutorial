@@ -197,14 +197,14 @@ package alternativa.physics.collision.primitives
       {
          var _loc5_:Matrix4 = null;
          _loc5_ = this.wet;
-         var _loc6_:Number = param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.qyririg * _loc5_.tari;
+         var _loc6_:Number = param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.z * _loc5_.tari;
          if(_loc6_ < param3 && _loc6_ > -param3)
          {
             return -1;
          }
          var _loc7_:Number = param1.x - _loc5_.kyvuru;
          var _loc8_:Number = param1.y - _loc5_.zumidynip;
-         var _loc9_:Number = param1.qyririg - _loc5_.sunafepo;
+         var _loc9_:Number = param1.z - _loc5_.sunafepo;
          var _loc10_:Number = _loc7_ * _loc5_.sivy + _loc8_ * _loc5_.wyvukog + _loc9_ * _loc5_.tari;
          var _loc11_:Number = -_loc10_ / _loc6_;
          if(_loc11_ < 0)
@@ -213,23 +213,23 @@ package alternativa.physics.collision.primitives
          }
          var _loc12_:Number = _loc7_ * _loc5_.gusat + _loc8_ * _loc5_.sig + _loc9_ * _loc5_.vug;
          var _loc13_:Number = _loc7_ * _loc5_.cydop + _loc8_ * _loc5_.qanezycap + _loc9_ * _loc5_.luwym;
-         _loc7_ = _loc12_ + _loc11_ * (param2.x * _loc5_.gusat + param2.y * _loc5_.sig + param2.qyririg * _loc5_.vug);
-         _loc8_ = _loc13_ + _loc11_ * (param2.x * _loc5_.cydop + param2.y * _loc5_.qanezycap + param2.qyririg * _loc5_.luwym);
+         _loc7_ = _loc12_ + _loc11_ * (param2.x * _loc5_.gusat + param2.y * _loc5_.sig + param2.z * _loc5_.vug);
+         _loc8_ = _loc13_ + _loc11_ * (param2.x * _loc5_.cydop + param2.y * _loc5_.qanezycap + param2.z * _loc5_.luwym);
          if(this.dodupypic.x * (_loc8_ - this.lyzud.y) - this.dodupypic.y * (_loc7_ - this.lyzud.x) < 0 || this.cilozuj.x * (_loc8_ - this.pedake.y) - this.cilozuj.y * (_loc7_ - this.pedake.x) < 0 || this.dij.x * (_loc8_ - this.bykecy.y) - this.dij.y * (_loc7_ - this.bykecy.x) < 0)
          {
             return -1;
          }
-         if(param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.qyririg * _loc5_.tari > 0)
+         if(param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.z * _loc5_.tari > 0)
          {
             param4.x = -_loc5_.sivy;
             param4.y = -_loc5_.wyvukog;
-            param4.qyririg = -_loc5_.tari;
+            param4.z = -_loc5_.tari;
          }
          else
          {
             param4.x = _loc5_.sivy;
             param4.y = _loc5_.wyvukog;
-            param4.qyririg = _loc5_.tari;
+            param4.z = _loc5_.tari;
          }
          return _loc11_;
       }

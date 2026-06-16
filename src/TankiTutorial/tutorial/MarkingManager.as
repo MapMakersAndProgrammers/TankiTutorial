@@ -200,7 +200,7 @@ package tutorial
             _loc6_ = GameData.wuhibota[_loc4_];
             _loc7_ = _loc6_.x - param1.x;
             _loc8_ = _loc6_.y - param1.y;
-            _loc9_ = _loc6_.qyririg - param1.z;
+            _loc9_ = _loc6_.z - param1.z;
             _loc10_ = Math.sqrt(_loc7_ * _loc7_ + _loc8_ * _loc8_ + _loc9_ * _loc9_);
             if(_loc10_ < cuzuf)
             {
@@ -321,7 +321,7 @@ package tutorial
                   _loc4_ = _loc3_;
                   _loc5_ = _loc2_.x - _loc4_.x;
                   _loc6_ = _loc2_.y - _loc4_.y;
-                  _loc7_ = _loc2_.qyririg - _loc4_.z;
+                  _loc7_ = _loc2_.z - _loc4_.z;
                   _loc8_ = Math.sqrt(_loc5_ * _loc5_ + _loc6_ * _loc6_ + _loc7_ * _loc7_);
                   _loc9_ = Number(this.qiqegoken[_loc4_]);
                   if(_loc9_ == 1 && _loc8_ < this.fowovany)

@@ -55,12 +55,12 @@ package alternativa.tanks.shared.camera
          this.memyjenut.y = _loc6_ * _loc3_;
          this.bidan.y = _loc8_ * _loc2_ + _loc5_ * _loc1_;
          this.tafel.y = _loc8_ * _loc1_ - _loc5_ * _loc2_;
-         this.memyjenut.qyririg = -_loc4_;
-         this.bidan.qyririg = _loc3_ * _loc2_;
-         this.tafel.qyririg = _loc3_ * _loc1_;
+         this.memyjenut.z = -_loc4_;
+         this.bidan.z = _loc3_ * _loc2_;
+         this.tafel.z = _loc3_ * _loc1_;
          this.position.x = x;
          this.position.y = y;
-         this.position.qyririg = z;
+         this.position.z = z;
       }
       
       public function getGlobalVector(param1:Vector3, param2:Vector3) : void

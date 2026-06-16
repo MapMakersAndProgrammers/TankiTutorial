@@ -1,19 +1,19 @@
 package alternativa.physics.contactislands
 {
-   import daz.fyweci;
-   import daz.hah;
+   import alternativa.physics.Body;
+   import alternativa.physics.BodyContact;
    
    public class ContactLevels
    {
       
-      private const duby:Vector.<hah> = new Vector.<hah>();
+      private const duby:Vector.<BodyContact> = new Vector.<BodyContact>();
       
       public function ContactLevels()
       {
          super();
       }
       
-      public function init(param1:Vector.<hah>) : void
+      public function init(param1:Vector.<BodyContact>) : void
       {
          var _loc2_:int = int(param1.length);
          this.duby.length = _loc2_;
@@ -30,10 +30,10 @@ package alternativa.physics.contactislands
          this.duby.length = 0;
       }
       
-      public function getStaticLevel(param1:Vector.<hah>, param2:Vector.<fyweci>) : void
+      public function getStaticLevel(param1:Vector.<BodyContact>, param2:Vector.<Body>) : void
       {
          var _loc3_:int = 0;
-         var _loc4_:hah = null;
+         var _loc4_:BodyContact = null;
          _loc3_ = 0;
          while(_loc3_ < this.duby.length)
          {
@@ -61,12 +61,12 @@ package alternativa.physics.contactislands
          }
       }
       
-      private function isStaticContact(param1:hah) : Boolean
+      private function isStaticContact(param1:BodyContact) : Boolean
       {
          return !(Boolean(param1.rukowicyp.midorofic) && Boolean(param1.zata.midorofic));
       }
       
-      private function getNonStaticBody(param1:hah) : fyweci
+      private function getNonStaticBody(param1:BodyContact) : Body
       {
          if(param1.rukowicyp.midorofic)
          {
@@ -82,10 +82,10 @@ package alternativa.physics.contactislands
          this.duby.length = _loc2_;
       }
       
-      public function getNextLevel(param1:Vector.<fyweci>, param2:Vector.<hah>, param3:Vector.<fyweci>) : void
+      public function getNextLevel(param1:Vector.<Body>, param2:Vector.<BodyContact>, param3:Vector.<Body>) : void
       {
          var _loc4_:int = 0;
-         var _loc5_:hah = null;
+         var _loc5_:BodyContact = null;
          _loc4_ = 0;
          while(_loc4_ < this.duby.length)
          {
@@ -113,12 +113,12 @@ package alternativa.physics.contactislands
          }
       }
       
-      private function isInContactWith(param1:Vector.<fyweci>, param2:hah) : Boolean
+      private function isInContactWith(param1:Vector.<Body>, param2:BodyContact) : Boolean
       {
          return param1.indexOf(param2.rukowicyp) >= 0 || param1.indexOf(param2.zata) >= 0;
       }
       
-      private function getNextLevelBody(param1:hah, param2:Vector.<fyweci>) : fyweci
+      private function getNextLevelBody(param1:BodyContact, param2:Vector.<Body>) : Body
       {
          if(param2.indexOf(param1.rukowicyp) < 0)
          {

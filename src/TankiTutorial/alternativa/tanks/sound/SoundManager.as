@@ -304,7 +304,7 @@ package alternativa.tanks.sound
             _loc8_.nyniqadi.readPosition(duv);
             _loc11_ = param1.x - duv.x;
             _loc12_ = param1.y - duv.y;
-            _loc13_ = param1.qyririg - duv.qyririg;
+            _loc13_ = param1.z - duv.z;
             _loc8_.pyvyg = _loc11_ * _loc11_ + _loc12_ * _loc12_ + _loc13_ * _loc13_;
             _loc2_++;
          }

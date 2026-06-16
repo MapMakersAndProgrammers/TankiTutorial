@@ -48,7 +48,7 @@ package tutorial.tasks
          this.citacir = param2;
          this.hon = param3;
          this.position = param1;
-         this.position.qyririg += 200;
+         this.position.z += 200;
          this.dodycoli = 0;
       }
       
@@ -63,7 +63,7 @@ package tutorial.tasks
             this.gomys = new Sprite3D(200,400,domihyv);
             this.gomys.x = this.position.x;
             this.gomys.y = this.position.y;
-            this.gomys.z = this.position.qyririg;
+            this.gomys.z = this.position.z;
             this.gomys.originY = 1;
             this.gomys.useShadowMap = false;
             this.gomys.useLight = false;
@@ -71,7 +71,7 @@ package tutorial.tasks
             this.nuvyma = new Plane(300,300,1,1,true,false,false,boqa,boqa);
             this.nuvyma.x = this.position.x;
             this.nuvyma.y = this.position.y;
-            this.nuvyma.z = this.position.qyririg - 190;
+            this.nuvyma.z = this.position.z - 190;
             this.nuvyma.useShadowMap = false;
             this.nuvyma.useLight = false;
             this.nuvyma.visible = false;
@@ -99,7 +99,7 @@ package tutorial.tasks
          {
             this.dodycoli += 5 * _loc1_.ziqod;
             _loc2_ = Math.sin(this.dodycoli);
-            this.gomys.z = this.position.qyririg + _loc2_ * 100;
+            this.gomys.z = this.position.z + _loc2_ * 100;
             if(Boolean(this.citacir.inGame) && Boolean(this.citacir.kat))
             {
                _loc3_ = Number(this.citacir.kuca.hullMesh.x);

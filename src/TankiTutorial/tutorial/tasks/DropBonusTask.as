@@ -19,7 +19,7 @@ package tutorial.tasks
          super();
          this.position.x = param1.x;
          this.position.y = param1.y;
-         this.position.qyririg = param1.qyririg + nezeg;
+         this.position.z = param1.z + nezeg;
       }
       
       override public function process() : Boolean

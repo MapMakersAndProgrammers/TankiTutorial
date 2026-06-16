@@ -34,7 +34,7 @@ package tutorial.tasks
             this.stage.addEventListener(KeyboardEvent.KEY_DOWN,this.onKeyDown);
             this.init = true;
          }
-         if(Boolean(this.jifom.kat) && this.jifom.hogys.body.kejo.position.qyririg < -2000)
+         if(Boolean(this.jifom.kat) && this.jifom.hogys.body.kejo.position.z < -2000)
          {
             this.jifom.kill();
             this.jifom.hogys.kyripama.nute &= ~CollisionGroup.nuqa;

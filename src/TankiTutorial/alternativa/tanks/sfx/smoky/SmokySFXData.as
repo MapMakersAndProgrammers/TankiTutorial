@@ -4,9 +4,9 @@ package alternativa.tanks.sfx.smoky
    import alternativa.engine3d.materials.TextureMaterial;
    import flash.display.BitmapData;
    import flash.media.Sound;
-   import alternativa.tanks.sfx.dosu;
+   import alternativa.tanks.sfx.TextureAnimation;
    import alternativa.tanks.sfx.LightData;
-   import alternativa.tanks.sfx.virah;
+   import alternativa.tanks.sfx.LightAnimation;
    import tutorial.commons.Assets;
    
    public class SmokySFXData
@@ -14,7 +14,7 @@ package alternativa.tanks.sfx.smoky
       
       public var pasinavuj:TextureMaterial;
       
-      public var zabe:dosu;
+      public var zabe:TextureAnimation;
       
       public var dodywytuq:TextureMaterial;
       
@@ -22,9 +22,9 @@ package alternativa.tanks.sfx.smoky
       
       public var lyrydab:Sound;
       
-      public var quf:virah = LightData.defajykeb;
+      public var quf:LightAnimation = LightData.defajykeb;
       
-      public var zucezu:virah = LightData.bevevy;
+      public var zucezu:LightAnimation = LightData.bevevy;
       
       private var qokohywyl:Boolean;
       
@@ -35,7 +35,7 @@ package alternativa.tanks.sfx.smoky
       
       public function init() : void
       {
-         this.zabe = Assets.getData("smoky_explosion",dosu);
+         this.zabe = Assets.getData("smoky_explosion",TextureAnimation);
          this.pasinavuj = new TextureMaterial(Assets.getData("smoky_shot",BitmapData),false,true,MipMapping.PER_PIXEL,2.5);
          this.lyrydab = Assets.getData("smoky_explosion",Sound);
          this.kopefus = Assets.getData("smoky_shot",Sound);

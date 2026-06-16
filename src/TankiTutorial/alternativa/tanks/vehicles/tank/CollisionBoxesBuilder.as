@@ -3,7 +3,7 @@ package alternativa.tanks.vehicles.tank
    import alternativa.math.Matrix4;
    import alternativa.math.Vector3;
    import alternativa.physics.PhysicsMaterial;
-   import alternativa.physics.collision.primitives.tygymamej;
+   import alternativa.physics.collision.primitives.CollisionBox;
    import alternativa.tanks.physics.CollisionGroup;
    import alternativa.tanks.shared.physics.TankBody;
    import alternativa.utils.MathUtils;
@@ -57,16 +57,16 @@ package alternativa.tanks.vehicles.tank
          _loc15_ = (1 + _loc8_) * _loc6_;
          _loc16_ = (1 - _loc7_) * _loc5_;
          var _loc18_:Number = Math.sqrt(_loc15_ * _loc15_ + _loc16_ * _loc16_) / 2;
-         var _loc19_:tygymamej = new tygymamej(new Vector3(param1.x,_loc17_,_loc18_),CollisionGroup.neli,lymuwykos);
+         var _loc19_:CollisionBox = new CollisionBox(new Vector3(param1.x,_loc17_,_loc18_),CollisionGroup.neli,lymuwykos);
          var _loc20_:Matrix4 = new Matrix4();
          var _loc21_:Number = Math.atan(_loc11_);
          _loc20_.setRotationMatrix(-_loc21_,0,0);
          var _loc22_:Number = _loc7_ * _loc5_ + _loc18_ * Math.sin(_loc21_) - _loc17_ * Math.cos(_loc21_);
-         var _loc23_:Number = -_loc6_ + _loc18_ * Math.cos(_loc21_) + _loc17_ * Math.sin(_loc21_) - (param1.qyririg - _loc4_ / 2);
+         var _loc23_:Number = -_loc6_ + _loc18_ * Math.cos(_loc21_) + _loc17_ * Math.sin(_loc21_) - (param1.z - _loc4_ / 2);
          _loc20_.setPosition(new Vector3(0,_loc22_,_loc23_));
          param3.body.addCollisionShape(_loc19_,_loc20_);
          param3.kodasy.push(_loc19_);
-         _loc19_ = new tygymamej(new Vector3(param1.x,_loc17_,_loc18_),CollisionGroup.neli,lymuwykos);
+         _loc19_ = new CollisionBox(new Vector3(param1.x,_loc17_,_loc18_),CollisionGroup.neli,lymuwykos);
          _loc20_.setRotationMatrix(_loc21_,0,0);
          _loc20_.setPosition(new Vector3(0,-_loc22_,_loc23_));
          param3.body.addCollisionShape(_loc19_,_loc20_);
@@ -74,15 +74,15 @@ package alternativa.tanks.vehicles.tank
          var _loc24_:Number = param2 * 3 / 4;
          var _loc25_:Vector3 = new Vector3(param1.x,param1.y * _loc7_,_loc24_ / 2);
          var _loc26_:Matrix4 = new Matrix4();
-         _loc26_.sunafepo = _loc25_.qyririg - param1.qyririg;
-         var _loc27_:tygymamej = new tygymamej(_loc25_,CollisionGroup.neli,lymuwykos);
+         _loc26_.sunafepo = _loc25_.z - param1.z;
+         var _loc27_:CollisionBox = new CollisionBox(_loc25_,CollisionGroup.neli,lymuwykos);
          param3.body.addCollisionShape(_loc27_,_loc26_);
          param3.kodasy.push(_loc27_);
          var _loc28_:Number = param2 * 3 / 4;
          var _loc29_:Vector3 = new Vector3(param1.x,param1.y * _loc7_,_loc28_ / 2);
          var _loc30_:Matrix4 = new Matrix4();
-         _loc30_.sunafepo = param2 - _loc29_.qyririg - param1.qyririg;
-         var _loc31_:tygymamej = new tygymamej(_loc29_,CollisionGroup.neli,zabybam);
+         _loc30_.sunafepo = param2 - _loc29_.z - param1.z;
+         var _loc31_:CollisionBox = new CollisionBox(_loc29_,CollisionGroup.neli,zabybam);
          param3.body.addCollisionShape(_loc31_,_loc30_);
          param3.kodasy.push(_loc31_);
       }
@@ -90,9 +90,9 @@ package alternativa.tanks.vehicles.tank
       public static function createTankCollisionBox(param1:Vector3, param2:Number, param3:TankBody) : void
       {
          var _loc4_:Vector3 = new Vector3(param1.x,param1.y,param2 / 2);
-         var _loc5_:tygymamej = new tygymamej(_loc4_,0,lymuwykos);
+         var _loc5_:CollisionBox = new CollisionBox(_loc4_,0,lymuwykos);
          var _loc6_:Matrix4 = new Matrix4();
-         _loc6_.sunafepo = param2 / 2 - param1.qyririg;
+         _loc6_.sunafepo = param2 / 2 - param1.z;
          param3.body.addCollisionShape(_loc5_,_loc6_);
          param3.kyripama = _loc5_;
       }

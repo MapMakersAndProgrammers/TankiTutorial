@@ -78,7 +78,7 @@ package tutorial.tasks
             _loc5_ = this.qaf[this.sesupi];
             this.foc.x = _loc5_.x - _loc4_.x;
             this.foc.y = _loc5_.y - _loc4_.y;
-            this.foc.qyririg = 0;
+            this.foc.z = 0;
             _loc6_ = this.foc.x * this.foc.x + this.foc.y * this.foc.y;
             this.foc.normalize();
             _loc7_ = _loc3_.body.jefe;
@@ -87,7 +87,7 @@ package tutorial.tasks
             tifot.normalize();
             _loc8_ = tifot.x * this.foc.y - tifot.y * this.foc.x;
             _loc9_ = Math.asin(_loc8_);
-            _loc10_ = Number(_loc3_.body.kejo.fev.qyririg);
+            _loc10_ = Number(_loc3_.body.kejo.fev.z);
             _loc11_ = _loc9_ + _loc10_ * GameData.lecopojen.ziqod;
             if(Math.cos(_loc11_) > veco)
             {

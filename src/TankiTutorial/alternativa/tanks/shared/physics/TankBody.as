@@ -2,7 +2,7 @@ package alternativa.tanks.shared.physics
 {
    import alternativa.physics.Body;
    import alternativa.physics.collision.CollisionShape;
-   import alternativa.physics.collision.primitives.tygymamej;
+   import alternativa.physics.collision.primitives.CollisionBox;
    
    public class TankBody
    {
@@ -11,7 +11,7 @@ package alternativa.tanks.shared.physics
       
       public var body:Body;
       
-      public var kyripama:tygymamej;
+      public var kyripama:CollisionBox;
       
       public const kodasy:Vector.<CollisionShape> = new Vector.<CollisionShape>();
       

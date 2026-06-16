@@ -1,34 +1,34 @@
 package alternativa.tanks.bonuses
 {
-   import gafaduzuw.finajylom;
-   import gafaduzuw.fode;
+   import alternativa.math.Vector3;
+   import alternativa.math.Matrix3;
    
-   public class LandingController implements judidoju
+   public class LandingController implements BonusController
    {
       
-      private static const fyqynyfy:finajylom = new finajylom();
+      private static const fyqynyfy:Vector3 = new Vector3();
       
-      private static const run:fode = new fode();
+      private static const run:Matrix3 = new Matrix3();
       
       private static const pih:Number = 2.5;
       
       private var nasybugo:BattleBonus;
       
-      private var lefugefo:finajylom = new finajylom();
+      private var lefugefo:Vector3 = new Vector3();
       
-      private var vale:finajylom = new finajylom();
+      private var vale:Vector3 = new Vector3();
       
-      private var cozude:finajylom = new finajylom();
+      private var cozude:Vector3 = new Vector3();
       
       private var qusejov:Number;
       
-      private var zekos:finajylom = new finajylom();
+      private var zekos:Vector3 = new Vector3();
       
-      private var nusipysav:varo = new varo();
+      private var nusipysav:LandingState = new LandingState();
       
-      private var hezataw:varo = new varo();
+      private var hezataw:LandingState = new LandingState();
       
-      private var sitozov:varo = new varo();
+      private var sitozov:LandingState = new LandingState();
       
       public function LandingController(param1:BattleBonus)
       {
@@ -36,29 +36,29 @@ package alternativa.tanks.bonuses
          this.nasybugo = param1;
       }
       
-      public function init(param1:finajylom, param2:finajylom) : void
+      public function init(param1:Vector3, param2:Vector3) : void
       {
-         this.vale.disy(param1);
-         this.lefugefo.disy(param2);
+         this.vale.copy(param1);
+         this.lefugefo.copy(param2);
       }
       
       public function start() : void
       {
-         var _loc1_:BonusMesh = this.nasybugo.qemydyc();
-         this.cozude.variq(_loc1_.x,_loc1_.y,_loc1_.z);
-         this.cozude.simesu(this.vale);
-         this.zekos.disy(finajylom.nesicuryn);
-         this.zekos.razabol(this.lefugefo);
-         this.zekos.behy();
-         this.qusejov = Math.acos(this.lefugefo.qyririg);
-         this.hezataw.position.variq(_loc1_.x,_loc1_.y,_loc1_.z);
-         this.hezataw.bej.daweviqe(_loc1_.rotationX,_loc1_.rotationY,_loc1_.rotationZ);
-         this.nusipysav.disy(this.hezataw);
+         var _loc1_:BonusMesh = this.nasybugo.getBonusMesh();
+         this.cozude.reset(_loc1_.x,_loc1_.y,_loc1_.z);
+         this.cozude.subtract(this.vale);
+         this.zekos.copy(Vector3.nesicuryn);
+         this.zekos.cross(this.lefugefo);
+         this.zekos.normalize();
+         this.qusejov = Math.acos(this.lefugefo.z);
+         this.hezataw.position.reset(_loc1_.x,_loc1_.y,_loc1_.z);
+         this.hezataw.bej.setFromEulerAnglesXYZ(_loc1_.rotationX,_loc1_.rotationY,_loc1_.rotationZ);
+         this.nusipysav.copy(this.hezataw);
       }
       
       public function runBeforePhysicsUpdate(param1:Number) : void
       {
-         this.nusipysav.disy(this.hezataw);
+         this.nusipysav.copy(this.hezataw);
          var _loc2_:Number = pih * param1;
          if(_loc2_ > this.qusejov)
          {
@@ -69,10 +69,10 @@ package alternativa.tanks.bonuses
          {
             this.qusejov -= _loc2_;
          }
-         run.dekod(this.zekos,_loc2_);
-         this.cozude.jec(run);
-         this.hezataw.position.disy(this.vale).kyluwuzi(this.cozude);
-         this.hezataw.bej.lavuhuke(this.zekos,_loc2_);
+         run.fromAxisAngle(this.zekos,_loc2_);
+         this.cozude.transform3(run);
+         this.hezataw.position.copy(this.vale).add(this.cozude);
+         this.hezataw.bej.addScaledVector(this.zekos,_loc2_);
          this.updateTrigger();
          if(this.qusejov == 0)
          {
@@ -84,25 +84,25 @@ package alternativa.tanks.bonuses
       
       private function updateTrigger() : void
       {
-         this.hezataw.bej.jolujeni(run);
-         this.nasybugo.getTrigger().qopalon(this.hezataw.position,run);
+         this.hezataw.bej.toMatrix3(run);
+         this.nasybugo.getTrigger().setTransform(this.hezataw.position,run);
       }
       
       public function interpolatePhysicsState(param1:Number) : void
       {
-         this.sitozov.lir(this.nusipysav,this.hezataw,param1);
+         this.sitozov.interpolate(this.nusipysav,this.hezataw,param1);
       }
       
       public function render() : void
       {
-         var _loc1_:BonusMesh = this.nasybugo.qemydyc();
-         _loc1_.x = this.sitozov.position.kan;
-         _loc1_.y = this.sitozov.position.zofydizug;
-         _loc1_.z = this.sitozov.position.qyririg;
-         this.sitozov.bej.vah(fyqynyfy);
-         _loc1_.rotationX = fyqynyfy.kan;
-         _loc1_.rotationY = fyqynyfy.zofydizug;
-         _loc1_.rotationZ = fyqynyfy.qyririg;
+         var _loc1_:BonusMesh = this.nasybugo.getBonusMesh();
+         _loc1_.x = this.sitozov.position.x;
+         _loc1_.y = this.sitozov.position.y;
+         _loc1_.z = this.sitozov.position.z;
+         this.sitozov.bej.getEulerAngles(fyqynyfy);
+         _loc1_.rotationX = fyqynyfy.x;
+         _loc1_.rotationY = fyqynyfy.y;
+         _loc1_.rotationZ = fyqynyfy.z;
       }
    }
 }

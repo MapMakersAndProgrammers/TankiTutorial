@@ -36,20 +36,20 @@ package alternativa.tanks.vehicles.tank.weapons
          var _loc3_:Vector3 = param1.firaqe.jun[param2];
          this.toqumyc.x = _loc3_.x;
          this.toqumyc.y = _loc3_.y;
-         this.toqumyc.qyririg = _loc3_.qyririg;
+         this.toqumyc.z = _loc3_.z;
          this.turretMesh = param1.kuca.turretMesh;
          this.siwowop = _loc3_.y;
          bul.setMatrix(this.turretMesh.x,this.turretMesh.y,this.turretMesh.z,this.turretMesh.rotationX,this.turretMesh.rotationY,this.turretMesh.rotationZ);
          bul.transformVector(this.toqumyc,this.symamume);
          sikomowar.x = this.toqumyc.x;
-         sikomowar.qyririg = this.toqumyc.qyririg;
+         sikomowar.z = this.toqumyc.z;
          bul.transformVector(sikomowar,this.fybumu);
          this.zequsir.x = bul.gusat;
          this.zequsir.y = bul.sig;
-         this.zequsir.qyririg = bul.vug;
+         this.zequsir.z = bul.vug;
          this.ruda.x = bul.cydop;
          this.ruda.y = bul.qanezycap;
-         this.ruda.qyririg = bul.luwym;
+         this.ruda.z = bul.luwym;
       }
    }
 }

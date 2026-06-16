@@ -27,14 +27,14 @@ package
       {
          this.butefu.x = param1.x;
          this.butefu.y = param1.y;
-         this.butefu.z = param1.qyririg;
+         this.butefu.z = param1.z;
       }
       
       protected function setOrientation(param1:Vector3) : void
       {
          this.butefu.rotationX = param1.x;
          this.butefu.rotationY = param1.y;
-         this.butefu.rotationZ = param1.qyririg;
+         this.butefu.rotationZ = param1.z;
       }
       
       protected function setOrientationXYZ(param1:Number, param2:Number, param3:Number) : void

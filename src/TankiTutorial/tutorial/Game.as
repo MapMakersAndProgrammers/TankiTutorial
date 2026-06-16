@@ -334,7 +334,7 @@ package tutorial
          if(_loc2_.isRecording())
          {
             _loc3_ = _loc2_.getRecord();
-            _loc4_ = "<enemy hull=\"" + _loc1_.nariw.gepocivaj + "\" turret=\"" + _loc1_.firaqe.gepocivaj + "\" color=\"red\" position=\"" + this.hyqirufy.x.toFixed(0) + " " + this.hyqirufy.y.toFixed(0) + " " + this.hyqirufy.qyririg.toFixed(0) + "\" orientation=\"" + this.vetawifac.dige.toFixed(4) + " " + this.vetawifac.x.toFixed(4) + " " + this.vetawifac.y.toFixed(4) + " " + this.vetawifac.qyririg.toFixed(6) + "\" data=\"" + _loc3_ + "\">\n</enemy>";
+            _loc4_ = "<enemy hull=\"" + _loc1_.nariw.gepocivaj + "\" turret=\"" + _loc1_.firaqe.gepocivaj + "\" color=\"red\" position=\"" + this.hyqirufy.x.toFixed(0) + " " + this.hyqirufy.y.toFixed(0) + " " + this.hyqirufy.z.toFixed(0) + "\" orientation=\"" + this.vetawifac.dige.toFixed(4) + " " + this.vetawifac.x.toFixed(4) + " " + this.vetawifac.y.toFixed(4) + " " + this.vetawifac.z.toFixed(6) + "\" data=\"" + _loc3_ + "\">\n</enemy>";
             _loc2_.stopRecording();
             this.setText(_loc4_);
          }
@@ -354,7 +354,7 @@ package tutorial
          {
             this.hyqirufy = _loc1_.body.kejo.position.clone();
             this.vetawifac = _loc1_.body.kejo.bej.clone();
-            this.setText("<player.spawn hull=\"" + _loc1_.nariw.gepocivaj + "\" turret=\"" + _loc1_.firaqe.gepocivaj + "\" color=\"green\" position=\"" + this.hyqirufy.x.toFixed(4) + " " + this.hyqirufy.y.toFixed(4) + " " + this.hyqirufy.qyririg.toFixed(4) + "\" orientation=\"" + this.vetawifac.dige.toFixed(4) + " " + this.vetawifac.x.toFixed(4) + " " + this.vetawifac.y.toFixed(4) + " " + this.vetawifac.qyririg.toFixed(4) + "\"/>");
+            this.setText("<player.spawn hull=\"" + _loc1_.nariw.gepocivaj + "\" turret=\"" + _loc1_.firaqe.gepocivaj + "\" color=\"green\" position=\"" + this.hyqirufy.x.toFixed(4) + " " + this.hyqirufy.y.toFixed(4) + " " + this.hyqirufy.z.toFixed(4) + "\" orientation=\"" + this.vetawifac.dige.toFixed(4) + " " + this.vetawifac.x.toFixed(4) + " " + this.vetawifac.y.toFixed(4) + " " + this.vetawifac.z.toFixed(4) + "\"/>");
          }
       }
       

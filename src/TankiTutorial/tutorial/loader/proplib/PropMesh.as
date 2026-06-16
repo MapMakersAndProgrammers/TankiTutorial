@@ -14,7 +14,10 @@ package tutorial.loader.proplib
    import tutorial.GameData;
    import tutorial.commons.Assets;
    import tutorial.loader.BaseLoader;
+   import alternativa.engine3d.alternativa3d;
    
+   use namespace alternativa3d;
+
    public class PropMesh extends BaseLoader
    {
       

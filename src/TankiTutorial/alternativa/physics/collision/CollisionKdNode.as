@@ -13,7 +13,7 @@ package alternativa.physics.collision
       
       public var vewu:CollisionKdNode;
       
-      public var tuz:diqohohi;
+      public var tuz:CollisionKdTree2D;
       
       public var zekos:int = -1;
       

@@ -20,10 +20,10 @@ package alternativa.tanks.utils
       {
          param1.x = param2.x;
          param1.y = param2.y;
-         param1.z = param2.qyririg;
+         param1.z = param2.z;
          param1.rotationX = param3.x;
          param1.rotationY = param3.y;
-         param1.rotationZ = param3.qyririg;
+         param1.rotationZ = param3.z;
       }
       
       public static function getSquareUVFramesFromTexture(param1:BitmapData, param2:int = 0) : Vector.<UVFrame>

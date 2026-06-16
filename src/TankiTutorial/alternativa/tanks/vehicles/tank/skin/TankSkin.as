@@ -22,7 +22,10 @@ package alternativa.tanks.vehicles.tank.skin
    import flash.display.Shape;
    import flash.utils.Dictionary;
    import tutorial.GameData;
+   import alternativa.engine3d.alternativa3d;
    
+   use namespace alternativa3d;
+
    public class TankSkin
    {
       
@@ -67,7 +70,7 @@ package alternativa.tanks.vehicles.tank.skin
          param1.z = param2.sunafepo;
          param1.rotationX = fyqynyfy.x;
          param1.rotationY = fyqynyfy.y;
-         param1.rotationZ = fyqynyfy.qyririg;
+         param1.rotationZ = fyqynyfy.z;
       }
       
       public function get visible() : Boolean
@@ -348,6 +351,9 @@ package alternativa.tanks.vehicles.tank.skin
 import alternativa.engine3d.materials.Material;
 import alternativa.engine3d.materials.TextureMaterial;
 import flash.display.BitmapData;
+import alternativa.engine3d.alternativa3d;
+
+use namespace alternativa3d;
 
 class TrackMaterial extends TextureMaterial
 {
@@ -357,7 +363,7 @@ class TrackMaterial extends TextureMaterial
       super(param1,param2,param3,param4,param5);
    }
    
-   override §§namespace("http://alternativaplatform.com/en/alternativa3d") function get transparent() : Boolean
+   override alternativa3d function get transparent() : Boolean
    {
       return true;
    }

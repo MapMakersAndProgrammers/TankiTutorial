@@ -25,7 +25,7 @@ package alternativa.tanks.sfx
       {
          param1.x = this.position.x;
          param1.y = this.position.y;
-         param1.z = this.position.qyririg;
+         param1.z = this.position.z;
       }
       
       public function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void

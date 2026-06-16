@@ -17,7 +17,7 @@ package alternativa.tanks.bonuses
          this.leqib[this.jiso++] = param1;
       }
       
-      public function ObjectCache() : Object
+      public function get() : Object
       {
          if(this.isEmpty())
          {

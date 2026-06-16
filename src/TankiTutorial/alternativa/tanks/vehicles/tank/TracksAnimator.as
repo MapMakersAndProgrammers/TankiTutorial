@@ -80,7 +80,7 @@ package alternativa.tanks.vehicles.tank
          this.getBodyPointVelocity(param1.body,_loc3_.getGlobalOrigin(),miqowat);
          var _loc4_:Number = miqowat.x - _loc2_.x;
          var _loc5_:Number = miqowat.y - _loc2_.y;
-         var _loc6_:Number = miqowat.qyririg - _loc2_.qyririg;
+         var _loc6_:Number = miqowat.z - _loc2_.z;
          var _loc7_:Matrix3 = param1.body.jefe;
          return _loc4_ * _loc7_.cydop + _loc5_ * _loc7_.qanezycap + _loc6_ * _loc7_.luwym;
       }
@@ -92,15 +92,15 @@ package alternativa.tanks.vehicles.tank
          var _loc4_:Vector3 = param1.kejo.position;
          _loc5_ = param2.x - _loc4_.x;
          var _loc6_:Number = param2.y - _loc4_.y;
-         var _loc7_:Number = param2.qyririg - _loc4_.qyririg;
+         var _loc7_:Number = param2.z - _loc4_.z;
          _loc8_ = param1.kejo.fev;
-         param3.x = _loc8_.y * _loc7_ - _loc8_.qyririg * _loc6_;
-         param3.y = _loc8_.qyririg * _loc5_ - _loc8_.x * _loc7_;
-         param3.qyririg = _loc8_.x * _loc6_ - _loc8_.y * _loc5_;
+         param3.x = _loc8_.y * _loc7_ - _loc8_.z * _loc6_;
+         param3.y = _loc8_.z * _loc5_ - _loc8_.x * _loc7_;
+         param3.z = _loc8_.x * _loc6_ - _loc8_.y * _loc5_;
          var _loc9_:Vector3 = param1.kejo.zerus;
          param3.x += _loc9_.x;
          param3.y += _loc9_.y;
-         param3.qyririg += _loc9_.qyririg;
+         param3.z += _loc9_.z;
       }
       
       private function requiresSynchronizedAnimation(param1:Track, param2:Number) : Boolean

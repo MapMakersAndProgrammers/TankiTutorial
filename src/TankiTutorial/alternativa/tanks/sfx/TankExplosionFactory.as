@@ -98,7 +98,7 @@ package alternativa.tanks.sfx
          var _loc4_:CollisionDetector = gov.kymaqos;
          if(_loc4_.raycastStatic(position,bec,255,_loc3_,null,wonuhig))
          {
-            wonuhig.position.qyririg += 10;
+            wonuhig.position.z += 10;
             _loc5_ = safybe;
             _loc6_ = 200;
             if(wonuhig.jomuc > _loc6_)
@@ -106,10 +106,10 @@ package alternativa.tanks.sfx
                _loc5_ *= (_loc3_ - wonuhig.jomuc) / (_loc3_ - _loc6_);
             }
             _loc7_ = wonuhig.lefugefo;
-            _loc8_ = Math.acos(_loc7_.qyririg);
+            _loc8_ = Math.acos(_loc7_.z);
             zekos.x = -_loc7_.y;
             zekos.y = _loc7_.x;
-            zekos.qyririg = 0;
+            zekos.z = 0;
             zekos.normalize();
             gijalatyt.fromAxisAngle(zekos,_loc8_);
             gijalatyt.getEulerAngles(fyqynyfy);
@@ -125,7 +125,7 @@ package alternativa.tanks.sfx
          {
             bucof = Assets.getData("tank_explosion/explosion",TextureAnimation);
          }
-         position.qyririg += 50;
+         position.z += 50;
          var _loc2_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(murow.getObject(StaticObject3DPositionProvider));
          _loc2_.init(position,gubeneb);
          var _loc3_:AnimatedSpriteEffect = AnimatedSpriteEffect(murow.getObject(AnimatedSpriteEffect));
@@ -150,7 +150,7 @@ package alternativa.tanks.sfx
             _loc3_ = dyjedic + Math.random() * juwizi;
             zerus.x = _loc3_ * (1 - 2 * Math.random());
             zerus.y = _loc3_ * (1 - 2 * Math.random());
-            zerus.qyririg = _loc3_ * 0.5 * (1 + Math.random());
+            zerus.z = _loc3_ * 0.5 * (1 + Math.random());
             _loc4_ = MovingObject3DPositionProvider(murow.getObject(MovingObject3DPositionProvider));
             _loc4_.init(position,zerus,nidowyje);
             _loc5_ = AnimatedSpriteEffect(murow.getObject(AnimatedSpriteEffect));

@@ -1,13 +1,13 @@
 package alternativa.tanks.sfx.flamethrower
 {
    import alternativa.engine3d.core.Object3D;
-   import hygal.nufaneqog;
-   import kefy.Wopowur;
-   import kefy.fare;
-   import alternativa.tanks.sfx.hebis;
+   import alternativa.tanks.shared.camera.GameCamera;
+   import alternativa.tanks.utils.objectpool.PooledObject;
+   import alternativa.tanks.utils.objectpool.Pool;
+   import alternativa.tanks.sfx.Object3DPositionProvider;
    import alternativa.tanks.sfx.CollisionObject3DPositionProvider;
    
-   public class StreamWeaponParticlesPositionProvider extends Wopowur implements hebis
+   public class StreamWeaponParticlesPositionProvider extends PooledObject implements Object3DPositionProvider
    {
       
       private var gucoqub:StreamWeaponGraphicEffect;
@@ -18,7 +18,7 @@ package alternativa.tanks.sfx.flamethrower
       
       private var logigap:Array = [0.5,0.8,1,0.5,0.3,0.05];
       
-      public function StreamWeaponParticlesPositionProvider(param1:fare)
+      public function StreamWeaponParticlesPositionProvider(param1:Pool)
       {
          super(param1);
       }
@@ -31,9 +31,9 @@ package alternativa.tanks.sfx.flamethrower
       
       public function initPosition(param1:Object3D) : void
       {
-         var _loc6_:Vector.<lyhyzi> = null;
+         var _loc6_:Vector.<StreamWeaponParticle> = null;
          var _loc7_:int = 0;
-         var _loc8_:lyhyzi = null;
+         var _loc8_:StreamWeaponParticle = null;
          var _loc9_:Number = NaN;
          var _loc10_:Number = NaN;
          var _loc2_:Number = 0;
@@ -84,7 +84,7 @@ package alternativa.tanks.sfx.flamethrower
          return 0;
       }
       
-      public function updateObjectPosition(param1:Object3D, param2:nufaneqog, param3:int) : void
+      public function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void
       {
          this.initPosition(param1);
       }

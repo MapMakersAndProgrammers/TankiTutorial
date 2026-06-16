@@ -462,7 +462,7 @@ package alternativa.tanks.shared.usertitle
       {
          this.sprite.x = param1.x;
          this.sprite.y = param1.y;
-         this.sprite.z = param1.qyririg + this.bifejizi;
+         this.sprite.z = param1.z + this.bifejizi;
       }
       
       public function readPosition(param1:Vector3D) : void

@@ -35,7 +35,7 @@ package alternativa.tanks.vehicles.tank.controllers
          var _loc3_:Vector3 = this.jywehybog.hogys.body.kejo.position;
          lyje.x = _loc3_.x - _loc2_.x;
          lyje.y = _loc3_.y - _loc2_.y;
-         lyje.qyririg = _loc3_.qyririg - _loc2_.qyririg;
+         lyje.z = _loc3_.z - _loc2_.z;
          this.citacir.hogys.body.kejo.bej.toMatrix4(rinal);
          rinal.deltaTransformVector(Vector3.pypymu,pedake);
          pedake.normalize();

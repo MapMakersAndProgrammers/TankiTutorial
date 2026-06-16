@@ -1,9 +1,9 @@
 package embed
 {
-   import §&@§.§@!4§;
-   import §'n§.§,f§;
-   import §4§.§-k§;
-   import §]!5§.§1!#§;
+   import tutorial.loader.TanksLoader;
+   import tutorial.GameData;
+   import alternativa.tanks.utils.GraphicsUtils;
+   import alternativa.tanks.sfx.TextureAnimation;
    import alternativa.engine3d.loaders.Parser3DS;
    import alternativa.engine3d.materials.TextureMaterial;
    import alternativa.engine3d.objects.Mesh;
@@ -415,7 +415,7 @@ package embed
          Assets.saveData("arrow",new arrow_gif().bitmapData,BitmapData);
          Assets.saveData("blue",new blue_gif().bitmapData,BitmapData);
          var _loc3_:BitmapData = new cords_gif().bitmapData;
-         §,f§.§5V§(_loc3_);
+         GameData.colorize(_loc3_);
          Assets.saveData("cords",_loc3_,BitmapData);
          Assets.saveData("target_pointer",new target_pointer_gif().bitmapData,BitmapData);
          Assets.saveData("shadow",new shadow_gif().bitmapData,BitmapData);
@@ -441,17 +441,17 @@ package embed
          Assets.saveData("parachute_inner",new parachute_inner_3ds(),ByteArray);
          Assets.saveData("parachute",new parachute_3ds(),ByteArray);
          var _loc4_:BitmapData = new box_med_jpg().bitmapData;
-         §,f§.§5V§(_loc4_);
+         GameData.colorize(_loc4_);
          Assets.saveData("med",_loc4_,BitmapData);
          var _loc5_:BitmapData = new box_crystal_jpg().bitmapData;
-         §,f§.§5V§(_loc5_);
+         GameData.colorize(_loc5_);
          Assets.saveData("crystal",_loc5_,BitmapData);
          var _loc6_:BitmapData = new para_jpg().bitmapData;
-         §,f§.§5V§(_loc6_);
+         GameData.colorize(_loc6_);
          Assets.saveData("parachute_inner",_loc6_,BitmapData);
          Assets.saveData("parachute",_loc6_,BitmapData);
          var _loc7_:BitmapData = new repairKitClass().bitmapData;
-         §,f§.§5V§(_loc7_);
+         GameData.colorize(_loc7_);
          Assets.saveData("repairKitBonusRegion",_loc7_,BitmapData);
          _loc2_ = "resources/hulls/";
          Assets.saveData(_loc2_ + "viking.3dz",new viking_3dz(),ByteArray);
@@ -491,8 +491,8 @@ package embed
          var _loc3_:Mesh = Mesh(_loc2_.objects[0]);
          _loc3_.weldVertices(0.001,0.0001);
          _loc3_.weldFaces(0.001,0.0001,0.01);
-         _loc3_.calculateVerticesNormalsByAngle(§,f§.§!C§,§,f§.§5'§);
-         _loc3_.calculateVerticesNormalsByAngle(§,f§.§!C§,§,f§.§5'§);
+         _loc3_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
+         _loc3_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
          return _loc2_;
       }
       
@@ -503,8 +503,8 @@ package embed
          var _loc3_:Mesh = Mesh(_loc2_.objects[0]);
          _loc3_.weldVertices(0.001,0.0001);
          _loc3_.weldFaces(0.001,0.0001,0.01);
-         _loc3_.calculateVerticesNormalsByAngle(§,f§.§!C§,§,f§.§5'§);
-         _loc3_.calculateVerticesNormalsByAngle(§,f§.§!C§,§,f§.§5'§);
+         _loc3_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
+         _loc3_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
          return _loc2_;
       }
       
@@ -552,7 +552,7 @@ package embed
             _loc1_.readBytes(diffuse,0,_loc3_);
             _loc4_ = _loc1_.readUnsignedInt();
             _loc1_.readBytes(alpha,0,_loc4_);
-            loader = §@!4§.§[K§(onOpaueLoaded,uncompressBin);
+            loader = TanksLoader.createLoader(onOpaueLoaded,uncompressBin);
             loader.loadBytes(diffuse);
          }
          else
@@ -588,7 +588,7 @@ package embed
             _loc2_.readBytes(diffuse,0,_loc3_);
             _loc4_ = _loc2_.readUnsignedInt();
             _loc2_.readBytes(alpha,0,_loc4_);
-            loader = §@!4§.§[K§(onOpaueLoadedEffect,uncompressEffect);
+            loader = TanksLoader.createLoader(onOpaueLoadedEffect,uncompressEffect);
             loader.loadBytes(diffuse);
          }
          else
@@ -608,7 +608,7 @@ package embed
          currentBMP = new BitmapData(_loc2_.width,_loc2_.height,true,0);
          currentBMP.copyPixels(_loc2_,_loc2_.rect,new Point());
          _loc2_.dispose();
-         loader = §@!4§.§[K§(onAlphaLoaded,uncompressBin);
+         loader = TanksLoader.createLoader(onAlphaLoaded,uncompressBin);
          loader.loadBytes(alpha);
       }
       
@@ -629,7 +629,7 @@ package embed
          currentBMP = new BitmapData(_loc2_.width,_loc2_.height,true,0);
          currentBMP.copyPixels(_loc2_,_loc2_.rect,new Point());
          _loc2_.dispose();
-         loader = §@!4§.§[K§(onAlphaLoadedEffect,uncompressEffect);
+         loader = TanksLoader.createLoader(onAlphaLoadedEffect,uncompressEffect);
          loader.loadBytes(alpha);
       }
       
@@ -639,7 +639,7 @@ package embed
          var _loc2_:BitmapData = Bitmap(loader.content).bitmapData;
          currentBMP.copyChannel(_loc2_,_loc2_.rect,new Point(),1,8);
          _loc2_.dispose();
-         Assets.saveData(currentURL,new §1!#§(new TextureMaterial(currentBMP),§-k§.§6!!§(currentBMP,currentEffect["width"],currentEffect["height"],currentEffect["numFrames"]),30),§1!#§);
+         Assets.saveData(currentURL,new TextureAnimation(new TextureMaterial(currentBMP),GraphicsUtils.getUVFramesFromTexture(currentBMP,currentEffect["width"],currentEffect["height"],currentEffect["numFrames"]),30),TextureAnimation);
          uncompressEffect();
       }
       
@@ -658,7 +658,7 @@ package embed
          }
          if(_loc1_ != null)
          {
-            loader = §@!4§.§[K§(onSwfLoaded,uncompressSwf);
+            loader = TanksLoader.createLoader(onSwfLoaded,uncompressSwf);
             loader.loadBytes(_loc1_);
          }
          else
