@@ -282,7 +282,7 @@ package tutorial
          this.ruda.y = 0;
          this.ruda.z = 1;
          var _loc7_:Decal = this.danewazam.createDecal(this.vyhomopog,this.ruda,this.jiso / 2,Math.atan2(param4,param5) + Math.PI,75 * Math.PI / 180,500,this.nuqybap);
-         if(!Shared.gpu || GameData.mawoqu < 11)
+         if(!Shared.gpu || GameData.version < 11)
          {
             _loc7_.z += 10;
             _loc7_.sorting = Sorting.DYNAMIC_BSP;

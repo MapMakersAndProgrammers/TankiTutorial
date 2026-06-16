@@ -6,7 +6,7 @@ package alternativa.physics
    import alternativa.math.Vector3;
    import alternativa.physics.collision.BodyCollisionFilter;
    import alternativa.physics.collision.CollisionShape;
-   import alternativa.physics.collision.types.dudyqo;
+   import alternativa.physics.collision.types.AABB;
    
    public class Body
    {
@@ -37,7 +37,7 @@ package alternativa.physics
       
       public var vowymov:Boolean = false;
       
-      public var raruluk:dudyqo = new dudyqo();
+      public var raruluk:AABB = new AABB();
       
       public var fosa:BodyCollisionFilter;
       
@@ -312,7 +312,7 @@ package alternativa.physics
          this.cobugihyh.copy(this.wofurys).append(this.jefe).prependTransposed(this.jefe);
          if(this.hebevy != null)
          {
-            this.raruluk.pyjerupof();
+            this.raruluk.infinity();
             _loc1_ = 0;
             while(_loc1_ < this.kizuvam)
             {
@@ -323,7 +323,7 @@ package alternativa.physics
                   _loc2_.wet.prepend(_loc2_.koma);
                }
                _loc2_.calculateAABB();
-               this.raruluk.fajabym(_loc2_.raruluk);
+               this.raruluk.addBoundBox(_loc2_.raruluk);
                _loc1_++;
             }
          }

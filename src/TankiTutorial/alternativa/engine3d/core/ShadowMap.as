@@ -1,11 +1,11 @@
 package alternativa.engine3d.core
 {
-   import §5e§.§!!?§;
-   import §5e§.§-!$§;
-   import §5e§.§0!>§;
-   import §5e§.§1!8§;
-   import §5e§.§8B§;
-   import §5e§.§`c§;
+   import alternativa.gfx.core.BitmapTextureResource
+   import alternativa.gfx.core.VertexBufferResource;
+   import alternativa.gfx.core.Device;
+   import alternativa.gfx.core.RenderTargetTextureResource;
+   import alternativa.gfx.core.ProgramResource;
+   import alternativa.gfx.core.IndexBufferResource;
    import alternativa.engine3d.alternativa3d;
    import alternativa.engine3d.lights.DirectionalLight;
    import alternativa.engine3d.materials.Material;
@@ -26,15 +26,15 @@ package alternativa.engine3d.core
       
       private static const sizeLimit:int = 2048;
       
-      private var opaqueProgram:§8B§;
+      private var opaqueProgram:ProgramResource;
       
-      private var transparentProgram:§8B§;
+      private var transparentProgram:ProgramResource;
       
-      private var spriteProgram:§8B§;
+      private var spriteProgram:ProgramResource;
       
-      private var spriteVertexBuffer:§-!$§;
+      private var spriteVertexBuffer:VertexBufferResource;
       
-      private var spriteIndexBuffer:§`c§;
+      private var spriteIndexBuffer:IndexBufferResource;
       
       alternativa3d var transform:Vector.<Number>;
       
@@ -48,9 +48,9 @@ package alternativa.engine3d.core
       
       private var scissor:Rectangle;
       
-      alternativa3d var map:§1!8§;
+      alternativa3d var map:RenderTargetTextureResource;
       
-      alternativa3d var noise:§!!?§;
+      alternativa3d var noise:BitmapTextureResource
       
       private var noiseSize:int = 64;
       
@@ -107,8 +107,8 @@ package alternativa.engine3d.core
          var sin:int = 0;
          var cos:int = 0;
          var len:int = 0;
-         this.spriteVertexBuffer = new §-!$§(Vector.<Number>([0,2,4,6]),1);
-         this.spriteIndexBuffer = new §`c§(Vector.<uint>([0,1,3,1,2,3]));
+         this.spriteVertexBuffer = new VertexBufferResource(Vector.<Number>([0,2,4,6]),1);
+         this.spriteIndexBuffer = new IndexBufferResource(Vector.<uint>([0,1,3,1,2,3]));
          this.transform = Vector.<Number>([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1]);
          this.params = Vector.<Number>([-255 * 2048,-2048,2048,1,0,0,0,1,0,0,0.5,1,0,0,0,1,0,0,0,1]);
          this.coords = Vector.<Number>([0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1 / 255,1]);
@@ -133,7 +133,7 @@ package alternativa.engine3d.core
          this.bias = bias;
          this.additionalSpace = additionalSpace;
          this.defaultLight.rotationX = Math.PI;
-         this.map = new §1!8§(mapSize,mapSize);
+         this.map = new RenderTargetTextureResource(mapSize,mapSize);
          var data:Vector.<uint> = new Vector.<uint>();
          var dataLength:int = 0;
          for(var i:int = 0; i < this.noiseSize; i++)
@@ -148,8 +148,8 @@ package alternativa.engine3d.core
                dataLength++;
             }
          }
-         this.noise = new §!!?§(new BitmapData(this.noiseSize,this.noiseSize,false,0),false);
-         this.noise.§<s§.setVector(this.noise.§<s§.rect,data);
+         this.noise = new BitmapTextureResource(new BitmapData(this.noiseSize,this.noiseSize,false,0),false);
+         this.noise.bitmapData.setVector(this.noise.bitmapData.rect,data);
       }
       
       alternativa3d function calculateBounds(camera:Camera3D) : void
@@ -350,8 +350,8 @@ package alternativa.engine3d.core
       alternativa3d function render(camera:Camera3D, objects:Vector.<Object3D>, objectsLength:int) : void
       {
          var object:Object3D = null;
-         var vertexBuffer:§-!$§ = null;
-         var indexBuffer:§`c§ = null;
+         var vertexBuffer:VertexBufferResource = null;
+         var indexBuffer:IndexBufferResource = null;
          var numTriangles:int = 0;
          var transparent:Boolean = false;
          var material:TextureMaterial = null;
@@ -372,7 +372,7 @@ package alternativa.engine3d.core
          var deltaV:Number = NaN;
          var mesh:Mesh = null;
          var bsp:BSP = null;
-         var device:§0!>§ = camera.device;
+         var device:Device = camera.device;
          this.planeX = Math.floor(this.light.boundMinX / this.pixel) * this.pixel;
          this.planeY = Math.floor(this.light.boundMinY / this.pixel) * this.pixel;
          this.scissor.width = Math.ceil(this.light.boundMaxX / this.pixel) - this.planeX / this.pixel;
@@ -383,14 +383,14 @@ package alternativa.engine3d.core
          var dx:Number = -(this.planeX + this.planeSize * 0.5) * sx;
          var dy:Number = -(this.planeY + this.planeSize * 0.5) * sy;
          var dz:Number = -this.light.boundMinZ * sz;
-         if(this.mapSize != this.map.§[]§)
+         if(this.mapSize != this.map.width)
          {
-            this.map.§[P§();
-            this.map = new §1!8§(this.mapSize,this.mapSize);
+            this.map.dispose();
+            this.map = new RenderTargetTextureResource(this.mapSize,this.mapSize);
          }
-         device.§!0§(this.map,true);
-         device.§9+§(1,0,0);
-         device.§?!&§(this.scissor);
+         device.setRenderToTexture(this.map,true);
+         device.clear(1,0,0);
+         device.setScissorRectangle(this.scissor);
          this.transform[14] = 1 / 255;
          for(var i:int = 0; i < objectsLength; i++)
          {
@@ -457,9 +457,9 @@ package alternativa.engine3d.core
                indexBuffer = this.spriteIndexBuffer;
                numTriangles = 2;
                transparent = true;
-               device.§"W§(this.getProgram(true,true));
-               device.§"J§(0,vertexBuffer,0,Context3DVertexBufferFormat.FLOAT_1);
-               device.§%&§(Context3DProgramType.VERTEX,0,this.coords,9,false);
+               device.setProgram(this.getProgram(true,true));
+               device.setVertexBufferAt(0,vertexBuffer,0,Context3DVertexBufferFormat.FLOAT_1);
+               device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,0,this.coords,9,false);
             }
             else
             {
@@ -482,7 +482,7 @@ package alternativa.engine3d.core
                   vertexBuffer = mesh.vertexBuffer;
                   indexBuffer = mesh.indexBuffer;
                   numTriangles = mesh.numTriangles;
-                  device.§"W§(this.getProgram(false,false));
+                  device.setProgram(this.getProgram(false,false));
                }
                else if(object is BSP)
                {
@@ -492,33 +492,33 @@ package alternativa.engine3d.core
                   indexBuffer = bsp.indexBuffer;
                   numTriangles = bsp.numTriangles;
                   transparent = true;
-                  device.§"W§(this.getProgram(true,false));
+                  device.setProgram(this.getProgram(true,false));
                   material = TextureMaterial(Face(bsp.faces[0]).material);
-                  device.§"J§(1,vertexBuffer,3,Context3DVertexBufferFormat.FLOAT_2);
+                  device.setVertexBufferAt(1,vertexBuffer,3,Context3DVertexBufferFormat.FLOAT_2);
                }
-               device.§"J§(0,vertexBuffer,0,Context3DVertexBufferFormat.FLOAT_3);
-               device.§%&§(Context3DProgramType.VERTEX,0,this.transform,4,false);
+               device.setVertexBufferAt(0,vertexBuffer,0,Context3DVertexBufferFormat.FLOAT_3);
+               device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,0,this.transform,4,false);
             }
             if(vertexBuffer != null && indexBuffer != null)
             {
                if(transparent)
                {
-                  device.§4! §(0,material.textureResource);
-                  this.alphatest[0] = material.textureResource.§ E§;
-                  this.alphatest[1] = material.textureResource.§9X§;
+                  device.setTextureAt(0,material.textureResource);
+                  this.alphatest[0] = material.textureResource.correctionU;
+                  this.alphatest[1] = material.textureResource.correctionV;
                   this.alphatest[3] = object is Sprite3D ? 0.99 : this.alphaThreshold;
-                  device.§%&§(Context3DProgramType.FRAGMENT,1,this.alphatest,1);
+                  device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,1,this.alphatest,1);
                }
-               device.§%&§(Context3DProgramType.FRAGMENT,0,this.fragment,1);
-               device.§>c§(indexBuffer,0,numTriangles);
+               device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,0,this.fragment,1);
+               device.drawTriangles(indexBuffer,0,numTriangles);
             }
             if(transparent)
             {
-               device.§4! §(0,null);
-               device.§"J§(1,null);
+               device.setTextureAt(0,null);
+               device.setVertexBufferAt(1,null);
             }
          }
-         device.§?!&§(null);
+         device.setScissorRectangle(null);
          sx = 1 / this.planeSize;
          sy = 1 / this.planeSize;
          dx = -this.planeX * sx;
@@ -552,15 +552,15 @@ package alternativa.engine3d.core
       
       public function dispose() : void
       {
-         this.map.§[!§();
-         this.noise.§[!§();
+         this.map.reset();
+         this.noise.reset();
       }
       
-      private function getProgram(transparent:Boolean, sprite:Boolean) : §8B§
+      private function getProgram(transparent:Boolean, sprite:Boolean) : ProgramResource
       {
          var fragmentProgram:ByteArray = null;
          var vertexProgram:ByteArray = null;
-         var program:§8B§ = transparent ? (sprite ? this.spriteProgram : this.transparentProgram) : this.opaqueProgram;
+         var program:ProgramResource = transparent ? (sprite ? this.spriteProgram : this.transparentProgram) : this.opaqueProgram;
          if(program == null)
          {
             if(transparent)
@@ -580,7 +580,7 @@ package alternativa.engine3d.core
                vertexProgram = Material.compileProgram(Context3DProgramType.VERTEX,["dp4 vt0.x, va0, vc0","dp4 vt0.y, va0, vc1","dp4 vt0.z, va0, vc2","mov vt0.w, vc3.w","mov v0, vt0","mul vt0.z, vt0.z, vc3.z","mov op, vt0"]);
                fragmentProgram = Material.compileProgram(Context3DProgramType.FRAGMENT,["frc ft0.y, v0.z","sub ft0.x, v0.z, ft0.y","mul ft0.x, ft0.x, fc0.x","mov ft0.z, fc0.z","mov ft0.w, fc0.w","mov oc, ft0"]);
             }
-            program = new §8B§(vertexProgram,fragmentProgram);
+            program = new ProgramResource(vertexProgram,fragmentProgram);
             if(transparent)
             {
                if(sprite)

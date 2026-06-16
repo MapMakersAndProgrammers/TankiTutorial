@@ -9,7 +9,10 @@ package alternativa.gfx.core
    import flash.events.EventDispatcher;
    import flash.geom.Rectangle;
    import flash.utils.Dictionary;
+   import alternativa.gfx.alternativagfx;
    
+   use namespace alternativagfx;
+
    [Event(name="context3DCreate",type="flash.events.Event")]
    public class Device extends EventDispatcher
    {

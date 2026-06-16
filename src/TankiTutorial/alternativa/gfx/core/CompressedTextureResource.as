@@ -5,7 +5,10 @@ package alternativa.gfx.core
    import flash.display3D.textures.Texture;
    import flash.utils.ByteArray;
    import flash.utils.Endian;
+   import alternativa.gfx.alternativagfx;
    
+   use namespace alternativagfx;
+
    public class CompressedTextureResource extends TextureResource
    {
       
@@ -54,13 +57,13 @@ package alternativa.gfx.core
          return this.qaso != null;
       }
       
-      override §§namespace("http://alternativaplatform.com/en/alternativagfx") function create(context:Context3D, stage3DIndex:int) : void
+      override alternativagfx function create(context:Context3D, stage3DIndex:int) : void
       {
          super.create(context,stage3DIndex);
          tylu[stage3DIndex] = context.createTexture(this.cof,this.gugap,Context3DTextureFormat.COMPRESSED,false);
       }
       
-      override §§namespace("http://alternativaplatform.com/en/alternativagfx") function upload(stage3DIndex:int) : void
+      override alternativagfx function upload(stage3DIndex:int) : void
       {
          super.upload(stage3DIndex);
          Texture(tylu[stage3DIndex]).uploadCompressedTextureFromByteArray(this.qaso,0);

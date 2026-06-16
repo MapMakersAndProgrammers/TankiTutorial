@@ -1,7 +1,7 @@
 package alternativa.engine3d.core
 {
-   import §!=§.§%8§;
-   import §5e§.§0!>§;
+   import alternativa.Alternativa3D;
+   import alternativa.gfx.core.Device;
    import alternativa.engine3d.alternativa3d;
    import flash.display.Bitmap;
    import flash.display.DisplayObject;
@@ -28,7 +28,7 @@ package alternativa.engine3d.core
    public class View extends Canvas
    {
       
-      private static var staticDevice:§0!>§;
+      private static var staticDevice:Device;
       
       private static const mouse:Point = new Point();
       
@@ -56,7 +56,7 @@ package alternativa.engine3d.core
       
       alternativa3d var correction:Boolean = false;
       
-      alternativa3d var device:§0!>§;
+      alternativa3d var device:Device;
       
       alternativa3d var quality:Boolean;
       
@@ -129,7 +129,7 @@ package alternativa.engine3d.core
          useHandCursor = false;
          tabEnabled = false;
          tabChildren = false;
-         item = new ContextMenuItem("Powered by Alternativa3D " + §%8§.§4!;§);
+         item = new ContextMenuItem("Powered by Alternativa3D " + Alternativa3D.version);
          item.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT,function(e:ContextMenuEvent):void
          {
             try
@@ -164,7 +164,7 @@ package alternativa.engine3d.core
          addEventListener(Event.REMOVED_FROM_STAGE,this.onRemoveFromStage);
          if(staticDevice == null)
          {
-            staticDevice = new §0!>§(stage,0,Context3DRenderMode.AUTO,this.constrained ? "baselineConstrained" : "baseline");
+            staticDevice = new Device(stage,0,Context3DRenderMode.AUTO,this.constrained ? "baselineConstrained" : "baseline");
          }
          views.push(this);
          this.device = staticDevice;
@@ -184,7 +184,7 @@ package alternativa.engine3d.core
          views.pop();
          if(views.length == 0)
          {
-            staticDevice.§[P§();
+            staticDevice.dispose();
             staticDevice = null;
          }
          this.device = null;
@@ -355,17 +355,17 @@ package alternativa.engine3d.core
                   maxY = view.globalCoords.y + view._height;
                }
             }
-            this.device.§7A§ = minX;
-            this.device.§5]§ = minY;
-            this.device.§[]§ = maxX - minX;
-            this.device.§'d§ = maxY - minY;
-            this.device.§-e§ = antiAlias;
-            this.device.§?4§ = true;
-            this.device.§@S§ = this.enableErrorChecking;
+            this.device.x = minX;
+            this.device.y = minY;
+            this.device.width = maxX - minX;
+            this.device.height = maxY - minY;
+            this.device.antiAlias = antiAlias;
+            this.device.enableDepthAndStencil = true;
+            this.device.enableErrorChecking = this.enableErrorChecking;
             configured = true;
          }
-         this.rect.x = int(this.globalCoords.x) - this.device.§7A§;
-         this.rect.y = int(this.globalCoords.y) - this.device.§5]§;
+         this.rect.x = int(this.globalCoords.x) - this.device.x;
+         this.rect.y = int(this.globalCoords.y) - this.device.y;
          this.rect.width = int(this._width);
          this.rect.height = int(this._height);
          this.correction = false;
@@ -378,16 +378,16 @@ package alternativa.engine3d.core
       {
          if(!cleared)
          {
-            this.device.§9+§((stage.color >> 16 & 0xFF) / 255,(stage.color >> 8 & 0xFF) / 255,(stage.color & 0xFF) / 255);
+            this.device.clear((stage.color >> 16 & 0xFF) / 255,(stage.color >> 8 & 0xFF) / 255,(stage.color & 0xFF) / 255);
             cleared = true;
          }
          else
          {
-            this.device.§9+§((stage.color >> 16 & 0xFF) / 255,(stage.color >> 8 & 0xFF) / 255,(stage.color & 0xFF) / 255,1,1,0,Context3DClearMask.DEPTH | Context3DClearMask.STENCIL);
+            this.device.clear((stage.color >> 16 & 0xFF) / 255,(stage.color >> 8 & 0xFF) / 255,(stage.color & 0xFF) / 255,1,1,0,Context3DClearMask.DEPTH | Context3DClearMask.STENCIL);
          }
-         if(this.rect.x != 0 || this.rect.y != 0 || this.rect.width != this.device.§[]§ || this.rect.height != this.device.§'d§)
+         if(this.rect.x != 0 || this.rect.y != 0 || this.rect.width != this.device.width || this.rect.height != this.device.height)
          {
-            this.device.§?!&§(this.rect);
+            this.device.setScissorRectangle(this.rect);
             this.correction = true;
          }
       }
@@ -397,7 +397,7 @@ package alternativa.engine3d.core
          var i:int = 0;
          var view:View = null;
          this.presented = true;
-         this.device.§?!&§(null);
+         this.device.setScissorRectangle(null);
          this.correction = false;
          for(i = 0; i < views.length; )
          {
@@ -410,7 +410,7 @@ package alternativa.engine3d.core
          }
          if(i == views.length)
          {
-            this.device.§5I§();
+            this.device.present();
             configured = false;
             cleared = false;
             for(i = 0; i < views.length; i++)
@@ -779,9 +779,9 @@ package alternativa.engine3d.core
       
       public function clear() : void
       {
-         if(this.device != null && this.device.§&;§)
+         if(this.device != null && this.device.ready)
          {
-            this.device.§9+§((stage.color >> 16 & 0xFF) / 255,(stage.color >> 8 & 0xFF) / 255,(stage.color & 0xFF) / 255);
+            this.device.clear((stage.color >> 16 & 0xFF) / 255,(stage.color >> 8 & 0xFF) / 255,(stage.color & 0xFF) / 255);
          }
          this.canvas.graphics.clear();
       }

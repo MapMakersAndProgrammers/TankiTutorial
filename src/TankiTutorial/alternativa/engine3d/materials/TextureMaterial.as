@@ -1,11 +1,11 @@
 package alternativa.engine3d.materials
 {
-   import §5e§.§!!?§;
-   import §5e§.§'Z§;
-   import §5e§.§-!$§;
-   import §5e§.§0!>§;
-   import §5e§.§8B§;
-   import §5e§.§`c§;
+   import alternativa.gfx.core.BitmapTextureResource
+   import alternativa.gfx.core.CompressedTextureResource;
+   import alternativa.gfx.core.VertexBufferResource;
+   import alternativa.gfx.core.Device;
+   import alternativa.gfx.core.ProgramResource;
+   import alternativa.gfx.core.IndexBufferResource;
    import alternativa.engine3d.alternativa3d;
    import alternativa.engine3d.core.Camera3D;
    import alternativa.engine3d.core.Face;
@@ -26,9 +26,9 @@ package alternativa.engine3d.materials
    public class TextureMaterial extends Material
    {
       
-      private static var vertexBuffer:§-!$§;
+      private static var vertexBuffer:VertexBufferResource;
       
-      alternativa3d static var indexBuffer:§`c§;
+      alternativa3d static var indexBuffer:IndexBufferResource;
       
       private static const offset:int = 14;
       
@@ -68,11 +68,11 @@ package alternativa.engine3d.materials
       
       alternativa3d var _hardwareMipMaps:Boolean = false;
       
-      alternativa3d var textureResource:§!!?§;
+      alternativa3d var textureResource:BitmapTextureResource
       
-      alternativa3d var textureATFResource:§'Z§;
+      alternativa3d var textureATFResource:CompressedTextureResource;
       
-      alternativa3d var textureATFAlphaResource:§'Z§;
+      alternativa3d var textureATFAlphaResource:CompressedTextureResource;
       
       public function TextureMaterial(texture:BitmapData = null, repeat:Boolean = false, smooth:Boolean = true, mipMapping:int = 0, resolution:Number = 1)
       {
@@ -90,7 +90,7 @@ package alternativa.engine3d.materials
          this.resolution = resolution;
          if(this._texture != null)
          {
-            this.textureResource = new §!!?§(this._texture,this._mipMapping > 0,this.repeat,this._hardwareMipMaps);
+            this.textureResource = new BitmapTextureResource(this._texture,this._mipMapping > 0,this.repeat,this._hardwareMipMaps);
          }
          if(vertexBuffer == null)
          {
@@ -107,8 +107,8 @@ package alternativa.engine3d.materials
                index = j * 4 + 3;
                constants[index] = 1;
             }
-            vertexBuffer = new §-!$§(vertices,1);
-            alternativa3d::indexBuffer = new §`c§(indices);
+            vertexBuffer = new VertexBufferResource(vertices,1);
+            alternativa3d::indexBuffer = new IndexBufferResource(indices);
          }
       }
       
@@ -123,13 +123,13 @@ package alternativa.engine3d.materials
          {
             if(this._texture != null)
             {
-               this.textureResource.§[P§();
+               this.textureResource.dispose();
                this.textureResource = null;
             }
             this._texture = value;
             if(this._texture != null)
             {
-               this.textureResource = new §!!?§(this._texture,this._mipMapping > 0,this.repeat,this._hardwareMipMaps);
+               this.textureResource = new BitmapTextureResource(this._texture,this._mipMapping > 0,this.repeat,this._hardwareMipMaps);
             }
          }
       }
@@ -145,13 +145,13 @@ package alternativa.engine3d.materials
          {
             if(this._textureATF != null)
             {
-               this.textureATFResource.§[P§();
+               this.textureATFResource.dispose();
                this.textureATFResource = null;
             }
             this._textureATF = value;
             if(this._textureATF != null)
             {
-               this.textureATFResource = new §'Z§(this._textureATF);
+               this.textureATFResource = new CompressedTextureResource(this._textureATF);
             }
          }
       }
@@ -167,13 +167,13 @@ package alternativa.engine3d.materials
          {
             if(this._textureATFAlpha != null)
             {
-               this.textureATFAlphaResource.§[P§();
+               this.textureATFAlphaResource.dispose();
                this.textureATFAlphaResource = null;
             }
             this._textureATFAlpha = value;
             if(this._textureATFAlpha != null)
             {
-               this.textureATFAlphaResource = new §'Z§(this._textureATFAlpha);
+               this.textureATFAlphaResource = new CompressedTextureResource(this._textureATFAlpha);
             }
          }
       }
@@ -193,8 +193,8 @@ package alternativa.engine3d.materials
          this._mipMapping = value;
          if(changed && this._texture != null)
          {
-            this.textureResource.§[P§();
-            this.textureResource = new §!!?§(this._texture,this._mipMapping > 0,this.repeat,this._hardwareMipMaps);
+            this.textureResource.dispose();
+            this.textureResource = new BitmapTextureResource(this._texture,this._mipMapping > 0,this.repeat,this._hardwareMipMaps);
          }
       }
       
@@ -210,7 +210,7 @@ package alternativa.engine3d.materials
             this._hardwareMipMaps = value;
             if(this._texture != null)
             {
-               this.textureResource.§4!%§ = this._hardwareMipMaps;
+               this.textureResource.calculateMipMapsUsingGPU = this._hardwareMipMaps;
             }
          }
       }
@@ -248,13 +248,13 @@ package alternativa.engine3d.materials
          return false;
       }
       
-      override alternativa3d function drawOpaque(camera:Camera3D, vertexBuffer:§-!$§, indexBuffer:§`c§, firstIndex:int, numTriangles:int, object:Object3D) : void
+      override alternativa3d function drawOpaque(camera:Camera3D, vertexBuffer:VertexBufferResource, indexBuffer:IndexBufferResource, firstIndex:int, numTriangles:int, object:Object3D) : void
       {
          if(this._texture == null && this._textureATF == null)
          {
             return;
          }
-         var device:§0!>§ = camera.device;
+         var device:Device = camera.device;
          var sky:Boolean = object is SkyBox && SkyBox(object).autoSize;
          var fog:Boolean = camera.fogAlpha > 0 && camera.fogStrength > 0;
          var cameraSsao:Boolean = !camera.view.constrained && camera.ssao && camera.ssaoStrength > 0;
@@ -264,78 +264,78 @@ package alternativa.engine3d.materials
          var shadow:Boolean = cameraShadow && object.useLight && object.useShadowMap && !sky;
          var cameraLight:Boolean = !camera.view.constrained && camera.deferredLighting && camera.deferredLightingStrength > 0;
          var light:Boolean = cameraLight && object.useDepth && object.useLight && !sky;
-         device.§"W§(this.getProgram(true,sky,false,false,camera.view.quality,this.repeat,this._mipMapping > 0,object.concatenatedColorTransform != null,false,fog,false,ssao,direct,shadow,this._texture == null,false,light,false,camera.view.correction));
+         device.setProgram(this.getProgram(true,sky,false,false,camera.view.quality,this.repeat,this._mipMapping > 0,object.concatenatedColorTransform != null,false,fog,false,ssao,direct,shadow,this._texture == null,false,light,false,camera.view.correction));
          if(this._texture != null)
          {
-            device.§4! §(0,this.textureResource);
-            uvCorrection[0] = this.textureResource.§ E§;
-            uvCorrection[1] = this.textureResource.§9X§;
+            device.setTextureAt(0,this.textureResource);
+            uvCorrection[0] = this.textureResource.correctionU;
+            uvCorrection[1] = this.textureResource.correctionV;
          }
          else
          {
-            device.§4! §(0,this.textureATFResource);
+            device.setTextureAt(0,this.textureATFResource);
             uvCorrection[0] = 1;
             uvCorrection[1] = 1;
          }
-         device.§"J§(0,vertexBuffer,0,Context3DVertexBufferFormat.FLOAT_3);
-         device.§"J§(1,vertexBuffer,3,Context3DVertexBufferFormat.FLOAT_2);
-         device.§%&§(Context3DProgramType.VERTEX,0,object.transformConst,3,false);
-         device.§%&§(Context3DProgramType.VERTEX,4,uvCorrection,1);
+         device.setVertexBufferAt(0,vertexBuffer,0,Context3DVertexBufferFormat.FLOAT_3);
+         device.setVertexBufferAt(1,vertexBuffer,3,Context3DVertexBufferFormat.FLOAT_2);
+         device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,0,object.transformConst,3,false);
+         device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,4,uvCorrection,1);
          if(!ssao && cameraSsao)
          {
-            device.§4! §(1,null);
+            device.setTextureAt(1,null);
          }
          if(!shadow && cameraShadow)
          {
-            device.§4! §(2,null);
-            device.§4! §(3,null);
+            device.setTextureAt(2,null);
+            device.setTextureAt(3,null);
          }
          if(!light && cameraLight)
          {
-            device.§4! §(5,null);
+            device.setTextureAt(5,null);
          }
          if(sky)
          {
-            device.§;j§(false,Context3DCompareMode.LESS_EQUAL);
-            device.§%&§(Context3DProgramType.VERTEX,11,SkyBox(object).transform,1);
+            device.setDepthTest(false,Context3DCompareMode.LESS_EQUAL);
+            device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,11,SkyBox(object).transform,1);
             if(fog)
             {
                skyFogConst[0] = camera.fogFragment[0] * camera.fogFragment[3];
                skyFogConst[1] = camera.fogFragment[1] * camera.fogFragment[3];
                skyFogConst[2] = camera.fogFragment[2] * camera.fogFragment[3];
                skyFogConst[3] = 1 - camera.fogFragment[3];
-               device.§%&§(Context3DProgramType.FRAGMENT,13,skyFogConst,1);
+               device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,13,skyFogConst,1);
             }
          }
          if(direct)
          {
-            device.§"J§(2,vertexBuffer,5,Context3DVertexBufferFormat.FLOAT_3);
+            device.setVertexBufferAt(2,vertexBuffer,5,Context3DVertexBufferFormat.FLOAT_3);
          }
          if(object.concatenatedColorTransform != null)
          {
-            device.§%&§(Context3DProgramType.FRAGMENT,0,object.colorConst,2,false);
+            device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,0,object.colorConst,2,false);
          }
-         device.§>c§(indexBuffer,firstIndex,numTriangles);
+         device.drawTriangles(indexBuffer,firstIndex,numTriangles);
          if(sky)
          {
-            device.§;j§(true,Context3DCompareMode.LESS);
+            device.setDepthTest(true,Context3DCompareMode.LESS);
          }
          if(direct)
          {
-            device.§"J§(2,null);
+            device.setVertexBufferAt(2,null);
          }
          if(!ssao && cameraSsao)
          {
-            device.§4! §(1,camera.depthMap);
+            device.setTextureAt(1,camera.depthMap);
          }
          if(!shadow && cameraShadow)
          {
-            device.§4! §(2,camera.shadowMap.map);
-            device.§4! §(3,camera.shadowMap.noise);
+            device.setTextureAt(2,camera.shadowMap.map);
+            device.setTextureAt(3,camera.shadowMap.noise);
          }
          if(!light && cameraLight)
          {
-            device.§4! §(5,camera.lightMap);
+            device.setTextureAt(5,camera.lightMap);
          }
          ++camera.numDraws;
          camera.numTriangles += numTriangles;
@@ -364,7 +364,7 @@ package alternativa.engine3d.materials
          }
          var ku:Number = 1;
          var kv:Number = 1;
-         var device:§0!>§ = camera.device;
+         var device:Device = camera.device;
          var decal:Boolean = object is Decal;
          var asDecal:Boolean = !decal && name == "decal";
          var fog:Boolean = camera.fogAlpha > 0 && camera.fogStrength > 0;
@@ -377,39 +377,39 @@ package alternativa.engine3d.materials
          var cameraLight:Boolean = !camera.view.constrained && camera.deferredLighting && camera.deferredLightingStrength > 0;
          var light:Boolean = cameraLight && object.useDepth && object.useLight && !sprite;
          var lightSprite:Boolean = cameraLight && sprite && object.useLight;
-         device.§"W§(this.getProgram(false,false,decal || asDecal,sprite,camera.view.quality,this.repeat,this._mipMapping > 0,object.concatenatedColorTransform != null,object.concatenatedAlpha < 1,fog,soft,ssao,direct,shadow,this._texture == null,this._texture == null && this._textureATFAlpha != null,light,lightSprite,camera.view.correction));
+         device.setProgram(this.getProgram(false,false,decal || asDecal,sprite,camera.view.quality,this.repeat,this._mipMapping > 0,object.concatenatedColorTransform != null,object.concatenatedAlpha < 1,fog,soft,ssao,direct,shadow,this._texture == null,this._texture == null && this._textureATFAlpha != null,light,lightSprite,camera.view.correction));
          if(this._texture != null)
          {
-            device.§4! §(0,this.textureResource);
-            ku = this.textureResource.§ E§;
-            kv = this.textureResource.§9X§;
+            device.setTextureAt(0,this.textureResource);
+            ku = this.textureResource.correctionU;
+            kv = this.textureResource.correctionV;
          }
          else
          {
-            device.§4! §(0,this.textureATFResource);
+            device.setTextureAt(0,this.textureATFResource);
             if(this._textureATFAlpha != null)
             {
-               device.§4! §(4,this.textureATFAlphaResource);
+               device.setTextureAt(4,this.textureATFAlphaResource);
             }
          }
-         device.§"J§(0,vertexBuffer,0,Context3DVertexBufferFormat.FLOAT_1);
+         device.setVertexBufferAt(0,vertexBuffer,0,Context3DVertexBufferFormat.FLOAT_1);
          if(!soft && !ssao && camera.depthMap != null)
          {
-            device.§4! §(1,null);
+            device.setTextureAt(1,null);
          }
          if(!shadow && cameraShadow)
          {
-            device.§4! §(2,null);
-            device.§4! §(3,null);
+            device.setTextureAt(2,null);
+            device.setTextureAt(3,null);
          }
          if(!light && cameraLight)
          {
-            device.§4! §(5,null);
+            device.setTextureAt(5,null);
          }
          if(soft || ssao || light)
          {
             softConst[2] = object.softAttenuation * camera.softTransparencyStrength * 255 / camera.farClipping;
-            device.§%&§(Context3DProgramType.FRAGMENT,14,softConst,1);
+            device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,14,softConst,1);
          }
          if(decal)
          {
@@ -421,7 +421,7 @@ package alternativa.engine3d.materials
             correctionConst[5] = object.mg * camera.correctionY / Decal(object).attenuation;
             correctionConst[6] = object.mk / Decal(object).attenuation;
             correctionConst[7] = camera.correctionY;
-            device.§%&§(Context3DProgramType.VERTEX,11,correctionConst,2,false);
+            device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,11,correctionConst,2,false);
          }
          else if(asDecal)
          {
@@ -433,7 +433,7 @@ package alternativa.engine3d.materials
             correctionConst[5] = 0;
             correctionConst[6] = 0;
             correctionConst[7] = camera.correctionY;
-            device.§%&§(Context3DProgramType.VERTEX,11,correctionConst,2,false);
+            device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,11,correctionConst,2,false);
          }
          else if(sprite)
          {
@@ -445,20 +445,20 @@ package alternativa.engine3d.materials
                correctionConst[3] = camera.correctionX;
                correctionConst[6] = 0.5;
                correctionConst[7] = camera.correctionY;
-               device.§%&§(Context3DProgramType.VERTEX,11,correctionConst,2,false);
+               device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,11,correctionConst,2,false);
             }
             if(lightSprite)
             {
-               device.§%&§(Context3DProgramType.FRAGMENT,13,Sprite3D(object).lightConst,1,false);
+               device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,13,Sprite3D(object).lightConst,1,false);
             }
          }
          if(object.concatenatedColorTransform != null)
          {
-            device.§%&§(Context3DProgramType.FRAGMENT,0,object.colorConst,2,false);
+            device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,0,object.colorConst,2,false);
          }
          else
          {
-            device.§%&§(Context3DProgramType.FRAGMENT,0,object.colorConst,1);
+            device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,0,object.colorConst,1);
          }
          var counter:int = 0;
          var i:int = 0;
@@ -486,8 +486,8 @@ package alternativa.engine3d.materials
                   cz = c.normalX * object.mi + c.normalY * object.mj + c.normalZ * object.mk;
                   if(counter >= limit)
                   {
-                     device.§%&§(Context3DProgramType.VERTEX,offset,constants,limit * 6,false);
-                     device.§>c§(indexBuffer,0,counter);
+                     device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,offset,constants,limit * 6,false);
+                     device.drawTriangles(indexBuffer,0,counter);
                      counter = 0;
                      i = 0;
                      ++camera.numDraws;
@@ -565,8 +565,8 @@ package alternativa.engine3d.materials
                   c = wrapper.vertex;
                   if(counter >= limit)
                   {
-                     device.§%&§(Context3DProgramType.VERTEX,offset,constants,limit * 6,false);
-                     device.§>c§(indexBuffer,0,counter);
+                     device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,offset,constants,limit * 6,false);
+                     device.drawTriangles(indexBuffer,0,counter);
                      counter = 0;
                      i = 0;
                      ++camera.numDraws;
@@ -610,35 +610,35 @@ package alternativa.engine3d.materials
          }
          if(counter > 0)
          {
-            device.§%&§(Context3DProgramType.VERTEX,offset,constants,counter * 6,false);
-            device.§>c§(indexBuffer,0,counter);
+            device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,offset,constants,counter * 6,false);
+            device.drawTriangles(indexBuffer,0,counter);
             ++camera.numDraws;
          }
          if(this._texture == null && this._textureATFAlpha != null)
          {
-            device.§4! §(4,null);
+            device.setTextureAt(4,null);
          }
          if(!soft && !ssao && camera.depthMap != null)
          {
-            device.§4! §(1,camera.depthMap);
+            device.setTextureAt(1,camera.depthMap);
          }
          if(!shadow && cameraShadow)
          {
-            device.§4! §(2,camera.shadowMap.map);
-            device.§4! §(3,camera.shadowMap.noise);
+            device.setTextureAt(2,camera.shadowMap.map);
+            device.setTextureAt(3,camera.shadowMap.noise);
          }
          if(!light && cameraLight)
          {
-            device.§4! §(5,camera.lightMap);
+            device.setTextureAt(5,camera.lightMap);
          }
       }
       
-      private function getProgram(opaque:Boolean, sky:Boolean, decal:Boolean, sprite:Boolean, quality:Boolean, repeat:Boolean, mip:Boolean, color:Boolean, alpha:Boolean, fog:Boolean, soft:Boolean, ssao:Boolean, direct:Boolean, shadow:Boolean, atf:Boolean, map:Boolean, light:Boolean, lightSprite:Boolean, correction:Boolean) : §8B§
+      private function getProgram(opaque:Boolean, sky:Boolean, decal:Boolean, sprite:Boolean, quality:Boolean, repeat:Boolean, mip:Boolean, color:Boolean, alpha:Boolean, fog:Boolean, soft:Boolean, ssao:Boolean, direct:Boolean, shadow:Boolean, atf:Boolean, map:Boolean, light:Boolean, lightSprite:Boolean, correction:Boolean) : ProgramResource
       {
          var vertexProgram:ByteArray = null;
          var fragmentProgram:ByteArray = null;
          var key:int = int(opaque) | int(sky) << 1 | int(decal) << 2 | int(sprite) << 3 | int(quality) << 4 | int(repeat) << 5 | int(mip) << 6 | int(color) << 7 | int(alpha) << 8 | int(fog) << 9 | int(soft) << 10 | int(ssao) << 11 | int(direct) << 12 | int(shadow) << 13 | int(atf) << 14 | int(map) << 15 | int(light) << 16 | int(lightSprite) << 17 | int(correction) << 18;
-         var program:§8B§ = programs[key];
+         var program:ProgramResource = programs[key];
          if(program == null)
          {
             vertexProgram = compileProgram(Context3DProgramType.VERTEX,opaque ? (!sky ? ["dp4 vt0.x, va0, vc0","dp4 vt0.y, va0, vc1","dp4 vt0.z, va0, vc2","mov vt0.w, vc4.w","mov v2, vt0" + (!direct && !shadow && !ssao && !light ? "rem" : ""),"dp3 vt1.x, va2, vc0" + (!direct ? "rem" : ""),"dp3 vt1.y, va2, vc1" + (!direct ? "rem" : ""),"dp3 vt1.z, va2, vc2" + (!direct ? "rem" : ""),"dp3 vt1.w, vt1.xyz, vc10.xyz" + (!direct ? "rem" : ""),"sub v2.w, vc4.w, vt1.w" + (!direct ? "rem" : ""),"dp4 v3.x, vt0, vc6" + (!shadow ? "rem" : ""),"dp4 v3.y, vt0, vc7" + (!shadow ? "rem" : ""),"dp4 v3.z, vt0, vc8" + (!shadow ? "rem" : ""),"sub vt1.w, vt0.z, vc9.x" + (!shadow ? "rem" : ""),"div vt1.w, vt1.w, vc9.y" + (!shadow ? "rem" : ""),"sub v3.w, vc4.w, vt1.w" + (!shadow ? "rem" : ""),"mov v1.xyz, va0.w" + (!fog ? "rem" : ""),"sub vt0.w, vt0.z, vc5.z" + (!fog ? "rem" : ""),"div v1.w, vt0.w, vc5.w" + (!fog ? "rem" : ""),"mul vt0.xy, vt0.xy, vc13.xy" + (!correction ? "rem" : ""),"mul vt1.xy, vc13.zw, vt0.z" + (!correction ? "rem" : "")
@@ -653,7 +653,7 @@ package alternativa.engine3d.materials
             ,"add ft4.z, ft4.z, ft2.z" + (!shadow ? "rem" : ""),"dp3 ft3.x, ft2, fc8" + (!shadow ? "rem" : ""),"dp3 ft3.y, ft2, fc9" + (!shadow ? "rem" : ""),"mov ft2, ft3" + (!shadow ? "rem" : ""),"add ft3, ft2, v3" + (!shadow ? "rem" : ""),"tex ft1, ft3, fs2 <2d,clamp,nearest,mipnone>" + (!shadow ? "rem" : ""),"dp3 ft2.z, ft1, ft5" + (!shadow ? "rem" : ""),"sat ft2.z, ft2.z" + (!shadow ? "rem" : ""),"add ft4.z, ft4.z, ft2.z" + (!shadow ? "rem" : ""),"dp3 ft3.x, ft2, fc8" + (!shadow ? "rem" : ""),"dp3 ft3.y, ft2, fc9" + (!shadow ? "rem" : ""),"mov ft2, ft3" + (!shadow ? "rem" : ""),"add ft3, ft2, v3" + (!shadow ? "rem" : ""),"tex ft1, ft3, fs2 <2d,clamp,nearest,mipnone>" + (!shadow ? "rem" : ""),"dp3 ft2.z, ft1, ft5" + (!shadow ? "rem" : ""),"sat ft2.z, ft2.z" + (!shadow ? "rem" : ""),"add ft4.z, ft4.z, ft2.z" + (!shadow ? "rem" : ""),"div ft2.w, ft4.z, fc6.y" + (!shadow ? "rem" : ""),"sat ft1.w, v3.w" + (!shadow ? "rem" : ""),"mul ft2.w, ft2.w, ft1.w" + (!shadow ? "rem" : ""),"mul ft2.w, ft2.w, fc6.w" + (!shadow ? "rem" : "")
             ,"min ft1.w, v2.w, fc10.w" + (!direct ? "rem" : ""),"max ft2.w, ft2.w, ft1.w" + (!direct || !shadow ? "rem" : ""),"mov ft2.w, ft1.w" + (!direct || shadow ? "rem" : ""),"sub ft2.w, fc10.w, ft2.w" + (!direct && !shadow ? "rem" : ""),"mul ft2.xyz, fc10.xyz, ft2.w" + (!direct && !shadow ? "rem" : ""),"add ft2.xyz, ft2.xyz, fc11.xyz" + (!direct && !shadow ? "rem" : ""),"add ft6.xyz, ft6.xyz, ft6.xyz" + (!light ? "rem" : ""),"add ft2.xyz, ft2.xyz, ft6.xyz" + (!light || !direct && !shadow ? "rem" : ""),"mov ft2.xyz, ft6.xyz" + (!light || direct || shadow ? "rem" : ""),"add ft2.xyz, ft2.xyz, fc13.xyz" + (!lightSprite || !direct && !shadow ? "rem" : ""),"mov ft2.xyz, fc13.xyz" + (!lightSprite || direct || shadow ? "rem" : ""),"mul ft0.xyz, ft0.xyz, ft2.xyz" + (!direct && !shadow && !light && !lightSprite ? "rem" : ""),"sat ft1.w, v1.w" + (!fog || sky ? "rem" : ""),"mul ft1.w, ft1.w, fc2.w" + (!fog || sky ? "rem" : ""),"mul ft1.xyz, fc2.xyz, ft1.w" + (!fog || sky ? "rem" : ""),"sub ft1.w, v1.x, ft1.w" + (!fog || sky ? "rem" : "")
             ,"mul ft0.xyz, ft0.xyz, ft1.w" + (!fog || sky ? "rem" : ""),"add ft0.xyz, ft0.xyz, ft1.xyz" + (!fog || sky ? "rem" : ""),"mul ft0.xyz, ft0.xyz, fc13.w" + (!fog || !sky ? "rem" : ""),"add ft0.xyz, ft0.xyz, fc13.xyz" + (!fog || !sky ? "rem" : ""),"mov oc, ft0"]);
-            program = new §8B§(vertexProgram,fragmentProgram);
+            program = new ProgramResource(vertexProgram,fragmentProgram);
             programs[key] = program;
          }
          return program;

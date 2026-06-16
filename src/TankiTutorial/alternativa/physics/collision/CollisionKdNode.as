@@ -1,6 +1,6 @@
 package alternativa.physics.collision
 {
-   import alternativa.physics.collision.types.dudyqo;
+   import alternativa.physics.collision.types.AABB;
    
    public class CollisionKdNode
    {
@@ -9,7 +9,7 @@ package alternativa.physics.collision
       
       public var henanaja:Vector.<int>;
       
-      public var taqa:dudyqo;
+      public var taqa:AABB;
       
       public var vewu:CollisionKdNode;
       

@@ -1,7 +1,7 @@
 package alternativa.engine3d.objects
 {
-   import §5e§.§-!$§;
-   import §5e§.§`c§;
+   import alternativa.gfx.core.VertexBufferResource;
+   import alternativa.gfx.core.IndexBufferResource;
    import alternativa.engine3d.alternativa3d;
    import alternativa.engine3d.core.Camera3D;
    import alternativa.engine3d.core.Debug;
@@ -14,6 +14,7 @@ package alternativa.engine3d.objects
    import alternativa.engine3d.materials.Material;
    import flash.geom.Vector3D;
    import flash.utils.Dictionary;
+   import flash.errors.IllegalOperationError;
    
    use namespace alternativa3d;
    
@@ -30,9 +31,9 @@ package alternativa.engine3d.objects
       
       alternativa3d var faceList:Face;
       
-      alternativa3d var vertexBuffer:§-!$§;
+      alternativa3d var vertexBuffer:VertexBufferResource;
       
-      alternativa3d var indexBuffer:§`c§;
+      alternativa3d var indexBuffer:IndexBufferResource;
       
       alternativa3d var numOpaqueTriangles:int;
       
@@ -1096,7 +1097,7 @@ package alternativa.engine3d.objects
           * Tip: You can try enabling "Deobfuscate code" option in Settings
           * Error type: ArrayIndexOutOfBoundsException (Index 4 out of bounds for length 4)
           */
-         throw new flash.errors.IllegalOperationError("Not decompiled due to error");
+         throw new IllegalOperationError("Not decompiled due to error");
       }
       
       private function group(verts:Vector.<Vertex>, begin:int, end:int, depth:int, distanceThreshold:Number, uvThreshold:Number, stack:Vector.<int>) : void
@@ -2393,7 +2394,7 @@ package alternativa.engine3d.objects
             }
             if(vertsCount > 0)
             {
-               this.vertexBuffer = new §-!$§(verts,8);
+               this.vertexBuffer = new VertexBufferResource(verts,8);
             }
             map = new Dictionary();
             for(face = this.faceList; face != null; )
@@ -2477,7 +2478,7 @@ package alternativa.engine3d.objects
             }
             if(indsLen > 0)
             {
-               this.indexBuffer = new §`c§(inds);
+               this.indexBuffer = new IndexBufferResource(inds);
             }
          }
       }
@@ -2486,9 +2487,9 @@ package alternativa.engine3d.objects
       {
          if(this.vertexBuffer != null)
          {
-            this.vertexBuffer.§[P§();
+            this.vertexBuffer.dispose();
             this.vertexBuffer = null;
-            this.indexBuffer.§[P§();
+            this.indexBuffer.dispose();
             this.indexBuffer = null;
             this.numTriangles = 0;
             this.opaqueMaterials.length = 0;

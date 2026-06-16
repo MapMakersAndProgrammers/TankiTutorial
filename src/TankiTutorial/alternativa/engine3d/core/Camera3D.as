@@ -1,9 +1,9 @@
 package alternativa.engine3d.core
 {
-   import §5e§.§-!$§;
-   import §5e§.§0!>§;
-   import §5e§.§^i§;
-   import §5e§.§`c§;
+   import alternativa.gfx.core.VertexBufferResource;
+   import alternativa.gfx.core.Device;
+   import alternativa.gfx.core.TextureResource;
+   import alternativa.gfx.core.IndexBufferResource;
    import alternativa.engine3d.alternativa3d;
    import alternativa.engine3d.lights.DirectionalLight;
    import alternativa.engine3d.lights.OmniLight;
@@ -76,7 +76,7 @@ package alternativa.engine3d.core
       
       alternativa3d var numTriangles:int;
       
-      alternativa3d var device:§0!>§;
+      alternativa3d var device:Device;
       
       alternativa3d var projection:Vector.<Number> = new Vector.<Number>(4);
       
@@ -86,9 +86,9 @@ package alternativa.engine3d.core
       
       private var opaqueMaterials:Vector.<Material> = new Vector.<Material>();
       
-      private var opaqueVertexBuffers:Vector.<§-!$§> = new Vector.<§-!$§>();
+      private var opaqueVertexBuffers:Vector.<VertexBufferResource> = new Vector.<VertexBufferResource>();
       
-      private var opaqueIndexBuffers:Vector.<§`c§> = new Vector.<§`c§>();
+      private var opaqueIndexBuffers:Vector.<IndexBufferResource> = new Vector.<IndexBufferResource>();
       
       private var opaqueRanges:Vector.<int> = new Vector.<int>();
       
@@ -126,9 +126,9 @@ package alternativa.engine3d.core
       
       alternativa3d var shadowAtlases:Array = new Array();
       
-      alternativa3d var receiversVertexBuffers:Vector.<§-!$§>;
+      alternativa3d var receiversVertexBuffers:Vector.<VertexBufferResource>;
       
-      alternativa3d var receiversIndexBuffers:Vector.<§`c§>;
+      alternativa3d var receiversIndexBuffers:Vector.<IndexBufferResource>;
       
       alternativa3d var gma:Number;
       
@@ -164,9 +164,9 @@ package alternativa.engine3d.core
       
       private var depthRenderer:DepthRenderer = new DepthRenderer();
       
-      alternativa3d var depthMap:§^i§;
+      alternativa3d var depthMap:TextureResource;
       
-      alternativa3d var lightMap:§^i§;
+      alternativa3d var lightMap:TextureResource;
       
       private var softParams:Vector.<Number> = Vector.<Number>([0,0,0,0.5]);
       
@@ -332,7 +332,7 @@ package alternativa.engine3d.core
          var shadowListLength:int = 0;
          var j:int = 0;
          var v:int = 0;
-         var lastTexture:§^i§ = null;
+         var lastTexture:TextureResource = null;
          var onTop:Boolean = false;
          var next:Face = null;
          var lastNumTriangles:int = 0;
@@ -340,7 +340,7 @@ package alternativa.engine3d.core
          this.numDraws = 0;
          this.numShadows = 0;
          this.numTriangles = 0;
-         if(this.view != null && this.view.device != null && this.view.device.§&;§)
+         if(this.view != null && this.view.device != null && this.view.device.ready)
          {
             this.device = this.view.device;
             this.view.configure();
@@ -461,15 +461,15 @@ package alternativa.engine3d.core
                      }
                   }
                }
-               this.device.§`!;§(Context3DTriangleFace.FRONT);
-               this.device.§ >§(Context3DBlendFactor.ONE,Context3DBlendFactor.ZERO);
-               this.device.§@_§(Context3DTriangleFace.NONE);
-               this.device.§7e§(0);
+               this.device.setCulling(Context3DTriangleFace.FRONT);
+               this.device.setBlendFactors(Context3DBlendFactor.ONE,Context3DBlendFactor.ZERO);
+               this.device.setStencilActions(Context3DTriangleFace.NONE);
+               this.device.setStencilReferenceValue(0);
                if(hasShadows)
                {
-                  this.device.§`!;§(Context3DTriangleFace.BACK);
-                  this.device.§;j§(true,Context3DCompareMode.GREATER_EQUAL);
-                  this.device.§"W§(Shadow.getCasterProgram());
+                  this.device.setCulling(Context3DTriangleFace.BACK);
+                  this.device.setDepthTest(true,Context3DCompareMode.GREATER_EQUAL);
+                  this.device.setProgram(Shadow.getCasterProgram());
                   for each(atlas in this.shadowAtlases)
                   {
                      if(atlas.shadowsCount > 0)
@@ -477,8 +477,8 @@ package alternativa.engine3d.core
                         atlas.renderCasters(this);
                      }
                   }
-                  this.device.§`!;§(Context3DTriangleFace.FRONT);
-                  this.device.§;j§(false,Context3DCompareMode.ALWAYS);
+                  this.device.setCulling(Context3DTriangleFace.FRONT);
+                  this.device.setDepthTest(false,Context3DCompareMode.ALWAYS);
                   for each(atlas in this.shadowAtlases)
                   {
                      if(atlas.shadowsCount > 0)
@@ -486,8 +486,8 @@ package alternativa.engine3d.core
                         atlas.renderBlur(this);
                      }
                   }
-                  this.device.§4! §(0,null);
-                  this.device.§"J§(1,null);
+                  this.device.setTextureAt(0,null);
+                  this.device.setVertexBufferAt(1,null);
                }
                if(this.directionalLight != null)
                {
@@ -498,7 +498,7 @@ package alternativa.engine3d.core
                root.concatenatedBlendMode = root.blendMode;
                root.concatenatedColorTransform = root.colorTransform;
                root.draw(this);
-               this.device.§;j§(true,Context3DCompareMode.LESS);
+               this.device.setDepthTest(true,Context3DCompareMode.LESS);
                if(!this.view.constrained && this.shadowMap != null && this.shadowMapStrength > 0)
                {
                   this.shadowMap.calculateBounds(this);
@@ -524,58 +524,58 @@ package alternativa.engine3d.core
                }
                if(hasShadows || !this.view.constrained && (this.softTransparency && this.softTransparencyStrength > 0 || this.ssao && this.ssaoStrength > 0 || this.deferredLighting && this.deferredLightingStrength > 0) || !this.view.constrained && this.shadowMap != null && this.shadowMapStrength > 0)
                {
-                  this.device.§4p§();
+                  this.device.setRenderToBackBuffer();
                }
                this.view.clearArea();
-               this.device.§%&§(Context3DProgramType.VERTEX,3,this.projection,1);
-               this.correction[0] = this.view.rect.width / this.device.§[]§;
-               this.correction[1] = this.view.rect.height / this.device.§'d§;
-               this.correction[2] = (this.view.rect.x * 2 + this.view.rect.width - this.device.§[]§) / this.device.§[]§;
-               this.correction[3] = (this.view.rect.y * 2 + this.view.rect.height - this.device.§'d§) / this.device.§'d§;
-               this.device.§%&§(Context3DProgramType.VERTEX,13,this.correction,1);
+               this.device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,3,this.projection,1);
+               this.correction[0] = this.view.rect.width / this.device.width;
+               this.correction[1] = this.view.rect.height / this.device.height;
+               this.correction[2] = (this.view.rect.x * 2 + this.view.rect.width - this.device.width) / this.device.width;
+               this.correction[3] = (this.view.rect.y * 2 + this.view.rect.height - this.device.height) / this.device.height;
+               this.device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,13,this.correction,1);
                if(!this.view.constrained && (this.softTransparency && this.softTransparencyStrength > 0 || this.ssao && this.ssaoStrength > 0 || this.deferredLighting && this.deferredLightingStrength > 0))
                {
                   this.softParams[0] = this.depthRenderer.correctionX;
                   this.softParams[1] = this.depthRenderer.correctionY;
                   this.softParams[2] = 255 / this.farClipping;
-                  this.device.§%&§(Context3DProgramType.FRAGMENT,4,this.softParams,1);
+                  this.device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,4,this.softParams,1);
                   if(this.softTransparency && this.softTransparencyStrength > 0 || this.ssao && this.ssaoStrength > 0)
                   {
                      this.ssaoParams[0] = (1 - 2 * (this.ssaoColor >> 16 & 0xFF) / 255) * this.ssaoAlpha * this.ssaoStrength;
                      this.ssaoParams[1] = (1 - 2 * (this.ssaoColor >> 8 & 0xFF) / 255) * this.ssaoAlpha * this.ssaoStrength;
                      this.ssaoParams[2] = (1 - 2 * (this.ssaoColor & 0xFF) / 255) * this.ssaoAlpha * this.ssaoStrength;
-                     this.device.§%&§(Context3DProgramType.FRAGMENT,12,this.ssaoParams,1);
+                     this.device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,12,this.ssaoParams,1);
                   }
                }
                if(!this.view.constrained && this.shadowMap != null && this.shadowMapStrength > 0)
                {
-                  this.device.§%&§(Context3DProgramType.VERTEX,6,this.shadowMap.transform,4);
-                  this.device.§%&§(Context3DProgramType.FRAGMENT,5,this.shadowMap.params,5);
+                  this.device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,6,this.shadowMap.transform,4);
+                  this.device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,5,this.shadowMap.params,5);
                }
                if(this.fogAlpha > 0 && this.fogStrength > 0)
                {
                   this.fogParams[2] = this.fogNear;
                   this.fogParams[3] = this.fogFar - this.fogNear;
-                  this.device.§%&§(Context3DProgramType.VERTEX,5,this.fogParams,1);
+                  this.device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,5,this.fogParams,1);
                   this.fogFragment[0] = (this.fogColor >> 16 & 0xFF) / 255;
                   this.fogFragment[1] = (this.fogColor >> 8 & 0xFF) / 255;
                   this.fogFragment[2] = (this.fogColor & 0xFF) / 255;
                   this.fogFragment[3] = this.fogAlpha * this.fogStrength;
-                  this.device.§%&§(Context3DProgramType.FRAGMENT,2,this.fogFragment,1);
+                  this.device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,2,this.fogFragment,1);
                }
                if(!this.view.constrained && this.directionalLight != null && this.directionalLightStrength > 0)
                {
                   this.lightTransform[0] = -this.directionalLight.imi;
                   this.lightTransform[1] = -this.directionalLight.imj;
                   this.lightTransform[2] = -this.directionalLight.imk;
-                  this.device.§%&§(Context3DProgramType.VERTEX,10,this.lightTransform,1);
+                  this.device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,10,this.lightTransform,1);
                   this.lightParams[0] = this.directionalLight.intensity * (this.directionalLight.color >> 16 & 0xFF) * 2 * this.directionalLightStrength / 255;
                   this.lightParams[1] = this.directionalLight.intensity * (this.directionalLight.color >> 8 & 0xFF) * 2 * this.directionalLightStrength / 255;
                   this.lightParams[2] = this.directionalLight.intensity * (this.directionalLight.color & 0xFF) * 2 * this.directionalLightStrength / 255;
                   this.lightParams[4] = 1 + ((this.ambientColor >> 16 & 0xFF) * 2 / 255 - 1) * this.directionalLightStrength;
                   this.lightParams[5] = 1 + ((this.ambientColor >> 8 & 0xFF) * 2 / 255 - 1) * this.directionalLightStrength;
                   this.lightParams[6] = 1 + ((this.ambientColor & 0xFF) * 2 / 255 - 1) * this.directionalLightStrength;
-                  this.device.§%&§(Context3DProgramType.FRAGMENT,10,this.lightParams,2);
+                  this.device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,10,this.lightParams,2);
                }
                else if(!this.view.constrained && this.shadowMap != null && this.shadowMapStrength > 0)
                {
@@ -585,20 +585,20 @@ package alternativa.engine3d.core
                   this.lightParams[4] = 1;
                   this.lightParams[5] = 1;
                   this.lightParams[6] = 1;
-                  this.device.§%&§(Context3DProgramType.FRAGMENT,10,this.lightParams,2);
+                  this.device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,10,this.lightParams,2);
                }
                if(!this.view.constrained && this.ssao && this.ssaoStrength > 0)
                {
-                  this.device.§4! §(1,this.depthMap);
+                  this.device.setTextureAt(1,this.depthMap);
                }
                if(!this.view.constrained && this.deferredLighting && this.deferredLightingStrength > 0)
                {
-                  this.device.§4! §(5,this.lightMap);
+                  this.device.setTextureAt(5,this.lightMap);
                }
                if(!this.view.constrained && this.shadowMap != null && this.shadowMapStrength > 0)
                {
-                  this.device.§4! §(2,this.shadowMap.map);
-                  this.device.§4! §(3,this.shadowMap.noise);
+                  this.device.setTextureAt(2,this.shadowMap.map);
+                  this.device.setTextureAt(3,this.shadowMap.noise);
                }
                for(i = 0; i < this.opaqueCount; i++)
                {
@@ -606,8 +606,8 @@ package alternativa.engine3d.core
                   range = this.opaqueRanges[i];
                   material.drawOpaque(this,this.opaqueVertexBuffers[i],this.opaqueIndexBuffers[i],range >> 16,range & 0xFFFF,this.opaqueObjects[i]);
                }
-               this.device.§"J§(1,null);
-               this.device.§;j§(false,Context3DCompareMode.LESS);
+               this.device.setVertexBufferAt(1,null);
+               this.device.setDepthTest(false,Context3DCompareMode.LESS);
                for(lastBlendMode = ""; this.decalCount > 0; )
                {
                   --this.decalCount;
@@ -618,20 +618,20 @@ package alternativa.engine3d.core
                      lastBlendMode = object.concatenatedBlendMode;
                      if(lastBlendMode == "add" || lastBlendMode == "screen")
                      {
-                        this.device.§ >§(Context3DBlendFactor.SOURCE_ALPHA,Context3DBlendFactor.ONE);
+                        this.device.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA,Context3DBlendFactor.ONE);
                      }
                      else
                      {
-                        this.device.§ >§(Context3DBlendFactor.SOURCE_ALPHA,Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
+                        this.device.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA,Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
                      }
                   }
                   faceList.material.drawTransparent(this,faceList,object);
                }
-               this.device.§4! §(0,null);
-               this.device.§4! §(1,null);
-               this.device.§4! §(2,null);
-               this.device.§4! §(3,null);
-               this.device.§4! §(5,null);
+               this.device.setTextureAt(0,null);
+               this.device.setTextureAt(1,null);
+               this.device.setTextureAt(2,null);
+               this.device.setTextureAt(3,null);
+               this.device.setTextureAt(5,null);
                if(hasShadows)
                {
                   shadowListLength = 0;
@@ -643,17 +643,17 @@ package alternativa.engine3d.core
                         shadowListLength++;
                      }
                   }
-                  this.device.§;j§(false,Context3DCompareMode.LESS);
+                  this.device.setDepthTest(false,Context3DCompareMode.LESS);
                   lastTexture = null;
                   for(i = 0; i < shadowListLength; i += 8)
                   {
                      if(i > 0)
                      {
-                        this.device.§9+§(0,0,0,0,1,0,Context3DClearMask.STENCIL);
+                        this.device.clear(0,0,0,0,1,0,Context3DClearMask.STENCIL);
                      }
-                     this.device.§ >§(Context3DBlendFactor.ZERO,Context3DBlendFactor.ONE);
-                     this.device.§`!;§(Context3DTriangleFace.NONE);
-                     this.device.§@_§(Context3DTriangleFace.FRONT_AND_BACK,Context3DCompareMode.ALWAYS,Context3DStencilAction.INVERT);
+                     this.device.setBlendFactors(Context3DBlendFactor.ZERO,Context3DBlendFactor.ONE);
+                     this.device.setCulling(Context3DTriangleFace.NONE);
+                     this.device.setStencilActions(Context3DTriangleFace.FRONT_AND_BACK,Context3DCompareMode.ALWAYS,Context3DStencilAction.INVERT);
                      j = i;
                      v = 1;
                      while(j < i + 8 && j < shadowListLength)
@@ -661,15 +661,15 @@ package alternativa.engine3d.core
                         shadow = this.shadowList[j];
                         if(!shadow.cameraInside)
                         {
-                           this.device.§7e§(v,v,v);
+                           this.device.setStencilReferenceValue(v,v,v);
                            shadow.renderVolume(this);
                         }
                         j++;
                         v <<= 1;
                      }
-                     this.device.§ >§(Context3DBlendFactor.SOURCE_ALPHA,Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
-                     this.device.§`!;§(Context3DTriangleFace.FRONT);
-                     this.device.§@_§(Context3DTriangleFace.BACK,Context3DCompareMode.EQUAL);
+                     this.device.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA,Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
+                     this.device.setCulling(Context3DTriangleFace.FRONT);
+                     this.device.setStencilActions(Context3DTriangleFace.BACK,Context3DCompareMode.EQUAL);
                      j = i;
                      v = 1;
                      while(j < i + 8 && j < shadowListLength)
@@ -677,45 +677,45 @@ package alternativa.engine3d.core
                         shadow = this.shadowList[j];
                         if(shadow.texture != lastTexture)
                         {
-                           this.device.§4! §(0,shadow.texture);
+                           this.device.setTextureAt(0,shadow.texture);
                            lastTexture = shadow.texture;
                         }
                         if(!shadow.cameraInside)
                         {
-                           this.device.§7e§(v,v,v);
+                           this.device.setStencilReferenceValue(v,v,v);
                            shadow.renderReceivers(this);
                         }
                         else
                         {
-                           this.device.§@_§(Context3DTriangleFace.BACK,Context3DCompareMode.ALWAYS);
+                           this.device.setStencilActions(Context3DTriangleFace.BACK,Context3DCompareMode.ALWAYS);
                            shadow.renderReceivers(this);
-                           this.device.§@_§(Context3DTriangleFace.BACK,Context3DCompareMode.EQUAL);
+                           this.device.setStencilActions(Context3DTriangleFace.BACK,Context3DCompareMode.EQUAL);
                         }
                         j++;
                         v <<= 1;
                      }
-                     this.device.§4! §(0,null);
+                     this.device.setTextureAt(0,null);
                      lastTexture = null;
                   }
-                  this.device.§@_§();
-                  this.device.§7e§(0);
+                  this.device.setStencilActions();
+                  this.device.setStencilReferenceValue(0);
                }
-               this.device.§%&§(Context3DProgramType.VERTEX,13,this.correction,1);
+               this.device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,13,this.correction,1);
                if(!this.view.constrained && (this.softTransparency && this.softTransparencyStrength > 0 || this.ssao && this.ssaoStrength > 0))
                {
-                  this.device.§4! §(1,this.depthMap);
+                  this.device.setTextureAt(1,this.depthMap);
                }
                if(!this.view.constrained && this.deferredLighting && this.deferredLightingStrength > 0)
                {
-                  this.device.§4! §(5,this.lightMap);
+                  this.device.setTextureAt(5,this.lightMap);
                }
                if(!this.view.constrained && this.shadowMap != null && this.shadowMapStrength > 0)
                {
-                  this.device.§4! §(2,this.shadowMap.map);
-                  this.device.§4! §(3,this.shadowMap.noise);
+                  this.device.setTextureAt(2,this.shadowMap.map);
+                  this.device.setTextureAt(3,this.shadowMap.noise);
                }
-               this.device.§`!;§(Context3DTriangleFace.FRONT);
-               this.device.§;j§(true,Context3DCompareMode.LESS);
+               this.device.setCulling(Context3DTriangleFace.FRONT);
+               this.device.setDepthTest(true,Context3DCompareMode.LESS);
                for(i = 0; i < this.transparentOpaqueCount; i++)
                {
                   this.transparentFaceLists[this.transparentCount] = this.transparentOpaqueFaceLists[i];
@@ -727,7 +727,7 @@ package alternativa.engine3d.core
                {
                   if(this.transparentCount == this.transparentOpaqueCount)
                   {
-                     this.device.§;j§(false,Context3DCompareMode.LESS);
+                     this.device.setDepthTest(false,Context3DCompareMode.LESS);
                   }
                   --this.transparentCount;
                   faceList = this.transparentFaceLists[this.transparentCount];
@@ -737,17 +737,17 @@ package alternativa.engine3d.core
                      lastBlendMode = object.concatenatedBlendMode;
                      if(lastBlendMode == "add" || lastBlendMode == "screen")
                      {
-                        this.device.§ >§(Context3DBlendFactor.SOURCE_ALPHA,Context3DBlendFactor.ONE);
+                        this.device.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA,Context3DBlendFactor.ONE);
                      }
                      else
                      {
-                        this.device.§ >§(Context3DBlendFactor.SOURCE_ALPHA,Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
+                        this.device.setBlendFactors(Context3DBlendFactor.SOURCE_ALPHA,Context3DBlendFactor.ONE_MINUS_SOURCE_ALPHA);
                      }
                   }
                   onTop = object.name == "title";
                   if(onTop)
                   {
-                     this.device.§;j§(false,Context3DCompareMode.ALWAYS);
+                     this.device.setDepthTest(false,Context3DCompareMode.ALWAYS);
                   }
                   if(object.receivedShadowsCount == 0)
                   {
@@ -766,12 +766,12 @@ package alternativa.engine3d.core
                         {
                            if(!this.view.constrained && this.shadowMap != null && this.shadowMapStrength > 0)
                            {
-                              this.device.§4! §(2,null);
-                              this.device.§4! §(3,null);
+                              this.device.setTextureAt(2,null);
+                              this.device.setTextureAt(3,null);
                            }
                            if(!this.view.constrained && this.deferredLighting && this.deferredLightingStrength > 0)
                            {
-                              this.device.§4! §(5,null);
+                              this.device.setTextureAt(5,null);
                            }
                            for(i = 0; i < object.receivedShadowsCount; i++)
                            {
@@ -780,20 +780,20 @@ package alternativa.engine3d.core
                            }
                            if(!this.view.constrained && (this.softTransparency && this.softTransparencyStrength > 0 || this.ssao && this.ssaoStrength > 0))
                            {
-                              this.device.§4! §(1,this.depthMap);
+                              this.device.setTextureAt(1,this.depthMap);
                            }
                            else
                            {
-                              this.device.§4! §(1,null);
+                              this.device.setTextureAt(1,null);
                            }
                            if(!this.view.constrained && this.shadowMap != null && this.shadowMapStrength > 0)
                            {
-                              this.device.§4! §(2,this.shadowMap.map);
-                              this.device.§4! §(3,this.shadowMap.noise);
+                              this.device.setTextureAt(2,this.shadowMap.map);
+                              this.device.setTextureAt(3,this.shadowMap.noise);
                            }
                            if(!this.view.constrained && this.deferredLighting && this.deferredLightingStrength > 0)
                            {
-                              this.device.§4! §(5,this.lightMap);
+                              this.device.setTextureAt(5,this.lightMap);
                            }
                         }
                         faceList = next;
@@ -801,14 +801,14 @@ package alternativa.engine3d.core
                   }
                   if(onTop)
                   {
-                     this.device.§;j§(false,Context3DCompareMode.LESS);
+                     this.device.setDepthTest(false,Context3DCompareMode.LESS);
                   }
                }
-               this.device.§4! §(0,null);
-               this.device.§4! §(1,null);
-               this.device.§4! §(2,null);
-               this.device.§4! §(3,null);
-               this.device.§4! §(5,null);
+               this.device.setTextureAt(0,null);
+               this.device.setTextureAt(1,null);
+               this.device.setTextureAt(2,null);
+               this.device.setTextureAt(3,null);
+               this.device.setTextureAt(5,null);
                this.opaqueMaterials.length = 0;
                this.opaqueVertexBuffers.length = 0;
                this.opaqueIndexBuffers.length = 0;
@@ -989,7 +989,7 @@ package alternativa.engine3d.core
          }
       }
       
-      alternativa3d function addOpaque(material:Material, vertexBuffer:§-!$§, indexBuffer:§`c§, firstIndex:int, numTriangles:int, object:Object3D) : void
+      alternativa3d function addOpaque(material:Material, vertexBuffer:VertexBufferResource, indexBuffer:IndexBufferResource, firstIndex:int, numTriangles:int, object:Object3D) : void
       {
          this.opaqueMaterials[this.opaqueCount] = material;
          this.opaqueVertexBuffers[this.opaqueCount] = vertexBuffer;

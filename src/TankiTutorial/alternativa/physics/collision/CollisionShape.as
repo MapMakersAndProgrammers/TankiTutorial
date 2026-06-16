@@ -4,7 +4,7 @@ package alternativa.physics.collision
    import alternativa.math.Vector3;
    import alternativa.physics.Body;
    import alternativa.physics.PhysicsMaterial;
-   import alternativa.physics.collision.types.dudyqo;
+   import alternativa.physics.collision.types.AABB;
    
    public class CollisionShape
    {
@@ -27,7 +27,7 @@ package alternativa.physics.collision
       
       public var wet:Matrix4 = new Matrix4();
       
-      public var raruluk:dudyqo = new dudyqo();
+      public var raruluk:AABB = new AABB();
       
       public var material:PhysicsMaterial;
       
@@ -63,7 +63,7 @@ package alternativa.physics.collision
          }
       }
       
-      public function calculateAABB() : dudyqo
+      public function calculateAABB() : AABB
       {
          return this.raruluk;
       }

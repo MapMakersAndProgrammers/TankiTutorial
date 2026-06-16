@@ -37,7 +37,7 @@ package tutorial.tasks
       
       public static function getMode() : String
       {
-         if(Alternativa3D.mawoqu == "7.11.0")
+         if(Alternativa3D.version == "7.11.0")
          {
             return GameData.butefu.view.constrained ? "GPU_constrained" : "GPU";
          }
@@ -53,7 +53,7 @@ package tutorial.tasks
       private function setInitialStageParams() : void
       {
          this.stage.frameRate = this.peqiru;
-         if(Alternativa3D.mawoqu == "7.11.0")
+         if(Alternativa3D.version == "7.11.0")
          {
             this.stage.quality = StageQuality.MEDIUM;
          }
@@ -71,7 +71,7 @@ package tutorial.tasks
       
       private function setMaxFrameRate() : void
       {
-         if(Alternativa3D.mawoqu == "7.11.0")
+         if(Alternativa3D.version == "7.11.0")
          {
             this.peqiru = hes;
          }

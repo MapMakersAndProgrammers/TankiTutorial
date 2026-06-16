@@ -1,11 +1,11 @@
 package zicy
 {
-   import kihi.dudyqo;
+   import alternativa.physics.collision.types.AABB;
    
    public class diqohohi
    {
       
-      private static const tyvak:dudyqo = new dudyqo();
+      private static const tyvak:AABB = new AABB();
       
       private static const tibuh:Vector.<Number> = new Vector.<Number>();
       
@@ -43,7 +43,7 @@ package zicy
       public function hoc() : void
       {
          this.wymyhujoq = new nekusupyg();
-         this.wymyhujoq.taqa = this.vivunoc.taqa.bet();
+         this.wymyhujoq.taqa = this.vivunoc.taqa.clone();
          this.wymyhujoq.vavyvyni = new Vector.<int>();
          var _loc1_:int = int(this.vivunoc.henanaja.length);
          var _loc2_:int = 0;
@@ -61,11 +61,11 @@ package zicy
          var _loc2_:Vector.<int> = null;
          var _loc3_:int = 0;
          var _loc4_:int = 0;
-         var _loc5_:dudyqo = null;
+         var _loc5_:AABB = null;
          var _loc8_:int = 0;
          var _loc9_:int = 0;
          var _loc10_:int = 0;
-         var _loc16_:dudyqo = null;
+         var _loc16_:AABB = null;
          var _loc17_:Number = NaN;
          var _loc18_:Number = NaN;
          if(param1.vavyvyni.length <= this.cihi)
@@ -81,7 +81,7 @@ package zicy
          tyvak.juri = _loc5_.juri - this.hevarer;
          tyvak.zepoci = _loc5_.zepoci - this.hevarer;
          var _loc6_:Number = this.hevarer * 2;
-         var _loc7_:Vector.<dudyqo> = this.tugoz.nyrimobo;
+         var _loc7_:Vector.<AABB> = this.tugoz.nyrimobo;
          var _loc11_:int = int(_loc2_.length);
          _loc3_ = 0;
          while(_loc3_ < _loc11_)
@@ -152,10 +152,10 @@ package zicy
          param1.retycel = this.qijysa;
          param1.hab = new nekusupyg();
          param1.hab.vewu = param1;
-         param1.hab.taqa = _loc5_.bet();
+         param1.hab.taqa = _loc5_.clone();
          param1.gumipiw = new nekusupyg();
          param1.gumipiw.vewu = param1;
-         param1.gumipiw.taqa = _loc5_.bet();
+         param1.gumipiw.taqa = _loc5_.clone();
          if(_loc12_)
          {
             param1.hab.taqa.jys = param1.gumipiw.taqa.cubegyw = this.qijysa;
@@ -243,11 +243,11 @@ package zicy
          var _loc19_:int = 0;
          var _loc20_:int = 0;
          var _loc21_:Number = NaN;
-         var _loc22_:dudyqo = null;
+         var _loc22_:AABB = null;
          var _loc6_:int = (param2 + 1) % 3;
          var _loc7_:int = (param2 + 2) % 3;
          var _loc8_:Number = (param5[_loc6_ + 3] - param5[_loc6_]) * (param5[_loc7_ + 3] - param5[_loc7_]);
-         var _loc9_:Vector.<dudyqo> = this.tugoz.nyrimobo;
+         var _loc9_:Vector.<AABB> = this.tugoz.nyrimobo;
          var _loc10_:int = 0;
          while(_loc10_ < param3)
          {

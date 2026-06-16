@@ -1,11 +1,14 @@
 package alternativa.gfx.core
 {
    import flash.display3D.textures.TextureBase;
+   import alternativa.gfx.alternativagfx;
    
+   use namespace alternativagfx;
+
    public class TextureResource extends Resource
    {
       
-      §§namespace("http://alternativaplatform.com/en/alternativagfx") var tylu:Vector.<TextureBase> = new Vector.<TextureBase>(4);
+      alternativagfx var tylu:Vector.<TextureBase> = new Vector.<TextureBase>(4);
       
       public function TextureResource()
       {

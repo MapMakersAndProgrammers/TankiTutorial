@@ -244,7 +244,7 @@ package alternativa.tanks.vehicles.tank
             _loc4_.katuf = this;
             this.hogys = new sagokibo(_loc4_);
          }
-         var _loc3_:finajylom = param2.bet();
+         var _loc3_:finajylom = param2.clone();
          _loc3_.rudi(0.5);
          vywamy.fyb(param1,_loc3_,this.hogys.body.wofurys);
          this.hogys.body.tuwykus = param1;

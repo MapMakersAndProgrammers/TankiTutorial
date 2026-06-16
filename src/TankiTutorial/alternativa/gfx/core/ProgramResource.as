@@ -3,11 +3,14 @@ package alternativa.gfx.core
    import flash.display3D.Context3D;
    import flash.display3D.Program3D;
    import flash.utils.ByteArray;
+   import alternativa.gfx.alternativagfx;
    
+   use namespace alternativagfx;
+
    public class ProgramResource extends Resource
    {
       
-      §§namespace("http://alternativaplatform.com/en/alternativagfx") var tecemyl:Vector.<Program3D> = new Vector.<Program3D>(4);
+      alternativagfx var tecemyl:Vector.<Program3D> = new Vector.<Program3D>(4);
       
       private var lugak:ByteArray;
       
@@ -63,13 +66,13 @@ package alternativa.gfx.core
          return this.lugak != null && this.cajaq != null;
       }
       
-      override §§namespace("http://alternativaplatform.com/en/alternativagfx") function create(context:Context3D, stage3DIndex:int) : void
+      override alternativagfx function create(context:Context3D, stage3DIndex:int) : void
       {
          super.create(context,stage3DIndex);
          this.tecemyl[stage3DIndex] = context.createProgram();
       }
       
-      override §§namespace("http://alternativaplatform.com/en/alternativagfx") function upload(stage3DIndex:int) : void
+      override alternativagfx function upload(stage3DIndex:int) : void
       {
          super.upload(stage3DIndex);
          Program3D(this.tecemyl[stage3DIndex]).upload(this.vertexProgram,this.fragmentProgram);

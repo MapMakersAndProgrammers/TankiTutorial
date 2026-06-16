@@ -1,7 +1,7 @@
 package alternativa.engine3d.objects
 {
-   import §5e§.§-!$§;
-   import §5e§.§`c§;
+   import alternativa.gfx.core.VertexBufferResource;
+   import alternativa.gfx.core.IndexBufferResource;
    import alternativa.engine3d.alternativa3d;
    import alternativa.engine3d.core.Camera3D;
    import alternativa.engine3d.core.Debug;
@@ -32,9 +32,9 @@ package alternativa.engine3d.objects
       
       alternativa3d var faces:Vector.<Face> = new Vector.<Face>();
       
-      alternativa3d var vertexBuffer:§-!$§;
+      alternativa3d var vertexBuffer:VertexBufferResource;
       
-      alternativa3d var indexBuffer:§`c§;
+      alternativa3d var indexBuffer:IndexBufferResource;
       
       alternativa3d var numTriangles:int;
       
@@ -787,7 +787,7 @@ package alternativa.engine3d.objects
                vertex.index = vertsCount;
                vertsCount++;
             }
-            this.vertexBuffer = new §-!$§(verts,8);
+            this.vertexBuffer = new VertexBufferResource(verts,8);
             inds = new Vector.<uint>();
             indsLen = 0;
             this.numTriangles = 0;
@@ -810,7 +810,7 @@ package alternativa.engine3d.objects
                   ++this.numTriangles;
                }
             }
-            this.indexBuffer = new §`c§(inds);
+            this.indexBuffer = new IndexBufferResource(inds);
          }
       }
       
@@ -818,9 +818,9 @@ package alternativa.engine3d.objects
       {
          if(this.vertexBuffer != null)
          {
-            this.vertexBuffer.§[P§();
+            this.vertexBuffer.dispose();
             this.vertexBuffer = null;
-            this.indexBuffer.§[P§();
+            this.indexBuffer.dispose();
             this.indexBuffer = null;
             this.numTriangles = 0;
          }

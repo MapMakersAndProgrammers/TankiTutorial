@@ -3,7 +3,7 @@ package alternativa.physics
    import alternativa.engine3d.core.Object3D;
    import alternativa.engine3d.objects.Mesh;
    import alternativa.physics.collision.CollisionShape;
-   import alternativa.physics.collision.types.dudyqo;
+   import alternativa.physics.collision.types.AABB;
    import alternativa.tanks.battle.PhysicsController;
    import alternativa.tanks.battle.PhysicsInterpolator;
    import alternativa.tanks.battle.triggers.Triggers;
@@ -99,13 +99,13 @@ package alternativa.physics
       
       public function build() : void
       {
-         var _loc1_:dudyqo = null;
+         var _loc1_:AABB = null;
          var _loc2_:Number = NaN;
          if(this.juzote)
          {
-            _loc1_ = new dudyqo();
+            _loc1_ = new AABB();
             _loc2_ = 200000;
-            _loc1_.wigikot(-_loc2_,-_loc2_,-_loc2_,_loc2_,_loc2_,_loc2_);
+            _loc1_.setSize(-_loc2_,-_loc2_,-_loc2_,_loc2_,_loc2_,_loc2_);
             this.secakesem.nonolit(this.kodasy,_loc1_);
             this.juzote = false;
          }

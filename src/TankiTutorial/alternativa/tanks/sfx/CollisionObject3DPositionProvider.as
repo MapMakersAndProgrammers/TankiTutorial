@@ -6,7 +6,7 @@ package alternativa.tanks.sfx
    import hygal.nufaneqog;
    import kefy.Wopowur;
    import kefy.fare;
-   import kihi.qedozeze;
+   import alternativa.physics.collision.types.qedozeze;
    import pekiv.sumik;
    import zicy.nocyquk;
    

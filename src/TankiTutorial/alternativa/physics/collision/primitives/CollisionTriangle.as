@@ -4,7 +4,7 @@ package alternativa.physics.collision.primitives
    import alternativa.math.Vector3;
    import alternativa.physics.PhysicsMaterial;
    import alternativa.physics.collision.CollisionShape;
-   import alternativa.physics.collision.types.dudyqo;
+   import alternativa.physics.collision.types.AABB;
    
    public class CollisionTriangle extends CollisionShape
    {
@@ -27,11 +27,11 @@ package alternativa.physics.collision.primitives
          this.initVertices(param1,param2,param3);
       }
       
-      override public function calculateAABB() : dudyqo
+      override public function calculateAABB() : AABB
       {
          var _loc4_:Number = NaN;
          var _loc5_:Number = NaN;
-         var _loc1_:dudyqo = this.raruluk;
+         var _loc1_:AABB = this.raruluk;
          var _loc2_:Matrix4 = this.wet;
          var _loc3_:Number = 0.005;
          var _loc6_:Number = _loc3_ * _loc2_.sivy;

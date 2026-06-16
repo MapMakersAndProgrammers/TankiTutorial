@@ -1,8 +1,8 @@
-package kihi
+package alternativa.physics.collision.types
 {
    import flash.utils.getQualifiedClassName;
    
-   public class dudyqo
+   public class AABB
    {
       
       public var cubegyw:Number = 1e+308;
@@ -17,12 +17,12 @@ package kihi
       
       public var zepoci:Number = -1e+308;
       
-      public function dudyqo()
+      public function AABB()
       {
          super();
       }
       
-      public function wigikot(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number) : void
+      public function setSize(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number) : void
       {
          this.cubegyw = param1;
          this.nicomosa = param2;
@@ -32,7 +32,7 @@ package kihi
          this.zepoci = param6;
       }
       
-      public function fajabym(param1:dudyqo) : void
+      public function addBoundBox(param1:AABB) : void
       {
          this.cubegyw = param1.cubegyw < this.cubegyw ? param1.cubegyw : this.cubegyw;
          this.nicomosa = param1.nicomosa < this.nicomosa ? param1.nicomosa : this.nicomosa;
@@ -42,7 +42,7 @@ package kihi
          this.zepoci = param1.zepoci > this.zepoci ? param1.zepoci : this.zepoci;
       }
       
-      public function sediw(param1:Number, param2:Number, param3:Number) : void
+      public function addPoint(param1:Number, param2:Number, param3:Number) : void
       {
          if(param1 < this.cubegyw)
          {
@@ -70,7 +70,7 @@ package kihi
          }
       }
       
-      public function pyjerupof() : void
+      public function infinity() : void
       {
          this.cubegyw = 1e+308;
          this.nicomosa = 1e+308;
@@ -80,12 +80,12 @@ package kihi
          this.zepoci = -1e+308;
       }
       
-      public function hoguqatec(param1:dudyqo, param2:Number) : Boolean
+      public function intersects(param1:AABB, param2:Number) : Boolean
       {
          return !(this.cubegyw > param1.jys + param2 || this.jys < param1.cubegyw - param2 || this.nicomosa > param1.juri + param2 || this.juri < param1.nicomosa - param2 || this.gesuwi > param1.zepoci + param2 || this.zepoci < param1.gesuwi - param2);
       }
       
-      public function hyr(param1:dudyqo) : void
+      public function copyFrom(param1:AABB) : void
       {
          this.cubegyw = param1.cubegyw;
          this.nicomosa = param1.nicomosa;
@@ -95,29 +95,29 @@ package kihi
          this.zepoci = param1.zepoci;
       }
       
-      public function bet() : dudyqo
+      public function clone() : AABB
       {
-         var _loc1_:dudyqo = new dudyqo();
-         _loc1_.hyr(this);
+         var _loc1_:AABB = new AABB();
+         _loc1_.copyFrom(this);
          return _loc1_;
       }
       
-      public function bojo() : Number
+      public function getSizeX() : Number
       {
          return this.jys - this.cubegyw;
       }
       
-      public function vywudyqit() : Number
+      public function getSizeY() : Number
       {
          return this.juri - this.nicomosa;
       }
       
-      public function kul() : Number
+      public function getSizeZ() : Number
       {
          return this.zepoci - this.gesuwi;
       }
       
-      public function nuw() : String
+      public function toString() : String
       {
          return getQualifiedClassName(this) + "(" + this.cubegyw.toFixed(3) + ", " + this.nicomosa.toFixed(3) + ", " + this.gesuwi.toFixed(3) + ": " + this.jys.toFixed(3) + ", " + this.juri.toFixed(3) + ", " + this.zepoci.toFixed(3) + ")";
       }

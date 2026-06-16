@@ -10,7 +10,7 @@ package alternativa.tanks.sfx.twins
    import kefy.Wopowur;
    import kefy.fare;
    import kefy.lalyna;
-   import kihi.qedozeze;
+   import alternativa.physics.collision.types.qedozeze;
    import kulo.huv;
    import alternativa.tanks.battle.litavepot;
    import alternativa.tanks.battle.qujimowo;

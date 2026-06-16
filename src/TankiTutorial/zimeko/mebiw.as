@@ -5,8 +5,8 @@ package zimeko
    import daz.hah;
    import gafaduzuw.finajylom;
    import gafaduzuw.fode;
-   import kihi.dudyqo;
-   import kihi.qedozeze;
+   import alternativa.physics.collision.types.AABB;
+   import alternativa.physics.collision.types.qedozeze;
    import lagysyz.cil;
    import lagysyz.labeja;
    import lagysyz.rejolymu;
@@ -34,7 +34,7 @@ package zimeko
       
       private const mydip:qedozeze = new qedozeze();
       
-      private const lukej:dudyqo = new dudyqo();
+      private const lukej:AABB = new AABB();
       
       private const pupicic:Vector.<gyhu> = new Vector.<gyhu>();
       
@@ -69,7 +69,7 @@ package zimeko
          this.kobet.midorofic = false;
       }
       
-      public function nonolit(param1:Vector.<dovabaf>, param2:dudyqo = null) : void
+      public function nonolit(param1:Vector.<dovabaf>, param2:AABB = null) : void
       {
          var _loc3_:dovabaf = null;
          for each(_loc3_ in param1)
@@ -185,7 +185,7 @@ package zimeko
             _loc6_ = this.cubajedid[_loc5_];
             _loc7_ = param1.body;
             _loc8_ = _loc6_.body;
-            if(!(Boolean(_loc7_.vowymov) && Boolean(_loc8_.vowymov)) && Boolean(_loc7_.raruluk.hoguqatec(_loc8_.raruluk,luculeqa)))
+            if(!(Boolean(_loc7_.vowymov) && Boolean(_loc8_.vowymov)) && Boolean(_loc7_.raruluk.intersects(_loc8_.raruluk,luculeqa)))
             {
                this.pabegyqo(param1.kyripama,_loc6_.kyripama,this.pupicic);
                _loc9_ = int(this.pupicic.length);
@@ -241,7 +241,7 @@ package zimeko
          var _loc9_:dovabaf = null;
          var _loc10_:int = 0;
          var _loc11_:hah = null;
-         if(param1.raruluk.hoguqatec(param2.raruluk,luculeqa))
+         if(param1.raruluk.intersects(param2.raruluk,luculeqa))
          {
             _loc4_ = int(param1.kizuvam);
             _loc5_ = param1.hebevy;
@@ -281,7 +281,7 @@ package zimeko
          {
             return;
          }
-         if(!param1.raruluk.hoguqatec(param2.raruluk,luculeqa))
+         if(!param1.raruluk.intersects(param2.raruluk,luculeqa))
          {
             return;
          }
@@ -299,7 +299,7 @@ package zimeko
          {
             return false;
          }
-         if(!param1.raruluk.hoguqatec(param2.raruluk,luculeqa))
+         if(!param1.raruluk.intersects(param2.raruluk,luculeqa))
          {
             return false;
          }
@@ -493,7 +493,7 @@ package zimeko
       {
          var _loc13_:sagokibo = null;
          var _loc14_:fyweci = null;
-         var _loc15_:dudyqo = null;
+         var _loc15_:AABB = null;
          var _loc16_:int = 0;
          var _loc17_:dovabaf = null;
          var _loc18_:Number = NaN;
@@ -579,7 +579,7 @@ package zimeko
          return true;
       }
       
-      private function luweb(param1:finajylom, param2:finajylom, param3:dudyqo, param4:pakokur) : Boolean
+      private function luweb(param1:finajylom, param2:finajylom, param3:AABB, param4:pakokur) : Boolean
       {
          var _loc5_:Number = NaN;
          var _loc6_:Number = NaN;

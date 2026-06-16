@@ -11,7 +11,7 @@ package alternativa.tanks.sfx.flamethrower
    import hygal.nufaneqog;
    import kefy.Wopowur;
    import kefy.fare;
-   import kihi.qedozeze;
+   import alternativa.physics.collision.types.qedozeze;
    import alternativa.tanks.sfx.bowu;
    import alternativa.tanks.sfx.dosu;
    import alternativa.tanks.sfx.pybalutu;

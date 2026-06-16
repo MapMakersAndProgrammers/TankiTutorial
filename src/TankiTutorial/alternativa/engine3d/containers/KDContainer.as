@@ -1,8 +1,8 @@
 package alternativa.engine3d.containers
 {
-   import §5e§.§-!$§;
-   import §5e§.§0!>§;
-   import §5e§.§`c§;
+   import alternativa.gfx.core.VertexBufferResource;
+   import alternativa.gfx.core.Device;
+   import alternativa.gfx.core.IndexBufferResource;
    import alternativa.engine3d.alternativa3d;
    import alternativa.engine3d.core.Camera3D;
    import alternativa.engine3d.core.Debug;
@@ -103,9 +103,9 @@ package alternativa.engine3d.containers
       
       private var transparentLength:int = 0;
       
-      private var receiversVertexBuffers:Vector.<§-!$§> = new Vector.<§-!$§>();
+      private var receiversVertexBuffers:Vector.<VertexBufferResource> = new Vector.<VertexBufferResource>();
       
-      private var receiversIndexBuffers:Vector.<§`c§> = new Vector.<§`c§>();
+      private var receiversIndexBuffers:Vector.<IndexBufferResource> = new Vector.<IndexBufferResource>();
       
       private var context3DIds:Vector.<int> = Vector.<int>([-1,-1,-1,-1]);
       
@@ -341,8 +341,8 @@ package alternativa.engine3d.containers
             this.root.createReceivers(vertices,indices);
             for(i = 0; i < vertices.length; i++)
             {
-               this.receiversVertexBuffers[i] = new §-!$§(vertices[i],3);
-               this.receiversIndexBuffers[i] = new §`c§(indices[i]);
+               this.receiversVertexBuffers[i] = new VertexBufferResource(vertices[i],3);
+               this.receiversIndexBuffers[i] = new IndexBufferResource(indices[i]);
             }
          }
       }
@@ -360,15 +360,15 @@ package alternativa.engine3d.containers
             textureMaterial = key as TextureMaterial;
             if(textureMaterial._texture != null)
             {
-               textureMaterial.textureResource.§[!§();
+               textureMaterial.textureResource.reset();
             }
             if(textureMaterial._textureATF != null)
             {
-               textureMaterial.textureATFResource.§[!§();
+               textureMaterial.textureATFResource.reset();
             }
             if(textureMaterial._textureATFAlpha != null)
             {
-               textureMaterial.textureATFAlphaResource.§[!§();
+               textureMaterial.textureATFAlphaResource.reset();
             }
          }
          for(object = this.opaqueList; object != null; )
@@ -378,11 +378,11 @@ package alternativa.engine3d.containers
                mesh = object as Mesh;
                if(mesh.vertexBuffer != null)
                {
-                  mesh.vertexBuffer.§[!§();
+                  mesh.vertexBuffer.reset();
                }
                if(mesh.indexBuffer != null)
                {
-                  mesh.indexBuffer.§[!§();
+                  mesh.indexBuffer.reset();
                }
             }
             else if(object is BSP)
@@ -390,11 +390,11 @@ package alternativa.engine3d.containers
                bsp = object as BSP;
                if(bsp.vertexBuffer != null)
                {
-                  bsp.vertexBuffer.§[!§();
+                  bsp.vertexBuffer.reset();
                }
                if(bsp.indexBuffer != null)
                {
-                  bsp.indexBuffer.§[!§();
+                  bsp.indexBuffer.reset();
                }
             }
             object = object.next;
@@ -407,11 +407,11 @@ package alternativa.engine3d.containers
                mesh = object as Mesh;
                if(mesh.vertexBuffer != null)
                {
-                  mesh.vertexBuffer.§[!§();
+                  mesh.vertexBuffer.reset();
                }
                if(mesh.indexBuffer != null)
                {
-                  mesh.indexBuffer.§[!§();
+                  mesh.indexBuffer.reset();
                }
             }
             else if(object is BSP)
@@ -419,11 +419,11 @@ package alternativa.engine3d.containers
                bsp = object as BSP;
                if(bsp.vertexBuffer != null)
                {
-                  bsp.vertexBuffer.§[!§();
+                  bsp.vertexBuffer.reset();
                }
                if(bsp.indexBuffer != null)
                {
-                  bsp.indexBuffer.§[!§();
+                  bsp.indexBuffer.reset();
                }
             }
             i++;
@@ -439,8 +439,8 @@ package alternativa.engine3d.containers
          }
          for(i = 0; i < this.receiversVertexBuffers.length; i++)
          {
-            §-!$§(this.receiversVertexBuffers[i]).§[P§();
-            §`c§(this.receiversIndexBuffers[i]).§[P§();
+            VertexBufferResource(this.receiversVertexBuffers[i]).dispose();
+            IndexBufferResource(this.receiversIndexBuffers[i]).dispose();
          }
          this.receiversVertexBuffers.length = 0;
          this.receiversIndexBuffers.length = 0;
@@ -1371,7 +1371,7 @@ package alternativa.engine3d.containers
          return result;
       }
       
-      private function uploadResources(device:§0!>§) : void
+      private function uploadResources(device:Device) : void
       {
          var key:* = undefined;
          var object:Object3D = null;
@@ -1379,23 +1379,23 @@ package alternativa.engine3d.containers
          var bsp:BSP = null;
          var i:int = 0;
          var textureMaterial:TextureMaterial = null;
-         if(this.context3DIds[device.§`N§] != device.§@!3§)
+         if(this.context3DIds[device.stage3DIndex] != device.context3DId)
          {
-            this.context3DIds[device.§`N§] = device.§@!3§;
+            this.context3DIds[device.stage3DIndex] = device.context3DId;
             for(key in this.materials)
             {
                textureMaterial = key as TextureMaterial;
                if(textureMaterial._texture != null)
                {
-                  device.§?^§(textureMaterial.textureResource);
+                  device.uploadResource(textureMaterial.textureResource);
                }
                if(textureMaterial._textureATF != null)
                {
-                  device.§?^§(textureMaterial.textureATFResource);
+                  device.uploadResource(textureMaterial.textureATFResource);
                }
                if(textureMaterial._textureATFAlpha != null)
                {
-                  device.§?^§(textureMaterial.textureATFAlphaResource);
+                  device.uploadResource(textureMaterial.textureATFAlphaResource);
                }
             }
             for(object = this.opaqueList; object != null; )
@@ -1404,15 +1404,15 @@ package alternativa.engine3d.containers
                {
                   mesh = object as Mesh;
                   mesh.prepareResources();
-                  device.§?^§(mesh.vertexBuffer);
-                  device.§?^§(mesh.indexBuffer);
+                  device.uploadResource(mesh.vertexBuffer);
+                  device.uploadResource(mesh.indexBuffer);
                }
                else if(object is BSP)
                {
                   bsp = object as BSP;
                   bsp.prepareResources();
-                  device.§?^§(bsp.vertexBuffer);
-                  device.§?^§(bsp.indexBuffer);
+                  device.uploadResource(bsp.vertexBuffer);
+                  device.uploadResource(bsp.indexBuffer);
                }
                object = object.next;
             }
@@ -1423,22 +1423,22 @@ package alternativa.engine3d.containers
                {
                   mesh = object as Mesh;
                   mesh.prepareResources();
-                  device.§?^§(mesh.vertexBuffer);
-                  device.§?^§(mesh.indexBuffer);
+                  device.uploadResource(mesh.vertexBuffer);
+                  device.uploadResource(mesh.indexBuffer);
                }
                else if(object is BSP)
                {
                   bsp = object as BSP;
                   bsp.prepareResources();
-                  device.§?^§(bsp.vertexBuffer);
-                  device.§?^§(bsp.indexBuffer);
+                  device.uploadResource(bsp.vertexBuffer);
+                  device.uploadResource(bsp.indexBuffer);
                }
                i++;
             }
             for(i = 0; i < this.receiversVertexBuffers.length; i++)
             {
-               device.§?^§(this.receiversVertexBuffers[i]);
-               device.§?^§(this.receiversIndexBuffers[i]);
+               device.uploadResource(this.receiversVertexBuffers[i]);
+               device.uploadResource(this.receiversIndexBuffers[i]);
             }
          }
       }
@@ -3146,76 +3146,70 @@ package alternativa.engine3d.containers
                }
             }
          }
-         for(var i:int = 0; i < this.numOccluders; )
+         var i:int = 0;
+         while(i < this.numOccluders)
          {
             occluder = this.occluders[i];
-            while(true)
+            while(occluder != null)
             {
-               if(occluder != null)
+               if(occluder.x >= 0)
                {
-                  if(occluder.x >= 0)
-                  {
-                     if(occluder.y >= 0)
-                     {
-                        if(occluder.z >= 0)
-                        {
-                           if(boundMaxX * occluder.x + boundMaxY * occluder.y + boundMaxZ * occluder.z > occluder.offset)
-                           {
-                              addr115c:
-                              if(occluder == null)
-                              {
-                                 return -1;
-                              }
-                              break;
-                           }
-                        }
-                        else if(boundMaxX * occluder.x + boundMaxY * occluder.y + boundMinZ * occluder.z > occluder.offset)
-                        {
-                           §§goto(addr115c);
-                        }
-                     }
-                     else if(occluder.z >= 0)
-                     {
-                        if(boundMaxX * occluder.x + boundMinY * occluder.y + boundMaxZ * occluder.z > occluder.offset)
-                        {
-                           §§goto(addr115c);
-                        }
-                     }
-                     else if(boundMaxX * occluder.x + boundMinY * occluder.y + boundMinZ * occluder.z > occluder.offset)
-                     {
-                        §§goto(addr115c);
-                     }
-                     continue;
-                  }
                   if(occluder.y >= 0)
                   {
                      if(occluder.z >= 0)
                      {
-                        if(boundMinX * occluder.x + boundMaxY * occluder.y + boundMaxZ * occluder.z > occluder.offset)
+                        if(boundMaxX * occluder.x + boundMaxY * occluder.y + boundMaxZ * occluder.z > occluder.offset)
                         {
-                           §§goto(addr115c);
+                           break;
                         }
                      }
-                     else if(boundMinX * occluder.x + boundMaxY * occluder.y + boundMinZ * occluder.z > occluder.offset)
+                     else if(boundMaxX * occluder.x + boundMaxY * occluder.y + boundMinZ * occluder.z > occluder.offset)
                      {
-                        §§goto(addr115c);
-                     }
-                     continue;
-                  }
-                  if(occluder.z >= 0)
-                  {
-                     if(boundMinX * occluder.x + boundMinY * occluder.y + boundMaxZ * occluder.z <= occluder.offset)
-                     {
-                        continue;
+                        break;
                      }
                   }
-                  else if(boundMinX * occluder.x + boundMinY * occluder.y + boundMinZ * occluder.z <= occluder.offset)
+                  else if(occluder.z >= 0)
                   {
-                     continue;
+                     if(boundMaxX * occluder.x + boundMinY * occluder.y + boundMaxZ * occluder.z > occluder.offset)
+                     {
+                        break;
+                     }
+                  }
+                  else if(boundMaxX * occluder.x + boundMinY * occluder.y + boundMinZ * occluder.z > occluder.offset)
+                  {
+                     break;
                   }
                }
-               §§goto(addr115c);
+               else if(occluder.y >= 0)
+               {
+                  if(occluder.z >= 0)
+                  {
+                     if(boundMinX * occluder.x + boundMaxY * occluder.y + boundMaxZ * occluder.z > occluder.offset)
+                     {
+                        break;
+                     }
+                  }
+                  else if(boundMinX * occluder.x + boundMaxY * occluder.y + boundMinZ * occluder.z > occluder.offset)
+                  {
+                     break;
+                  }
+               }
+               else if(occluder.z >= 0)
+               {
+                  if(boundMinX * occluder.x + boundMinY * occluder.y + boundMaxZ * occluder.z > occluder.offset)
+                  {
+                     break;
+                  }
+               }
+               else if(boundMinX * occluder.x + boundMinY * occluder.y + boundMinZ * occluder.z > occluder.offset)
+               {
+                  break;
+               }
                occluder = occluder.next;
+            }
+            if(occluder == null)
+            {
+               return -1;
             }
             i++;
          }
@@ -3225,76 +3219,70 @@ package alternativa.engine3d.containers
       private function occludeGeometry(camera:Camera3D, geometry:VG) : Boolean
       {
          var occluder:Vertex = null;
-         for(var i:int = geometry.numOccluders; i < this.numOccluders; )
+         var i:int = geometry.numOccluders;
+         while(i < this.numOccluders)
          {
             occluder = this.occluders[i];
-            while(true)
+            while(occluder != null)
             {
-               if(occluder != null)
+               if(occluder.x >= 0)
                {
-                  if(occluder.x >= 0)
-                  {
-                     if(occluder.y >= 0)
-                     {
-                        if(occluder.z >= 0)
-                        {
-                           if(geometry.boundMaxX * occluder.x + geometry.boundMaxY * occluder.y + geometry.boundMaxZ * occluder.z > occluder.offset)
-                           {
-                              addr022b:
-                              if(occluder == null)
-                              {
-                                 return true;
-                              }
-                              break;
-                           }
-                        }
-                        else if(geometry.boundMaxX * occluder.x + geometry.boundMaxY * occluder.y + geometry.boundMinZ * occluder.z > occluder.offset)
-                        {
-                           §§goto(addr022b);
-                        }
-                     }
-                     else if(occluder.z >= 0)
-                     {
-                        if(geometry.boundMaxX * occluder.x + geometry.boundMinY * occluder.y + geometry.boundMaxZ * occluder.z > occluder.offset)
-                        {
-                           §§goto(addr022b);
-                        }
-                     }
-                     else if(geometry.boundMaxX * occluder.x + geometry.boundMinY * occluder.y + geometry.boundMinZ * occluder.z > occluder.offset)
-                     {
-                        §§goto(addr022b);
-                     }
-                     continue;
-                  }
                   if(occluder.y >= 0)
                   {
                      if(occluder.z >= 0)
                      {
-                        if(geometry.boundMinX * occluder.x + geometry.boundMaxY * occluder.y + geometry.boundMaxZ * occluder.z > occluder.offset)
+                        if(geometry.boundMaxX * occluder.x + geometry.boundMaxY * occluder.y + geometry.boundMaxZ * occluder.z > occluder.offset)
                         {
-                           §§goto(addr022b);
+                           break;
                         }
                      }
-                     else if(geometry.boundMinX * occluder.x + geometry.boundMaxY * occluder.y + geometry.boundMinZ * occluder.z > occluder.offset)
+                     else if(geometry.boundMaxX * occluder.x + geometry.boundMaxY * occluder.y + geometry.boundMinZ * occluder.z > occluder.offset)
                      {
-                        §§goto(addr022b);
-                     }
-                     continue;
-                  }
-                  if(occluder.z >= 0)
-                  {
-                     if(geometry.boundMinX * occluder.x + geometry.boundMinY * occluder.y + geometry.boundMaxZ * occluder.z <= occluder.offset)
-                     {
-                        continue;
+                        break;
                      }
                   }
-                  else if(geometry.boundMinX * occluder.x + geometry.boundMinY * occluder.y + geometry.boundMinZ * occluder.z <= occluder.offset)
+                  else if(occluder.z >= 0)
                   {
-                     continue;
+                     if(geometry.boundMaxX * occluder.x + geometry.boundMinY * occluder.y + geometry.boundMaxZ * occluder.z > occluder.offset)
+                     {
+                        break;
+                     }
+                  }
+                  else if(geometry.boundMaxX * occluder.x + geometry.boundMinY * occluder.y + geometry.boundMinZ * occluder.z > occluder.offset)
+                  {
+                     break;
                   }
                }
-               §§goto(addr022b);
+               else if(occluder.y >= 0)
+               {
+                  if(occluder.z >= 0)
+                  {
+                     if(geometry.boundMinX * occluder.x + geometry.boundMaxY * occluder.y + geometry.boundMaxZ * occluder.z > occluder.offset)
+                     {
+                        break;
+                     }
+                  }
+                  else if(geometry.boundMinX * occluder.x + geometry.boundMaxY * occluder.y + geometry.boundMinZ * occluder.z > occluder.offset)
+                  {
+                     break;
+                  }
+               }
+               else if(occluder.z >= 0)
+               {
+                  if(geometry.boundMinX * occluder.x + geometry.boundMinY * occluder.y + geometry.boundMaxZ * occluder.z > occluder.offset)
+                  {
+                     break;
+                  }
+               }
+               else if(geometry.boundMinX * occluder.x + geometry.boundMinY * occluder.y + geometry.boundMinZ * occluder.z > occluder.offset)
+               {
+                  break;
+               }
                occluder = occluder.next;
+            }
+            if(occluder == null)
+            {
+               return true;
             }
             i++;
          }

@@ -111,7 +111,7 @@ package tutorial
       
       public static const ruda:Vector3D = new Vector3D(-0.6,-0.5,-1);
       
-      public static const mawoqu:int = Alternativa3D.mawoqu.split(".")[1];
+      public static const version:int = Alternativa3D.version.split(".")[1];
       
       public static var wuhibota:Vector.<Vector3> = new Vector.<Vector3>();
       
@@ -185,7 +185,7 @@ package tutorial
          _loc9_ = _loc11_ & 0xFF;
          var _loc12_:int = color(_loc4_ - _loc7_,_loc5_ - _loc8_,_loc6_ - _loc9_);
          var _loc13_:int = color(_loc7_,_loc8_,_loc9_);
-         if(Boolean(Shared.gpu) && mawoqu >= 11 && !Shared.constrained && (Shared.navigator != "Chrome" || int(Shared.navigatorVersion.split(".")[0]) > 23))
+         if(Boolean(Shared.gpu) && version >= 11 && !Shared.constrained && (Shared.navigator != "Chrome" || int(Shared.navigatorVersion.split(".")[0]) > 23))
          {
             butefu.fogNear = 0;
             butefu.fogFar = 10000;

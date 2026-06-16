@@ -2,7 +2,10 @@ package alternativa.gfx.core
 {
    import flash.display3D.Context3D;
    import flash.display3D.Context3DTextureFormat;
+   import alternativa.gfx.alternativagfx;
    
+   use namespace alternativagfx;
+
    public class RenderTargetTextureResource extends TextureResource
    {
       
@@ -40,7 +43,7 @@ package alternativa.gfx.core
          return this.rubajam;
       }
       
-      override §§namespace("http://alternativaplatform.com/en/alternativagfx") function create(context:Context3D, stage3DIndex:int) : void
+      override alternativagfx function create(context:Context3D, stage3DIndex:int) : void
       {
          super.create(context,stage3DIndex);
          tylu[stage3DIndex] = context.createTexture(this.cof,this.gugap,Context3DTextureFormat.BGRA,true);

@@ -7,7 +7,10 @@ package alternativa.gfx.core
    import flash.geom.Matrix;
    import flash.geom.Point;
    import flash.geom.Rectangle;
+   import alternativa.gfx.alternativagfx;
    
+   use namespace alternativagfx;
+
    public class BitmapTextureResource extends TextureResource
    {
       
@@ -103,13 +106,13 @@ package alternativa.gfx.core
          return this.byfap != null;
       }
       
-      override §§namespace("http://alternativaplatform.com/en/alternativagfx") function create(context:Context3D, stage3DIndex:int) : void
+      override alternativagfx function create(context:Context3D, stage3DIndex:int) : void
       {
          super.create(context,stage3DIndex);
          tylu[stage3DIndex] = context.createTexture(this.req,this.vot,Context3DTextureFormat.BGRA,false);
       }
       
-      override §§namespace("http://alternativaplatform.com/en/alternativagfx") function upload(stage3DIndex:int) : void
+      override alternativagfx function upload(stage3DIndex:int) : void
       {
          var source:BitmapData = null;
          var pix:BitmapData = null;

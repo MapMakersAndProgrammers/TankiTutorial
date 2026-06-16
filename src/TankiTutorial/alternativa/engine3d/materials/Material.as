@@ -1,7 +1,7 @@
 package alternativa.engine3d.materials
 {
-   import §5e§.§-!$§;
-   import §5e§.§`c§;
+   import alternativa.gfx.core.VertexBufferResource;
+   import alternativa.gfx.core.IndexBufferResource;
    import alternativa.engine3d.alternativa3d;
    import alternativa.engine3d.core.Camera3D;
    import alternativa.engine3d.core.Face;
@@ -65,7 +65,7 @@ package alternativa.engine3d.materials
          return "[" + className.substr(className.indexOf("::") + 2) + " " + this.name + "]";
       }
       
-      alternativa3d function drawOpaque(camera:Camera3D, vertexBuffer:§-!$§, indexBuffer:§`c§, firstIndex:int, numTriangles:int, object:Object3D) : void
+      alternativa3d function drawOpaque(camera:Camera3D, vertexBuffer:VertexBufferResource, indexBuffer:IndexBufferResource, firstIndex:int, numTriangles:int, object:Object3D) : void
       {
       }
       

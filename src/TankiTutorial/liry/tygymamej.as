@@ -3,7 +3,7 @@ package liry
    import daz.ryh;
    import gafaduzuw.finajylom;
    import gafaduzuw.kyhewil;
-   import kihi.dudyqo;
+   import alternativa.physics.collision.types.AABB;
    import zicy.dovabaf;
    
    public class tygymamej extends dovabaf
@@ -17,10 +17,10 @@ package liry
          this.nezav.disy(param1);
       }
       
-      override public function zety() : dudyqo
+      override public function zety() : AABB
       {
          var _loc1_:kyhewil = null;
-         var _loc2_:dudyqo = null;
+         var _loc2_:AABB = null;
          var _loc3_:Number = NaN;
          var _loc4_:Number = NaN;
          var _loc5_:Number = NaN;
@@ -50,14 +50,14 @@ package liry
          return _loc2_;
       }
       
-      override public function hyr(param1:dovabaf) : dovabaf
+      override public function copyFrom(param1:dovabaf) : dovabaf
       {
          var _loc2_:tygymamej = param1 as tygymamej;
          if(_loc2_ == null)
          {
             return this;
          }
-         super.hyr(_loc2_);
+         super.copyFrom(_loc2_);
          this.nezav.disy(_loc2_.nezav);
          return this;
       }

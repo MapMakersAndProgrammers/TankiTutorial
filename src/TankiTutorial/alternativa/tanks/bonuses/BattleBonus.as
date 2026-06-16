@@ -6,7 +6,7 @@ package alternativa.tanks.bonuses
    import jydanitu.mase;
    import kefy.Wopowur;
    import kefy.fare;
-   import kihi.qedozeze;
+   import alternativa.physics.collision.types.qedozeze;
    import lifyqeq.lojufaqik;
    import lifyqeq.tugawe;
    import alternativa.tanks.battle.litavepot;

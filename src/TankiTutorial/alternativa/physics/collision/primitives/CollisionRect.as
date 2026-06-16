@@ -4,7 +4,7 @@ package alternativa.physics.collision.primitives
    import alternativa.math.Vector3;
    import alternativa.physics.PhysicsMaterial;
    import alternativa.physics.collision.CollisionShape;
-   import alternativa.physics.collision.types.dudyqo;
+   import alternativa.physics.collision.types.AABB;
    
    public class CollisionRect extends CollisionShape
    {
@@ -19,14 +19,14 @@ package alternativa.physics.collision.primitives
          this.nezav.copy(param1);
       }
       
-      override public function calculateAABB() : dudyqo
+      override public function calculateAABB() : AABB
       {
          var _loc1_:Matrix4 = null;
          _loc1_ = wet;
          var _loc2_:Number = _loc1_.gusat < 0 ? -_loc1_.gusat : _loc1_.gusat;
          var _loc3_:Number = _loc1_.cydop < 0 ? -_loc1_.cydop : _loc1_.cydop;
          var _loc4_:Number = _loc1_.sivy < 0 ? -_loc1_.sivy : _loc1_.sivy;
-         var _loc5_:dudyqo = this.raruluk;
+         var _loc5_:AABB = this.raruluk;
          _loc5_.jys = this.nezav.x * _loc2_ + this.nezav.y * _loc3_ + nabyjyge * _loc4_;
          _loc5_.cubegyw = -_loc5_.jys;
          _loc2_ = _loc1_.sig < 0 ? -_loc1_.sig : _loc1_.sig;

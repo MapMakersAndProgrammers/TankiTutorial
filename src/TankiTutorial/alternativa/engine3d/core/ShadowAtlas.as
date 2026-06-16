@@ -1,10 +1,10 @@
 package alternativa.engine3d.core
 {
-   import §5e§.§-!$§;
-   import §5e§.§0!>§;
-   import §5e§.§1!8§;
-   import §5e§.§8B§;
-   import §5e§.§`c§;
+   import alternativa.gfx.core.VertexBufferResource;
+   import alternativa.gfx.core.Device;
+   import alternativa.gfx.core.RenderTargetTextureResource;
+   import alternativa.gfx.core.ProgramResource;
+   import alternativa.gfx.core.IndexBufferResource;
    import alternativa.engine3d.alternativa3d;
    import alternativa.engine3d.materials.Material;
    import flash.display3D.Context3DProgramType;
@@ -20,9 +20,9 @@ package alternativa.engine3d.core
       
       private static var blurPrograms:Array = new Array();
       
-      private static var blurVertexBuffer:§-!$§ = new §-!$§(Vector.<Number>([-1,1,0,0,0,-1,-1,0,0,1,1,-1,0,1,1,1,1,0,1,0]),5);
+      private static var blurVertexBuffer:VertexBufferResource = new VertexBufferResource(Vector.<Number>([-1,1,0,0,0,-1,-1,0,0,1,1,-1,0,1,1,1,1,0,1,0]),5);
       
-      private static var blurIndexBuffer:§`c§ = new §`c§(Vector.<uint>([0,1,3,2,3,1]));
+      private static var blurIndexBuffer:IndexBufferResource = new IndexBufferResource(Vector.<uint>([0,1,3,2,3,1]));
       
       private static var blurConst:Vector.<Number> = Vector.<Number>([0,0,0,1]);
       
@@ -36,9 +36,9 @@ package alternativa.engine3d.core
       
       private var maps:Array = new Array();
       
-      private var map1:§1!8§;
+      private var map1:RenderTargetTextureResource;
       
-      private var map2:§1!8§;
+      private var map2:RenderTargetTextureResource;
       
       public function ShadowAtlas(mapSize:int, blur:int)
       {
@@ -50,7 +50,7 @@ package alternativa.engine3d.core
       alternativa3d function renderCasters(camera:Camera3D) : void
       {
          var shadow:Shadow = null;
-         var device:§0!>§ = camera.device;
+         var device:Device = camera.device;
          var max:int = sizeLimit / this.mapSize;
          var rows:int = Math.ceil(this.shadowsCount / max);
          var cols:int = this.shadowsCount > max ? max : this.shadowsCount;
@@ -67,13 +67,13 @@ package alternativa.engine3d.core
          this.map2 = this.maps[key2];
          if(this.map1 == null)
          {
-            this.map1 = new §1!8§(cols * this.mapSize,rows * this.mapSize);
-            this.map2 = new §1!8§(cols * this.mapSize,rows * this.mapSize);
+            this.map1 = new RenderTargetTextureResource(cols * this.mapSize,rows * this.mapSize);
+            this.map2 = new RenderTargetTextureResource(cols * this.mapSize,rows * this.mapSize);
             this.maps[key1] = this.map1;
             this.maps[key2] = this.map2;
          }
-         device.§!0§(this.map1,true);
-         device.§9+§(0,0,0,0,0);
+         device.setRenderToTexture(this.map1,true);
+         device.clear(0,0,0,0,0);
          for(var i:int = 0; i < this.shadowsCount; i++)
          {
             shadow = this.shadows[i];
@@ -88,28 +88,28 @@ package alternativa.engine3d.core
       
       alternativa3d function renderBlur(camera:Camera3D) : void
       {
-         var device:§0!>§ = camera.device;
+         var device:Device = camera.device;
          if(this.blur > 0)
          {
             blurConst[2] = 1 + this.blur + this.blur;
-            device.§"J§(0,blurVertexBuffer,0,Context3DVertexBufferFormat.FLOAT_3);
-            device.§"J§(1,blurVertexBuffer,3,Context3DVertexBufferFormat.FLOAT_2);
-            device.§!0§(this.map2,false);
-            device.§9+§(0,0,0,0);
-            device.§"W§(this.getBlurProgram(1,this.blur));
-            device.§4! §(0,this.map1);
-            blurConst[0] = 1 / this.map1.§[]§;
-            blurConst[1] = this.blur / this.map1.§[]§;
-            device.§%&§(Context3DProgramType.FRAGMENT,0,blurConst,1);
-            device.§>c§(blurIndexBuffer,0,2);
-            device.§!0§(this.map1,false);
-            device.§9+§(0,0,0,0);
-            device.§"W§(this.getBlurProgram(2,this.blur));
-            device.§4! §(0,this.map2);
-            blurConst[0] = 1 / this.map1.§'d§;
-            blurConst[1] = this.blur / this.map1.§'d§;
-            device.§%&§(Context3DProgramType.FRAGMENT,0,blurConst,1);
-            device.§>c§(blurIndexBuffer,0,2);
+            device.setVertexBufferAt(0,blurVertexBuffer,0,Context3DVertexBufferFormat.FLOAT_3);
+            device.setVertexBufferAt(1,blurVertexBuffer,3,Context3DVertexBufferFormat.FLOAT_2);
+            device.setRenderToTexture(this.map2,false);
+            device.clear(0,0,0,0);
+            device.setProgram(this.getBlurProgram(1,this.blur));
+            device.setTextureAt(0,this.map1);
+            blurConst[0] = 1 / this.map1.width;
+            blurConst[1] = this.blur / this.map1.width;
+            device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,0,blurConst,1);
+            device.drawTriangles(blurIndexBuffer,0,2);
+            device.setRenderToTexture(this.map1,false);
+            device.clear(0,0,0,0);
+            device.setProgram(this.getBlurProgram(2,this.blur));
+            device.setTextureAt(0,this.map2);
+            blurConst[0] = 1 / this.map1.height;
+            blurConst[1] = this.blur / this.map1.height;
+            device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,0,blurConst,1);
+            device.drawTriangles(blurIndexBuffer,0,2);
          }
       }
       
@@ -125,14 +125,14 @@ package alternativa.engine3d.core
          this.shadowsCount = 0;
       }
       
-      private function getBlurProgram(pass:int, blur:int) : §8B§
+      private function getBlurProgram(pass:int, blur:int) : ProgramResource
       {
          var vertexProgram:ByteArray = null;
          var i:int = 0;
          var code:Array = null;
          var fragmentProgram:ByteArray = null;
          var key:int = (pass << 16) + blur;
-         var program:§8B§ = blurPrograms[key];
+         var program:ProgramResource = blurPrograms[key];
          if(program == null)
          {
             vertexProgram = Material.compileProgram(Context3DProgramType.VERTEX,["mov op, va0","mov v0, va1"]);
@@ -163,7 +163,7 @@ package alternativa.engine3d.core
                code.push("div ft3.w, ft3.w, fc0.z","mov oc, ft3");
             }
             fragmentProgram = Material.compileProgram(Context3DProgramType.FRAGMENT,code);
-            program = new §8B§(vertexProgram,fragmentProgram);
+            program = new ProgramResource(vertexProgram,fragmentProgram);
             blurPrograms[key] = program;
          }
          return program;

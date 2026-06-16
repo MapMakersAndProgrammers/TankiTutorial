@@ -226,7 +226,7 @@ package alternativa.engine3d.objects
                textureMaterial = this.material as TextureMaterial;
                if(textureMaterial._texture != null)
                {
-                  camera.device.§?^§(textureMaterial.textureResource);
+                  camera.device.uploadResource(textureMaterial.textureResource);
                }
             }
             if(camera.debug && (debug = camera.checkInDebug(this)) > 0)
@@ -263,7 +263,7 @@ package alternativa.engine3d.objects
                textureMaterial = this.material as TextureMaterial;
                if(textureMaterial._texture != null)
                {
-                  camera.device.§?^§(textureMaterial.textureResource);
+                  camera.device.uploadResource(textureMaterial.textureResource);
                }
             }
             face.normalX = 0;

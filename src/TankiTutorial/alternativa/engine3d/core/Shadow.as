@@ -1,10 +1,10 @@
 package alternativa.engine3d.core
 {
-   import §5e§.§-!$§;
-   import §5e§.§0!>§;
-   import §5e§.§8B§;
-   import §5e§.§^i§;
-   import §5e§.§`c§;
+   import alternativa.gfx.core.VertexBufferResource;
+   import alternativa.gfx.core.Device;
+   import alternativa.gfx.core.ProgramResource;
+   import alternativa.gfx.core.TextureResource;
+   import alternativa.gfx.core.IndexBufferResource;
    import alternativa.engine3d.alternativa3d;
    import alternativa.engine3d.lights.DirectionalLight;
    import alternativa.engine3d.materials.Material;
@@ -20,15 +20,15 @@ package alternativa.engine3d.core
    public class Shadow
    {
       
-      private static var casterProgram:§8B§;
+      private static var casterProgram:ProgramResource;
       
-      private static var volumeProgram:§8B§;
+      private static var volumeProgram:ProgramResource;
       
       private static var casterConst:Vector.<Number> = Vector.<Number>([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0]);
       
-      private static var volumeVertexBuffer:§-!$§ = new §-!$§(Vector.<Number>([0,0,0,0,1,0,1,1,0,1,0,0,0,0,1,0,1,1,1,1,1,1,0,1]),3);
+      private static var volumeVertexBuffer:VertexBufferResource = new VertexBufferResource(Vector.<Number>([0,0,0,0,1,0,1,1,0,1,0,0,0,0,1,0,1,1,1,1,1,1,0,1]),3);
       
-      private static var volumeIndexBuffer:§`c§ = new §`c§(Vector.<uint>([0,1,3,2,3,1,7,6,4,5,4,6,4,5,0,1,0,5,3,2,7,6,7,2,0,3,4,7,4,3,5,6,1,2,1,6]));
+      private static var volumeIndexBuffer:IndexBufferResource = new IndexBufferResource(Vector.<uint>([0,1,3,2,3,1,7,6,4,5,4,6,4,5,0,1,0,5,3,2,7,6,7,2,0,3,4,7,4,3,5,6,1,2,1,6]));
       
       private static var volumeTransformConst:Vector.<Number> = new Vector.<Number>(20);
       
@@ -104,7 +104,7 @@ package alternativa.engine3d.core
       
       private var clampConst:Vector.<Number> = new Vector.<Number>(4);
       
-      alternativa3d var texture:§^i§;
+      alternativa3d var texture:TextureResource;
       
       alternativa3d var textureScaleU:Number;
       
@@ -135,16 +135,16 @@ package alternativa.engine3d.core
          this.alpha = alpha;
       }
       
-      alternativa3d static function getCasterProgram() : §8B§
+      alternativa3d static function getCasterProgram() : ProgramResource
       {
          var vertexProgram:ByteArray = null;
          var fragmentProgram:ByteArray = null;
-         var program:§8B§ = casterProgram;
+         var program:ProgramResource = casterProgram;
          if(program == null)
          {
             vertexProgram = Material.compileProgram(Context3DProgramType.VERTEX,["dp4 vt0.x, va0, vc0","dp4 vt0.y, va0, vc1","dp4 vt0.z, va0, vc2","mul vt0.xy, vt0.xy, vc4.xy","add vt0.xy, vt0.xy, vc4.zw","mov op.xyz, vt0.xyz","mov op.w, vc3.w","mov v0.xyz, va0.w","mov v0.w, vt0.z"]);
             fragmentProgram = Material.compileProgram(Context3DProgramType.FRAGMENT,["mov oc, v0"]);
-            program = new §8B§(vertexProgram,fragmentProgram);
+            program = new ProgramResource(vertexProgram,fragmentProgram);
             casterProgram = program;
          }
          return program;
@@ -427,7 +427,7 @@ package alternativa.engine3d.core
       alternativa3d function renderCasters(camera:Camera3D) : void
       {
          var caster:Mesh = null;
-         var device:§0!>§ = camera.device;
+         var device:Device = camera.device;
          var m0:Number = 2 / this.planeSize;
          var m5:Number = -2 / this.planeSize;
          var m10:Number = 1 / (this.light.boundMaxZ - this.attenuation - (this.light.boundMinZ - this.offset));
@@ -454,9 +454,9 @@ package alternativa.engine3d.core
             casterConst[17] = this.textureScaleV;
             casterConst[18] = 2 * this.textureOffsetU - 1 + this.textureScaleU;
             casterConst[19] = -(2 * this.textureOffsetV - 1 + this.textureScaleV);
-            device.§"J§(0,caster.vertexBuffer,0,Context3DVertexBufferFormat.FLOAT_3);
-            device.§%&§(Context3DProgramType.VERTEX,0,casterConst,5,false);
-            device.§>c§(caster.indexBuffer,0,caster.numTriangles);
+            device.setVertexBufferAt(0,caster.vertexBuffer,0,Context3DVertexBufferFormat.FLOAT_3);
+            device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,0,casterConst,5,false);
+            device.drawTriangles(caster.indexBuffer,0,caster.numTriangles);
          }
          this.clampConst[0] = this.textureOffsetU;
          this.clampConst[1] = this.textureOffsetV;
@@ -466,7 +466,7 @@ package alternativa.engine3d.core
       
       alternativa3d function renderVolume(camera:Camera3D) : void
       {
-         var device:§0!>§ = camera.device;
+         var device:Device = camera.device;
          volumeTransformConst[0] = this.light.ma;
          volumeTransformConst[1] = this.light.mb;
          volumeTransformConst[2] = this.light.mc;
@@ -487,19 +487,19 @@ package alternativa.engine3d.core
          volumeTransformConst[17] = this.light.boundMinY;
          volumeTransformConst[18] = this.light.boundMinZ;
          volumeTransformConst[19] = 1;
-         device.§"W§(this.getVolumeProgram());
-         device.§"J§(0,volumeVertexBuffer,0,Context3DVertexBufferFormat.FLOAT_3);
-         device.§%&§(Context3DProgramType.VERTEX,11,volumeTransformConst,5,false);
-         device.§%&§(Context3DProgramType.VERTEX,16,camera.projection,1);
-         device.§%&§(Context3DProgramType.VERTEX,17,camera.correction,1);
-         device.§%&§(Context3DProgramType.FRAGMENT,13,volumeFragmentConst,1);
-         device.§>c§(volumeIndexBuffer,0,12);
+         device.setProgram(this.getVolumeProgram());
+         device.setVertexBufferAt(0,volumeVertexBuffer,0,Context3DVertexBufferFormat.FLOAT_3);
+         device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,11,volumeTransformConst,5,false);
+         device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,16,camera.projection,1);
+         device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,17,camera.correction,1);
+         device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,13,volumeFragmentConst,1);
+         device.drawTriangles(volumeIndexBuffer,0,12);
       }
       
       alternativa3d function renderReceivers(camera:Camera3D) : void
       {
          var buffer:int = 0;
-         var device:§0!>§ = camera.device;
+         var device:Device = camera.device;
          var planeZ:Number = this.light.boundMinZ - this.offset;
          var zSize:Number = this.light.boundMaxZ - this.attenuation - planeZ;
          var ma:Number = this.light.ima / this.planeSize;
@@ -553,18 +553,18 @@ package alternativa.engine3d.core
          this.colorConst[9] = (this.color >> 8 & 0xFF) / 255;
          this.colorConst[10] = (this.color & 0xFF) / 255;
          this.colorConst[11] = this.alpha * distAlpha * camera.shadowsStrength;
-         device.§"W§(this.getShadowProgram(camera.view.quality,this.cameraInside));
-         device.§%&§(Context3DProgramType.VERTEX,11,camera.transform,3);
-         device.§%&§(Context3DProgramType.VERTEX,14,camera.projection,1);
-         device.§%&§(Context3DProgramType.VERTEX,15,this.transformConst,4);
-         device.§%&§(Context3DProgramType.VERTEX,19,camera.correction,1);
-         device.§%&§(Context3DProgramType.FRAGMENT,13,this.colorConst,3);
-         device.§%&§(Context3DProgramType.FRAGMENT,16,this.clampConst,1);
+         device.setProgram(this.getShadowProgram(camera.view.quality,this.cameraInside));
+         device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,11,camera.transform,3);
+         device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,14,camera.projection,1);
+         device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,15,this.transformConst,4);
+         device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,19,camera.correction,1);
+         device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,13,this.colorConst,3);
+         device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,16,this.clampConst,1);
          for(var i:int = 0; i < this.receiversCount; i++)
          {
             buffer = this.receiversBuffers[i];
-            device.§"J§(0,camera.receiversVertexBuffers[buffer],0,Context3DVertexBufferFormat.FLOAT_3);
-            device.§>c§(camera.receiversIndexBuffers[buffer],this.receiversFirstIndexes[i],this.receiversNumsTriangles[i]);
+            device.setVertexBufferAt(0,camera.receiversVertexBuffers[buffer],0,Context3DVertexBufferFormat.FLOAT_3);
+            device.drawTriangles(camera.receiversIndexBuffers[buffer],this.receiversFirstIndexes[i],this.receiversNumsTriangles[i]);
             ++camera.numShadows;
          }
          this.receiversCount = 0;
@@ -572,57 +572,57 @@ package alternativa.engine3d.core
       
       alternativa3d function renderFace(camera:Camera3D, numTriangles:int) : void
       {
-         var device:§0!>§ = camera.device;
-         device.§"W§(this.getFaceProgram(camera.view.quality));
-         device.§4! §(1,this.texture);
-         device.§%&§(Context3DProgramType.VERTEX,123,this.transformConst,4);
-         device.§%&§(Context3DProgramType.FRAGMENT,13,this.colorConst,3);
-         device.§%&§(Context3DProgramType.FRAGMENT,16,this.clampConst,1);
-         device.§>c§(TextureMaterial.indexBuffer,0,numTriangles);
+         var device:Device = camera.device;
+         device.setProgram(this.getFaceProgram(camera.view.quality));
+         device.setTextureAt(1,this.texture);
+         device.setProgramConstantsFromVector(Context3DProgramType.VERTEX,123,this.transformConst,4);
+         device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,13,this.colorConst,3);
+         device.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,16,this.clampConst,1);
+         device.drawTriangles(TextureMaterial.indexBuffer,0,numTriangles);
       }
       
-      private function getVolumeProgram() : §8B§
+      private function getVolumeProgram() : ProgramResource
       {
          var vertexProgram:ByteArray = null;
          var fragmentProgram:ByteArray = null;
-         var program:§8B§ = volumeProgram;
+         var program:ProgramResource = volumeProgram;
          if(program == null)
          {
             vertexProgram = Material.compileProgram(Context3DProgramType.VERTEX,["mul vt1.xyz, va0.xyz, vc14.xyz","add vt1.xyz, vt1.xyz, vc15.xyz","mov vt1.w, va0.w","dp4 vt0.x, vt1, vc11","dp4 vt0.y, vt1, vc12","dp4 vt0.z, vt1, vc13","mov vt0.w, vt1.w","mul vt0.xy, vt0.xy, vc17.xy","mul vt1.xy, vc17.zw, vt0.z","add vt0.xy, vt0.xy, vt1.xy","mov op.xw, vt0.xz","neg op.y, vt0.y","mul vt0.z, vt0.z, vc16.z","add op.z, vt0.z, vc16.w"]);
             fragmentProgram = Material.compileProgram(Context3DProgramType.FRAGMENT,["mov oc, fc13"]);
-            program = new §8B§(vertexProgram,fragmentProgram);
+            program = new ProgramResource(vertexProgram,fragmentProgram);
             volumeProgram = program;
          }
          return program;
       }
       
-      private function getShadowProgram(quality:Boolean, clamp:Boolean) : §8B§
+      private function getShadowProgram(quality:Boolean, clamp:Boolean) : ProgramResource
       {
          var vertexProgram:ByteArray = null;
          var fragmentProgram:ByteArray = null;
          var key:int = int(quality) | int(clamp) << 1;
-         var program:§8B§ = shadowPrograms[key];
+         var program:ProgramResource = shadowPrograms[key];
          if(program == null)
          {
             vertexProgram = Material.compileProgram(Context3DProgramType.VERTEX,["dp4 vt0.x, va0, vc11","dp4 vt0.y, va0, vc12","dp4 vt0.z, va0, vc13","mov vt0.w, va0.w","dp4 vt1.x, vt0, vc15","dp4 vt1.y, vt0, vc16","mul vt1.xy, vt1.xy, vc18.xy","add v0.xy, vt1.xy, vc18.zw","dp4 v0.z, vt0, vc17","mov v0.w, vt0.w","div vt1.z, vc14.w, vt0.z","add vt1.z, vt1.z, vc14.z","mul vt1.z, vt1.z, vc14.x","sub vt1.z, vt1.z, vc14.y","div vt1.z, vt1.z, vc14.x","sub vt1.z, vt1.z, vc14.z","div vt1.z, vc14.w, vt1.z","nrm vt2.xyz, vt0.xyz","sub vt1.z, vt0.z, vt1.z","div vt1.z, vt1.z, vt2.z","mul vt2.xyz, vt2.xyz, vt1.z","sub vt0.xyz, vt0.xyz, vt2.xyz","mul vt0.xy, vt0.xy, vc19.xy","mul vt1.xy, vc19.zw, vt0.z","add vt0.xy, vt0.xy, vt1.xy","mov op.xw, vt0.xz","neg op.y, vt0.y","mul vt0.z, vt0.z, vc14.z","add op.z, vt0.z, vc14.w"]);
             fragmentProgram = Material.compileProgram(Context3DProgramType.FRAGMENT,["mov ft1, v0" + (clamp ? "rem" : ""),"max ft1, v0, fc16" + (!clamp ? "rem" : ""),"min ft1.xy, ft1.xy, fc16.zw" + (!clamp ? "rem" : ""),"tex ft0, ft1, fs0 <2d,clamp," + (quality ? "linear,miplinear" : "nearest,mipnearest") + ">","sub ft1.w, v0.z, fc13.w","div ft1.z, ft1.w, fc13.z","max ft1.x, ft1.w, fc13.x","mul ft1.x, ft1.x, fc13.y","min ft1.x, ft1.x, fc13.w","sub ft1.y, fc13.w, ft1.x","mul ft1.z, ft1.z, ft1.x","mul ft1.w, ft1.w, ft1.y","add ft1.z, ft1.w, ft1.z","sub ft1.z, fc13.w, ft1.z","mul ft0.w, ft0.w, ft1.z","sub ft1.z, v0.z, fc14.x","div ft1.z, ft1.z, fc14.y","sat ft1.z, ft1.z","mul ft0.w, ft0.w, ft1.z","mov ft0.xyz, fc15.xyz","mul ft0.w, ft0.w, fc15.w","mov oc, ft0"]);
-            program = new §8B§(vertexProgram,fragmentProgram);
+            program = new ProgramResource(vertexProgram,fragmentProgram);
             shadowPrograms[key] = program;
          }
          return program;
       }
       
-      private function getFaceProgram(quality:Boolean) : §8B§
+      private function getFaceProgram(quality:Boolean) : ProgramResource
       {
          var vertexProgram:ByteArray = null;
          var fragmentProgram:ByteArray = null;
          var key:int = int(quality);
-         var program:§8B§ = facePrograms[key];
+         var program:ProgramResource = facePrograms[key];
          if(program == null)
          {
             vertexProgram = Material.compileProgram(Context3DProgramType.VERTEX,["mov vt0, vc[va0.x]","mov vt0.w, vc3.y","dp4 vt1.x, vt0, vc123","dp4 vt1.y, vt0, vc124","mul vt1.xy, vt1.xy, vc126.xy","add v0.xy, vt1.xy, vc126.zw","dp4 v0.z, vt0, vc125","mov v0.w, vt0.w","div vt1.z, vc3.w, vt0.z","add vt1.z, vt1.z, vc3.z","mul vt1.z, vt1.z, vc3.x","sub vt1.z, vt1.z, vc3.y","div vt1.z, vt1.z, vc3.x","sub vt1.z, vt1.z, vc3.z","div vt1.z, vc3.w, vt1.z","nrm vt2.xyz, vt0.xyz","sub vt1.z, vt0.z, vt1.z","div vt1.z, vt1.z, vt2.z","mul vt2.xyz, vt2.xyz, vt1.z","sub vt0.xyz, vt0.xyz, vt2.xyz","mul vt0.xy, vt0.xy, vc13.xy","mul vt1.xy, vc13.zw, vt0.z","add vt0.xy, vt0.xy, vt1.xy","mov op.xw, vt0.xz","neg op.y, vt0.y","mul vt0.z, vt0.z, vc3.z","add op.z, vt0.z, vc3.w","mov v1, vc[va0.x+1]"]);
             fragmentProgram = Material.compileProgram(Context3DProgramType.FRAGMENT,["max ft1, v0, fc16","min ft1.xy, ft1.xy, fc16.zw","tex ft0, ft1, fs1 <2d,clamp," + (quality ? "linear,miplinear" : "nearest,mipnearest") + ">","sub ft1.w, v0.z, fc13.w","div ft1.z, ft1.w, fc13.z","max ft1.x, ft1.w, fc13.x","mul ft1.x, ft1.x, fc13.y","min ft1.x, ft1.x, fc13.w","sub ft1.y, fc13.w, ft1.x","mul ft1.z, ft1.z, ft1.x","mul ft1.w, ft1.w, ft1.y","add ft1.z, ft1.w, ft1.z","sub ft1.z, fc13.w, ft1.z","mul ft0.w, ft0.w, ft1.z","sub ft1.z, v0.z, fc14.x","div ft1.z, ft1.z, fc14.y","sat ft1.z, ft1.z","mul ft0.w, ft0.w, ft1.z","mov ft0.xyz, fc15.xyz","mul ft0.w, ft0.w, fc15.w","tex ft1, v1, fs0 <2d,clamp," + (quality ? "linear,miplinear" : "nearest,mipnearest") + ">","mul ft0.w, ft0.w, ft1.w","mov oc, ft0"]);
-            program = new §8B§(vertexProgram,fragmentProgram);
+            program = new ProgramResource(vertexProgram,fragmentProgram);
             facePrograms[key] = program;
          }
          return program;

@@ -2,11 +2,14 @@ package alternativa.gfx.core
 {
    import flash.display3D.Context3D;
    import flash.display3D.IndexBuffer3D;
+   import alternativa.gfx.alternativagfx;
    
+   use namespace alternativagfx;
+
    public class IndexBufferResource extends Resource
    {
       
-      §§namespace("http://alternativaplatform.com/en/alternativagfx") var putiwyfa:Vector.<IndexBuffer3D> = new Vector.<IndexBuffer3D>(4);
+      alternativagfx var putiwyfa:Vector.<IndexBuffer3D> = new Vector.<IndexBuffer3D>(4);
       
       private var voq:Vector.<uint>;
       
@@ -56,13 +59,13 @@ package alternativa.gfx.core
          return this.voq != null;
       }
       
-      override §§namespace("http://alternativaplatform.com/en/alternativagfx") function create(context:Context3D, stage3DIndex:int) : void
+      override alternativagfx function create(context:Context3D, stage3DIndex:int) : void
       {
          super.create(context,stage3DIndex);
          this.putiwyfa[stage3DIndex] = context.createIndexBuffer(this.litewo);
       }
       
-      override §§namespace("http://alternativaplatform.com/en/alternativagfx") function upload(stage3DIndex:int) : void
+      override alternativagfx function upload(stage3DIndex:int) : void
       {
          super.upload(stage3DIndex);
          IndexBuffer3D(this.putiwyfa[stage3DIndex]).uploadFromVector(this.voq,0,this.litewo);

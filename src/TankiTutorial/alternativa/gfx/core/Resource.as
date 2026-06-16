@@ -1,11 +1,14 @@
 package alternativa.gfx.core
 {
    import flash.display3D.Context3D;
+   import alternativa.gfx.alternativagfx;
+   
+   use namespace alternativagfx;
    
    public class Resource
    {
       
-      §§namespace("http://alternativaplatform.com/en/alternativagfx") var jewu:Vector.<int> = Vector.<int>([-1,-1,-1,-1]);
+      alternativagfx var jewu:Vector.<int> = Vector.<int>([-1,-1,-1,-1]);
       
       public function Resource()
       {
@@ -33,11 +36,11 @@ package alternativa.gfx.core
          return false;
       }
       
-      §§namespace("http://alternativaplatform.com/en/alternativagfx") function create(context:Context3D, stage3DIndex:int) : void
+      alternativagfx function create(context:Context3D, stage3DIndex:int) : void
       {
       }
       
-      §§namespace("http://alternativaplatform.com/en/alternativagfx") function upload(stage3DIndex:int) : void
+      alternativagfx function upload(stage3DIndex:int) : void
       {
       }
    }
