@@ -1,3 +1,6 @@
 [submodule "external/BulkLoader"]
 	path = external/BulkLoader
 	url = https://github.com/arthur-debert/BulkLoader
+[submodule "external/as3-signals"]
+	path = external/as3-signals
+	url = https://github.com/robertpenner/as3-signals.git
