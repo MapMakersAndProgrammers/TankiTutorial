@@ -1091,433 +1091,432 @@ package alternativa.engine3d.objects
       
       public function weldFaces(angleThreshold:Number = 0, uvThreshold:Number = 0, convexThreshold:Number = 0, pairWeld:Boolean = false) : void
       {
-         var _loc5_:int = 0;
-         var _loc6_:int = 0;
-         var _loc7_:* = undefined;
-         var _loc8_:Face = null;
-         var _loc9_:Face = null;
-         var _loc10_:Face = null;
-         var _loc11_:Wrapper = null;
-         var _loc12_:Wrapper = null;
-         var _loc13_:Wrapper = null;
-         var _loc14_:Wrapper = null;
-         var _loc15_:Wrapper = null;
-         var _loc16_:Wrapper = null;
-         var _loc17_:Wrapper = null;
-         var _loc18_:Wrapper = null;
-         var _loc19_:Vertex = null;
-         var _loc20_:Vertex = null;
-         var _loc21_:Vertex = null;
-         var _loc22_:Vertex = null;
-         var _loc23_:Number = NaN;
-         var _loc24_:Number = NaN;
-         var _loc25_:Number = NaN;
-         var _loc26_:Number = NaN;
-         var _loc27_:Number = NaN;
-         var _loc28_:Number = NaN;
-         var _loc29_:Number = NaN;
-         var _loc30_:Number = NaN;
-         var _loc31_:Number = NaN;
-         var _loc32_:Number = NaN;
-         var _loc33_:Number = NaN;
-         var _loc34_:Number = NaN;
-         var _loc35_:Number = NaN;
-         var _loc36_:Number = NaN;
-         var _loc37_:Dictionary = null;
-         var _loc44_:int = 0;
-         var _loc45_:Number = NaN;
-         var _loc46_:Number = NaN;
-         var _loc47_:Number = NaN;
-         var _loc48_:Number = NaN;
-         var _loc49_:Number = NaN;
-         var _loc50_:Number = NaN;
-         var _loc51_:Number = NaN;
-         var _loc52_:Number = NaN;
-         var _loc53_:Number = NaN;
-         var _loc54_:Number = NaN;
-         var _loc55_:Number = NaN;
-         var _loc56_:Number = NaN;
-         var _loc57_:Number = NaN;
-         var _loc58_:Number = NaN;
-         var _loc59_:Number = NaN;
-         var _loc60_:Number = NaN;
-         var _loc61_:Number = NaN;
-         var _loc62_:Number = NaN;
-         var _loc63_:Number = NaN;
-         var _loc64_:Boolean = false;
-         var _loc65_:Face = null;
+         var i:int = 0;
+         var j:int = 0;
+         var key:* = undefined;
+         var sibling:Face = null;
+         var face:Face = null;
+         var next:Face = null;
+         var wp:Wrapper = null;
+         var sp:Wrapper = null;
+         var w:Wrapper = null;
+         var s:Wrapper = null;
+         var wn:Wrapper = null;
+         var sn:Wrapper = null;
+         var wm:Wrapper = null;
+         var sm:Wrapper = null;
+         var vertex:Vertex = null;
+         var a:Vertex = null;
+         var b:Vertex = null;
+         var c:Vertex = null;
+         var abx:Number = NaN;
+         var aby:Number = NaN;
+         var abz:Number = NaN;
+         var abu:Number = NaN;
+         var abv:Number = NaN;
+         var acx:Number = NaN;
+         var acy:Number = NaN;
+         var acz:Number = NaN;
+         var acu:Number = NaN;
+         var acv:Number = NaN;
+         var nx:Number = NaN;
+         var ny:Number = NaN;
+         var nz:Number = NaN;
+         var nl:Number = NaN;
+         var dictionary:Dictionary = null;
+         var num:int = 0;
+         var det:Number = NaN;
+         var ima:Number = NaN;
+         var imb:Number = NaN;
+         var imc:Number = NaN;
+         var imd:Number = NaN;
+         var ime:Number = NaN;
+         var imf:Number = NaN;
+         var img:Number = NaN;
+         var imh:Number = NaN;
+         var ma:Number = NaN;
+         var mb:Number = NaN;
+         var mc:Number = NaN;
+         var md:Number = NaN;
+         var me:Number = NaN;
+         var mf:Number = NaN;
+         var mg:Number = NaN;
+         var mh:Number = NaN;
+         var du:Number = NaN;
+         var dv:Number = NaN;
+         var weld:Boolean = false;
+         var newFace:Face = null;
          this.deleteResources();
-         var _loc38_:Number = 0.001;
-         angleThreshold = Math.cos(angleThreshold) - _loc38_;
-         uvThreshold += _loc38_;
-         convexThreshold = Math.cos(Math.PI - convexThreshold) - _loc38_;
-         var _loc39_:Dictionary = new Dictionary();
-         var _loc40_:Dictionary = new Dictionary();
-         _loc9_ = this.faceList;
-         while(_loc9_ != null)
+         angleThreshold = Math.cos(angleThreshold) - 0.001;
+         uvThreshold += 0.001;
+         convexThreshold = Math.cos(Math.PI - convexThreshold) - 0.001;
+         var faceSet:Dictionary = new Dictionary();
+         var map:Dictionary = new Dictionary();
+         face = this.faceList;
+         while(face != null)
          {
-            _loc10_ = _loc9_.next;
-            _loc9_.next = null;
-            _loc20_ = _loc9_.wrapper.vertex;
-            _loc21_ = _loc9_.wrapper.next.vertex;
-            _loc22_ = _loc9_.wrapper.next.next.vertex;
-            _loc23_ = _loc21_.x - _loc20_.x;
-            _loc24_ = _loc21_.y - _loc20_.y;
-            _loc25_ = _loc21_.z - _loc20_.z;
-            _loc28_ = _loc22_.x - _loc20_.x;
-            _loc29_ = _loc22_.y - _loc20_.y;
-            _loc30_ = _loc22_.z - _loc20_.z;
-            _loc33_ = _loc30_ * _loc24_ - _loc29_ * _loc25_;
-            _loc34_ = _loc28_ * _loc25_ - _loc30_ * _loc23_;
-            _loc35_ = _loc29_ * _loc23_ - _loc28_ * _loc24_;
-            _loc36_ = _loc33_ * _loc33_ + _loc34_ * _loc34_ + _loc35_ * _loc35_;
-            if(_loc36_ > _loc38_)
+            next = face.next;
+            face.next = null;
+            a = face.wrapper.vertex;
+            b = face.wrapper.next.vertex;
+            c = face.wrapper.next.next.vertex;
+            abx = b.x - a.x;
+            aby = b.y - a.y;
+            abz = b.z - a.z;
+            acx = c.x - a.x;
+            acy = c.y - a.y;
+            acz = c.z - a.z;
+            nx = acz * aby - acy * abz;
+            ny = acx * abz - acz * abx;
+            nz = acy * abx - acx * aby;
+            nl = nx * nx + ny * ny + nz * nz;
+            if(nl > 0.001)
             {
-               _loc36_ = 1 / Math.sqrt(_loc36_);
-               _loc33_ *= _loc36_;
-               _loc34_ *= _loc36_;
-               _loc35_ *= _loc36_;
-               _loc9_.normalX = _loc33_;
-               _loc9_.normalY = _loc34_;
-               _loc9_.normalZ = _loc35_;
-               _loc9_.offset = _loc20_.x * _loc33_ + _loc20_.y * _loc34_ + _loc20_.z * _loc35_;
-               _loc39_[_loc9_] = true;
-               _loc15_ = _loc9_.wrapper;
-               while(_loc15_ != null)
+               nl = 1 / Math.sqrt(nl);
+               nx *= nl;
+               ny *= nl;
+               nz *= nl;
+               face.normalX = nx;
+               face.normalY = ny;
+               face.normalZ = nz;
+               face.offset = a.x * nx + a.y * ny + a.z * nz;
+               faceSet[face] = true;
+               wn = face.wrapper;
+               while(wn != null)
                {
-                  _loc19_ = _loc15_.vertex;
-                  _loc37_ = _loc40_[_loc19_];
-                  if(_loc37_ == null)
+                  vertex = wn.vertex;
+                  dictionary = map[vertex];
+                  if(dictionary == null)
                   {
-                     _loc37_ = new Dictionary();
-                     _loc40_[_loc19_] = _loc37_;
+                     dictionary = new Dictionary();
+                     map[vertex] = dictionary;
                   }
-                  _loc37_[_loc9_] = true;
-                  _loc15_ = _loc15_.next;
+                  dictionary[face] = true;
+                  wn = wn.next;
                }
             }
-            _loc9_ = _loc10_;
+            face = next;
          }
          this.faceList = null;
-         var _loc41_:Vector.<Face> = new Vector.<Face>();
-         var _loc42_:Dictionary = new Dictionary();
-         var _loc43_:Dictionary = new Dictionary();
+         var island:Vector.<Face> = new Vector.<Face>();
+         var siblings:Dictionary = new Dictionary();
+         var unfit:Dictionary = new Dictionary();
          while(true)
          {
-            _loc9_ = null;
+            face = null;
             var _loc66_:int = 0;
-            var _loc67_:* = _loc39_;
-            for(_loc7_ in _loc67_)
+            var _loc67_:* = faceSet;
+            for(key in _loc67_)
             {
-               _loc9_ = _loc7_;
-               delete _loc39_[_loc7_];
+               face = key;
+               delete faceSet[key];
             }
-            if(_loc9_ == null)
+            if(face == null)
             {
                break;
             }
-            _loc44_ = 0;
-            _loc41_[_loc44_] = _loc9_;
-            _loc44_++;
-            _loc20_ = _loc9_.wrapper.vertex;
-            _loc21_ = _loc9_.wrapper.next.vertex;
-            _loc22_ = _loc9_.wrapper.next.next.vertex;
-            _loc23_ = _loc21_.x - _loc20_.x;
-            _loc24_ = _loc21_.y - _loc20_.y;
-            _loc25_ = _loc21_.z - _loc20_.z;
-            _loc26_ = _loc21_.u - _loc20_.u;
-            _loc27_ = _loc21_.v - _loc20_.v;
-            _loc28_ = _loc22_.x - _loc20_.x;
-            _loc29_ = _loc22_.y - _loc20_.y;
-            _loc30_ = _loc22_.z - _loc20_.z;
-            _loc31_ = _loc22_.u - _loc20_.u;
-            _loc32_ = _loc22_.v - _loc20_.v;
-            _loc33_ = _loc9_.normalX;
-            _loc34_ = _loc9_.normalY;
-            _loc35_ = _loc9_.normalZ;
-            _loc45_ = -_loc33_ * _loc29_ * _loc25_ + _loc28_ * _loc34_ * _loc25_ + _loc33_ * _loc24_ * _loc30_ - _loc23_ * _loc34_ * _loc30_ - _loc28_ * _loc24_ * _loc35_ + _loc23_ * _loc29_ * _loc35_;
-            _loc46_ = (-_loc34_ * _loc30_ + _loc29_ * _loc35_) / _loc45_;
-            _loc47_ = (_loc33_ * _loc30_ - _loc28_ * _loc35_) / _loc45_;
-            _loc48_ = (-_loc33_ * _loc29_ + _loc28_ * _loc34_) / _loc45_;
-            _loc49_ = (_loc20_.x * _loc34_ * _loc30_ - _loc33_ * _loc20_.y * _loc30_ - _loc20_.x * _loc29_ * _loc35_ + _loc28_ * _loc20_.y * _loc35_ + _loc33_ * _loc29_ * _loc20_.z - _loc28_ * _loc34_ * _loc20_.z) / _loc45_;
-            _loc50_ = (_loc34_ * _loc25_ - _loc24_ * _loc35_) / _loc45_;
-            _loc51_ = (-_loc33_ * _loc25_ + _loc23_ * _loc35_) / _loc45_;
-            _loc52_ = (_loc33_ * _loc24_ - _loc23_ * _loc34_) / _loc45_;
-            _loc53_ = (_loc33_ * _loc20_.y * _loc25_ - _loc20_.x * _loc34_ * _loc25_ + _loc20_.x * _loc24_ * _loc35_ - _loc23_ * _loc20_.y * _loc35_ - _loc33_ * _loc24_ * _loc20_.z + _loc23_ * _loc34_ * _loc20_.z) / _loc45_;
-            _loc54_ = _loc26_ * _loc46_ + _loc31_ * _loc50_;
-            _loc55_ = _loc26_ * _loc47_ + _loc31_ * _loc51_;
-            _loc56_ = _loc26_ * _loc48_ + _loc31_ * _loc52_;
-            _loc57_ = _loc26_ * _loc49_ + _loc31_ * _loc53_ + _loc20_.u;
-            _loc58_ = _loc27_ * _loc46_ + _loc32_ * _loc50_;
-            _loc59_ = _loc27_ * _loc47_ + _loc32_ * _loc51_;
-            _loc60_ = _loc27_ * _loc48_ + _loc32_ * _loc52_;
-            _loc61_ = _loc27_ * _loc49_ + _loc32_ * _loc53_ + _loc20_.v;
-            for(_loc7_ in _loc43_)
+            num = 0;
+            island[num] = face;
+            num++;
+            a = face.wrapper.vertex;
+            b = face.wrapper.next.vertex;
+            c = face.wrapper.next.next.vertex;
+            abx = b.x - a.x;
+            aby = b.y - a.y;
+            abz = b.z - a.z;
+            abu = b.u - a.u;
+            abv = b.v - a.v;
+            acx = c.x - a.x;
+            acy = c.y - a.y;
+            acz = c.z - a.z;
+            acu = c.u - a.u;
+            acv = c.v - a.v;
+            nx = face.normalX;
+            ny = face.normalY;
+            nz = face.normalZ;
+            det = -nx * acy * abz + acx * ny * abz + nx * aby * acz - abx * ny * acz - acx * aby * nz + abx * acy * nz;
+            ima = (-ny * acz + acy * nz) / det;
+            imb = (nx * acz - acx * nz) / det;
+            imc = (-nx * acy + acx * ny) / det;
+            imd = (a.x * ny * acz - nx * a.y * acz - a.x * acy * nz + acx * a.y * nz + nx * acy * a.z - acx * ny * a.z) / det;
+            ime = (ny * abz - aby * nz) / det;
+            imf = (-nx * abz + abx * nz) / det;
+            img = (nx * aby - abx * ny) / det;
+            imh = (nx * a.y * abz - a.x * ny * abz + a.x * aby * nz - abx * a.y * nz - nx * aby * a.z + abx * ny * a.z) / det;
+            ma = abu * ima + acu * ime;
+            mb = abu * imb + acu * imf;
+            mc = abu * imc + acu * img;
+            md = abu * imd + acu * imh + a.u;
+            me = abv * ima + acv * ime;
+            mf = abv * imb + acv * imf;
+            mg = abv * imc + acv * img;
+            mh = abv * imd + acv * imh + a.v;
+            for(key in unfit)
             {
-               delete _loc43_[_loc7_];
+               delete unfit[key];
             }
-            _loc5_ = 0;
-            while(_loc5_ < _loc44_)
+            i = 0;
+            while(i < num)
             {
-               _loc9_ = _loc41_[_loc5_];
-               for(_loc7_ in _loc42_)
+               face = island[i];
+               for(key in siblings)
                {
-                  delete _loc42_[_loc7_];
+                  delete siblings[key];
                }
-               _loc13_ = _loc9_.wrapper;
-               while(_loc13_ != null)
+               w = face.wrapper;
+               while(w != null)
                {
-                  for(_loc7_ in _loc40_[_loc13_.vertex])
+                  for(key in map[w.vertex])
                   {
-                     if(Boolean(_loc39_[_loc7_]) && !_loc43_[_loc7_])
+                     if(Boolean(faceSet[key]) && !unfit[key])
                      {
-                        _loc42_[_loc7_] = true;
+                        siblings[key] = true;
                      }
                   }
-                  _loc13_ = _loc13_.next;
+                  w = w.next;
                }
-               for(_loc7_ in _loc42_)
+               for(key in siblings)
                {
-                  _loc8_ = _loc7_;
-                  if(_loc33_ * _loc8_.normalX + _loc34_ * _loc8_.normalY + _loc35_ * _loc8_.normalZ >= angleThreshold)
+                  sibling = key;
+                  if(nx * sibling.normalX + ny * sibling.normalY + nz * sibling.normalZ >= angleThreshold)
                   {
-                     _loc14_ = _loc8_.wrapper;
-                     while(_loc14_ != null)
+                     s = sibling.wrapper;
+                     while(s != null)
                      {
-                        _loc19_ = _loc14_.vertex;
-                        _loc62_ = _loc54_ * _loc19_.x + _loc55_ * _loc19_.y + _loc56_ * _loc19_.z + _loc57_ - _loc19_.u;
-                        _loc63_ = _loc58_ * _loc19_.x + _loc59_ * _loc19_.y + _loc60_ * _loc19_.z + _loc61_ - _loc19_.v;
-                        if(_loc62_ > uvThreshold || _loc62_ < -uvThreshold || _loc63_ > uvThreshold || _loc63_ < -uvThreshold)
+                        vertex = s.vertex;
+                        du = ma * vertex.x + mb * vertex.y + mc * vertex.z + md - vertex.u;
+                        dv = me * vertex.x + mf * vertex.y + mg * vertex.z + mh - vertex.v;
+                        if(du > uvThreshold || du < -uvThreshold || dv > uvThreshold || dv < -uvThreshold)
                         {
                            break;
                         }
-                        _loc14_ = _loc14_.next;
+                        s = s.next;
                      }
-                     if(_loc14_ == null)
+                     if(s == null)
                      {
-                        _loc13_ = _loc9_.wrapper;
-                        while(_loc13_ != null)
+                        w = face.wrapper;
+                        while(w != null)
                         {
-                           _loc15_ = _loc13_.next != null ? _loc13_.next : _loc9_.wrapper;
-                           _loc14_ = _loc8_.wrapper;
-                           while(_loc14_ != null)
+                           wn = w.next != null ? w.next : face.wrapper;
+                           s = sibling.wrapper;
+                           while(s != null)
                            {
-                              _loc16_ = _loc14_.next != null ? _loc14_.next : _loc8_.wrapper;
-                              if(_loc13_.vertex == _loc16_.vertex && _loc15_.vertex == _loc14_.vertex)
+                              sn = s.next != null ? s.next : sibling.wrapper;
+                              if(w.vertex == sn.vertex && wn.vertex == s.vertex)
                               {
                                  break;
                               }
-                              _loc14_ = _loc14_.next;
+                              s = s.next;
                            }
-                           if(_loc14_ != null)
+                           if(s != null)
                            {
                               break;
                            }
-                           _loc13_ = _loc13_.next;
+                           w = w.next;
                         }
-                        if(_loc13_ != null)
+                        if(w != null)
                         {
-                           _loc41_[_loc44_] = _loc8_;
-                           _loc44_++;
-                           delete _loc39_[_loc8_];
+                           island[num] = sibling;
+                           num++;
+                           delete faceSet[sibling];
                         }
                      }
                      else
                      {
-                        _loc43_[_loc8_] = true;
+                        unfit[sibling] = true;
                      }
                   }
                   else
                   {
-                     _loc43_[_loc8_] = true;
+                     unfit[sibling] = true;
                   }
                }
-               _loc5_++;
+               i++;
             }
-            if(_loc44_ == 1)
+            if(num == 1)
             {
-               _loc9_ = _loc41_[0];
-               _loc9_.next = this.faceList;
-               this.faceList = _loc9_;
+               face = island[0];
+               face.next = this.faceList;
+               this.faceList = face;
             }
             else
             {
-               while(true)
+               do
                {
-                  _loc64_ = false;
-                  _loc5_ = 0;
-                  while(_loc5_ < _loc44_ - 1)
+                  weld = false;
+                  i = 0;
+                  while(i < num - 1)
                   {
-                     _loc9_ = _loc41_[_loc5_];
-                     if(_loc9_ != null)
+                     face = island[i];
+                     if(face != null)
                      {
-                        _loc6_ = 1;
-                        for(; _loc6_ < _loc44_; _loc6_++)
+                        j = 1;
+                        for(; j < num; j++)
                         {
-                           _loc8_ = _loc41_[_loc6_];
-                           if(_loc8_ != null)
+                           sibling = island[j];
+                           if(sibling != null)
                            {
-                              _loc13_ = _loc9_.wrapper;
-                              while(_loc13_ != null)
+                              w = face.wrapper;
+                              while(w != null)
                               {
-                                 _loc15_ = _loc13_.next != null ? _loc13_.next : _loc9_.wrapper;
-                                 _loc14_ = _loc8_.wrapper;
-                                 while(_loc14_ != null)
+                                 wn = w.next != null ? w.next : face.wrapper;
+                                 s = sibling.wrapper;
+                                 while(s != null)
                                  {
-                                    _loc16_ = _loc14_.next != null ? _loc14_.next : _loc8_.wrapper;
-                                    if(_loc13_.vertex == _loc16_.vertex && _loc15_.vertex == _loc14_.vertex)
+                                    sn = s.next != null ? s.next : sibling.wrapper;
+                                    if(w.vertex == sn.vertex && wn.vertex == s.vertex)
                                     {
                                        break;
                                     }
-                                    _loc14_ = _loc14_.next;
+                                    s = s.next;
                                  }
-                                 if(_loc14_ != null)
+                                 if(s != null)
                                  {
                                     break;
                                  }
-                                 _loc13_ = _loc13_.next;
+                                 w = w.next;
                               }
-                              if(_loc13_ != null)
+                              if(w != null)
                               {
                                  while(true)
                                  {
-                                    _loc17_ = _loc15_.next != null ? _loc15_.next : _loc9_.wrapper;
-                                    _loc12_ = _loc8_.wrapper;
-                                    while(_loc12_.next != _loc14_ && _loc12_.next != null)
+                                    wm = wn.next != null ? wn.next : face.wrapper;
+                                    sp = sibling.wrapper;
+                                    while(sp.next != s && sp.next != null)
                                     {
-                                       _loc12_ = _loc12_.next;
+                                       sp = sp.next;
                                     }
-                                    if(_loc17_.vertex != _loc12_.vertex)
+                                    if(wm.vertex != sp.vertex)
                                     {
                                        break;
                                     }
-                                    _loc15_ = _loc17_;
-                                    _loc14_ = _loc12_;
+                                    wn = wm;
+                                    s = sp;
                                  }
                                  while(true)
                                  {
-                                    _loc11_ = _loc9_.wrapper;
-                                    while(_loc11_.next != _loc13_ && _loc11_.next != null)
+                                    wp = face.wrapper;
+                                    while(wp.next != w && wp.next != null)
                                     {
-                                       _loc11_ = _loc11_.next;
+                                       wp = wp.next;
                                     }
-                                    _loc18_ = _loc16_.next != null ? _loc16_.next : _loc8_.wrapper;
-                                    if(_loc11_.vertex != _loc18_.vertex)
+                                    sm = sn.next != null ? sn.next : sibling.wrapper;
+                                    if(wp.vertex != sm.vertex)
                                     {
                                        break;
                                     }
-                                    _loc13_ = _loc11_;
-                                    _loc16_ = _loc18_;
+                                    w = wp;
+                                    sn = sm;
                                  }
-                                 _loc20_ = _loc13_.vertex;
-                                 _loc21_ = _loc18_.vertex;
-                                 _loc22_ = _loc11_.vertex;
-                                 _loc23_ = _loc21_.x - _loc20_.x;
-                                 _loc24_ = _loc21_.y - _loc20_.y;
-                                 _loc25_ = _loc21_.z - _loc20_.z;
-                                 _loc28_ = _loc22_.x - _loc20_.x;
-                                 _loc29_ = _loc22_.y - _loc20_.y;
-                                 _loc30_ = _loc22_.z - _loc20_.z;
-                                 _loc33_ = _loc30_ * _loc24_ - _loc29_ * _loc25_;
-                                 _loc34_ = _loc28_ * _loc25_ - _loc30_ * _loc23_;
-                                 _loc35_ = _loc29_ * _loc23_ - _loc28_ * _loc24_;
-                                 if(_loc33_ < _loc38_ && _loc33_ > -_loc38_ && _loc34_ < _loc38_ && _loc34_ > -_loc38_ && _loc35_ < _loc38_ && _loc35_ > -_loc38_)
+                                 a = w.vertex;
+                                 b = sm.vertex;
+                                 c = wp.vertex;
+                                 abx = b.x - a.x;
+                                 aby = b.y - a.y;
+                                 abz = b.z - a.z;
+                                 acx = c.x - a.x;
+                                 acy = c.y - a.y;
+                                 acz = c.z - a.z;
+                                 nx = acz * aby - acy * abz;
+                                 ny = acx * abz - acz * abx;
+                                 nz = acy * abx - acx * aby;
+                                 if(nx < 0.001 && nx > -0.001 && ny < 0.001 && ny > -0.001 && nz < 0.001 && nz > -0.001)
                                  {
-                                    if(_loc23_ * _loc28_ + _loc24_ * _loc29_ + _loc25_ * _loc30_ > 0)
+                                    if(abx * acx + aby * acy + abz * acz > 0)
                                     {
                                        continue;
                                     }
                                  }
-                                 else if(_loc9_.normalX * _loc33_ + _loc9_.normalY * _loc34_ + _loc9_.normalZ * _loc35_ < 0)
+                                 else if(face.normalX * nx + face.normalY * ny + face.normalZ * nz < 0)
                                  {
                                     continue;
                                  }
-                                 _loc36_ = 1 / Math.sqrt(_loc23_ * _loc23_ + _loc24_ * _loc24_ + _loc25_ * _loc25_);
-                                 _loc23_ *= _loc36_;
-                                 _loc24_ *= _loc36_;
-                                 _loc25_ *= _loc36_;
-                                 _loc36_ = 1 / Math.sqrt(_loc28_ * _loc28_ + _loc29_ * _loc29_ + _loc30_ * _loc30_);
-                                 _loc28_ *= _loc36_;
-                                 _loc29_ *= _loc36_;
-                                 _loc30_ *= _loc36_;
-                                 if(_loc23_ * _loc28_ + _loc24_ * _loc29_ + _loc25_ * _loc30_ >= convexThreshold)
+                                 nl = 1 / Math.sqrt(abx * abx + aby * aby + abz * abz);
+                                 abx *= nl;
+                                 aby *= nl;
+                                 abz *= nl;
+                                 nl = 1 / Math.sqrt(acx * acx + acy * acy + acz * acz);
+                                 acx *= nl;
+                                 acy *= nl;
+                                 acz *= nl;
+                                 if(abx * acx + aby * acy + abz * acz >= convexThreshold)
                                  {
-                                    _loc20_ = _loc14_.vertex;
-                                    _loc21_ = _loc17_.vertex;
-                                    _loc22_ = _loc12_.vertex;
-                                    _loc23_ = _loc21_.x - _loc20_.x;
-                                    _loc24_ = _loc21_.y - _loc20_.y;
-                                    _loc25_ = _loc21_.z - _loc20_.z;
-                                    _loc28_ = _loc22_.x - _loc20_.x;
-                                    _loc29_ = _loc22_.y - _loc20_.y;
-                                    _loc30_ = _loc22_.z - _loc20_.z;
-                                    _loc33_ = _loc30_ * _loc24_ - _loc29_ * _loc25_;
-                                    _loc34_ = _loc28_ * _loc25_ - _loc30_ * _loc23_;
-                                    _loc35_ = _loc29_ * _loc23_ - _loc28_ * _loc24_;
-                                    if(_loc33_ < _loc38_ && _loc33_ > -_loc38_ && _loc34_ < _loc38_ && _loc34_ > -_loc38_ && _loc35_ < _loc38_ && _loc35_ > -_loc38_)
+                                    a = s.vertex;
+                                    b = wm.vertex;
+                                    c = sp.vertex;
+                                    abx = b.x - a.x;
+                                    aby = b.y - a.y;
+                                    abz = b.z - a.z;
+                                    acx = c.x - a.x;
+                                    acy = c.y - a.y;
+                                    acz = c.z - a.z;
+                                    nx = acz * aby - acy * abz;
+                                    ny = acx * abz - acz * abx;
+                                    nz = acy * abx - acx * aby;
+                                    if(nx < 0.001 && nx > -0.001 && ny < 0.001 && ny > -0.001 && nz < 0.001 && nz > -0.001)
                                     {
-                                       if(_loc23_ * _loc28_ + _loc24_ * _loc29_ + _loc25_ * _loc30_ > 0)
+                                       if(abx * acx + aby * acy + abz * acz > 0)
                                        {
                                           continue;
                                        }
                                     }
-                                    else if(_loc9_.normalX * _loc33_ + _loc9_.normalY * _loc34_ + _loc9_.normalZ * _loc35_ < 0)
+                                    else if(face.normalX * nx + face.normalY * ny + face.normalZ * nz < 0)
                                     {
                                        continue;
                                     }
-                                    _loc36_ = 1 / Math.sqrt(_loc23_ * _loc23_ + _loc24_ * _loc24_ + _loc25_ * _loc25_);
-                                    _loc23_ *= _loc36_;
-                                    _loc24_ *= _loc36_;
-                                    _loc25_ *= _loc36_;
-                                    _loc36_ = 1 / Math.sqrt(_loc28_ * _loc28_ + _loc29_ * _loc29_ + _loc30_ * _loc30_);
-                                    _loc28_ *= _loc36_;
-                                    _loc29_ *= _loc36_;
-                                    _loc30_ *= _loc36_;
-                                    if(_loc23_ * _loc28_ + _loc24_ * _loc29_ + _loc25_ * _loc30_ >= convexThreshold)
+                                    nl = 1 / Math.sqrt(abx * abx + aby * aby + abz * abz);
+                                    abx *= nl;
+                                    aby *= nl;
+                                    abz *= nl;
+                                    nl = 1 / Math.sqrt(acx * acx + acy * acy + acz * acz);
+                                    acx *= nl;
+                                    acy *= nl;
+                                    acz *= nl;
+                                    if(abx * acx + aby * acy + abz * acz >= convexThreshold)
                                     {
-                                       _loc64_ = true;
-                                       _loc65_ = new Face();
-                                       _loc65_.material = _loc9_.material;
-                                       _loc65_.smoothingGroups = _loc9_.smoothingGroups;
-                                       _loc65_.normalX = _loc9_.normalX;
-                                       _loc65_.normalY = _loc9_.normalY;
-                                       _loc65_.normalZ = _loc9_.normalZ;
-                                       _loc65_.offset = _loc9_.offset;
-                                       _loc65_.id = _loc9_.id;
-                                       _loc17_ = null;
-                                       while(_loc15_ != _loc13_)
+                                       weld = true;
+                                       newFace = new Face();
+                                       newFace.material = face.material;
+                                       newFace.smoothingGroups = face.smoothingGroups;
+                                       newFace.normalX = face.normalX;
+                                       newFace.normalY = face.normalY;
+                                       newFace.normalZ = face.normalZ;
+                                       newFace.offset = face.offset;
+                                       newFace.id = face.id;
+                                       wm = null;
+                                       while(wn != w)
                                        {
-                                          _loc18_ = new Wrapper();
-                                          _loc18_.vertex = _loc15_.vertex;
-                                          if(_loc17_ != null)
+                                          sm = new Wrapper();
+                                          sm.vertex = wn.vertex;
+                                          if(wm != null)
                                           {
-                                             _loc17_.next = _loc18_;
+                                             wm.next = sm;
                                           }
                                           else
                                           {
-                                             _loc65_.wrapper = _loc18_;
+                                             newFace.wrapper = sm;
                                           }
-                                          _loc17_ = _loc18_;
-                                          _loc15_ = _loc15_.next != null ? _loc15_.next : _loc9_.wrapper;
+                                          wm = sm;
+                                          wn = wn.next != null ? wn.next : face.wrapper;
                                        }
-                                       while(_loc16_ != _loc14_)
+                                       while(sn != s)
                                        {
-                                          _loc18_ = new Wrapper();
-                                          _loc18_.vertex = _loc16_.vertex;
-                                          if(_loc17_ != null)
+                                          sm = new Wrapper();
+                                          sm.vertex = sn.vertex;
+                                          if(wm != null)
                                           {
-                                             _loc17_.next = _loc18_;
+                                             wm.next = sm;
                                           }
                                           else
                                           {
-                                             _loc65_.wrapper = _loc18_;
+                                             newFace.wrapper = sm;
                                           }
-                                          _loc17_ = _loc18_;
-                                          _loc16_ = _loc16_.next != null ? _loc16_.next : _loc8_.wrapper;
+                                          wm = sm;
+                                          sn = sn.next != null ? sn.next : sibling.wrapper;
                                        }
-                                       _loc41_[_loc5_] = _loc65_;
-                                       _loc41_[_loc6_] = null;
-                                       _loc9_ = _loc65_;
+                                       island[i] = newFace;
+                                       island[j] = null;
+                                       face = newFace;
                                        if(pairWeld)
                                        {
                                           break;
@@ -1528,24 +1527,21 @@ package alternativa.engine3d.objects
                            }
                         }
                      }
-                     _loc5_++;
-                  }
-                  if(!_loc64_)
-                  {
-                     break;
+                     i++;
                   }
                }
-               _loc5_ = 0;
-               while(_loc5_ < _loc44_)
+               while(weld);
+               i = 0;
+               while(i < num)
                {
-                  _loc9_ = _loc41_[_loc5_];
-                  if(_loc9_ != null)
+                  face = island[i];
+                  if(face != null)
                   {
-                     _loc9_.calculateBestSequenceAndNormal();
-                     _loc9_.next = this.faceList;
-                     this.faceList = _loc9_;
+                     face.calculateBestSequenceAndNormal();
+                     face.next = this.faceList;
+                     this.faceList = face;
                   }
-                  _loc5_++;
+                  i++;
                }
             }
          }

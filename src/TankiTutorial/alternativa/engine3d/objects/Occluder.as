@@ -185,42 +185,39 @@ package alternativa.engine3d.objects
          for(face = this.faceList; face != null; face = face.next)
          {
             face.calculateBestSequenceAndNormal();
-            for(wrapper = face.wrapper; wrapper != null; )
+            wrapper = face.wrapper; 
+            while (wrapper != null)
             {
                a = wrapper.vertex;
                b = wrapper.next != null ? wrapper.next.vertex : face.wrapper.vertex;
                edge = this.edgeList;
-               while(true)
+               while(edge != null)
                {
-                  if(edge != null)
+                  if(edge.a == a && edge.b == b)
                   {
-                     if(edge.a == a && edge.b == b)
-                     {
-                        return "The supplied geometry is not valid.";
-                     }
-                     if(!(edge.a == b && edge.b == a))
-                     {
-                        continue;
-                     }
+                     return "The supplied geometry is not valid.";
                   }
-                  if(edge != null)
+                  if(edge.a == b && edge.b == a)
                   {
-                     edge.right = face;
+                     break;
                   }
-                  else
-                  {
-                     edge = new Edge();
-                     edge.a = a;
-                     edge.b = b;
-                     edge.left = face;
-                     edge.next = this.edgeList;
-                     this.edgeList = edge;
-                  }
-                  wrapper = wrapper.next;
-                  a = b;
-                  break;
                   edge = edge.next;
                }
+               if(edge != null)
+               {
+                  edge.right = face;
+               }
+               else
+               {
+                  edge = new Edge();
+                  edge.a = a;
+                  edge.b = b;
+                  edge.left = face;
+                  edge.next = this.edgeList;
+                  this.edgeList = edge;
+               }
+               a = b;
+               wrapper = wrapper.next;
             }
          }
          for(edge = this.edgeList; edge != null; edge = edge.next)
