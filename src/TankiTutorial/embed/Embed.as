@@ -537,12 +537,16 @@ package embed
          var _loc1_:ByteArray = null;
          var _loc5_:int = 0;
          var _loc6_:* = binMap;
+
+         // According to the pcode this code is correct even if strange
          for(_loc2_ in _loc6_)
          {
             currentURL = _loc2_;
             _loc1_ = binMap[_loc2_];
             delete binMap[_loc2_];
+            break;
          }
+         
          if(_loc1_ != null)
          {
             _loc1_.uncompress();
@@ -572,12 +576,16 @@ package embed
          currentEffect = null;
          var _loc5_:int = 0;
          var _loc6_:* = effectMap;
+
+         // According to the pcode this code is correct even if strange
          for(_loc1_ in _loc6_)
          {
             currentURL = _loc1_;
             currentEffect = effectMap[_loc1_];
             delete effectMap[_loc1_];
+            break;
          }
+         
          if(currentEffect != null)
          {
             _loc2_ = currentEffect["data"];
@@ -650,12 +658,16 @@ package embed
          UnpackingProgressUpdating.update();
          var _loc3_:int = 0;
          var _loc4_:* = swfMap;
+
+         // According to the pcode this code is correct even if strange
          for(_loc2_ in _loc4_)
          {
             currentURL = _loc2_;
             _loc1_ = swfMap[_loc2_];
             delete swfMap[_loc2_];
+            break;
          }
+
          if(_loc1_ != null)
          {
             loader = TanksLoader.createLoader(onSwfLoaded,uncompressSwf);
