@@ -18,17 +18,17 @@ package alternativa.tanks.shared.usertitle
    public class UserTitle
    {
       
-      private static const gijalatyt:Matrix = new Matrix();
+      private static const matrix:Matrix = new Matrix();
       
-      private static const dusojan:int = 3000;
+      private static const BLINKING_TIME:int = 3000;
       
       private static const nizohe:int = 13;
       
-      private static const jajid:int = 13;
+      private static const LABEL_HEIGHT:int = 13;
       
       private static const bebujizon:int = 3;
       
-      private static const qucysu:int = 16;
+      private static const INDICATOR_SIZE:int = 16;
       
       private static const vicufis:int = -3;
       
@@ -38,79 +38,79 @@ package alternativa.tanks.shared.usertitle
       
       private static const rotizefaq:int = 4;
       
-      private static const fapyv:int = 4;
+      private static const INDICATOR_SPACING:int = 4;
       
-      private static const perus:int = 100;
+      private static const BAR_WIDTH:int = 100;
       
-      private static const bon:int = 8;
+      private static const BAR_HEIGHT:int = 8;
       
-      private static const mycamake:int = 3;
+      private static const MARGIN:int = 3;
       
-      private static const gop:int = 2 * mycamake;
+      private static const gop:int = 2 * MARGIN;
       
-      private static const bosemy:Vector.<int> = Vector.<int>([InventoryItemType.gezah,InventoryItemType.ramymep,InventoryItemType.ronura,InventoryItemType.majycy]);
+      private static const effectIds:Vector.<int> = Vector.<int>([InventoryItemType.gezah,InventoryItemType.ramymep,InventoryItemType.ronura,InventoryItemType.majycy]);
       
-      private static const mocedu:GlowFilter = new GlowFilter(0,0.8,4,4,3);
+      private static const glowFilter:GlowFilter = new GlowFilter(0,0.8,4,4,3);
       
-      private static const hacevul:Number = 0.002;
+      private static const ALPHA_SPEED:Number = 0.002;
       
-      private var mojyfod:int;
+      private var configuration:int;
       
-      private var zofahy:int;
+      private var dirtyFlags:int;
       
       private var sprite:Sprite3D;
       
-      private var kiqep:Rectangle;
+      private var rect:Rectangle;
       
-      private var girilu:Label;
+      private var label:Label;
       
-      private var tudapypyk:ProgressBar;
+      private var healthBar:ProgressBar;
       
-      private var ruwyb:ProgressBar;
+      private var weaponBar:ProgressBar;
       
-      private var redado:Vector.<EffectIndicator>;
+      private var effectIndicators:Vector.<EffectIndicator>;
       
-      private var fil:int;
+      private var numVisibleIndicators:int;
       
-      private var gycebute:int;
+      private var indicatorsY:int;
       
-      private var lavur:int;
+      private var rank:int;
       
-      private var butyv:String;
+      private var labelText:String;
       
-      private var quj:int;
+      private var health:int;
       
-      private var wibo:int;
+      private var maxHealth:int;
       
-      private var fyfefi:int;
+      private var weaponStatus:int;
       
       private var vos:Boolean;
       
-      private var tojuhata:ProgressBarSkin = ProgressBarSkin.gify;
+      private var healthBarSkin:ProgressBarSkin = ProgressBarSkin.hpDm;
       
-      private var juvowywa:Boolean = true;
+      private var hidden:Boolean = true;
       
-      private var lecopojen:int;
+      private var time:int;
       
       private var material:TextureMaterial;
       
-      private var zyl:BitmapData;
+      private var texture:BitmapData;
       
-      private var bifejizi:Number;
+      private var heightOffset:Number;
       
-      private var danewazam:Object3DContainer;
+      private var container:Object3DContainer;
       
-      private var jiso:Size2D = new Size2D();
+      private var size:Size2D = new Size2D();
       
-      public function UserTitle(param1:Number, param2:Object3DContainer)
+      public function UserTitle(heightOffset:Number, container:Object3DContainer)
       {
          super();
-         this.bifejizi = param1;
-         this.danewazam = param2;
+         this.heightOffset = heightOffset;
+         this.container = container;
          this.material = new TextureMaterial();
          this.material.name = "title";
          this.sprite = new Sprite3D(100,100,this.material);
-         if(param1 == 0)
+         if(heightOffset == 0)
          {
             this.sprite.name = "title";
          }
@@ -118,19 +118,19 @@ package alternativa.tanks.shared.usertitle
          this.sprite.perspectiveScale = false;
          this.sprite.alpha = 0;
          this.sprite.visible = false;
-         this.juvowywa = true;
+         this.hidden = true;
          this.sprite.useShadowMap = false;
          this.sprite.useLight = false;
       }
       
       public function getTexture() : BitmapData
       {
-         return this.zyl;
+         return this.texture;
       }
       
       public function hide() : void
       {
-         this.juvowywa = true;
+         this.hidden = true;
       }
       
       public function hideImmediate() : void
@@ -141,208 +141,208 @@ package alternativa.tanks.shared.usertitle
       
       public function show() : void
       {
-         this.juvowywa = false;
+         this.hidden = false;
       }
       
-      public function setConfiguration(param1:int) : void
+      public function setConfiguration(configuration:int) : void
       {
-         if(this.mojyfod != param1)
+         if(this.configuration != configuration)
          {
-            this.mojyfod = param1;
+            this.configuration = configuration;
             this.updateConfiguration();
          }
       }
       
-      public function setRank(param1:int) : void
+      public function setRank(rank:int) : void
       {
-         if(this.lavur != param1)
+         if(this.rank != rank)
          {
-            this.lavur = param1;
-            if(this.hasAnyFlag(TitleConfigFlags.kiwy))
+            this.rank = rank;
+            if(this.hasAnyFlag(TitleConfigFlags.LABEL))
             {
-               this.invalidateConfigFlags(TitleConfigFlags.kiwy | TitleConfigFlags.qoj | TitleConfigFlags.deli | TitleConfigFlags.gibevugus);
+               this.invalidateConfigFlags(TitleConfigFlags.LABEL | TitleConfigFlags.HEALTH | TitleConfigFlags.WEAPON | TitleConfigFlags.EFFECTS);
             }
          }
       }
       
-      public function setLabelText(param1:String) : void
+      public function setLabelText(labelText:String) : void
       {
-         if(this.butyv != param1)
+         if(this.labelText != labelText)
          {
-            this.butyv = param1;
-            if(this.hasAnyFlag(TitleConfigFlags.kiwy))
+            this.labelText = labelText;
+            if(this.hasAnyFlag(TitleConfigFlags.LABEL))
             {
                this.updateConfiguration();
-               this.invalidateConfigFlags(TitleConfigFlags.kiwy | TitleConfigFlags.qoj | TitleConfigFlags.deli | TitleConfigFlags.gibevugus);
+               this.invalidateConfigFlags(TitleConfigFlags.LABEL | TitleConfigFlags.HEALTH | TitleConfigFlags.WEAPON | TitleConfigFlags.EFFECTS);
             }
          }
       }
       
-      public function setHealth(param1:int, param2:int) : void
+      public function setHealth(health:int, maxHealth:int) : void
       {
-         if(this.tudapypyk == null)
+         if(this.healthBar == null)
          {
             return;
          }
-         if(this.quj != param1)
+         if(this.health != health)
          {
-            this.quj = param1;
-            this.invalidateConfigFlags(TitleConfigFlags.qoj);
+            this.health = health;
+            this.invalidateConfigFlags(TitleConfigFlags.HEALTH);
          }
-         if(this.wibo != param2)
+         if(this.maxHealth != maxHealth)
          {
-            this.wibo = param2;
-            this.invalidateConfigFlags(TitleConfigFlags.qoj);
-            this.tudapypyk.zabiso = param2;
-         }
-      }
-      
-      public function setWeaponStatus(param1:int) : void
-      {
-         if(this.fyfefi != param1)
-         {
-            this.fyfefi = param1;
-            this.invalidateConfigFlags(TitleConfigFlags.deli);
+            this.maxHealth = maxHealth;
+            this.invalidateConfigFlags(TitleConfigFlags.HEALTH);
+            this.healthBar.maxValue = maxHealth;
          }
       }
       
-      public function showIndicator(param1:int, param2:int) : void
+      public function setWeaponStatus(weaponStatus:int) : void
       {
-         var _loc3_:EffectIndicator = null;
-         if(this.hasAnyFlag(TitleConfigFlags.gibevugus))
+         if(this.weaponStatus != weaponStatus)
          {
-            _loc3_ = this.getEffectIndicatorById(param1);
-            if(_loc3_ != null)
+            this.weaponStatus = weaponStatus;
+            this.invalidateConfigFlags(TitleConfigFlags.WEAPON);
+         }
+      }
+      
+      public function showIndicator(effectId:int, duration:int) : void
+      {
+         var indicator:EffectIndicator = null;
+         if(this.hasAnyFlag(TitleConfigFlags.EFFECTS))
+         {
+            indicator = this.getEffectIndicatorById(effectId);
+            if(indicator != null)
             {
-               if(_loc3_.isHidden())
+               if(indicator.isHidden())
                {
                   this.changeVisibleIndicatorsNumber(1);
                }
-               _loc3_.show(param2);
+               indicator.show(duration);
             }
          }
       }
       
-      public function hideIndicator(param1:int) : void
+      public function hideIndicator(effectId:int) : void
       {
-         var _loc2_:EffectIndicator = null;
-         if(this.hasAnyFlag(TitleConfigFlags.gibevugus))
+         var indicator:EffectIndicator = null;
+         if(this.hasAnyFlag(TitleConfigFlags.EFFECTS))
          {
-            _loc2_ = this.getEffectIndicatorById(param1);
-            if(_loc2_ != null)
+            indicator = this.getEffectIndicatorById(effectId);
+            if(indicator != null)
             {
-               _loc2_.hide();
+               indicator.hide();
             }
          }
       }
       
       public function hideIndicators() : void
       {
-         var _loc1_:int = 0;
-         if(this.hasAnyFlag(TitleConfigFlags.gibevugus) && this.redado != null)
+         var effectId:int = 0;
+         if(this.hasAnyFlag(TitleConfigFlags.EFFECTS) && this.effectIndicators != null)
          {
-            for each(_loc1_ in bosemy)
+            for each(effectId in effectIds)
             {
-               this.hideIndicator(_loc1_);
+               this.hideIndicator(effectId);
             }
          }
       }
       
-      internal function doHideIndicator(param1:EffectIndicator) : void
+      internal function doHideIndicator(indicator:EffectIndicator) : void
       {
-         param1.clear(this.zyl);
+         indicator.clear(this.texture);
          this.changeVisibleIndicatorsNumber(-1);
       }
       
-      public function update(param1:Vector3) : void
+      public function update(position:Vector3) : void
       {
-         var _loc4_:EffectIndicator = null;
-         this.setPosition(param1);
-         var _loc2_:int = getTimer();
-         var _loc3_:int = _loc2_ - this.lecopojen;
-         this.lecopojen = _loc2_;
-         this.updateVisibility(_loc3_);
-         if(this.zofahy != 0)
+         var indicator:EffectIndicator = null;
+         this.setPosition(position);
+         var currentTime:int = getTimer();
+         var deltaTime:int = currentTime - this.time;
+         this.time = currentTime;
+         this.updateVisibility(deltaTime);
+         if(this.dirtyFlags != 0)
          {
-            if(this.isDirtyAndHasOption(TitleConfigFlags.kiwy))
+            if(this.isDirtyAndHasOption(TitleConfigFlags.LABEL))
             {
                this.updateLabel();
             }
-            if(this.isDirtyAndHasOption(TitleConfigFlags.qoj))
+            if(this.isDirtyAndHasOption(TitleConfigFlags.HEALTH))
             {
-               this.tudapypyk.setSkin(this.tojuhata);
-               this.tudapypyk.progress = this.quj;
-               this.tudapypyk.draw(this.zyl);
+               this.healthBar.setSkin(this.healthBarSkin);
+               this.healthBar.progress = this.health;
+               this.healthBar.draw(this.texture);
             }
-            if(this.isDirtyAndHasOption(TitleConfigFlags.deli))
+            if(this.isDirtyAndHasOption(TitleConfigFlags.WEAPON))
             {
-               this.ruwyb.progress = this.fyfefi;
-               this.ruwyb.draw(this.zyl);
+               this.weaponBar.progress = this.weaponStatus;
+               this.weaponBar.draw(this.texture);
             }
-            if(this.isDirtyAndHasOption(TitleConfigFlags.gibevugus))
+            if(this.isDirtyAndHasOption(TitleConfigFlags.EFFECTS))
             {
-               for each(_loc4_ in this.redado)
+               for each(indicator in this.effectIndicators)
                {
-                  _loc4_.forceRedraw();
+                  indicator.forceRedraw();
                }
             }
-            this.zofahy = 0;
+            this.dirtyFlags = 0;
          }
-         if(this.hasAnyFlag(TitleConfigFlags.gibevugus))
+         if(this.hasAnyFlag(TitleConfigFlags.EFFECTS))
          {
-            this.updateEffectIndicators(_loc2_,_loc3_);
+            this.updateEffectIndicators(currentTime,deltaTime);
          }
       }
       
-      private function isDirtyAndHasOption(param1:int) : Boolean
+      private function isDirtyAndHasOption(flags:int) : Boolean
       {
-         return (param1 & this.zofahy & this.mojyfod) == param1;
+         return (flags & this.dirtyFlags & this.configuration) == flags;
       }
       
-      private function updateEffectIndicators(param1:int, param2:int) : void
+      private function updateEffectIndicators(time:int, deltaTime:int) : void
       {
-         var _loc3_:EffectIndicator = null;
-         var _loc4_:int = 0;
-         var _loc6_:int = 0;
-         var _loc5_:int = int(this.redado.length);
+         var indicator:EffectIndicator = null;
+         var i:int = 0;
+         var x:int = 0;
+         var len:int = int(this.effectIndicators.length);
          if(this.vos)
          {
             this.vos = false;
-            _loc6_ = this.jiso.width + gop - this.fil * qucysu - (this.fil - 1) * fapyv >> 1;
-            _loc4_ = 0;
-            while(_loc4_ < _loc5_)
+            x = this.size.width + gop - this.numVisibleIndicators * INDICATOR_SIZE - (this.numVisibleIndicators - 1) * INDICATOR_SPACING >> 1;
+            i = 0;
+            while(i < len)
             {
-               _loc3_ = this.redado[_loc4_];
-               if(_loc3_.isVisible())
+               indicator = this.effectIndicators[i];
+               if(indicator.isVisible())
                {
-                  _loc3_.clear(this.zyl);
+                  indicator.clear(this.texture);
                }
-               if(!_loc3_.isHidden())
+               if(!indicator.isHidden())
                {
-                  _loc3_.setPosition(_loc6_,this.gycebute);
-                  _loc6_ += qucysu + fapyv;
+                  indicator.setPosition(x,this.indicatorsY);
+                  x += INDICATOR_SIZE + INDICATOR_SPACING;
                }
-               _loc4_++;
+               i++;
             }
          }
-         _loc4_ = 0;
-         while(_loc4_ < _loc5_)
+         i = 0;
+         while(i < len)
          {
-            _loc3_ = this.redado[_loc4_];
-            _loc3_.update(param1,param2,this.zyl);
-            _loc4_++;
+            indicator = this.effectIndicators[i];
+            indicator.update(time,deltaTime,this.texture);
+            i++;
          }
       }
       
-      private function changeVisibleIndicatorsNumber(param1:int) : void
+      private function changeVisibleIndicatorsNumber(delta:int) : void
       {
-         this.fil += param1;
+         this.numVisibleIndicators += delta;
          this.vos = true;
       }
       
       private function updateConfiguration() : void
       {
-         if(this.mojyfod != 0)
+         if(this.configuration != 0)
          {
             this.setupTexture();
             this.setupComponents();
@@ -351,92 +351,92 @@ package alternativa.tanks.shared.usertitle
       
       private function setupTexture() : void
       {
-         var _loc1_:int = 0;
-         var _loc2_:int = 0;
-         this.jiso.setToZero();
-         if(this.hasAnyFlag(TitleConfigFlags.kiwy))
+         var numIndicators:int = 0;
+         var width:int = 0;
+         this.size.setToZero();
+         if(this.hasAnyFlag(TitleConfigFlags.LABEL))
          {
             this.createLabelComponents();
-            this.girilu.text = this.butyv || "";
-            this.jiso.setWidth(nizohe + vicufis + this.girilu.textWidth);
-            this.jiso.setHeight(jajid);
+            this.label.text = this.labelText || "";
+            this.size.setWidth(nizohe + vicufis + this.label.textWidth);
+            this.size.setHeight(LABEL_HEIGHT);
          }
-         if(this.hasAnyFlag(TitleConfigFlags.qoj))
+         if(this.hasAnyFlag(TitleConfigFlags.HEALTH))
          {
-            this.jiso.setWidthIfGreater(perus);
-            if(this.hasAnyFlag(TitleConfigFlags.kiwy))
+            this.size.setWidthIfGreater(BAR_WIDTH);
+            if(this.hasAnyFlag(TitleConfigFlags.LABEL))
             {
-               this.jiso.addHeight(vopafub);
+               this.size.addHeight(vopafub);
             }
-            this.jiso.addHeight(bon);
+            this.size.addHeight(BAR_HEIGHT);
          }
-         if(this.hasAnyFlag(TitleConfigFlags.deli))
+         if(this.hasAnyFlag(TitleConfigFlags.WEAPON))
          {
-            this.jiso.setWidthIfGreater(perus);
-            this.jiso.addHeight(retunobi + bon);
+            this.size.setWidthIfGreater(BAR_WIDTH);
+            this.size.addHeight(retunobi + BAR_HEIGHT);
          }
-         if(this.hasAnyFlag(TitleConfigFlags.gibevugus))
+         if(this.hasAnyFlag(TitleConfigFlags.EFFECTS))
          {
-            _loc1_ = 4;
-            _loc2_ = _loc1_ * qucysu + (_loc1_ - 1) * fapyv;
-            this.jiso.setWidthIfGreater(_loc2_);
-            if(this.hasAnyFlag(TitleConfigFlags.kiwy | TitleConfigFlags.qoj))
+            numIndicators = 4;
+            width = numIndicators * INDICATOR_SIZE + (numIndicators - 1) * INDICATOR_SPACING;
+            this.size.setWidthIfGreater(width);
+            if(this.hasAnyFlag(TitleConfigFlags.LABEL | TitleConfigFlags.HEALTH))
             {
-               this.jiso.addHeight(rotizefaq);
+               this.size.addHeight(rotizefaq);
             }
-            this.jiso.addHeight(qucysu);
+            this.size.addHeight(INDICATOR_SIZE);
          }
-         this.jiso.addWidth(2 * mycamake);
-         this.jiso.addHeight(2 * mycamake);
+         this.size.addWidth(2 * MARGIN);
+         this.size.addHeight(2 * MARGIN);
          this.createTexture();
       }
       
       private function createTexture() : void
       {
-         var _loc1_:int = this.jiso.width;
-         var _loc2_:int = this.jiso.height;
-         if(this.zyl == null || this.zyl.width != _loc1_ || this.zyl.height != _loc2_)
+         var width:int = this.size.width;
+         var height:int = this.size.height;
+         if(this.texture == null || this.texture.width != width || this.texture.height != height)
          {
-            if(this.zyl != null)
+            if(this.texture != null)
             {
-               this.zyl.dispose();
+               this.texture.dispose();
             }
-            this.zyl = new BitmapData(_loc1_,_loc2_,true,0);
-            this.material.texture = this.zyl;
-            this.sprite.width = _loc1_;
-            this.sprite.height = _loc2_;
-            this.kiqep = this.zyl.rect;
-            this.invalidateConfigFlags(TitleConfigFlags.kiwy | TitleConfigFlags.qoj | TitleConfigFlags.deli | TitleConfigFlags.gibevugus);
+            this.texture = new BitmapData(width,height,true,0);
+            this.material.texture = this.texture;
+            this.sprite.width = width;
+            this.sprite.height = height;
+            this.rect = this.texture.rect;
+            this.invalidateConfigFlags(TitleConfigFlags.LABEL | TitleConfigFlags.HEALTH | TitleConfigFlags.WEAPON | TitleConfigFlags.EFFECTS);
          }
       }
       
       private function setupComponents() : void
       {
-         var _loc1_:int = mycamake;
-         if(this.hasAnyFlag(TitleConfigFlags.kiwy))
+         var y:int = MARGIN;
+         if(this.hasAnyFlag(TitleConfigFlags.LABEL))
          {
-            _loc1_ += jajid;
+            y += LABEL_HEIGHT;
          }
-         var _loc2_:int = this.jiso.width - perus >> 1;
-         if(this.hasAnyFlag(TitleConfigFlags.qoj))
+         var x:int = this.size.width - BAR_WIDTH >> 1;
+         if(this.hasAnyFlag(TitleConfigFlags.HEALTH))
          {
-            if(this.hasAnyFlag(TitleConfigFlags.kiwy))
+            if(this.hasAnyFlag(TitleConfigFlags.LABEL))
             {
-               _loc1_ += vopafub;
+               y += vopafub;
             }
-            this.tudapypyk = new ProgressBar(_loc2_,_loc1_,0,perus,this.tojuhata);
-            _loc1_ += bon;
+            this.healthBar = new ProgressBar(x,y,0,BAR_WIDTH,this.healthBarSkin);
+            y += BAR_HEIGHT;
          }
-         if(this.hasAnyFlag(TitleConfigFlags.deli))
+         if(this.hasAnyFlag(TitleConfigFlags.WEAPON))
          {
-            _loc1_ += retunobi;
-            this.ruwyb = new ProgressBar(_loc2_,_loc1_,100,perus,ProgressBarSkin.mub);
-            _loc1_ += bon;
+            y += retunobi;
+            this.weaponBar = new ProgressBar(x,y,100,BAR_WIDTH,ProgressBarSkin.weapon);
+            y += BAR_HEIGHT;
          }
-         if(this.hasAnyFlag(TitleConfigFlags.gibevugus))
+         if(this.hasAnyFlag(TitleConfigFlags.EFFECTS))
          {
-            _loc1_ += rotizefaq;
-            this.gycebute = _loc1_;
+            y += rotizefaq;
+            this.indicatorsY = y;
             this.createEffectsIndicators();
          }
       }
@@ -445,8 +445,8 @@ package alternativa.tanks.shared.usertitle
       {
          if(this.sprite.parent == null)
          {
-            this.danewazam.addChild(this.sprite);
-            this.lecopojen = getTimer();
+            this.container.addChild(this.sprite);
+            this.time = getTimer();
          }
       }
       
@@ -458,105 +458,105 @@ package alternativa.tanks.shared.usertitle
          }
       }
       
-      public function setPosition(param1:Vector3) : void
+      public function setPosition(position:Vector3) : void
       {
-         this.sprite.x = param1.x;
-         this.sprite.y = param1.y;
-         this.sprite.z = param1.z + this.bifejizi;
+         this.sprite.x = position.x;
+         this.sprite.y = position.y;
+         this.sprite.z = position.z + this.heightOffset;
       }
       
-      public function readPosition(param1:Vector3D) : void
+      public function readPosition(position:Vector3D) : void
       {
-         param1.x = this.sprite.x;
-         param1.y = this.sprite.y;
-         param1.z = this.sprite.z;
+         position.x = this.sprite.x;
+         position.y = this.sprite.y;
+         position.z = this.sprite.z;
       }
       
-      private function invalidateConfigFlags(param1:int) : void
+      private function invalidateConfigFlags(flags:int) : void
       {
-         this.zofahy |= param1 & this.mojyfod;
+         this.dirtyFlags |= flags & this.configuration;
       }
       
-      private function hasAnyFlag(param1:int) : Boolean
+      private function hasAnyFlag(flags:int) : Boolean
       {
-         return (param1 & this.mojyfod) != 0;
+         return (flags & this.configuration) != 0;
       }
       
       private function createLabelComponents() : void
       {
-         if(this.girilu == null)
+         if(this.label == null)
          {
-            this.girilu = new Label();
-            this.girilu.autoSize = TextFieldAutoSize.LEFT;
-            this.girilu.thickness = 50;
+            this.label = new Label();
+            this.label.autoSize = TextFieldAutoSize.LEFT;
+            this.label.thickness = 50;
          }
       }
       
       private function updateLabel() : void
       {
-         var _loc1_:BitmapData = this.zyl.clone();
-         _loc1_.fillRect(this.kiqep,0);
-         var _loc2_:int = nizohe + vicufis + this.girilu.textWidth;
-         var _loc3_:int = this.jiso.width - _loc2_ >> 1;
-         gijalatyt.tx = _loc3_;
-         gijalatyt.ty = mycamake + bebujizon;
-         gijalatyt.tx = _loc3_ + nizohe + vicufis;
-         gijalatyt.ty = mycamake;
-         this.girilu.textColor = this.tojuhata.color;
-         _loc1_.draw(this.girilu,gijalatyt,null,null,null,true);
-         this.zyl.applyFilter(_loc1_,this.kiqep,new Point(),mocedu);
-         _loc1_.dispose();
+         var bitmapData:BitmapData = this.texture.clone();
+         bitmapData.fillRect(this.rect,0);
+         var width:int = nizohe + vicufis + this.label.textWidth;
+         var x:int = this.size.width - width >> 1;
+         matrix.tx = x;
+         matrix.ty = MARGIN + bebujizon;
+         matrix.tx = x + nizohe + vicufis;
+         matrix.ty = MARGIN;
+         this.label.textColor = this.healthBarSkin.color;
+         bitmapData.draw(this.label,matrix,null,null,null,true);
+         this.texture.applyFilter(bitmapData,this.rect,new Point(),glowFilter);
+         bitmapData.dispose();
       }
       
       private function createEffectsIndicators() : void
       {
-         var _loc1_:int = 0;
-         if(this.redado == null)
+         var effectId:int = 0;
+         if(this.effectIndicators == null)
          {
-            this.redado = new Vector.<EffectIndicator>();
-            for each(_loc1_ in bosemy)
+            this.effectIndicators = new Vector.<EffectIndicator>();
+            for each(effectId in effectIds)
             {
-               if(_loc1_ == InventoryItemType.gezah)
+               if(effectId == InventoryItemType.gezah)
                {
-                  this.redado.push(new EffectIndicator(_loc1_,100000,this,300,0));
+                  this.effectIndicators.push(new EffectIndicator(effectId,100000,this,300,0));
                }
                else
                {
-                  this.redado.push(new EffectIndicator(_loc1_,dusojan,this,300,30));
+                  this.effectIndicators.push(new EffectIndicator(effectId,BLINKING_TIME,this,300,30));
                }
             }
          }
       }
       
-      private function getEffectIndicatorById(param1:int) : EffectIndicator
+      private function getEffectIndicatorById(effectId:int) : EffectIndicator
       {
-         var _loc2_:int = 0;
-         var _loc3_:int = 0;
-         var _loc4_:EffectIndicator = null;
-         if(this.redado != null)
+         var len:int = 0;
+         var i:int = 0;
+         var indicator:EffectIndicator = null;
+         if(this.effectIndicators != null)
          {
-            _loc2_ = int(this.redado.length);
-            _loc3_ = 0;
-            while(_loc3_ < _loc2_)
+            len = int(this.effectIndicators.length);
+            i = 0;
+            while(i < len)
             {
-               _loc4_ = this.redado[_loc3_];
-               if(_loc4_.effectId == param1)
+               indicator = this.effectIndicators[i];
+               if(indicator.effectId == effectId)
                {
-                  return _loc4_;
+                  return indicator;
                }
-               _loc3_++;
+               i++;
             }
          }
          return null;
       }
       
-      private function updateVisibility(param1:int) : void
+      private function updateVisibility(deltaTime:int) : void
       {
-         if(this.juvowywa)
+         if(this.hidden)
          {
             if(this.sprite.alpha > 0)
             {
-               this.sprite.alpha -= hacevul * param1;
+               this.sprite.alpha -= ALPHA_SPEED * deltaTime;
                if(this.sprite.alpha <= 0)
                {
                   this.sprite.alpha = 0;
@@ -569,7 +569,7 @@ package alternativa.tanks.shared.usertitle
             this.sprite.visible = true;
             if(this.sprite.alpha < 1)
             {
-               this.sprite.alpha += hacevul * param1;
+               this.sprite.alpha += ALPHA_SPEED * deltaTime;
                if(this.sprite.alpha > 1)
                {
                   this.sprite.alpha = 1;

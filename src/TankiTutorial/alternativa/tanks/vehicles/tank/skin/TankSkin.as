@@ -55,7 +55,7 @@ package alternativa.tanks.vehicles.tank.skin
       
       public var butefu:Camera3D;
       
-      public var nuvyma:Shadow;
+      public var shadow:Shadow;
       
       public function TankSkin()
       {
@@ -88,9 +88,9 @@ package alternativa.tanks.vehicles.tank.skin
       {
          this.mema.alpha = param1;
          this.kimiwacun.alpha = param1;
-         if(this.nuvyma != null)
+         if(this.shadow != null)
          {
-            this.nuvyma.alpha = param1;
+            this.shadow.alpha = param1;
          }
       }
       
@@ -106,19 +106,19 @@ package alternativa.tanks.vehicles.tank.skin
             param1.addChild(this.kimiwacun);
          }
          this.butefu = param2;
-         this.nuvyma = new Shadow(128,8,100,5000,10000,516,0.95);
-         this.nuvyma.offset = 100;
-         this.nuvyma.backFadeRange = 100;
-         this.nuvyma.direction = GameData.ruda;
+         this.shadow = new Shadow(128,8,100,5000,10000,516,0.95);
+         this.shadow.offset = 100;
+         this.shadow.backFadeRange = 100;
+         this.shadow.direction = GameData.ruda;
          if(this.mema != null)
          {
-            this.nuvyma.addCaster(this.mema);
+            this.shadow.addCaster(this.mema);
          }
          if(this.kimiwacun != null)
          {
-            this.nuvyma.addCaster(this.kimiwacun);
+            this.shadow.addCaster(this.kimiwacun);
          }
-         param2.addShadow(this.nuvyma);
+         param2.addShadow(this.shadow);
       }
       
       public function removeFromContainer() : void
@@ -136,9 +136,9 @@ package alternativa.tanks.vehicles.tank.skin
          }
          if(this.butefu != null)
          {
-            this.nuvyma.removeAllCasters();
-            this.butefu.removeShadow(this.nuvyma);
-            this.nuvyma = null;
+            this.shadow.removeAllCasters();
+            this.butefu.removeShadow(this.shadow);
+            this.shadow = null;
             this.butefu = null;
          }
       }
@@ -176,16 +176,16 @@ package alternativa.tanks.vehicles.tank.skin
             }
          }
          this.updatePartTexture(this.cocehi,this.mema);
-         if(this.nuvyma != null)
+         if(this.shadow != null)
          {
-            this.nuvyma.removeAllCasters();
+            this.shadow.removeAllCasters();
             if(this.mema != null)
             {
-               this.nuvyma.addCaster(this.mema);
+               this.shadow.addCaster(this.mema);
             }
             if(this.kimiwacun != null)
             {
-               this.nuvyma.addCaster(this.kimiwacun);
+               this.shadow.addCaster(this.kimiwacun);
             }
          }
       }
@@ -256,16 +256,16 @@ package alternativa.tanks.vehicles.tank.skin
             }
          }
          this.updatePartTexture(this.lygawe,this.kimiwacun);
-         if(this.nuvyma != null)
+         if(this.shadow != null)
          {
-            this.nuvyma.removeAllCasters();
+            this.shadow.removeAllCasters();
             if(this.mema != null)
             {
-               this.nuvyma.addCaster(this.mema);
+               this.shadow.addCaster(this.mema);
             }
             if(this.kimiwacun != null)
             {
-               this.nuvyma.addCaster(this.kimiwacun);
+               this.shadow.addCaster(this.kimiwacun);
             }
          }
       }

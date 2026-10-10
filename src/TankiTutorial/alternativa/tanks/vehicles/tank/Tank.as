@@ -230,7 +230,7 @@ package alternativa.tanks.vehicles.tank
             this.createBody(this.tuwykus,_loc4_);
             this.createChassis(_loc4_,_loc2_);
             this.setOptimalZCorrection(_loc4_);
-            this.setBodyCollisionGroup(CollisionGroup.pisyse | CollisionGroup.bywowe | CollisionGroup.deli | CollisionGroup.nuqa);
+            this.setBodyCollisionGroup(CollisionGroup.pisyse | CollisionGroup.bywowe | CollisionGroup.WEAPON | CollisionGroup.nuqa);
             this.setTracksCollisionGroup(CollisionGroup.bywowe);
          }
       }
@@ -389,7 +389,7 @@ package alternativa.tanks.vehicles.tank
       {
          this.kuca.turretMesh.visible = false;
          this.kuca.hullMesh.visible = false;
-         this.kuca.nuvyma.alpha = 0;
+         this.kuca.shadow.alpha = 0;
          this.bijatil.addEffect(this.lysecof);
          this.setColormap(this.zafutonaz);
          this.quj = this.wibo;
@@ -409,7 +409,7 @@ package alternativa.tanks.vehicles.tank
       {
          this.kuca.turretMesh.visible = true;
          this.kuca.hullMesh.visible = true;
-         this.kuca.nuvyma.alpha = 1;
+         this.kuca.shadow.alpha = 1;
          if(this.kakow != null)
          {
             this.kakow.show();

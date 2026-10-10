@@ -11,7 +11,7 @@ package alternativa.tanks.vehicles.tank.weapons
    public class ConicAreaTargetingSystem
    {
       
-      private static const sowe:int = CollisionGroup.deli;
+      private static const sowe:int = CollisionGroup.WEAPON;
       
       private static const vyhomopog:Vector3 = new Vector3();
       

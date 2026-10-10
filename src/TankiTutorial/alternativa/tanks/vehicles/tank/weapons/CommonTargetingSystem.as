@@ -10,7 +10,7 @@ package alternativa.tanks.vehicles.tank.weapons
    public class CommonTargetingSystem
    {
       
-      private static const sowe:int = CollisionGroup.deli;
+      private static const sowe:int = CollisionGroup.WEAPON;
       
       private static const gijalatyt:Matrix3 = new Matrix3();
       

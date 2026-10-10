@@ -435,7 +435,7 @@ package tutorial.script
       private function setTitle() : void
       {
          var _loc1_:UserTitle = this.jifom.kakow == null ? new UserTitle(0,GameData.root) : this.jifom.kakow;
-         var _loc2_:uint = uint(TitleConfigFlags.qoj | TitleConfigFlags.deli);
+         var _loc2_:uint = uint(TitleConfigFlags.HEALTH | TitleConfigFlags.WEAPON);
          _loc1_.setConfiguration(_loc2_);
          _loc1_.addToContainer();
          _loc1_.show();

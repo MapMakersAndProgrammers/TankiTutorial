@@ -18,32 +18,32 @@ package alternativa.tanks.shared.usertitle
          this.height = 0;
       }
       
-      public function setWidth(param1:int) : void
+      public function setWidth(width:int) : void
       {
-         this.width = param1;
+         this.width = width;
       }
       
-      public function setHeight(param1:int) : void
+      public function setHeight(height:int) : void
       {
-         this.height = param1;
+         this.height = height;
       }
       
-      public function setWidthIfGreater(param1:int) : void
+      public function setWidthIfGreater(width:int) : void
       {
-         if(this.width < param1)
+         if(this.width < width)
          {
-            this.width = param1;
+            this.width = width;
          }
       }
       
-      public function addHeight(param1:int) : void
+      public function addHeight(height:int) : void
       {
-         this.height += param1;
+         this.height += height;
       }
       
-      public function addWidth(param1:int) : void
+      public function addWidth(width:int) : void
       {
-         this.width += param1;
+         this.width += width;
       }
    }
 }

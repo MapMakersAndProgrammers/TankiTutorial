@@ -9,151 +9,151 @@ package alternativa.tanks.shared.usertitle
    public class ProgressBar
    {
       
-      private static var gijalatyt:Matrix = new Matrix();
+      private static var matrix:Matrix = new Matrix();
       
-      public var zabiso:int;
+      public var maxValue:int;
       
-      private var mevyjyhe:int;
+      private var width:int;
       
-      private var dyfami:int;
+      private var shadowLeftWidth:int;
       
-      private var bowi:int;
+      private var shadowHeight:int;
       
-      private var zanipubon:int;
+      private var offsetX:int;
       
-      private var pym:int;
+      private var offsetY:int;
       
-      private var kuca:ProgressBarSkin;
+      private var skin:ProgressBarSkin;
       
-      private var tami:int;
+      private var leftBgWidth:int;
       
-      private var nedyjoj:int;
+      private var leftBgHeight:int;
       
-      private var mukehefa:int;
+      private var _progress:int;
       
-      private var pediri:Shape = new Shape();
+      private var shape:Shape = new Shape();
       
       private var x:int;
       
       private var y:int;
       
-      private var wobycezu:Rectangle;
+      private var rect:Rectangle;
       
-      public function ProgressBar(param1:int, param2:int, param3:int, param4:int, param5:ProgressBarSkin)
+      public function ProgressBar(x:int, y:int, maxValue:int, width:int, skin:ProgressBarSkin)
       {
          super();
-         this.x = param1;
-         this.y = param2;
-         this.zabiso = param3;
-         this.mevyjyhe = param4;
-         this.setSkin(param5);
-         this.wobycezu = new Rectangle(param1,param2,2 * this.dyfami + param4,this.bowi);
+         this.x = x;
+         this.y = y;
+         this.maxValue = maxValue;
+         this.width = width;
+         this.setSkin(skin);
+         this.rect = new Rectangle(x,y,2 * this.shadowLeftWidth + width,this.shadowHeight);
       }
       
-      public function setSkin(param1:ProgressBarSkin) : void
+      public function setSkin(skin:ProgressBarSkin) : void
       {
-         this.kuca = param1;
-         this.tami = param1.row.width;
-         this.nedyjoj = param1.row.height;
-         this.dyfami = param1.roga.width;
-         this.bowi = param1.nuvyma.height;
-         this.zanipubon = this.dyfami - this.tami;
-         this.pym = this.bowi - this.nedyjoj >> 1;
+         this.skin = skin;
+         this.leftBgWidth = skin.leftBg.width;
+         this.leftBgHeight = skin.leftBg.height;
+         this.shadowLeftWidth = skin.shadowLeft.width;
+         this.shadowHeight = skin.shadow.height;
+         this.offsetX = this.shadowLeftWidth - this.leftBgWidth;
+         this.offsetY = this.shadowHeight - this.leftBgHeight >> 1;
       }
       
       public function get progress() : int
       {
-         return this.mukehefa;
+         return this._progress;
       }
       
-      public function set progress(param1:int) : void
+      public function set progress(value:int) : void
       {
-         if(param1 < 0)
+         if(value < 0)
          {
-            param1 = 0;
+            value = 0;
          }
-         else if(param1 > this.zabiso)
+         else if(value > this.maxValue)
          {
-            param1 = this.zabiso;
+            value = this.maxValue;
          }
-         this.mukehefa = param1;
+         this._progress = value;
       }
       
-      public function draw(param1:BitmapData) : void
+      public function draw(texture:BitmapData) : void
       {
          var _loc4_:int = 0;
-         var _loc2_:Graphics = this.pediri.graphics;
-         _loc2_.clear();
-         _loc2_.beginBitmapFill(this.kuca.roga);
-         _loc2_.drawRect(0,0,this.dyfami,this.bowi);
-         _loc2_.beginBitmapFill(this.kuca.nuvyma);
-         _loc2_.drawRect(this.dyfami,0,this.mevyjyhe - 2 * this.tami,this.bowi);
-         _loc2_.beginBitmapFill(this.kuca.bavofyhe);
-         _loc2_.drawRect(this.dyfami + this.mevyjyhe - 2 * this.tami,0,this.dyfami,this.bowi);
-         _loc2_.endFill();
-         var _loc3_:int = this.mevyjyhe * this.mukehefa / this.zabiso;
-         var _loc5_:int = this.mevyjyhe - this.tami;
-         if(_loc3_ >= this.tami)
+         var graphics:Graphics = this.shape.graphics;
+         graphics.clear();
+         graphics.beginBitmapFill(this.skin.shadowLeft);
+         graphics.drawRect(0,0,this.shadowLeftWidth,this.shadowHeight);
+         graphics.beginBitmapFill(this.skin.shadow);
+         graphics.drawRect(this.shadowLeftWidth,0,this.width - 2 * this.leftBgWidth,this.shadowHeight);
+         graphics.beginBitmapFill(this.skin.shadowRight);
+         graphics.drawRect(this.shadowLeftWidth + this.width - 2 * this.leftBgWidth,0,this.shadowLeftWidth,this.shadowHeight);
+         graphics.endFill();
+         var _loc3_:int = this.width * this._progress / this.maxValue;
+         var _loc5_:int = this.width - this.leftBgWidth;
+         if(_loc3_ >= this.leftBgWidth)
          {
-            if(_loc3_ == this.mevyjyhe)
+            if(_loc3_ == this.width)
             {
-               this.drawFullBar(_loc2_,this.kuca.color,this.kuca.bypot,this.kuca.cyv);
+               this.drawFullBar(graphics,this.skin.color,this.skin.left,this.skin.right);
                _loc4_ = _loc3_;
             }
             else
             {
-               gijalatyt.tx = this.zanipubon;
-               gijalatyt.ty = this.pym;
-               _loc2_.beginBitmapFill(this.kuca.bypot,gijalatyt,false);
-               _loc2_.drawRect(this.zanipubon,this.pym,this.tami,this.nedyjoj);
-               if(_loc3_ > this.tami)
+               matrix.tx = this.offsetX;
+               matrix.ty = this.offsetY;
+               graphics.beginBitmapFill(this.skin.left,matrix,false);
+               graphics.drawRect(this.offsetX,this.offsetY,this.leftBgWidth,this.leftBgHeight);
+               if(_loc3_ > this.leftBgWidth)
                {
                   if(_loc3_ > _loc5_)
                   {
                      _loc3_ = _loc5_;
                   }
                   _loc4_ = _loc3_;
-                  _loc2_.beginFill(this.kuca.color);
-                  _loc2_.drawRect(this.zanipubon + this.tami,this.pym,_loc3_ - this.tami,this.nedyjoj);
+                  graphics.beginFill(this.skin.color);
+                  graphics.drawRect(this.offsetX + this.leftBgWidth,this.offsetY,_loc3_ - this.leftBgWidth,this.leftBgHeight);
                }
                else
                {
-                  _loc4_ = this.tami;
+                  _loc4_ = this.leftBgWidth;
                }
             }
          }
          if(_loc4_ == 0)
          {
-            this.drawFullBar(_loc2_,this.kuca.furoveb,this.kuca.row,this.kuca.sikaq);
+            this.drawFullBar(graphics,this.skin.bgColor,this.skin.leftBg,this.skin.rightBg);
          }
-         else if(_loc4_ < this.mevyjyhe)
+         else if(_loc4_ < this.width)
          {
-            _loc2_.beginFill(this.kuca.furoveb);
-            _loc2_.drawRect(this.zanipubon + _loc4_,this.pym,_loc5_ - _loc4_,this.nedyjoj);
-            gijalatyt.tx = this.zanipubon + _loc5_;
-            gijalatyt.ty = this.pym;
-            _loc2_.beginBitmapFill(this.kuca.sikaq,gijalatyt,false);
-            _loc2_.drawRect(this.zanipubon + _loc5_,this.pym,this.tami,this.nedyjoj);
+            graphics.beginFill(this.skin.bgColor);
+            graphics.drawRect(this.offsetX + _loc4_,this.offsetY,_loc5_ - _loc4_,this.leftBgHeight);
+            matrix.tx = this.offsetX + _loc5_;
+            matrix.ty = this.offsetY;
+            graphics.beginBitmapFill(this.skin.rightBg,matrix,false);
+            graphics.drawRect(this.offsetX + _loc5_,this.offsetY,this.leftBgWidth,this.leftBgHeight);
          }
-         _loc2_.endFill();
-         param1.fillRect(this.wobycezu,0);
-         gijalatyt.tx = this.x;
-         gijalatyt.ty = this.y;
-         param1.draw(this.pediri,gijalatyt);
+         graphics.endFill();
+         texture.fillRect(this.rect,0);
+         matrix.tx = this.x;
+         matrix.ty = this.y;
+         texture.draw(this.shape,matrix);
       }
       
-      private function drawFullBar(param1:Graphics, param2:uint, param3:BitmapData, param4:BitmapData) : void
+      private function drawFullBar(graphics:Graphics, color:uint, left:BitmapData, right:BitmapData) : void
       {
-         var _loc5_:int = this.mevyjyhe - this.tami;
-         gijalatyt.tx = this.zanipubon;
-         gijalatyt.ty = this.pym;
-         param1.beginBitmapFill(param3,gijalatyt,false);
-         param1.drawRect(this.zanipubon,this.pym,this.tami,this.nedyjoj);
-         param1.beginFill(param2);
-         param1.drawRect(this.zanipubon + this.tami,this.pym,_loc5_ - this.tami,this.nedyjoj);
-         gijalatyt.tx = this.zanipubon + _loc5_;
-         param1.beginBitmapFill(param4,gijalatyt,false);
-         param1.drawRect(this.zanipubon + _loc5_,this.pym,this.tami,this.nedyjoj);
+         var _loc5_:int = this.width - this.leftBgWidth;
+         matrix.tx = this.offsetX;
+         matrix.ty = this.offsetY;
+         graphics.beginBitmapFill(left,matrix,false);
+         graphics.drawRect(this.offsetX,this.offsetY,this.leftBgWidth,this.leftBgHeight);
+         graphics.beginFill(color);
+         graphics.drawRect(this.offsetX + this.leftBgWidth,this.offsetY,_loc5_ - this.leftBgWidth,this.leftBgHeight);
+         matrix.tx = this.offsetX + _loc5_;
+         graphics.beginBitmapFill(right,matrix,false);
+         graphics.drawRect(this.offsetX + _loc5_,this.offsetY,this.leftBgWidth,this.leftBgHeight);
       }
    }
 }

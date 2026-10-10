@@ -370,7 +370,7 @@ package alternativa.tanks.sfx.twins
          _loc3_.diff(this.guripovec,this.fybumu);
          var _loc4_:Number = Number(_loc3_.length());
          _loc3_.normalize();
-         if(param1.raycast(this.fybumu,_loc3_,CollisionGroup.deli,_loc4_,this,wonuhig))
+         if(param1.raycast(this.fybumu,_loc3_,CollisionGroup.WEAPON,_loc4_,this,wonuhig))
          {
             this.fybumu.addScaled(wonuhig.jomuc,_loc3_);
             this.applyImpact(wonuhig.vetudozi.body,this.fybumu,_loc3_,0);
@@ -382,7 +382,7 @@ package alternativa.tanks.sfx.twins
          while(_loc5_ < fenuf)
          {
             _loc6_ = this.cekyno[_loc5_];
-            if(param1.raycast(_loc6_,this.kovi,CollisionGroup.deli,_loc4_,this,wonuhig))
+            if(param1.raycast(_loc6_,this.kovi,CollisionGroup.WEAPON,_loc4_,this,wonuhig))
             {
                _loc7_ = wonuhig.vetudozi.body;
                if(_loc7_ != null)

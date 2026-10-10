@@ -189,7 +189,7 @@ package alternativa.tanks.sfx.flamethrower
             dizecoca.x = _loc5_.x;
             dizecoca.y = _loc5_.y;
             dizecoca.z = _loc5_.z;
-            if(_loc5_.hyn > this.judawohof || Boolean(this.kymaqos.raycastStatic(dizecoca,_loc5_.zerus,CollisionGroup.deli,_loc3_,null,tefydiw)))
+            if(_loc5_.hyn > this.judawohof || Boolean(this.kymaqos.raycastStatic(dizecoca,_loc5_.zerus,CollisionGroup.WEAPON,_loc3_,null,tefydiw)))
             {
                this.removeParticle(_loc4_--);
             }
