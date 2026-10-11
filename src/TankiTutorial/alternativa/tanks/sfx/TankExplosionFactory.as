@@ -74,7 +74,7 @@ package alternativa.tanks.sfx
       
       private static function getEffectScale(tank:Tank) : Number
       {
-         var hullMesh:Mesh = tank.kuca.hullMesh;
+         var hullMesh:Mesh = tank.skin.hullMesh;
          var sizeX:Number = hullMesh.boundMaxX - hullMesh.boundMinX;
          var sizeY:Number = hullMesh.boundMaxY - hullMesh.boundMinY;
          var sizeZ:Number = hullMesh.boundMaxZ - hullMesh.boundMinZ;
@@ -94,7 +94,7 @@ package alternativa.tanks.sfx
             shockWaveAnimation = Assets.getData("tank_explosion/shockwave",TextureAnimation);
          }
          var _loc3_:Number = 500;
-         position.copy(tank.hogys.body.state.position);
+         position.copy(tank.tankBody.body.state.position);
          var collisionDetector:CollisionDetector = physicsScene.collisionDetector;
          if(collisionDetector.raycastStatic(position,bec,255,_loc3_,null,rayHit))
          {

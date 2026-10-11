@@ -421,7 +421,7 @@ package tutorial.script
          this.playerTank.addToGame();
          this.playerTank.setWeaponDamageMultiplier(params.damageMultiplier);
          this.playerTank.setCheckpoint();
-         this.playerTank.lysecof.setSilentMode();
+         this.playerTank.sounds.setSilentMode();
          params.recycle();
       }
       
@@ -429,17 +429,17 @@ package tutorial.script
       {
          taskGroup.addTask(new TankControlTask(this.playerTank,GameData.recordTankController));
          this.playerTank.turretController = new LocalTurretController(0,0,GameData.stage);
-         this.playerTank.lysecof.setIdleMode();
+         this.playerTank.sounds.setIdleMode();
       }
       
       private function setTitle() : void
       {
-         var title:UserTitle = this.playerTank.kakow == null ? new UserTitle(0,GameData.root) : this.playerTank.kakow;
+         var title:UserTitle = this.playerTank.userTitle == null ? new UserTitle(0,GameData.root) : this.playerTank.userTitle;
          var flags:uint = uint(TitleConfigFlags.HEALTH | TitleConfigFlags.WEAPON);
          title.setConfiguration(flags);
          title.addToContainer();
          title.show();
-         this.playerTank.kakow = title;
+         this.playerTank.userTitle = title;
       }
       
       private function onStepDone() : void

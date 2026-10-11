@@ -8,50 +8,50 @@ package alternativa.tanks.vehicles.tank.controllers
    public class AutoAimTurretController extends TurretController
    {
       
-      private static const pedake:Vector3 = new Vector3();
+      private static const bodyDirection:Vector3 = new Vector3();
       
-      private static const rinal:Matrix4 = new Matrix4();
+      private static const matrix:Matrix4 = new Matrix4();
       
-      private static const lyje:Vector3 = new Vector3();
+      private static const targetDirection:Vector3 = new Vector3();
       
       private var tank:Tank;
       
-      private var jywehybog:Tank;
+      private var target:Tank;
       
-      public function AutoAimTurretController(param1:Tank, param2:Tank)
+      public function AutoAimTurretController(tank:Tank, target:Tank)
       {
          super(0,0,false);
-         this.tank = param1;
-         this.jywehybog = param2;
+         this.tank = tank;
+         this.target = target;
       }
       
-      override public function rotate(param1:Number) : void
+      override public function rotate(dt:Number) : void
       {
-         if(!this.tank.kat)
+         if(!this.tank.alive)
          {
             return;
          }
-         var _loc2_:Vector3 = this.tank.hogys.body.state.position;
-         var _loc3_:Vector3 = this.jywehybog.hogys.body.state.position;
-         lyje.x = _loc3_.x - _loc2_.x;
-         lyje.y = _loc3_.y - _loc2_.y;
-         lyje.z = _loc3_.z - _loc2_.z;
-         this.tank.hogys.body.state.orientation.toMatrix4(rinal);
-         rinal.deltaTransformVector(Vector3.yAxis,pedake);
-         pedake.normalize();
-         lyje.normalize();
-         var _loc4_:Number = Math.atan2(lyje.y,lyje.x);
-         var _loc5_:Number = Math.atan2(pedake.y,pedake.x);
-         var _loc6_:Number = _loc4_ - _loc5_;
-         if(_loc6_ < -Math.PI)
+         var position:Vector3 = this.tank.tankBody.body.state.position;
+         var targetPosition:Vector3 = this.target.tankBody.body.state.position;
+         targetDirection.x = targetPosition.x - position.x;
+         targetDirection.y = targetPosition.y - position.y;
+         targetDirection.z = targetPosition.z - position.z;
+         this.tank.tankBody.body.state.orientation.toMatrix4(matrix);
+         matrix.deltaTransformVector(Vector3.yAxis,bodyDirection);
+         bodyDirection.normalize();
+         targetDirection.normalize();
+         var targetAngle:Number = Math.atan2(targetDirection.y,targetDirection.x);
+         var bodyAngle:Number = Math.atan2(bodyDirection.y,bodyDirection.x);
+         var angle:Number = targetAngle - bodyAngle;
+         if(angle < -Math.PI)
          {
-            _loc6_ += MathUtils.PI2;
+            angle += MathUtils.PI2;
          }
-         else if(_loc6_ > Math.PI)
+         else if(angle > Math.PI)
          {
-            _loc6_ -= MathUtils.PI2;
+            angle -= MathUtils.PI2;
          }
-         setDirectionImmediate(_loc6_);
+         setDirectionImmediate(angle);
       }
    }
 }

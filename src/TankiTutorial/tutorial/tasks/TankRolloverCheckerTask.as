@@ -43,11 +43,11 @@ package tutorial.tasks
       private function isRolledOver() : Boolean
       {
          var tank:Tank = GameData.playerTank;
-         if(tank.hogys == null)
+         if(tank.tankBody == null)
          {
             return false;
          }
-         return tank.hogys.body.orientationMatrix.mk < threshold;
+         return tank.tankBody.body.orientationMatrix.mk < threshold;
       }
       
       private function showSuicideHelp() : void

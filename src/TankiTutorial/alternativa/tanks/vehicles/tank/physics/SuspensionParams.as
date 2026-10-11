@@ -3,13 +3,13 @@ package alternativa.tanks.vehicles.tank.physics
    public class SuspensionParams
    {
       
-      public var tovudov:Number = 50;
+      public var rayLength:Number = 50;
       
-      public var vocuqih:Number = 25;
+      public var nominalRayLength:Number = 25;
       
-      public var jakopunu:Number = 0;
+      public var springCoeff:Number = 0;
       
-      public var miqelina:Number = 1000;
+      public var dampingCoeff:Number = 1000;
       
       public function SuspensionParams()
       {

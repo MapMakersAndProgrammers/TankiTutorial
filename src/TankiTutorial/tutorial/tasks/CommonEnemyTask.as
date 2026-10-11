@@ -103,9 +103,9 @@ package tutorial.tasks
          {
             this.lastCheckTime = time;
             target = this.tank.getWeapon().getTarget();
-            if(target == this.playerTank && Boolean(this.playerTank.kat) && Math.random() < SHOOT_PROBABILITY)
+            if(target == this.playerTank && Boolean(this.playerTank.alive) && Math.random() < SHOOT_PROBABILITY)
             {
-               this.shootAction = 1 << CommonTankController.syfysu;
+               this.shootAction = 1 << CommonTankController.FIRE;
             }
             else
             {
@@ -125,21 +125,21 @@ package tutorial.tasks
             this.kdContainer.addChild(this.pointer);
             this.controller = new CommonTankController(this.tank);
             GameData.taskGroup.addTask(new TankControlTask(this.tank,this.controller));
-            this.tank.kuca.setAlpha(0);
+            this.tank.skin.setAlpha(0);
          }
          var timeData:TimeData = GameData.time;
          if(this.state < STATE_DEAD)
          {
             if(this.pointer != null)
             {
-               position = this.tank.hogys.body.state.position;
+               position = this.tank.tankBody.body.state.position;
                this.pointer.x = position.x;
                this.pointer.y = position.y;
                this.pointer.z = position.z;
                this.phase += timeData.deltaTime * 5;
                this.pointer.z = position.z + POINTER_HEIGHT + Math.sin(this.phase) * 100;
             }
-            if(this.tank.currentHealth <= 0 && Boolean(this.tank.kat))
+            if(this.tank.currentHealth <= 0 && Boolean(this.tank.alive))
             {
                this.state = STATE_DEAD;
                GameData.dust.removeTank(this.tank);
@@ -179,7 +179,7 @@ package tutorial.tasks
          {
             this.racefom = getTimer();
             this.state = STATE_EXECUTE;
-            this.tank.kuca.setAlpha(1);
+            this.tank.skin.setAlpha(1);
          }
       }
       
@@ -201,7 +201,7 @@ package tutorial.tasks
       {
          var timeData:TimeData = GameData.time;
          this.alpha -= 2 * timeData.deltaTime;
-         this.tank.kuca.setAlpha(this.alpha);
+         this.tank.skin.setAlpha(this.alpha);
          if(this.alpha < 0)
          {
             this.tank.removeFromGame();

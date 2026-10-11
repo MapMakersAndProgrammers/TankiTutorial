@@ -36,7 +36,7 @@ package alternativa.tanks.sfx.flamethrower
       
       protected var positionProvider:Object3DPositionProvider;
       
-      protected var kat:Boolean;
+      protected var alive:Boolean;
       
       protected var tize:int;
       
@@ -65,7 +65,7 @@ package alternativa.tanks.sfx.flamethrower
       public function play(deltaTime:int, camera:GameCamera) : Boolean
       {
          var _loc3_:Number = NaN;
-         if(!this.kat)
+         if(!this.alive)
          {
             return false;
          }
@@ -118,7 +118,7 @@ package alternativa.tanks.sfx.flamethrower
       
       public function kill() : void
       {
-         this.kat = false;
+         this.alive = false;
       }
       
       public function stop() : void

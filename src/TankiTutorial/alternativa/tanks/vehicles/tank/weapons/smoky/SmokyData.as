@@ -10,20 +10,20 @@ package alternativa.tanks.vehicles.tank.weapons.smoky
    public class SmokyData
    {
       
-      public var syli:WeaponSettings;
+      public var settings:WeaponSettings;
       
       public var effects:SmokyEffects;
       
-      public var namekazaf:CommonTargetingSystem;
+      public var targetingSystem:CommonTargetingSystem;
       
       public function SmokyData()
       {
          super();
-         this.syli = new WeaponSettings(1.8,1.3,200,1500);
+         this.settings = new WeaponSettings(1.8,1.3,200,1500);
          this.effects = new SmokyEffects(new SmokySFXData());
-         var _loc1_:Number = 9 * Math.PI / 180;
-         var _loc2_:Number = 12 * Math.PI / 180;
-         this.namekazaf = new CommonTargetingSystem(9000,_loc1_,WeaponSettings.getNumRays(_loc1_),_loc2_,WeaponSettings.getNumRays(_loc2_),GameData.collisionDetector,new DMCommonTargetEvaluator());
+         var angleUp:Number = 9 * Math.PI / 180;
+         var angleDown:Number = 12 * Math.PI / 180;
+         this.targetingSystem = new CommonTargetingSystem(9000,angleUp,WeaponSettings.getNumRays(angleUp),angleDown,WeaponSettings.getNumRays(angleDown),GameData.collisionDetector,new DMCommonTargetEvaluator());
       }
    }
 }

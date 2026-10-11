@@ -5,41 +5,41 @@ package alternativa.tanks.vehicles.tank.controllers
    public class TurretControlKeyMap
    {
       
-      private static var taqino:TurretControlKeyMap;
+      private static var defaultKeyMap:TurretControlKeyMap;
       
-      private static var kulohi:int;
+      private static var defaultKeyLeft:int;
       
-      public var hatu:Vector.<uint>;
+      public var leftKeys:Vector.<uint>;
       
-      public var baric:Vector.<uint>;
+      public var rightKeys:Vector.<uint>;
       
-      public var konejohe:Vector.<uint>;
+      public var centerKeys:Vector.<uint>;
       
-      public function TurretControlKeyMap(param1:Vector.<uint>, param2:Vector.<uint>, param3:Vector.<uint>)
+      public function TurretControlKeyMap(leftKeys:Vector.<uint>, rightKeys:Vector.<uint>, centerKeys:Vector.<uint>)
       {
          super();
-         this.hatu = param1;
-         this.baric = param2;
-         this.konejohe = param3;
+         this.leftKeys = leftKeys;
+         this.rightKeys = rightKeys;
+         this.centerKeys = centerKeys;
       }
       
-      public static function initDefaultKeyMap(param1:String) : void
+      public static function initDefaultKeyMap(locale:String) : void
       {
-         if(taqino == null)
+         if(defaultKeyMap == null)
          {
-            kulohi = param1 == "de" ? int(Keyboard.Y) : int(Keyboard.Z);
-            taqino = new TurretControlKeyMap(Vector.<uint>([kulohi,Keyboard.COMMA]),Vector.<uint>([Keyboard.X,Keyboard.PERIOD]),Vector.<uint>([Keyboard.C,Keyboard.SLASH]));
+            defaultKeyLeft = locale == "de" ? int(Keyboard.Y) : int(Keyboard.Z);
+            defaultKeyMap = new TurretControlKeyMap(Vector.<uint>([defaultKeyLeft,Keyboard.COMMA]),Vector.<uint>([Keyboard.X,Keyboard.PERIOD]),Vector.<uint>([Keyboard.C,Keyboard.SLASH]));
          }
       }
       
       public static function getDefaultKeyLeft() : int
       {
-         return kulohi;
+         return defaultKeyLeft;
       }
       
       public static function getDefaultKeyMap() : TurretControlKeyMap
       {
-         return taqino;
+         return defaultKeyMap;
       }
    }
 }

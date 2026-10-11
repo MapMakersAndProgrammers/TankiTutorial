@@ -11,10 +11,10 @@ package alternativa.tanks.vehicles.tank.weapons
          super();
       }
       
-      public function isValidTarget(param1:Body) : Boolean
+      public function isValidTarget(body:Body) : Boolean
       {
-         var _loc2_:Tank = param1.data as Tank;
-         return _loc2_ != null && _loc2_.currentHealth > 0;
+         var tank:Tank = body.data as Tank;
+         return tank != null && tank.currentHealth > 0;
       }
    }
 }

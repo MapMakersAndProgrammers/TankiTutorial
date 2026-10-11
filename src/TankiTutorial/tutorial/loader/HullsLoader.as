@@ -62,7 +62,7 @@ package tutorial.loader
          var urlLoader:URLLoader = null;
          if(details != null)
          {
-            this.current.vypupital = details;
+            this.current.detailsTexture = details;
             this.current = null;
             ++this.index;
          }
@@ -82,8 +82,8 @@ package tutorial.loader
             else
             {
                this.parse(Assets.getData(currentURL,ByteArray));
-               this.current.sut = Assets.getData(this.baseURL + hullXML.@lightmap.toString(),BitmapData);
-               this.current.vypupital = Assets.getData(this.baseURL + hullXML.@details.toString(),BitmapData);
+               this.current.lightmapTexture = Assets.getData(this.baseURL + hullXML.@lightmap.toString(),BitmapData);
+               this.current.detailsTexture = Assets.getData(this.baseURL + hullXML.@details.toString(),BitmapData);
                this.current = null;
                ++this.index;
                this.loadHulls();
@@ -116,7 +116,7 @@ package tutorial.loader
       
       private function loadDetails(lightmap:BitmapData) : void
       {
-         this.current.sut = lightmap;
+         this.current.lightmapTexture = lightmap;
          var hullXML:XML = this.hulls[this.index];
          var detailsURL:String = this.baseURL + hullXML.@details.toString();
          imageLoader.load(detailsURL,this.loadHulls);
@@ -143,7 +143,7 @@ package tutorial.loader
             objectName = mesh.name.toLowerCase();
             if(objectName.indexOf("hull") == 0)
             {
-               hull.kuca = mesh;
+               hull.skin = mesh;
                mesh.sorting = Sorting.DYNAMIC_BSP;
                mesh.optimizeForDynamicBSP();
                mesh.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
@@ -151,7 +151,7 @@ package tutorial.loader
             else if(objectName.indexOf("mount") == 0)
             {
                position = Mesh(mesh).matrix.position;
-               hull.sih.reset(position.x,position.y,position.z);
+               hull.mountPoint.reset(position.x,position.y,position.z);
             }
             i++;
          }

@@ -13,126 +13,126 @@ package alternativa.tanks.vehicles.tank
       
       private static const garyvacy:Number = 100;
       
-      private static const miqowat:Vector3 = new Vector3();
+      private static const pointVelocity:Vector3 = new Vector3();
       
-      private var hag:TrackedChassis;
+      private var chassis:TrackedChassis;
       
-      private var kuca:TankSkin;
+      private var skin:TankSkin;
       
-      private var jifav:ValueSmoother;
+      private var maxSpeedSmoother:ValueSmoother;
       
-      public function TracksAnimator(param1:TrackedChassis, param2:TankSkin, param3:ValueSmoother)
+      public function TracksAnimator(chassis:TrackedChassis, skin:TankSkin, maxSpeedSmoother:ValueSmoother)
       {
          super();
-         this.hag = param1;
-         this.kuca = param2;
-         this.jifav = param3;
+         this.chassis = chassis;
+         this.skin = skin;
+         this.maxSpeedSmoother = maxSpeedSmoother;
       }
       
-      public function animate(param1:Number) : void
+      public function animate(dt:Number) : void
       {
-         this.calculateTracksAnimationSpeed(param1);
-         this.kuca.updateTracks(param1 * this.hag.vapal.zigebota,param1 * this.hag.mof.zigebota);
+         this.calculateTracksAnimationSpeed(dt);
+         this.skin.updateTracks(dt * this.chassis.leftTrack.animationSpeed,dt * this.chassis.rightTrack.animationSpeed);
       }
       
-      private function calculateTracksAnimationSpeed(param1:Number) : void
+      private function calculateTracksAnimationSpeed(dt:Number) : void
       {
-         this.calculateTrackAnimationSpeed(this.hag.vapal,param1);
-         this.calculateTrackAnimationSpeed(this.hag.mof,param1);
+         this.calculateTrackAnimationSpeed(this.chassis.leftTrack,dt);
+         this.calculateTrackAnimationSpeed(this.chassis.rightTrack,dt);
       }
       
-      private function calculateTrackAnimationSpeed(param1:Track, param2:Number) : void
+      private function calculateTrackAnimationSpeed(track:Track, dt:Number) : void
       {
-         if(this.hasCorrectContacts(param1))
+         if(this.hasCorrectContacts(track))
          {
-            this.animateTrackWithContacts(param1,param2);
+            this.animateTrackWithContacts(track,dt);
          }
          else
          {
-            this.animateTrackWithoutContacts(param1,param2);
+            this.animateTrackWithoutContacts(track,dt);
          }
       }
       
-      private function hasCorrectContacts(param1:Track) : Boolean
+      private function hasCorrectContacts(track:Track) : Boolean
       {
-         return param1.body.orientationMatrix.mk > 0 && param1.jim > 0;
+         return track.body.orientationMatrix.mk > 0 && track.numContacts > 0;
       }
       
-      private function animateTrackWithContacts(param1:Track, param2:Number) : void
+      private function animateTrackWithContacts(track:Track, dt:Number) : void
       {
-         var _loc4_:Number = NaN;
-         var _loc3_:Number = this.getTrackSpeed(param1);
-         if(this.requiresSynchronizedAnimation(param1,_loc3_))
+         var targetSpeed:Number = NaN;
+         var trackSpeed:Number = this.getTrackSpeed(track);
+         if(this.requiresSynchronizedAnimation(track,trackSpeed))
          {
-            param1.zigebota = _loc3_;
+            track.animationSpeed = trackSpeed;
          }
          else
          {
-            _loc4_ = this.getDesiredSpeedCoeff(param1) * garyvacy;
-            param1.setAnimationSpeed(_loc4_,this.hag.getAcceleration() * param2);
+            targetSpeed = this.getDesiredSpeedCoeff(track) * garyvacy;
+            track.setAnimationSpeed(targetSpeed,this.chassis.getAcceleration() * dt);
          }
       }
       
-      private function getTrackSpeed(param1:Track) : Number
+      private function getTrackSpeed(track:Track) : Number
       {
-         var _loc2_:Vector3 = param1.hetofefu;
-         var _loc3_:SuspensionRay = param1.mofovoti[param1.wavi >> 1];
-         this.getBodyPointVelocity(param1.body,_loc3_.getGlobalOrigin(),miqowat);
-         var _loc4_:Number = miqowat.x - _loc2_.x;
-         var _loc5_:Number = miqowat.y - _loc2_.y;
-         var _loc6_:Number = miqowat.z - _loc2_.z;
-         var _loc7_:Matrix3 = param1.body.orientationMatrix;
-         return _loc4_ * _loc7_.mb + _loc5_ * _loc7_.mf + _loc6_ * _loc7_.mj;
+         var contactVelocity:Vector3 = track.averageContactVelocity;
+         var ray:SuspensionRay = track.rays[track.numRays >> 1];
+         this.getBodyPointVelocity(track.body,ray.getGlobalOrigin(),pointVelocity);
+         var dx:Number = pointVelocity.x - contactVelocity.x;
+         var dy:Number = pointVelocity.y - contactVelocity.y;
+         var dz:Number = pointVelocity.z - contactVelocity.z;
+         var matrix:Matrix3 = track.body.orientationMatrix;
+         return dx * matrix.mb + dy * matrix.mf + dz * matrix.mj;
       }
       
-      private function getBodyPointVelocity(param1:Body, param2:Vector3, param3:Vector3) : void
+      private function getBodyPointVelocity(body:Body, point:Vector3, result:Vector3) : void
       {
-         var _loc5_:Number = NaN;
-         var _loc8_:Vector3 = null;
-         var _loc4_:Vector3 = param1.state.position;
-         _loc5_ = param2.x - _loc4_.x;
-         var _loc6_:Number = param2.y - _loc4_.y;
-         var _loc7_:Number = param2.z - _loc4_.z;
-         _loc8_ = param1.state.rotation;
-         param3.x = _loc8_.y * _loc7_ - _loc8_.z * _loc6_;
-         param3.y = _loc8_.z * _loc5_ - _loc8_.x * _loc7_;
-         param3.z = _loc8_.x * _loc6_ - _loc8_.y * _loc5_;
-         var _loc9_:Vector3 = param1.state.velocity;
-         param3.x += _loc9_.x;
-         param3.y += _loc9_.y;
-         param3.z += _loc9_.z;
+         var dx:Number = NaN;
+         var rotation:Vector3 = null;
+         var position:Vector3 = body.state.position;
+         dx = point.x - position.x;
+         var dy:Number = point.y - position.y;
+         var dz:Number = point.z - position.z;
+         rotation = body.state.rotation;
+         result.x = rotation.y * dz - rotation.z * dy;
+         result.y = rotation.z * dx - rotation.x * dz;
+         result.z = rotation.x * dy - rotation.y * dx;
+         var velocity:Vector3 = body.state.velocity;
+         result.x += velocity.x;
+         result.y += velocity.y;
+         result.z += velocity.z;
       }
       
-      private function requiresSynchronizedAnimation(param1:Track, param2:Number) : Boolean
+      private function requiresSynchronizedAnimation(track:Track, speed:Number) : Boolean
       {
-         var _loc3_:Number = this.getDesiredSpeedCoeff(param1);
-         return Math.abs(param2) > 0.8 * garyvacy || _loc3_ == 0 || MathUtils.numberSign(param2,1) * MathUtils.sign(_loc3_) == -1;
+         var coeff:Number = this.getDesiredSpeedCoeff(track);
+         return Math.abs(speed) > 0.8 * garyvacy || coeff == 0 || MathUtils.numberSign(speed,1) * MathUtils.sign(coeff) == -1;
       }
       
-      private function getDesiredSpeedCoeff(param1:Track) : Number
+      private function getDesiredSpeedCoeff(track:Track) : Number
       {
-         var _loc2_:int = this.hag.getActualMovementDirection();
-         var _loc3_:int = this.hag.getActualTurnDirection();
-         var _loc4_:Number = 0;
-         if(_loc2_ == 0)
+         var movementDirection:int = this.chassis.getActualMovementDirection();
+         var turnDirection:int = this.chassis.getActualTurnDirection();
+         var coeff:Number = 0;
+         if(movementDirection == 0)
          {
-            _loc4_ = param1.lolojela * _loc3_ * 0.5;
+            coeff = track.side * turnDirection * 0.5;
          }
-         else if(_loc3_ == 0)
+         else if(turnDirection == 0)
          {
-            _loc4_ = _loc2_;
+            coeff = movementDirection;
          }
          else
          {
-            _loc4_ = _loc2_ * (3 + param1.lolojela * _loc3_) / 4;
+            coeff = movementDirection * (3 + track.side * turnDirection) / 4;
          }
-         return _loc4_;
+         return coeff;
       }
       
-      private function animateTrackWithoutContacts(param1:Track, param2:Number) : void
+      private function animateTrackWithoutContacts(track:Track, dt:Number) : void
       {
-         var _loc3_:Number = this.getDesiredSpeedCoeff(param1);
-         param1.setAnimationSpeed(_loc3_ * this.jifav.getTargetValue(),this.hag.getAcceleration() * param2);
+         var coeff:Number = this.getDesiredSpeedCoeff(track);
+         track.setAnimationSpeed(coeff * this.maxSpeedSmoother.getTargetValue(),this.chassis.getAcceleration() * dt);
       }
    }
 }

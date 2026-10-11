@@ -26,7 +26,7 @@ package tutorial.tasks
          var controller:FollowCameraController = GameData.camera.controller as FollowCameraController;
          if(this.angle == 0)
          {
-            GameData.playerTank.kakow.hide();
+            GameData.playerTank.userTitle.hide();
          }
          if(controller != null)
          {
@@ -53,7 +53,7 @@ package tutorial.tasks
                GameData.playerTank.unlockMovement();
                controller.heightOffset = 0;
                GameData.playerTank.turretController.unlock(1);
-               GameData.playerTank.kakow.show();
+               GameData.playerTank.userTitle.show();
                return true;
             }
          }

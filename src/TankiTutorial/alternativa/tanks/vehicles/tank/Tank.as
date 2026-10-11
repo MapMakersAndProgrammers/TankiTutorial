@@ -42,7 +42,7 @@ package alternativa.tanks.vehicles.tank
    public class Tank implements CameraTarget, PhysicsInterpolator, PhysicsController, Renderer, BodyCollisionFilter
    {
       
-      private static const radanigys:Number = 0.4;
+      private static const EXPLOSION_VOLUME:Number = 0.4;
       
       private static const lilotes:Vector3 = new Vector3();
       
@@ -64,13 +64,13 @@ package alternativa.tanks.vehicles.tank
       
       private static const gof:Vector3 = new Vector3();
       
-      private const zeneti:Vector3 = new Vector3();
+      private const interpolatedPosition:Vector3 = new Vector3();
       
-      private const lobozofeh:Quaternion = new Quaternion();
+      private const interpolatedOrientation:Quaternion = new Quaternion();
       
-      private var jifav:ValueSmoother = new SimpleValueSmoother(100,1000,0,0);
+      private var maxSpeedSmoother:ValueSmoother = new SimpleValueSmoother(100,1000,0,0);
       
-      private var vibewyge:ValueSmoother = new SimpleValueSmoother(0.3,10,0,0);
+      private var maxTurnSpeedSmoother:ValueSmoother = new SimpleValueSmoother(0.3,10,0,0);
       
       private const soundManager:ISoundManager = GameData.soundManager;
       
@@ -84,322 +84,322 @@ package alternativa.tanks.vehicles.tank
       
       private const renderers:RenderGroup = GameData.renderers;
       
-      private var civacofo:Vector.<Vector3>;
+      private var visibilityPoints:Vector.<Vector3>;
       
-      private var nyryp:Number = 0;
+      private var zCorrection:Number = 0;
       
-      public var nariw:TankHull;
+      public var hull:TankHull;
       
-      public var firaqe:TankTurret;
+      public var turret:TankTurret;
       
-      public var hogys:TankBody;
+      public var tankBody:TankBody;
       
-      private var tuwykus:Number;
+      private var mass:Number;
       
       private var fusisywa:int;
       
-      private var bedepidy:Number = 0;
+      private var turretDirection:Number = 0;
       
-      public var kuca:TankSkin;
+      public var skin:TankSkin;
       
-      private var quj:Number;
+      private var health:Number;
       
-      private var wibo:Number;
+      private var maxHealth:Number;
       
-      public var kat:Boolean;
+      public var alive:Boolean;
       
-      private var tasapupat:Weapon;
+      private var weapon:Weapon;
       
-      public var kakow:UserTitle;
+      public var userTitle:UserTitle;
       
-      public var lysecof:TankSounds;
+      public var sounds:TankSounds;
       
-      private var wom:Boolean;
+      private var _inGame:Boolean;
       
-      private var zafutonaz:String;
+      private var colormapName:String;
       
-      private const zywanywy:Vector3 = new Vector3();
+      private const respawnPosition:Vector3 = new Vector3();
       
-      private const josi:Quaternion = new Quaternion();
+      private const respawnOrientation:Quaternion = new Quaternion();
       
-      private const faqes:Vector3 = new Vector3();
+      private const checkpointPosition:Vector3 = new Vector3();
       
-      private const wykuc:Quaternion = new Quaternion();
+      private const checkpointOrientation:Quaternion = new Quaternion();
       
-      private var mum:TurretController;
+      private var _turretController:TurretController;
       
       private var momomafoj:Number = 0;
       
-      public var fysa:Number;
+      public var boundSphereRadius:Number;
       
-      private var gobo:SuspensionParams = new SuspensionParams();
+      private var suspensionParams:SuspensionParams = new SuspensionParams();
       
-      private var hag:TrackedChassis;
+      private var chassis:TrackedChassis;
       
-      private var viqi:TracksAnimator;
+      private var tracksAnimator:TracksAnimator;
       
-      private var diniqu:Boolean = false;
+      private var soundAdded:Boolean = false;
       
       public function Tank()
       {
          super();
-         this.kuca = new TankSkin();
+         this.skin = new TankSkin();
       }
       
       public function get body() : Body
       {
-         if(this.hogys == null)
+         if(this.tankBody == null)
          {
             throw new Error();
          }
-         return this.hogys.body;
+         return this.tankBody.body;
       }
       
-      public function setWeaponDamageMultiplier(param1:Number) : void
+      public function setWeaponDamageMultiplier(value:Number) : void
       {
-         if(this.tasapupat != null)
+         if(this.weapon != null)
          {
-            this.tasapupat.kuqy = param1;
+            this.weapon.damageMultiplier = value;
          }
       }
       
-      private function setMaxHealth(param1:Number) : void
+      private function setMaxHealth(value:Number) : void
       {
-         this.wibo = param1;
-         this.quj = this.wibo;
+         this.maxHealth = value;
+         this.health = this.maxHealth;
       }
       
-      public function substructHealth(param1:Number) : void
+      public function substructHealth(damage:Number) : void
       {
-         if(this == GameData.playerTank && this.quj <= this.wibo * 0.5)
+         if(this == GameData.playerTank && this.health <= this.maxHealth * 0.5)
          {
-            this.quj -= this.quj / this.wibo * param1;
+            this.health -= this.health / this.maxHealth * damage;
          }
          else
          {
-            this.quj -= param1;
+            this.health -= damage;
          }
-         if(this.quj < 0)
+         if(this.health < 0)
          {
-            this.quj = 0;
+            this.health = 0;
          }
-         if(this.kakow != null)
+         if(this.userTitle != null)
          {
-            this.kakow.setHealth(this.quj,this.wibo);
+            this.userTitle.setHealth(this.health,this.maxHealth);
          }
       }
       
       public function get currentHealth() : Number
       {
-         return this.quj;
+         return this.health;
       }
       
-      public function init(param1:String, param2:String, param3:String, param4:Number = 0) : void
+      public function init(hullName:String, turretName:String, param3:String, param4:Number = 0) : void
       {
          if(param4 > 0)
          {
             this.momomafoj = param4;
          }
-         this.zafutonaz = param3;
-         this.setHull(param1);
-         this.setTurret(param2);
+         this.colormapName = param3;
+         this.setHull(hullName);
+         this.setTurret(turretName);
          this.setColormap(param3);
       }
       
-      public function setHull(param1:String) : void
+      public function setHull(hullName:String) : void
       {
-         var _loc3_:Mesh = null;
-         var _loc4_:Vector3 = null;
-         var _loc2_:TankHull = Hulls.objects[param1];
-         if(_loc2_ == null)
+         var mesh:Mesh = null;
+         var size:Vector3 = null;
+         var newHull:TankHull = Hulls.objects[hullName];
+         if(newHull == null)
          {
             throw new ArgumentError("Hull is null");
          }
-         if(this.nariw != _loc2_)
+         if(this.hull != newHull)
          {
-            this.gobo.miqelina = _loc2_.sasi;
-            this.setMaxHealth(this.momomafoj > 0 ? this.momomafoj : Number(_loc2_.quj));
-            this.nariw = _loc2_;
-            this.kuca.setHull(_loc2_);
-            this.tuwykus = _loc2_.mass;
-            this.setMaxSpeed(_loc2_.speed,true);
-            this.setMaxTurnSpeed(_loc2_.pyfika,true);
-            _loc3_ = _loc2_.kuca;
-            _loc3_.calculateBounds();
-            _loc4_ = new Vector3(2 * _loc3_.boundMaxX,2 * _loc3_.boundMaxY,_loc3_.boundMaxZ);
-            this.createBody(this.tuwykus,_loc4_);
-            this.createChassis(_loc4_,_loc2_);
-            this.setOptimalZCorrection(_loc4_);
+            this.suspensionParams.dampingCoeff = newHull.damping;
+            this.setMaxHealth(this.momomafoj > 0 ? this.momomafoj : Number(newHull.health));
+            this.hull = newHull;
+            this.skin.setHull(newHull);
+            this.mass = newHull.mass;
+            this.setMaxSpeed(newHull.speed,true);
+            this.setMaxTurnSpeed(newHull.turnSpeed,true);
+            mesh = newHull.skin;
+            mesh.calculateBounds();
+            size = new Vector3(2 * mesh.boundMaxX,2 * mesh.boundMaxY,mesh.boundMaxZ);
+            this.createBody(this.mass,size);
+            this.createChassis(size,newHull);
+            this.setOptimalZCorrection(size);
             this.setBodyCollisionGroup(CollisionGroup.pisyse | CollisionGroup.bywowe | CollisionGroup.WEAPON | CollisionGroup.BONUS);
             this.setTracksCollisionGroup(CollisionGroup.bywowe);
          }
       }
       
-      private function createBody(param1:Number, param2:Vector3) : void
+      private function createBody(param1:Number, size:Vector3) : void
       {
          var _loc4_:Body = null;
-         if(this.hogys == null)
+         if(this.tankBody == null)
          {
             _loc4_ = new Body(param1,Matrix3.identity);
             _loc4_.data = this;
-            this.hogys = new TankBody(_loc4_);
+            this.tankBody = new TankBody(_loc4_);
          }
-         var _loc3_:Vector3 = param2.clone();
-         _loc3_.scale(0.5);
-         PhysicsUtils.setBoxInvInertia(param1,_loc3_,this.hogys.body.invInertia);
-         this.hogys.body.mass = param1;
-         this.hogys.body.invMass = 1 / param1;
-         this.createCollisionPrimitives(_loc3_);
-         this.createVisibilityPoints(_loc3_);
+         var halfSize:Vector3 = size.clone();
+         halfSize.scale(0.5);
+         PhysicsUtils.setBoxInvInertia(param1,halfSize,this.tankBody.body.invInertia);
+         this.tankBody.body.mass = param1;
+         this.tankBody.body.invMass = 1 / param1;
+         this.createCollisionPrimitives(halfSize);
+         this.createVisibilityPoints(halfSize);
       }
       
-      private function createCollisionPrimitives(param1:Vector3) : void
+      private function createCollisionPrimitives(halfSize:Vector3) : void
       {
-         this.hogys.clearCollisionShapes();
-         var _loc2_:Number = 2 * param1.z - (this.gobo.vocuqih - TankConst.kyr);
-         CollisionBoxesBuilder.createTankCollisionBox(param1,_loc2_,this.hogys);
-         CollisionBoxesBuilder.createStaticCollisionBoxes(param1,_loc2_,this.hogys);
-         this.setBoundSphereRadius(param1,_loc2_);
+         this.tankBody.clearCollisionShapes();
+         var height:Number = 2 * halfSize.z - (this.suspensionParams.nominalRayLength - TankConst.kyr);
+         CollisionBoxesBuilder.createTankCollisionBox(halfSize,height,this.tankBody);
+         CollisionBoxesBuilder.createStaticCollisionBoxes(halfSize,height,this.tankBody);
+         this.setBoundSphereRadius(halfSize,height);
       }
       
-      private function setBoundSphereRadius(param1:Vector3, param2:Number) : void
+      private function setBoundSphereRadius(halfSize:Vector3, height:Number) : void
       {
-         var _loc3_:Vector3 = new Vector3(param1.x,param1.y,param2 / 2);
-         var _loc4_:Matrix4 = this.hogys.tankCollisionBox.localTransform;
-         this.fysa = _loc3_.length() + Math.abs(_loc4_.ml);
+         var boxHalfSize:Vector3 = new Vector3(halfSize.x,halfSize.y,height / 2);
+         var transform:Matrix4 = this.tankBody.tankCollisionBox.localTransform;
+         this.boundSphereRadius = boxHalfSize.length() + Math.abs(transform.ml);
       }
       
-      private function createVisibilityPoints(param1:Vector3) : void
+      private function createVisibilityPoints(halfSize:Vector3) : void
       {
-         var _loc2_:Number = Number(param1.x);
-         var _loc3_:Number = Number(param1.y);
-         this.civacofo = Vector.<Vector3>([new Vector3(-_loc2_,_loc3_,0),new Vector3(_loc2_,_loc3_,0),new Vector3(-_loc2_,0,0),new Vector3(_loc2_,0,0),new Vector3(-_loc2_,-_loc3_,0),new Vector3(_loc2_,-_loc3_,0)]);
+         var halfX:Number = Number(halfSize.x);
+         var halfY:Number = Number(halfSize.y);
+         this.visibilityPoints = Vector.<Vector3>([new Vector3(-halfX,halfY,0),new Vector3(halfX,halfY,0),new Vector3(-halfX,0,0),new Vector3(halfX,0,0),new Vector3(-halfX,-halfY,0),new Vector3(halfX,-halfY,0)]);
       }
       
-      private function createChassis(param1:Vector3, param2:TankHull) : void
+      private function createChassis(size:Vector3, param2:TankHull) : void
       {
-         this.hag = new TrackedChassis(this.hogys.body,this.gobo,this.jifav,param1);
-         this.hag.setAcceleration(param2.acceleration);
-         this.hag.setReverseAcceleration(param2.qezuw);
-         this.hag.setSideAcceleration(param2.wito);
-         this.hag.setTurnAcceleration(param2.qupi);
-         this.hag.setReverseTurnAcceleration(param2.beg);
-         this.viqi = new TracksAnimator(this.hag,this.kuca,this.jifav);
+         this.chassis = new TrackedChassis(this.tankBody.body,this.suspensionParams,this.maxSpeedSmoother,size);
+         this.chassis.setAcceleration(param2.acceleration);
+         this.chassis.setReverseAcceleration(param2.reverseAcceleration);
+         this.chassis.setSideAcceleration(param2.sideAcceleration);
+         this.chassis.setTurnAcceleration(param2.turnAcceleration);
+         this.chassis.setReverseTurnAcceleration(param2.reverseTurnAcceleration);
+         this.tracksAnimator = new TracksAnimator(this.chassis,this.skin,this.maxSpeedSmoother);
       }
       
-      public function setTurret(param1:String) : void
+      public function setTurret(turretName:String) : void
       {
-         var _loc2_:TankTurret = Turrets.objects[param1];
-         if(_loc2_ == null)
+         var newTurret:TankTurret = Turrets.objects[turretName];
+         if(newTurret == null)
          {
             throw new ArgumentError("Turret is null");
          }
-         if(this.firaqe != _loc2_)
+         if(this.turret != newTurret)
          {
-            if(this.tasapupat != null)
+            if(this.weapon != null)
             {
-               this.tasapupat.stop();
+               this.weapon.stop();
             }
-            this.tasapupat = Turrets.getWeapon(param1);
-            if(this.mum != null)
+            this.weapon = Turrets.getWeapon(turretName);
+            if(this._turretController != null)
             {
-               this.mum.setMaxTurnSpeed(_loc2_.gejebuke,false);
-               this.mum.setTurnAcceleration(_loc2_.qupi);
+               this._turretController.setMaxTurnSpeed(newTurret.maxTurnSpeed,false);
+               this._turretController.setTurnAcceleration(newTurret.turnAcceleration);
             }
-            this.tasapupat.setTank(this);
-            this.firaqe = _loc2_;
-            this.kuca.setTurret(_loc2_);
+            this.weapon.setTank(this);
+            this.turret = newTurret;
+            this.skin.setTurret(newTurret);
          }
       }
       
-      public function getCameraParams(param1:Vector3, param2:Vector3) : void
+      public function getCameraParams(position:Vector3, direction:Vector3) : void
       {
-         this.lobozofeh.toMatrix3(wokymityf);
-         lilotes.copy(this.zeneti);
-         lilotes.x += this.nyryp * wokymityf.mc;
-         lilotes.y += this.nyryp * wokymityf.mg;
-         lilotes.z += this.nyryp * wokymityf.mk;
+         this.interpolatedOrientation.toMatrix3(wokymityf);
+         lilotes.copy(this.interpolatedPosition);
+         lilotes.x += this.zCorrection * wokymityf.mc;
+         lilotes.y += this.zCorrection * wokymityf.mg;
+         lilotes.z += this.zCorrection * wokymityf.mk;
          qef.setFromMatrix3(wokymityf,lilotes);
-         var _loc3_:Vector3 = this.kuca.getHull().sih;
-         rizy.setMatrix(_loc3_.x,_loc3_.y,_loc3_.z,0,0,GameData.kumiteva ? Number(this.mum.getCameraDirection()) : Number(this.mum.getDirection()));
+         var mountPoint:Vector3 = this.skin.getHull().mountPoint;
+         rizy.setMatrix(mountPoint.x,mountPoint.y,mountPoint.z,0,0,GameData.kumiteva ? Number(this._turretController.getCameraDirection()) : Number(this._turretController.getDirection()));
          rizy.append(qef);
-         param1.reset(rizy.md,rizy.mh,rizy.ml);
-         param2.reset(rizy.mb,rizy.mf,rizy.mj);
+         position.reset(rizy.md,rizy.mh,rizy.ml);
+         direction.reset(rizy.mb,rizy.mf,rizy.mj);
       }
       
-      public function setMaxSpeed(param1:Number, param2:Boolean) : void
+      public function setMaxSpeed(value:Number, immediately:Boolean) : void
       {
-         if(param2)
+         if(immediately)
          {
-            this.jifav.reset(param1);
+            this.maxSpeedSmoother.reset(value);
          }
          else
          {
-            this.jifav.setTargetValue(param1);
+            this.maxSpeedSmoother.setTargetValue(value);
          }
       }
       
-      public function setMaxTurnSpeed(param1:Number, param2:Boolean) : void
+      public function setMaxTurnSpeed(value:Number, immediately:Boolean) : void
       {
-         if(param2)
+         if(immediately)
          {
-            this.vibewyge.reset(param1);
+            this.maxTurnSpeedSmoother.reset(value);
          }
          else
          {
-            this.vibewyge.setTargetValue(param1);
+            this.maxTurnSpeedSmoother.setTargetValue(value);
          }
       }
       
       public function setCheckpoint() : void
       {
-         this.zywanywy.copy(this.faqes);
-         this.josi.copy(this.wykuc);
-         this.faqes.copy(this.hogys.body.state.position);
-         this.wykuc.copy(this.hogys.body.state.orientation);
+         this.respawnPosition.copy(this.checkpointPosition);
+         this.respawnOrientation.copy(this.checkpointOrientation);
+         this.checkpointPosition.copy(this.tankBody.body.state.position);
+         this.checkpointOrientation.copy(this.tankBody.body.state.orientation);
       }
       
       public function setColormap(param1:String) : void
       {
-         var _loc2_:BitmapData = Assets.getData(param1,BitmapData);
-         this.kuca.setColormap(_loc2_);
+         var colormap:BitmapData = Assets.getData(param1,BitmapData);
+         this.skin.setColormap(colormap);
       }
       
       public function kill() : void
       {
-         if(this.mum != null)
+         if(this._turretController != null)
          {
-            this.mum.lock(1);
+            this._turretController.lock(1);
          }
-         this.kat = false;
-         this.soundManager.removeEffect(this.lysecof);
+         this.alive = false;
+         this.soundManager.removeEffect(this.sounds);
          TankExplosionFactory.createEffect(this);
          this.setColormap("dead");
-         if(this.kakow != null)
+         if(this.userTitle != null)
          {
-            this.kakow.hide();
+            this.userTitle.hide();
          }
-         this.hogys.body.state.velocity.z += 500;
-         this.hogys.body.state.rotation.reset(2,2,2);
-         var _loc1_:Sound3D = Sound3D.create(Assets.getData("tank_explosion",Sound),SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,radanigys);
-         this.soundManager.addEffect(Sound3DEffect.create(this.objectPool,this.hogys.body.state.position,_loc1_,0,0));
+         this.tankBody.body.state.velocity.z += 500;
+         this.tankBody.body.state.rotation.reset(2,2,2);
+         var sound:Sound3D = Sound3D.create(Assets.getData("tank_explosion",Sound),SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,EXPLOSION_VOLUME);
+         this.soundManager.addEffect(Sound3DEffect.create(this.objectPool,this.tankBody.body.state.position,sound,0,0));
       }
       
       public function respawn() : void
       {
-         this.kuca.turretMesh.visible = false;
-         this.kuca.hullMesh.visible = false;
-         this.kuca.shadow.alpha = 0;
-         this.soundManager.addEffect(this.lysecof);
-         this.setColormap(this.zafutonaz);
-         this.quj = this.wibo;
-         this.hogys.body.setVelocityXYZ(0,0,0);
-         this.hogys.body.setPosition(this.zywanywy);
-         this.hogys.body.setOrientation(this.josi);
-         if(this.mum != null)
+         this.skin.turretMesh.visible = false;
+         this.skin.hullMesh.visible = false;
+         this.skin.shadow.alpha = 0;
+         this.soundManager.addEffect(this.sounds);
+         this.setColormap(this.colormapName);
+         this.health = this.maxHealth;
+         this.tankBody.body.setVelocityXYZ(0,0,0);
+         this.tankBody.body.setPosition(this.respawnPosition);
+         this.tankBody.body.setOrientation(this.respawnOrientation);
+         if(this._turretController != null)
          {
-            this.mum.reset();
-            this.mum.unlock(1);
+            this._turretController.reset();
+            this._turretController.unlock(1);
          }
          GameData.taskGroup.addTask(new ChangeCameraAngleTask(0.2,2));
          setTimeout(this.showAfterRespawn,1000);
@@ -407,133 +407,133 @@ package alternativa.tanks.vehicles.tank
       
       private function showAfterRespawn() : void
       {
-         this.kuca.turretMesh.visible = true;
-         this.kuca.hullMesh.visible = true;
-         this.kuca.shadow.alpha = 1;
-         if(this.kakow != null)
+         this.skin.turretMesh.visible = true;
+         this.skin.hullMesh.visible = true;
+         this.skin.shadow.alpha = 1;
+         if(this.userTitle != null)
          {
-            this.kakow.show();
+            this.userTitle.show();
          }
-         this.kat = true;
+         this.alive = true;
       }
       
       public function addToGame() : void
       {
-         this.physicsScene.addTankBody(this.hogys);
+         this.physicsScene.addTankBody(this.tankBody);
          this.physicsScene.addPhysicsController(this);
          this.physicsScene.addPhysicsInterpolator(this);
-         this.kat = true;
+         this.alive = true;
          this.renderers.addRenderer(this);
-         this.kuca.addToContainer(this.kdContainer,this.camera);
+         this.skin.addToContainer(this.kdContainer,this.camera);
          GameData.dust.addTank(this);
-         this.wom = true;
-         this.lysecof = new TankSounds();
-         this.lysecof.setTank(this);
-         this.lysecof.turretSoundEnabled = true;
+         this._inGame = true;
+         this.sounds = new TankSounds();
+         this.sounds.setTank(this);
+         this.sounds.turretSoundEnabled = true;
          this.addSoundToSoundManager();
       }
       
       public function addSoundToSoundManager() : void
       {
-         if(!this.diniqu)
+         if(!this.soundAdded)
          {
-            this.diniqu = this.soundManager.addEffect(this.lysecof);
+            this.soundAdded = this.soundManager.addEffect(this.sounds);
          }
       }
       
       public function removeFromGame() : void
       {
-         this.soundManager.removeEffect(this.lysecof);
-         this.physicsScene.removeTankBody(this.hogys);
+         this.soundManager.removeEffect(this.sounds);
+         this.physicsScene.removeTankBody(this.tankBody);
          this.physicsScene.removePhysicsInterpolator(this);
          this.physicsScene.removePhysicsController(this);
          this.renderers.removeRenderer(this);
-         this.kuca.removeFromContainer();
+         this.skin.removeFromContainer();
          GameData.dust.removeTank(this);
-         this.wom = false;
+         this._inGame = false;
       }
       
       public function heal() : void
       {
-         this.quj = this.wibo;
+         this.health = this.maxHealth;
       }
       
-      public function setMovementParams(param1:int, param2:int, param3:Boolean) : void
+      public function setMovementParams(movementDirection:int, turnDirection:int, param3:Boolean) : void
       {
-         this.hag.rucumopak = param1;
-         this.hag.wuzyvodew = param2;
-         this.hag.cewubegy = param3;
+         this.chassis.movementDirection = movementDirection;
+         this.chassis.turnDirection = turnDirection;
+         this.chassis.cewubegy = param3;
          this.updateEngineSound();
       }
       
       private function updateEngineSound() : void
       {
-         if(this.hag.dajy)
+         if(this.chassis.movementLocked)
          {
-            this.lysecof.setIdleMode();
+            this.sounds.setIdleMode();
          }
-         else if(this.hag.rucumopak != 0)
+         else if(this.chassis.movementDirection != 0)
          {
-            this.lysecof.setAccelerationMode();
+            this.sounds.setAccelerationMode();
          }
-         else if(this.hag.wuzyvodew != 0)
+         else if(this.chassis.turnDirection != 0)
          {
-            this.lysecof.setTurningMode();
+            this.sounds.setTurningMode();
          }
          else
          {
-            this.lysecof.setIdleMode();
+            this.sounds.setIdleMode();
          }
       }
       
-      public function interpolatePhysicsState(param1:Number) : void
+      public function interpolatePhysicsState(t:Number) : void
       {
-         this.hogys.body.interpolate(param1,this.zeneti,this.lobozofeh);
-         this.lobozofeh.normalize();
-         if(this.mum != null)
+         this.tankBody.body.interpolate(t,this.interpolatedPosition,this.interpolatedOrientation);
+         this.interpolatedOrientation.normalize();
+         if(this._turretController != null)
          {
-            this.bedepidy = -this.mum.getInterpolatedDirection(param1);
+            this.turretDirection = -this._turretController.getInterpolatedDirection(t);
          }
       }
       
-      public function render(param1:int, param2:int) : void
+      public function render(time:int, deltaTime:int) : void
       {
-         this.lobozofeh.toMatrix3(wokymityf);
-         lilotes.copy(this.zeneti);
-         lilotes.x += this.nyryp * wokymityf.mc;
-         lilotes.y += this.nyryp * wokymityf.mg;
-         lilotes.z += this.nyryp * wokymityf.mk;
-         this.kuca.updateTransform(lilotes,this.lobozofeh,this.bedepidy);
-         var _loc3_:Number = param2 * 0.001;
-         this.viqi.animate(_loc3_);
-         lilotes.x = this.kuca.turretMesh.x;
-         lilotes.y = this.kuca.turretMesh.y;
-         lilotes.z = this.kuca.turretMesh.z;
-         if(this.tasapupat != null)
+         this.interpolatedOrientation.toMatrix3(wokymityf);
+         lilotes.copy(this.interpolatedPosition);
+         lilotes.x += this.zCorrection * wokymityf.mc;
+         lilotes.y += this.zCorrection * wokymityf.mg;
+         lilotes.z += this.zCorrection * wokymityf.mk;
+         this.skin.updateTransform(lilotes,this.interpolatedOrientation,this.turretDirection);
+         var dt:Number = deltaTime * 0.001;
+         this.tracksAnimator.animate(dt);
+         lilotes.x = this.skin.turretMesh.x;
+         lilotes.y = this.skin.turretMesh.y;
+         lilotes.z = this.skin.turretMesh.z;
+         if(this.weapon != null)
          {
-            this.tasapupat.update(param1,param2);
+            this.weapon.update(time,deltaTime);
          }
-         if(this.kakow != null)
+         if(this.userTitle != null)
          {
-            this.kakow.setWeaponStatus(100 * this.tasapupat.status);
-            this.kakow.setHealth(this.quj,this.wibo);
-            this.kakow.update(lilotes);
+            this.userTitle.setWeaponStatus(100 * this.weapon.status);
+            this.userTitle.setHealth(this.health,this.maxHealth);
+            this.userTitle.update(lilotes);
          }
-         if(this.mum != null)
+         if(this._turretController != null)
          {
-            this.mum.setTankDirection(this.calculateTankDirection());
+            this._turretController.setTankDirection(this.calculateTankDirection());
          }
       }
       
       private function calculateTankDirection() : Number
       {
-         this.lobozofeh.toMatrix3(wokymityf);
+         this.interpolatedOrientation.toMatrix3(wokymityf);
          wokymityf.transformVector(Vector3.zAxis,dedit);
          dedit.normalize();
-         qalolyris.z = this.nyryp;
+         qalolyris.z = this.zCorrection;
          lilotes.reset();
          lilotes.transform3(wokymityf);
-         lilotes.add(this.zeneti);
+         lilotes.add(this.interpolatedPosition);
          qef.setFromMatrix3(wokymityf,lilotes);
          hyqirufy.reset(qef.md,qef.mh,qef.ml);
          jygef.reset(qef.mb,qef.mf,qef.mj);
@@ -544,116 +544,116 @@ package alternativa.tanks.vehicles.tank
          gof.projectOnPlane(dedit);
          baven.normalize();
          gof.normalize();
-         var _loc1_:Number = Number(gof.dot(jygef));
-         var _loc2_:Number = Number(baven.dot(jygef));
-         return Math.acos(_loc1_) * (_loc2_ > 0 ? -1 : 1);
+         var yDot:Number = Number(gof.dot(jygef));
+         var xDot:Number = Number(baven.dot(jygef));
+         return Math.acos(yDot) * (xDot > 0 ? -1 : 1);
       }
       
-      public function runBeforePhysicsUpdate(param1:Number) : void
+      public function runBeforePhysicsUpdate(dt:Number) : void
       {
          this.fusisywa = 0;
-         var _loc2_:Number = Number(this.jifav.update(param1));
-         var _loc3_:Number = Number(this.vibewyge.update(param1));
-         this.hag.applyForces(_loc2_,_loc3_,param1);
-         this.rotateTurret(param1);
+         var maxSpeed:Number = Number(this.maxSpeedSmoother.update(dt));
+         var maxTurnSpeed:Number = Number(this.maxTurnSpeedSmoother.update(dt));
+         this.chassis.applyForces(maxSpeed,maxTurnSpeed,dt);
+         this.rotateTurret(dt);
       }
       
-      private function rotateTurret(param1:Number) : void
+      private function rotateTurret(dt:Number) : void
       {
-         if(this.mum != null)
+         if(this._turretController != null)
          {
-            this.mum.rotate(param1);
-            this.lysecof.playTurretSound(this.mum.isRotating());
+            this._turretController.rotate(dt);
+            this.sounds.playTurretSound(this._turretController.isRotating());
          }
       }
       
-      private function setOptimalZCorrection(param1:Vector3) : void
+      private function setOptimalZCorrection(size:Vector3) : void
       {
-         this.nyryp = 0;
+         this.zCorrection = 0;
       }
       
       public function getWeapon() : Weapon
       {
-         return this.tasapupat;
+         return this.weapon;
       }
       
       public function get inGame() : Boolean
       {
-         return this.wom;
+         return this._inGame;
       }
       
-      public function considerBodies(param1:Body, param2:Body) : Boolean
+      public function considerBodies(body1:Body, body2:Body) : Boolean
       {
-         if(param1.collisionFilter != null && param2.collisionFilter == null)
+         if(body1.collisionFilter != null && body2.collisionFilter == null)
          {
-            ++Tank(param1.data).fusisywa;
+            ++Tank(body1.data).fusisywa;
          }
-         else if(param1.collisionFilter == null && param2.collisionFilter != null)
+         else if(body1.collisionFilter == null && body2.collisionFilter != null)
          {
-            ++Tank(param2.data).fusisywa;
+            ++Tank(body2.data).fusisywa;
          }
          return false;
       }
       
-      public function setTracksCollisionGroup(param1:int) : void
+      public function setTracksCollisionGroup(collisionGroup:int) : void
       {
-         this.hag.setTracksCollisionGroup(param1);
+         this.chassis.setTracksCollisionGroup(collisionGroup);
       }
       
-      public function setBodyCollisionGroup(param1:int) : void
+      public function setBodyCollisionGroup(collisionGroup:int) : void
       {
-         this.hogys.tankCollisionBox.collisionGroup = param1;
+         this.tankBody.tankCollisionBox.collisionGroup = collisionGroup;
       }
       
       public function get turretController() : TurretController
       {
-         return this.mum;
+         return this._turretController;
       }
       
-      public function set turretController(param1:TurretController) : void
+      public function set turretController(value:TurretController) : void
       {
-         this.mum = param1;
-         if(this.firaqe != null)
+         this._turretController = value;
+         if(this.turret != null)
          {
-            this.mum.setMaxTurnSpeed(this.firaqe.gejebuke,false);
-            this.mum.setTurnAcceleration(this.firaqe.qupi);
+            this._turretController.setMaxTurnSpeed(this.turret.maxTurnSpeed,false);
+            this._turretController.setTurnAcceleration(this.turret.turnAcceleration);
          }
       }
       
       public function lockMovement() : void
       {
-         this.hag.dajy = true;
+         this.chassis.movementLocked = true;
          this.updateEngineSound();
       }
       
       public function unlockMovement() : void
       {
-         this.hag.dajy = false;
+         this.chassis.movementLocked = false;
          this.updateEngineSound();
       }
       
       public function getLeftTrack() : Track
       {
-         return this.hag.vapal;
+         return this.chassis.leftTrack;
       }
       
       public function getRightTrack() : Track
       {
-         return this.hag.mof;
+         return this.chassis.rightTrack;
       }
       
-      public function setPosition(param1:Vector3) : void
+      public function setPosition(position:Vector3) : void
       {
-         this.hogys.body.setPosition(param1);
-         this.hogys.body.saveState();
-         this.zeneti.copy(param1);
+         this.tankBody.body.setPosition(position);
+         this.tankBody.body.saveState();
+         this.interpolatedPosition.copy(position);
       }
       
-      public function setOrientation(param1:Quaternion) : void
+      public function setOrientation(orientation:Quaternion) : void
       {
-         this.hogys.body.setOrientation(param1);
-         this.hogys.body.saveState();
-         this.lobozofeh.copy(param1);
+         this.tankBody.body.setOrientation(orientation);
+         this.tankBody.body.saveState();
+         this.interpolatedOrientation.copy(orientation);
       }
    }
 }

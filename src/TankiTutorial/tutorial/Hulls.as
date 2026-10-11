@@ -20,15 +20,15 @@ package tutorial
       public static function applyProfile(xml:XML, hull:TankHull) : void
       {
          hull.mass = xml.@mass;
-         hull.sasi = xml.@damping;
-         hull.quj = xml.@health;
+         hull.damping = xml.@damping;
+         hull.health = xml.@health;
          hull.speed = xml.@speed;
          hull.acceleration = xml.@acceleration;
-         hull.qezuw = xml.@reverseAcceleration;
-         hull.wito = xml.@sideAcceleration;
-         hull.pyfika = MathUtils.toRadians(xml.@turnSpeed);
-         hull.qupi = MathUtils.toRadians(xml.@turnAcceleration);
-         hull.beg = MathUtils.toRadians(xml.@reverseTurnAcceleration);
+         hull.reverseAcceleration = xml.@reverseAcceleration;
+         hull.sideAcceleration = xml.@sideAcceleration;
+         hull.turnSpeed = MathUtils.toRadians(xml.@turnSpeed);
+         hull.turnAcceleration = MathUtils.toRadians(xml.@turnAcceleration);
+         hull.reverseTurnAcceleration = MathUtils.toRadians(xml.@reverseTurnAcceleration);
       }
    }
 }

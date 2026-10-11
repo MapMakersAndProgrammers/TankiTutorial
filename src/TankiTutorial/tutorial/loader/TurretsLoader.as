@@ -66,7 +66,7 @@ package tutorial.loader
          var urlLoader:URLLoader = null;
          if(details != null)
          {
-            this.current.vypupital = details;
+            this.current.detailsTexture = details;
             this.current = null;
             ++this.index;
          }
@@ -86,8 +86,8 @@ package tutorial.loader
             else
             {
                this.parse(Assets.getData(currentURL,ByteArray));
-               this.current.sut = Assets.getData(this.baseURL + turretXML.@lightmap.toString(),BitmapData);
-               this.current.vypupital = Assets.getData(this.baseURL + turretXML.@details.toString(),BitmapData);
+               this.current.lightmapTexture = Assets.getData(this.baseURL + turretXML.@lightmap.toString(),BitmapData);
+               this.current.detailsTexture = Assets.getData(this.baseURL + turretXML.@details.toString(),BitmapData);
                this.current = null;
                ++this.index;
                this.loadTurret();
@@ -104,9 +104,9 @@ package tutorial.loader
          this.current = this.parseTurret(data);
          Turrets.objects[this.id] = this.current;
          var turretXML:XML = this.turrets[this.index];
-         this.current.qupi = turretXML.@turnAcceleration;
-         this.current.gejebuke = turretXML.@maxTurnSpeed;
-         this.current.beryfitu = turretXML.@damage;
+         this.current.turnAcceleration = turretXML.@turnAcceleration;
+         this.current.maxTurnSpeed = turretXML.@maxTurnSpeed;
+         this.current.damage = turretXML.@damage;
          return turretXML;
       }
       
@@ -126,7 +126,7 @@ package tutorial.loader
       private function loadDetails(e:Event) : void
       {
          var loaderInfo:LoaderInfo = LoaderInfo(e.target);
-         this.current.sut = Bitmap(loaderInfo.content).bitmapData;
+         this.current.lightmapTexture = Bitmap(loaderInfo.content).bitmapData;
          loaderInfo.removeEventListener(Event.COMPLETE,this.loadDetails);
          loaderInfo.removeEventListener(ProgressEvent.PROGRESS,onProgress);
          var turretXML:XML = this.turrets[this.index];
@@ -157,7 +157,7 @@ package tutorial.loader
                objectName = mesh.name.toLowerCase();
                if(objectName.indexOf("turret") == 0)
                {
-                  turret.kuca = mesh;
+                  turret.skin = mesh;
                   mesh.sorting = Sorting.DYNAMIC_BSP;
                   mesh.optimizeForDynamicBSP();
                   mesh.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
@@ -165,14 +165,14 @@ package tutorial.loader
                else if(objectName.indexOf("fmnt") == 0)
                {
                   position = mesh.matrix.position;
-                  turret.luru.x = position.x;
-                  turret.luru.y = position.y;
-                  turret.luru.z = position.z;
+                  turret.flagMountPoint.x = position.x;
+                  turret.flagMountPoint.y = position.y;
+                  turret.flagMountPoint.z = position.z;
                }
                else if(objectName.indexOf("muzzle") == 0)
                {
                   position = mesh.matrix.position;
-                  turret.jun.push(new Vector3(position.x,position.y,position.z));
+                  turret.muzzles.push(new Vector3(position.x,position.y,position.z));
                }
             }
             i++;

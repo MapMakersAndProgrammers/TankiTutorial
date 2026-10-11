@@ -182,13 +182,13 @@ package alternativa.physics
          super.update(delta);
          if(this.isPlayerTankAlive())
          {
-            this.triggers.check(GameData.playerTank.hogys.body);
+            this.triggers.check(GameData.playerTank.tankBody.body);
          }
       }
       
       private function isPlayerTankAlive() : Boolean
       {
-         return Boolean(GameData.playerTank) && Boolean(GameData.playerTank.hogys) && Boolean(GameData.playerTank.kat);
+         return Boolean(GameData.playerTank) && Boolean(GameData.playerTank.tankBody) && Boolean(GameData.playerTank.alive);
       }
       
       private function runPhysicsControllers(dt:Number) : void

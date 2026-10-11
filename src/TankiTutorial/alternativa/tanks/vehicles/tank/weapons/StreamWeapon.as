@@ -13,78 +13,78 @@ package alternativa.tanks.vehicles.tank.weapons
       
       private static const qipuji:Number = 0.3;
       
-      private static const befin:Vector.<Body> = new Vector.<Body>();
+      private static const targets:Vector.<Body> = new Vector.<Body>();
       
-      private static const vyla:Vector.<Number> = new Vector.<Number>();
+      private static const distances:Vector.<Number> = new Vector.<Number>();
       
-      private var katyzypu:Number;
+      private var maxEnergy:Number;
       
-      private var rofukeho:Number;
+      private var energyDischargeRate:Number;
       
-      private var bevy:Number;
+      private var energyRechargeRate:Number;
       
-      private var lab:int;
+      private var tickInterval:int;
       
-      private var namekazaf:ConicAreaTargetingSystem;
+      private var targetingSystem:ConicAreaTargetingSystem;
       
       private var effects:FlamethrowerEffects;
       
-      private var kifakazup:int;
+      private var nextTickTime:int;
       
-      private var javoq:Boolean;
+      private var shooting:Boolean;
       
-      private var nomotan:int;
+      private var baseTime:int;
       
-      private var nykasev:int;
+      private var numTicks:int;
       
-      private var beryfitu:Number;
+      private var damage:Number;
       
-      private var liwikyter:Boolean = false;
+      private var outOfEnergy:Boolean = false;
       
-      public function StreamWeapon(param1:Number, param2:Number, param3:Number, param4:Number, param5:int, param6:ConicAreaTargetingSystem, param7:FlamethrowerEffects)
+      public function StreamWeapon(damage:Number, maxEnergy:Number, energyDischargeRate:Number, energyRechargeRate:Number, tickInterval:int, targetingSystem:ConicAreaTargetingSystem, effects:FlamethrowerEffects)
       {
          super("Flamethrower");
-         this.beryfitu = param1;
-         this.katyzypu = param2;
-         this.rofukeho = param3;
-         this.bevy = param4;
-         this.lab = param5;
-         this.namekazaf = param6;
-         this.effects = param7;
+         this.damage = damage;
+         this.maxEnergy = maxEnergy;
+         this.energyDischargeRate = energyDischargeRate;
+         this.energyRechargeRate = energyRechargeRate;
+         this.tickInterval = tickInterval;
+         this.targetingSystem = targetingSystem;
+         this.effects = effects;
       }
       
       public function reset() : void
       {
-         this.javoq = false;
-         zadawe = false;
-         this.nomotan = 0;
-         this.kifakazup = 0;
-         this.nykasev = 0;
+         this.shooting = false;
+         active = false;
+         this.baseTime = 0;
+         this.nextTickTime = 0;
+         this.numTicks = 0;
       }
       
       override public function get status() : Number
       {
-         var _loc1_:Number = NaN;
-         if(zadawe && !this.liwikyter)
+         var energy:Number = NaN;
+         if(active && !this.outOfEnergy)
          {
-            _loc1_ = this.getCurrentEnergyInShootingMode(getTimer());
+            energy = this.getCurrentEnergyInShootingMode(getTimer());
          }
          else
          {
-            _loc1_ = this.getCurrentEnergyInIdleMode(getTimer());
+            energy = this.getCurrentEnergyInIdleMode(getTimer());
          }
-         return _loc1_ / this.katyzypu;
+         return energy / this.maxEnergy;
       }
       
-      override public function update(param1:int, param2:int) : void
+      override public function update(time:int, deltaTime:int) : void
       {
-         if(this.javoq)
+         if(this.shooting)
          {
-            this.runLogicForShootingMode(param1);
+            this.runLogicForShootingMode(time);
          }
          else
          {
-            this.runLogicForIdleMode(param1);
+            this.runLogicForIdleMode(time);
          }
       }
       
@@ -94,172 +94,172 @@ package alternativa.tanks.vehicles.tank.weapons
          this.effects.stopEffects();
       }
       
-      private function runLogicForShootingMode(param1:int) : void
+      private function runLogicForShootingMode(time:int) : void
       {
-         if(zadawe)
+         if(active)
          {
-            this.tryToTick(param1);
-            this.stopIfNecessary(param1);
+            this.tryToTick(time);
+            this.stopIfNecessary(time);
          }
          else
          {
-            this.liwikyter = false;
-            this.stopShoot(param1);
+            this.outOfEnergy = false;
+            this.stopShoot(time);
          }
       }
       
       override public function start() : void
       {
-         if(zadawe)
+         if(active)
          {
             return;
          }
-         zadawe = true;
-         this.liwikyter = false;
+         active = true;
+         this.outOfEnergy = false;
       }
       
-      private function tryToTick(param1:int) : void
+      private function tryToTick(time:int) : void
       {
-         if(this.nykasev > 0)
+         if(this.numTicks > 0)
          {
-            if(this.kifakazup <= param1)
+            if(this.nextTickTime <= time)
             {
-               this.tick(param1);
-               this.nykasev -= 1;
+               this.tick(time);
+               this.numTicks -= 1;
             }
          }
       }
       
-      private function stopIfNecessary(param1:int) : void
+      private function stopIfNecessary(time:int) : void
       {
-         if(this.nykasev == 0)
+         if(this.numTicks == 0)
          {
-            if(this.getCurrentEnergyInShootingMode(param1) <= 0)
+            if(this.getCurrentEnergyInShootingMode(time) <= 0)
             {
-               this.liwikyter = true;
-               this.stopShoot(param1);
+               this.outOfEnergy = true;
+               this.stopShoot(time);
             }
          }
       }
       
-      private function runLogicForIdleMode(param1:int) : void
+      private function runLogicForIdleMode(time:int) : void
       {
-         if(zadawe && !this.liwikyter)
+         if(active && !this.outOfEnergy)
          {
-            this.startShoot(param1);
+            this.startShoot(time);
          }
       }
       
-      private function startShoot(param1:int) : void
+      private function startShoot(time:int) : void
       {
-         var _loc2_:Number = NaN;
+         var energy:Number = NaN;
          var _loc3_:Tank = null;
-         if(!this.javoq)
+         if(!this.shooting)
          {
-            this.javoq = true;
-            _loc2_ = this.getCurrentEnergyInIdleMode(param1);
-            this.nomotan = this.getBaseTimeForShootingMode(param1,_loc2_);
-            this.calculateTicksNumber(_loc2_);
-            this.kifakazup = param1 + this.lab;
+            this.shooting = true;
+            energy = this.getCurrentEnergyInIdleMode(time);
+            this.baseTime = this.getBaseTimeForShootingMode(time,energy);
+            this.calculateTicksNumber(energy);
+            this.nextTickTime = time + this.tickInterval;
             _loc3_ = getTank();
-            this.effects.startEffects(_loc3_.hogys.body,_loc3_.firaqe.jun[0],_loc3_.kuca.turretMesh);
+            this.effects.startEffects(_loc3_.tankBody.body,_loc3_.turret.muzzles[0],_loc3_.skin.turretMesh);
          }
       }
       
-      private function calculateTicksNumber(param1:Number) : void
+      private function calculateTicksNumber(energy:Number) : void
       {
-         this.nykasev = wuvyt * param1 / (this.rofukeho * this.lab);
+         this.numTicks = wuvyt * energy / (this.energyDischargeRate * this.tickInterval);
       }
       
-      private function stopShoot(param1:int) : void
+      private function stopShoot(time:int) : void
       {
-         if(this.javoq)
+         if(this.shooting)
          {
-            this.javoq = false;
-            this.nomotan = param1 - this.getCurrentEnergyInShootingMode(param1) / this.bevy * wuvyt;
-            this.nykasev = 0;
+            this.shooting = false;
+            this.baseTime = time - this.getCurrentEnergyInShootingMode(time) / this.energyRechargeRate * wuvyt;
+            this.numTicks = 0;
             this.effects.stopEffects();
          }
       }
       
       override public function getTarget() : Tank
       {
-         var _loc4_:Tank = null;
-         var _loc5_:int = 0;
-         var _loc6_:Body = null;
-         var _loc7_:Tank = null;
-         var _loc1_:TurretData = getData();
+         var target:Tank = null;
+         var i:int = 0;
+         var body:Body = null;
+         var targetTank:Tank = null;
+         var turretData:TurretData = getData();
          var _loc2_:Tank = getTank();
-         _loc1_.update(_loc2_,0);
-         this.namekazaf.getTargets(_loc2_.hogys.body,_loc1_.siwowop,qipuji,_loc1_.fybumu,_loc1_.direction,_loc1_.zequsir,befin,vyla);
-         var _loc3_:int = int(befin.length);
-         if(_loc3_ == 1)
+         turretData.update(_loc2_,0);
+         this.targetingSystem.getTargets(_loc2_.tankBody.body,turretData.barrelLength,qipuji,turretData.barrelOrigin,turretData.direction,turretData.xAxis,targets,distances);
+         var numTargets:int = int(targets.length);
+         if(numTargets == 1)
          {
-            _loc5_ = 0;
-            while(_loc5_ < _loc3_)
+            i = 0;
+            while(i < numTargets)
             {
-               _loc6_ = befin[_loc5_];
-               _loc7_ = _loc6_.data as Tank;
-               if(_loc7_ == GameData.playerTank)
+               body = targets[i];
+               targetTank = body.data as Tank;
+               if(targetTank == GameData.playerTank)
                {
-                  _loc4_ = _loc7_;
+                  target = targetTank;
                }
-               _loc5_++;
+               i++;
             }
          }
-         befin.length = 0;
-         vyla.length = 0;
-         return _loc4_;
+         targets.length = 0;
+         distances.length = 0;
+         return target;
       }
       
-      private function tick(param1:int) : void
+      private function tick(time:int) : void
       {
-         var _loc6_:Body = null;
-         var _loc7_:Tank = null;
-         this.kifakazup = param1 + this.lab;
-         var _loc2_:TurretData = getData();
+         var body:Body = null;
+         var targetTank:Tank = null;
+         this.nextTickTime = time + this.tickInterval;
+         var turretData:TurretData = getData();
          var _loc3_:Tank = getTank();
-         _loc2_.update(_loc3_,0);
-         befin.length = 0;
-         vyla.length = 0;
-         this.namekazaf.getTargets(_loc3_.hogys.body,_loc2_.siwowop,qipuji,_loc2_.fybumu,_loc2_.direction,_loc2_.zequsir,befin,vyla);
-         var _loc4_:int = int(befin.length);
-         var _loc5_:int = 0;
-         while(_loc5_ < _loc4_)
+         turretData.update(_loc3_,0);
+         targets.length = 0;
+         distances.length = 0;
+         this.targetingSystem.getTargets(_loc3_.tankBody.body,turretData.barrelLength,qipuji,turretData.barrelOrigin,turretData.direction,turretData.xAxis,targets,distances);
+         var numTargets:int = int(targets.length);
+         var i:int = 0;
+         while(i < numTargets)
          {
-            _loc6_ = befin[_loc5_];
-            _loc7_ = _loc6_.data as Tank;
-            if(_loc7_ != null)
+            body = targets[i];
+            targetTank = body.data as Tank;
+            if(targetTank != null)
             {
-               _loc7_.substructHealth(this.beryfitu * kuqy);
+               targetTank.substructHealth(this.damage * damageMultiplier);
             }
-            _loc5_++;
+            i++;
          }
-         befin.length = 0;
-         vyla.length = 0;
+         targets.length = 0;
+         distances.length = 0;
       }
       
-      private function getCurrentEnergyInIdleMode(param1:int) : Number
+      private function getCurrentEnergyInIdleMode(time:int) : Number
       {
-         var _loc2_:Number = this.katyzypu;
-         var _loc3_:Number = this.bevy * (param1 - this.nomotan) / wuvyt;
-         return _loc3_ > _loc2_ ? _loc2_ : _loc3_;
+         var _loc2_:Number = this.maxEnergy;
+         var energy:Number = this.energyRechargeRate * (time - this.baseTime) / wuvyt;
+         return energy > _loc2_ ? _loc2_ : energy;
       }
       
-      private function getCurrentEnergyInShootingMode(param1:int) : Number
+      private function getCurrentEnergyInShootingMode(time:int) : Number
       {
-         var _loc2_:Number = this.katyzypu - this.rofukeho * (param1 - this.nomotan) / wuvyt;
-         return _loc2_ < 0 ? 0 : _loc2_;
+         var energy:Number = this.maxEnergy - this.energyDischargeRate * (time - this.baseTime) / wuvyt;
+         return energy < 0 ? 0 : energy;
       }
       
-      private function getBaseTimeForIdleMode(param1:int, param2:Number) : int
+      private function getBaseTimeForIdleMode(time:int, energy:Number) : int
       {
-         return param1 - param2 / this.bevy * wuvyt;
+         return time - energy / this.energyRechargeRate * wuvyt;
       }
       
-      private function getBaseTimeForShootingMode(param1:int, param2:Number) : int
+      private function getBaseTimeForShootingMode(time:int, energy:Number) : int
       {
-         return param1 - (this.katyzypu - param2) / this.rofukeho * wuvyt;
+         return time - (this.maxEnergy - energy) / this.energyDischargeRate * wuvyt;
       }
    }
 }

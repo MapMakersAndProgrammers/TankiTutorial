@@ -46,22 +46,22 @@ package tutorial
                if(smokyData == null)
                {
                   smokyData = new SmokyData();
-                  smokyData.syli.beryfitu = turret.beryfitu;
+                  smokyData.settings.damage = turret.damage;
                }
-               return new SmokyWeapon(smokyData.syli,smokyData.namekazaf,smokyData.effects);
+               return new SmokyWeapon(smokyData.settings,smokyData.targetingSystem,smokyData.effects);
             case TWINS:
                if(twinsData == null)
                {
                   twinsData = new TwinsData();
-                  twinsData.syli.beryfitu = turret.beryfitu;
+                  twinsData.settings.damage = turret.damage;
                }
-               return new PlasmaWeapon(twinsData.syli,twinsData.namekazaf,twinsData.effects,2);
+               return new PlasmaWeapon(twinsData.settings,twinsData.targetingSystem,twinsData.effects,2);
             case FLAMETHROWER:
                if(targetingSystem == null)
                {
                   targetingSystem = new ConicAreaTargetingSystem(2000,20 * Math.PI / 180,5,6,GameData.collisionDetector,new DefaultConicAreaTargetValidator());
                }
-               return new StreamWeapon(turret.beryfitu,1000,100,80,500,targetingSystem,getFlamethrowerEffects());
+               return new StreamWeapon(turret.damage,1000,100,80,500,targetingSystem,getFlamethrowerEffects());
             default:
                return null;
          }

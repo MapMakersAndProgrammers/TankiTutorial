@@ -22,7 +22,7 @@ package tutorial.tasks
       {
          super();
          this.turretName = turretName;
-         this.playerTank.kuca.turretMesh.colorTransform = this.colorTransform;
+         this.playerTank.skin.turretMesh.colorTransform = this.colorTransform;
       }
       
       override public function process() : Boolean
@@ -40,9 +40,9 @@ package tutorial.tasks
                }
                break;
             case 1:
-               this.playerTank.kuca.turretMesh.colorTransform = null;
+               this.playerTank.skin.turretMesh.colorTransform = null;
                this.playerTank.setTurret(this.turretName);
-               this.playerTank.kuca.turretMesh.colorTransform = this.colorTransform;
+               this.playerTank.skin.turretMesh.colorTransform = this.colorTransform;
                this.state = 2;
                break;
             case 2:
@@ -52,7 +52,7 @@ package tutorial.tasks
                if(this.colorTransform.redOffset <= 0)
                {
                   this.state = 3;
-                  this.playerTank.kuca.turretMesh.colorTransform = null;
+                  this.playerTank.skin.turretMesh.colorTransform = null;
                   return true;
                }
          }

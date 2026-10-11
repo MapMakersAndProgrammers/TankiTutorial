@@ -100,10 +100,10 @@ package tutorial.tasks
             this.phase += 5 * timeData.deltaTime;
             offset = Math.sin(this.phase);
             this.arrow.z = this.position.z + offset * 100;
-            if(Boolean(this.tank.inGame) && Boolean(this.tank.kat))
+            if(Boolean(this.tank.inGame) && Boolean(this.tank.alive))
             {
-               x = Number(this.tank.kuca.hullMesh.x);
-               y = Number(this.tank.kuca.hullMesh.y);
+               x = Number(this.tank.skin.hullMesh.x);
+               y = Number(this.tank.skin.hullMesh.y);
                distanceSqr = (x - this.position.x) * (x - this.position.x) + (y - this.position.y) * (y - this.position.y);
                if(distanceSqr < this.range * this.range)
                {

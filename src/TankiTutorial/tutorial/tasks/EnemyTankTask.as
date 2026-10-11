@@ -45,8 +45,8 @@ package tutorial.tasks
          var distanceSqr:Number = NaN;
          if(this.activationPosition != null)
          {
-            x = Number(GameData.playerTank.kuca.hullMesh.x);
-            y = Number(GameData.playerTank.kuca.hullMesh.y);
+            x = Number(GameData.playerTank.skin.hullMesh.x);
+            y = Number(GameData.playerTank.skin.hullMesh.y);
             distanceSqr = (x - this.activationPosition.x) * (x - this.activationPosition.x) + (y - this.activationPosition.y) * (y - this.activationPosition.y);
             if(distanceSqr < this.range * this.range)
             {
@@ -91,7 +91,7 @@ package tutorial.tasks
             predictedAngle = angle + angularVelocityZ * GameData.time.deltaTime;
             if(Math.cos(predictedAngle) > veco)
             {
-               action |= 1 << CommonTankController.cyjeruqa;
+               action |= 1 << CommonTankController.FORWARD;
             }
             if(distanceSqr < 110000)
             {
@@ -119,22 +119,22 @@ package tutorial.tasks
                {
                   if(angularVelocityZ > 0)
                   {
-                     action |= 1 << CommonTankController.dudazodol;
+                     action |= 1 << CommonTankController.LEFT;
                   }
                   else if(angularVelocityZ < 0)
                   {
-                     action |= 1 << CommonTankController.qij;
+                     action |= 1 << CommonTankController.RIGHT;
                   }
                }
                else if(Math.abs(predictedAngle) > nuzofaqi)
                {
                   if(angle > 0)
                   {
-                     action |= 1 << CommonTankController.dudazodol;
+                     action |= 1 << CommonTankController.LEFT;
                   }
                   else
                   {
-                     action |= 1 << CommonTankController.qij;
+                     action |= 1 << CommonTankController.RIGHT;
                   }
                }
             }

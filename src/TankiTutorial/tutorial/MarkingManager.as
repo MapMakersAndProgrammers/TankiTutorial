@@ -313,9 +313,9 @@ package tutorial
          var alphaMultiplier:Number = NaN;
          if(!this.editMode)
          {
-            if(this.tank.hogys != null)
+            if(this.tank.tankBody != null)
             {
-               position = this.tank.hogys.body.state.position;
+               position = this.tank.tankBody.body.state.position;
                for(key in this.decals)
                {
                   decal = key;

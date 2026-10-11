@@ -29,29 +29,29 @@ package alternativa.tanks.vehicles.tank.skin
    public class TankSkin
    {
       
-      private static const qopo:Matrix4 = new Matrix4();
+      private static const matrix:Matrix4 = new Matrix4();
       
-      private static const zyrirerip:Matrix4 = new Matrix4();
+      private static const hullMatrix:Matrix4 = new Matrix4();
       
-      private static const fyqynyfy:Vector3 = new Vector3();
+      private static const eulerAngles:Vector3 = new Vector3();
       
-      private var qev:BitmapData;
+      private var colormap:BitmapData;
       
-      private var cocehi:TankHull;
+      private var hull:TankHull;
       
-      private var mema:Mesh;
+      private var _hullMesh:Mesh;
       
-      private var lygawe:TankTurret;
+      private var turret:TankTurret;
       
-      private var kimiwacun:Mesh;
+      private var _turretMesh:Mesh;
       
       private var container:Object3DContainer;
       
-      private var rehyzomi:TrackSkin;
+      private var leftTrackSkin:TrackSkin;
       
-      private var vyjo:TrackSkin;
+      private var rightTrackSkin:TrackSkin;
       
-      private var niheji:Dictionary;
+      private var trackFaces:Dictionary;
       
       public var camera:Camera3D;
       
@@ -62,61 +62,61 @@ package alternativa.tanks.vehicles.tank.skin
          super();
       }
       
-      private static function setObjectTransformation(param1:Object3D, param2:Matrix4) : void
+      private static function setObjectTransformation(object:Object3D, transform:Matrix4) : void
       {
-         param2.getEulerAngles(fyqynyfy);
-         param1.x = param2.md;
-         param1.y = param2.mh;
-         param1.z = param2.ml;
-         param1.rotationX = fyqynyfy.x;
-         param1.rotationY = fyqynyfy.y;
-         param1.rotationZ = fyqynyfy.z;
+         transform.getEulerAngles(eulerAngles);
+         object.x = transform.md;
+         object.y = transform.mh;
+         object.z = transform.ml;
+         object.rotationX = eulerAngles.x;
+         object.rotationY = eulerAngles.y;
+         object.rotationZ = eulerAngles.z;
       }
       
       public function get visible() : Boolean
       {
-         return this.mema.visible;
+         return this._hullMesh.visible;
       }
       
-      public function set visible(param1:Boolean) : void
+      public function set visible(value:Boolean) : void
       {
-         this.mema.visible = param1;
-         this.kimiwacun.visible = param1;
+         this._hullMesh.visible = value;
+         this._turretMesh.visible = value;
       }
       
-      public function setAlpha(param1:Number) : void
+      public function setAlpha(value:Number) : void
       {
-         this.mema.alpha = param1;
-         this.kimiwacun.alpha = param1;
+         this._hullMesh.alpha = value;
+         this._turretMesh.alpha = value;
          if(this.shadow != null)
          {
-            this.shadow.alpha = param1;
+            this.shadow.alpha = value;
          }
       }
       
       public function addToContainer(param1:Object3DContainer, param2:Camera3D) : void
       {
          this.container = param1;
-         if(this.mema != null)
+         if(this._hullMesh != null)
          {
-            param1.addChild(this.mema);
+            param1.addChild(this._hullMesh);
          }
-         if(this.kimiwacun != null)
+         if(this._turretMesh != null)
          {
-            param1.addChild(this.kimiwacun);
+            param1.addChild(this._turretMesh);
          }
          this.camera = param2;
          this.shadow = new Shadow(128,8,100,5000,10000,516,0.95);
          this.shadow.offset = 100;
          this.shadow.backFadeRange = 100;
          this.shadow.direction = GameData.direction;
-         if(this.mema != null)
+         if(this._hullMesh != null)
          {
-            this.shadow.addCaster(this.mema);
+            this.shadow.addCaster(this._hullMesh);
          }
-         if(this.kimiwacun != null)
+         if(this._turretMesh != null)
          {
-            this.shadow.addCaster(this.kimiwacun);
+            this.shadow.addCaster(this._turretMesh);
          }
          param2.addShadow(this.shadow);
       }
@@ -125,13 +125,13 @@ package alternativa.tanks.vehicles.tank.skin
       {
          if(this.container != null)
          {
-            if(this.mema != null)
+            if(this._hullMesh != null)
             {
-               this.container.removeChild(this.mema);
+               this.container.removeChild(this._hullMesh);
             }
-            if(this.kimiwacun != null)
+            if(this._turretMesh != null)
             {
-               this.container.removeChild(this.kimiwacun);
+               this.container.removeChild(this._turretMesh);
             }
          }
          if(this.camera != null)
@@ -145,127 +145,127 @@ package alternativa.tanks.vehicles.tank.skin
       
       public function get hullMesh() : Mesh
       {
-         return this.mema;
+         return this._hullMesh;
       }
       
       public function get turretMesh() : Mesh
       {
-         return this.kimiwacun;
+         return this._turretMesh;
       }
       
       public function getHull() : TankHull
       {
-         return this.cocehi;
+         return this.hull;
       }
       
       public function setHull(param1:TankHull) : void
       {
-         if(this.cocehi != null && this.container != null)
+         if(this.hull != null && this.container != null)
          {
-            this.container.removeChild(this.mema);
+            this.container.removeChild(this._hullMesh);
          }
-         this.cocehi = param1;
-         if(this.cocehi != null)
+         this.hull = param1;
+         if(this.hull != null)
          {
-            this.mema = Mesh(this.cocehi.kuca.clone());
-            this.mema.sorting = Sorting.DYNAMIC_BSP;
-            this.parseTrackSkins(this.mema);
+            this._hullMesh = Mesh(this.hull.skin.clone());
+            this._hullMesh.sorting = Sorting.DYNAMIC_BSP;
+            this.parseTrackSkins(this._hullMesh);
             if(this.container != null)
             {
-               this.container.addChild(this.mema);
+               this.container.addChild(this._hullMesh);
             }
          }
-         this.updatePartTexture(this.cocehi,this.mema);
+         this.updatePartTexture(this.hull,this._hullMesh);
          if(this.shadow != null)
          {
             this.shadow.removeAllCasters();
-            if(this.mema != null)
+            if(this._hullMesh != null)
             {
-               this.shadow.addCaster(this.mema);
+               this.shadow.addCaster(this._hullMesh);
             }
-            if(this.kimiwacun != null)
+            if(this._turretMesh != null)
             {
-               this.shadow.addCaster(this.kimiwacun);
+               this.shadow.addCaster(this._turretMesh);
             }
          }
       }
       
-      private function parseTrackSkins(param1:Mesh) : void
+      private function parseTrackSkins(mesh:Mesh) : void
       {
-         var _loc2_:Face = null;
-         this.rehyzomi = new TrackSkin();
-         this.vyjo = new TrackSkin();
-         this.niheji = new Dictionary();
-         for each(_loc2_ in param1.faces)
+         var face:Face = null;
+         this.leftTrackSkin = new TrackSkin();
+         this.rightTrackSkin = new TrackSkin();
+         this.trackFaces = new Dictionary();
+         for each(face in mesh.faces)
          {
-            if(_loc2_.material.name == "tracks")
+            if(face.material.name == "tracks")
             {
-               this.addFaceToTrackSkin(_loc2_);
-               this.niheji[_loc2_] = true;
+               this.addFaceToTrackSkin(face);
+               this.trackFaces[face] = true;
             }
          }
-         this.rehyzomi.init();
-         this.vyjo.init();
+         this.leftTrackSkin.init();
+         this.rightTrackSkin.init();
       }
       
-      private function addFaceToTrackSkin(param1:Face) : void
+      private function addFaceToTrackSkin(face:Face) : void
       {
-         var _loc2_:Vertex = param1.vertices[0];
-         if(_loc2_.x < 0)
+         var vertex:Vertex = face.vertices[0];
+         if(vertex.x < 0)
          {
-            this.rehyzomi.addFace(param1);
+            this.leftTrackSkin.addFace(face);
          }
          else
          {
-            this.vyjo.addFace(param1);
+            this.rightTrackSkin.addFace(face);
          }
       }
       
       public function getTurret() : TankTurret
       {
-         return this.lygawe;
+         return this.turret;
       }
       
       public function setTurret(param1:TankTurret) : void
       {
-         var _loc2_:Object3DContainer = null;
-         var _loc3_:Mesh = null;
-         if(this.lygawe != null)
+         var parentContainer:Object3DContainer = null;
+         var oldMesh:Mesh = null;
+         if(this.turret != null)
          {
-            _loc2_ = this.kimiwacun.parent;
-            this.kimiwacun.removeFromParent();
-            _loc3_ = this.kimiwacun;
+            parentContainer = this._turretMesh.parent;
+            this._turretMesh.removeFromParent();
+            oldMesh = this._turretMesh;
          }
-         this.lygawe = param1;
-         if(this.lygawe != null)
+         this.turret = param1;
+         if(this.turret != null)
          {
-            this.kimiwacun = Mesh(this.lygawe.kuca.clone());
-            this.kimiwacun.sorting = Sorting.DYNAMIC_BSP;
-            if(_loc3_ != null)
+            this._turretMesh = Mesh(this.turret.skin.clone());
+            this._turretMesh.sorting = Sorting.DYNAMIC_BSP;
+            if(oldMesh != null)
             {
-               this.kimiwacun.x = _loc3_.x;
-               this.kimiwacun.y = _loc3_.y;
-               this.kimiwacun.z = _loc3_.z;
-               this.kimiwacun.rotationX = _loc3_.rotationX;
-               this.kimiwacun.rotationY = _loc3_.rotationY;
-               this.kimiwacun.rotationZ = _loc3_.rotationZ;
+               this._turretMesh.x = oldMesh.x;
+               this._turretMesh.y = oldMesh.y;
+               this._turretMesh.z = oldMesh.z;
+               this._turretMesh.rotationX = oldMesh.rotationX;
+               this._turretMesh.rotationY = oldMesh.rotationY;
+               this._turretMesh.rotationZ = oldMesh.rotationZ;
             }
-            if(_loc2_ != null)
+            if(parentContainer != null)
             {
-               _loc2_.addChild(this.kimiwacun);
+               parentContainer.addChild(this._turretMesh);
             }
          }
-         this.updatePartTexture(this.lygawe,this.kimiwacun);
+         this.updatePartTexture(this.turret,this._turretMesh);
          if(this.shadow != null)
          {
             this.shadow.removeAllCasters();
-            if(this.mema != null)
+            if(this._hullMesh != null)
             {
-               this.shadow.addCaster(this.mema);
+               this.shadow.addCaster(this._hullMesh);
             }
-            if(this.kimiwacun != null)
+            if(this._turretMesh != null)
             {
-               this.shadow.addCaster(this.kimiwacun);
+               this.shadow.addCaster(this._turretMesh);
             }
          }
       }
@@ -274,75 +274,75 @@ package alternativa.tanks.vehicles.tank.skin
       {
          if(param1 != null)
          {
-            this.qev = param1;
-            this.updatePartTexture(this.cocehi,this.mema);
-            this.updatePartTexture(this.lygawe,this.kimiwacun);
+            this.colormap = param1;
+            this.updatePartTexture(this.hull,this._hullMesh);
+            this.updatePartTexture(this.turret,this._turretMesh);
          }
       }
       
       private function getHalfHeight() : Number
       {
-         return (this.mema.boundMaxZ - this.mema.boundMinZ) / 2;
+         return (this._hullMesh.boundMaxZ - this._hullMesh.boundMinZ) / 2;
       }
       
-      public function updateTransform(param1:Vector3, param2:Quaternion, param3:Number) : void
+      public function updateTransform(position:Vector3, orientation:Quaternion, turretDirection:Number) : void
       {
-         if(this.cocehi != null)
+         if(this.hull != null)
          {
-            param2.toMatrix4(qopo);
-            qopo.setPosition(param1);
-            zyrirerip.toIdentity();
-            zyrirerip.ml = -(this.getHalfHeight() + TankConst.puna);
-            zyrirerip.append(qopo);
-            setObjectTransformation(this.mema,zyrirerip);
-            if(this.lygawe != null)
+            orientation.toMatrix4(matrix);
+            matrix.setPosition(position);
+            hullMatrix.toIdentity();
+            hullMatrix.ml = -(this.getHalfHeight() + TankConst.puna);
+            hullMatrix.append(matrix);
+            setObjectTransformation(this._hullMesh,hullMatrix);
+            if(this.turret != null)
             {
-               qopo.toIdentity();
-               qopo.setPosition(this.cocehi.sih);
-               qopo.setRotationMatrix(0,0,-param3);
-               qopo.append(zyrirerip);
-               setObjectTransformation(this.kimiwacun,qopo);
+               matrix.toIdentity();
+               matrix.setPosition(this.hull.mountPoint);
+               matrix.setRotationMatrix(0,0,-turretDirection);
+               matrix.append(hullMatrix);
+               setObjectTransformation(this._turretMesh,matrix);
             }
          }
       }
       
-      public function updateTracks(param1:Number, param2:Number) : void
+      public function updateTracks(leftDelta:Number, rightDelta:Number) : void
       {
-         this.rehyzomi.move(param1);
-         this.vyjo.move(param2);
+         this.leftTrackSkin.move(leftDelta);
+         this.rightTrackSkin.move(rightDelta);
       }
       
-      private function updatePartTexture(param1:TankPart, param2:Mesh) : void
+      private function updatePartTexture(part:TankPart, mesh:Mesh) : void
       {
-         var _loc3_:Shape = null;
-         var _loc4_:BitmapData = null;
-         var _loc5_:TextureMaterial = null;
-         var _loc6_:TrackMaterial = null;
-         var _loc7_:Face = null;
-         if(param1 != null && this.qev != null)
+         var shape:Shape = null;
+         var texture:BitmapData = null;
+         var material:TextureMaterial = null;
+         var trackMaterial:TrackMaterial = null;
+         var face:Face = null;
+         if(part != null && this.colormap != null)
          {
-            _loc3_ = new Shape();
-            _loc3_.graphics.beginBitmapFill(this.qev);
-            _loc3_.graphics.drawRect(0,0,param1.sut.width,param1.sut.height);
-            _loc4_ = new BitmapData(param1.sut.width,param1.sut.height,false,0);
-            _loc4_.draw(_loc3_);
-            _loc4_.draw(param1.sut,null,null,BlendMode.HARDLIGHT);
-            _loc4_.draw(param1.vypupital);
-            GameData.colorize(_loc4_);
-            _loc5_ = new TextureMaterial(_loc4_,true,true,MipMapping.PER_PIXEL,2.5);
-            _loc6_ = new TrackMaterial(_loc4_,true,true,MipMapping.PER_PIXEL,2.5);
-            for each(_loc7_ in param2.faces)
+            shape = new Shape();
+            shape.graphics.beginBitmapFill(this.colormap);
+            shape.graphics.drawRect(0,0,part.lightmapTexture.width,part.lightmapTexture.height);
+            texture = new BitmapData(part.lightmapTexture.width,part.lightmapTexture.height,false,0);
+            texture.draw(shape);
+            texture.draw(part.lightmapTexture,null,null,BlendMode.HARDLIGHT);
+            texture.draw(part.detailsTexture);
+            GameData.colorize(texture);
+            material = new TextureMaterial(texture,true,true,MipMapping.PER_PIXEL,2.5);
+            trackMaterial = new TrackMaterial(texture,true,true,MipMapping.PER_PIXEL,2.5);
+            for each(face in mesh.faces)
             {
-               if(this.niheji[_loc7_] == null)
+               if(this.trackFaces[face] == null)
                {
-                  _loc7_.material = _loc5_;
+                  face.material = material;
                }
                else
                {
-                  _loc7_.material = _loc6_;
+                  face.material = trackMaterial;
                }
             }
-            param2.removeVertex(param2.addVertex(0,0,0));
+            mesh.removeVertex(mesh.addVertex(0,0,0));
          }
       }
    }

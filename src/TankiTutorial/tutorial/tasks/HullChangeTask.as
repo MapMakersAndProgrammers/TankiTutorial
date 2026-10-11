@@ -23,7 +23,7 @@ package tutorial.tasks
       {
          super();
          this.hullName = hullName;
-         this.playerTank.kuca.hullMesh.colorTransform = this.colorTransform;
+         this.playerTank.skin.hullMesh.colorTransform = this.colorTransform;
       }
       
       override public function process() : Boolean
@@ -44,13 +44,13 @@ package tutorial.tasks
                }
                break;
             case 1:
-               this.playerTank.kuca.hullMesh.colorTransform = null;
-               dimensions = this.playerTank.kuca.getHull().getSkinDimensions();
+               this.playerTank.skin.hullMesh.colorTransform = null;
+               dimensions = this.playerTank.skin.getHull().getSkinDimensions();
                halfHeight = dimensions.z * 0.5;
                this.playerTank.setHull(this.hullName);
-               this.playerTank.hogys.body.state.position.z += dimensions.z * 0.5 - halfHeight;
-               this.playerTank.hogys.body.saveState();
-               this.playerTank.kuca.hullMesh.colorTransform = this.colorTransform;
+               this.playerTank.tankBody.body.state.position.z += dimensions.z * 0.5 - halfHeight;
+               this.playerTank.tankBody.body.saveState();
+               this.playerTank.skin.hullMesh.colorTransform = this.colorTransform;
                this.state = 2;
                break;
             case 2:
@@ -60,7 +60,7 @@ package tutorial.tasks
                if(this.colorTransform.redOffset <= 0)
                {
                   this.state = 3;
-                  this.playerTank.kuca.hullMesh.colorTransform = null;
+                  this.playerTank.skin.hullMesh.colorTransform = null;
                   return true;
                }
          }

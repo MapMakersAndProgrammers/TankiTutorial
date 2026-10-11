@@ -103,11 +103,11 @@ package tutorial.tasks
             this.phase += 5 * timeData.deltaTime;
             offset = Math.sin(this.phase);
             this.arrow.z = this.position.z + offset * 100;
-            if(Boolean(this.tank.inGame) && Boolean(this.tank.kat))
+            if(Boolean(this.tank.inGame) && Boolean(this.tank.alive))
             {
-               this.tankPosition.x = this.tank.kuca.hullMesh.x;
-               this.tankPosition.y = this.tank.kuca.hullMesh.y;
-               this.tankPosition.z = this.tank.kuca.hullMesh.z;
+               this.tankPosition.x = this.tank.skin.hullMesh.x;
+               this.tankPosition.y = this.tank.skin.hullMesh.y;
+               this.tankPosition.z = this.tank.skin.hullMesh.z;
                if(this.wall.isPointInEnvironmentOfWall(this.tankPosition,this.range))
                {
                   this.reached = true;

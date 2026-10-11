@@ -67,7 +67,7 @@ package alternativa.tanks.battle
       
       public function addTank(tank:Tank) : void
       {
-         this.tankScales[tank] = tank.fysa / 600;
+         this.tankScales[tank] = tank.boundSphereRadius / 600;
       }
       
       public function removeTank(tank:Tank) : void
@@ -99,7 +99,7 @@ package alternativa.tanks.battle
          scale = Number(this.tankScales[tank]);
          var leftTrack:Track = tank.getLeftTrack();
          var rightTrack:Track = tank.getRightTrack();
-         if(leftTrack.zigebota * rightTrack.zigebota < 0)
+         if(leftTrack.animationSpeed * rightTrack.animationSpeed < 0)
          {
             minSpeed = 5;
          }
@@ -118,9 +118,9 @@ package alternativa.tanks.battle
          var speed:Number = NaN;
          var strength:Number = NaN;
          var i:int = 0;
-         while(i < track.wavi)
+         while(i < track.numRays)
          {
-            suspensionRay = track.mofovoti[i];
+            suspensionRay = track.rays[i];
             speed = Math.abs(suspensionRay.speed);
             if(speed > minSpeed && Math.random() < probability)
             {

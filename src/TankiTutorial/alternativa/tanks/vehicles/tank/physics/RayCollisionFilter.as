@@ -8,10 +8,10 @@ package alternativa.tanks.vehicles.tank.physics
       
       private var body:Body;
       
-      public function RayCollisionFilter(param1:Body)
+      public function RayCollisionFilter(body:Body)
       {
          super();
-         this.body = param1;
+         this.body = body;
       }
       
       public function considerBody(param1:Body) : Boolean

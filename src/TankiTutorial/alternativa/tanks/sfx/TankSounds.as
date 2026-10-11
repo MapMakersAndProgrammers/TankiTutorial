@@ -177,7 +177,7 @@ package alternativa.tanks.sfx
       {
          if(this.tank != null && this._enabled)
          {
-            position.copy(this.tank.hogys.body.state.position);
+            position.copy(this.tank.tankBody.body.state.position);
             if(this.engineSoundsLoaded)
             {
                this.engineSounds.update(deltaTime,camera.position,position,camera.xAxis);
@@ -212,7 +212,7 @@ package alternativa.tanks.sfx
       
       public function readPosition(result:Vector3) : void
       {
-         result.copy(this.tank.hogys.body.state.position);
+         result.copy(this.tank.tankBody.body.state.position);
       }
       
       public function set enabled(value:Boolean) : void

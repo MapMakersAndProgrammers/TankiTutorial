@@ -14,94 +14,94 @@ package alternativa.tanks.vehicles.tank.controllers
    public class LocalTurretController extends TurretController
    {
       
-      private static const cud:String = "mouseLock";
+      private static const MOUSE_LOCK:String = "mouseLock";
       
-      private static const kygiwu:String = "fullScreenInteractiveAccepted";
+      private static const FULL_SCREEN_INTERACTIVE_ACCEPTED:String = "fullScreenInteractiveAccepted";
       
-      private static const hofyq:String = "rightMouseDown";
+      private static const RIGHT_MOUSE_DOWN:String = "rightMouseDown";
       
-      private static const tebydutug:String = "rightMouseUp";
+      private static const RIGHT_MOUSE_UP:String = "rightMouseUp";
       
-      private static const liqiliw:String = "movementX";
+      private static const MOVEMENT_X:String = "movementX";
       
-      private static const womefivy:String = "fullScreen";
+      private static const FULL_SCREEN:String = "fullScreen";
       
-      private static const votam:Number = 0.001;
+      private static const MOUSE_SENSITIVITY:Number = 0.001;
       
-      private var selijy:InteractiveObject;
+      private var eventSource:InteractiveObject;
       
-      private var gofucuheg:int;
+      private var controlState:int;
       
-      private var ridima:Dictionary;
+      private var handlers:Dictionary;
       
-      private var wupeko:TurretControlKeyMap;
+      private var keyMap:TurretControlKeyMap;
       
-      private var jipuzy:Number = 0;
+      private var targetDirection:Number = 0;
       
-      private var qicucufov:Number = 0;
+      private var mouseDirection:Number = 0;
       
-      private var raliw:Boolean = false;
+      private var mouseMoved:Boolean = false;
       
       private var cyzogi:Boolean = false;
       
-      private var zadawe:Boolean = true;
+      private var active:Boolean = true;
       
       private var behu:Boolean = false;
       
-      private var kowywyq:Boolean = false;
+      private var skipMouseMove:Boolean = false;
       
-      private var wezet:Boolean = false;
+      private var mouseModeRequested:Boolean = false;
       
-      public function LocalTurretController(param1:Number, param2:Number, param3:InteractiveObject)
+      public function LocalTurretController(param1:Number, param2:Number, eventSource:InteractiveObject)
       {
          super(param1,param2,false);
-         this.selijy = param3;
+         this.eventSource = eventSource;
          this.setDefaultKeyMap();
-         param3.addEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
-         param3.addEventListener(KeyboardEvent.KEY_UP,this.onKey);
+         eventSource.addEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
+         eventSource.addEventListener(KeyboardEvent.KEY_UP,this.onKey);
          if(GameData.mouseEnabled)
          {
-            param3.addEventListener(MouseEvent.MOUSE_DOWN,this.onMouseDown);
-            param3.addEventListener(MouseEvent.MOUSE_MOVE,this.onMouseMove);
-            param3.addEventListener(kygiwu,this.onFullScreen);
-            param3.addEventListener(FullScreenEvent.FULL_SCREEN,this.onFullScreen);
-            param3.addEventListener(Event.ACTIVATE,this.onActivate);
-            param3.addEventListener(Event.DEACTIVATE,this.onDeactivate);
-            param3.addEventListener(Event.MOUSE_LEAVE,this.onMouseLeave);
-            param3.addEventListener(hofyq,this.onRightMouseDown);
-            param3.addEventListener(tebydutug,this.onRightMouseUp);
+            eventSource.addEventListener(MouseEvent.MOUSE_DOWN,this.onMouseDown);
+            eventSource.addEventListener(MouseEvent.MOUSE_MOVE,this.onMouseMove);
+            eventSource.addEventListener(FULL_SCREEN_INTERACTIVE_ACCEPTED,this.onFullScreen);
+            eventSource.addEventListener(FullScreenEvent.FULL_SCREEN,this.onFullScreen);
+            eventSource.addEventListener(Event.ACTIVATE,this.onActivate);
+            eventSource.addEventListener(Event.DEACTIVATE,this.onDeactivate);
+            eventSource.addEventListener(Event.MOUSE_LEAVE,this.onMouseLeave);
+            eventSource.addEventListener(RIGHT_MOUSE_DOWN,this.onRightMouseDown);
+            eventSource.addEventListener(RIGHT_MOUSE_UP,this.onRightMouseUp);
             this.enableMouseMode();
          }
       }
       
-      private function onRightMouseDown(param1:Event) : void
+      private function onRightMouseDown(e:Event) : void
       {
          GameData.qazul = true;
-         this.gofucuheg = 0;
-         applyControlState(this.gofucuheg);
+         this.controlState = 0;
+         applyControlState(this.controlState);
       }
       
-      private function onRightMouseUp(param1:Event) : void
+      private function onRightMouseUp(e:Event) : void
       {
          GameData.qazul = false;
       }
       
-      private function onMouseLeave(param1:Event) : void
+      private function onMouseLeave(e:Event) : void
       {
          if(this.isFullScreen())
          {
-            this.zadawe = false;
+            this.active = false;
          }
       }
       
-      private function onDeactivate(param1:Event) : void
+      private function onDeactivate(e:Event) : void
       {
-         this.zadawe = false;
+         this.active = false;
       }
       
-      private function onActivate(param1:Event) : void
+      private function onActivate(e:Event) : void
       {
-         if(!this.zadawe)
+         if(!this.active)
          {
             this.behu = true;
             if(GameData.kumiteva)
@@ -111,24 +111,24 @@ package alternativa.tanks.vehicles.tank.controllers
          }
       }
       
-      private function onMouseMove(param1:MouseEvent) : void
+      private function onMouseMove(mouseEvent:MouseEvent) : void
       {
-         if(this.kowywyq)
+         if(this.skipMouseMove)
          {
-            this.kowywyq = false;
+            this.skipMouseMove = false;
             return;
          }
          if(GameData.kumiteva && isNotLocked())
          {
-            this.qicucufov -= param1[liqiliw] * votam;
-            this.qicucufov = MathUtils.clampAngle(this.qicucufov);
-            this.raliw = true;
+            this.mouseDirection -= mouseEvent[MOVEMENT_X] * MOUSE_SENSITIVITY;
+            this.mouseDirection = MathUtils.clampAngle(this.mouseDirection);
+            this.mouseMoved = true;
          }
       }
       
-      private function onMouseDown(param1:MouseEvent) : void
+      private function onMouseDown(mouseEvent:MouseEvent) : void
       {
-         if(!GameData.kumiteva && this.zadawe)
+         if(!GameData.kumiteva && this.active)
          {
             if(!this.isFullScreen())
             {
@@ -138,7 +138,7 @@ package alternativa.tanks.vehicles.tank.controllers
             {
                this.enableMouseMode();
             }
-            param1.stopImmediatePropagation();
+            mouseEvent.stopImmediatePropagation();
          }
       }
       
@@ -149,29 +149,29 @@ package alternativa.tanks.vehicles.tank.controllers
       
       public function setKeyMap(param1:TurretControlKeyMap) : void
       {
-         this.wupeko = param1;
-         this.gofucuheg = 0;
+         this.keyMap = param1;
+         this.controlState = 0;
          applyControlState(0);
-         this.ridima = new Dictionary();
-         this.setHandlers(param1.hatu,this.onKeyLeft);
-         this.setHandlers(param1.baric,this.onKeyRight);
-         this.setHandlers(param1.konejohe,this.onKeyCenter);
+         this.handlers = new Dictionary();
+         this.setHandlers(param1.leftKeys,this.onKeyLeft);
+         this.setHandlers(param1.rightKeys,this.onKeyRight);
+         this.setHandlers(param1.centerKeys,this.onKeyCenter);
       }
       
       override public function destroy() : void
       {
          super.destroy();
-         this.selijy.removeEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
-         this.selijy.removeEventListener(KeyboardEvent.KEY_UP,this.onKey);
-         this.selijy.removeEventListener(MouseEvent.MOUSE_DOWN,this.onMouseDown);
-         this.selijy.removeEventListener(MouseEvent.MOUSE_MOVE,this.onMouseMove);
-         this.selijy.removeEventListener(kygiwu,this.onFullScreen);
-         this.selijy.removeEventListener(FullScreenEvent.FULL_SCREEN,this.onFullScreen);
+         this.eventSource.removeEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
+         this.eventSource.removeEventListener(KeyboardEvent.KEY_UP,this.onKey);
+         this.eventSource.removeEventListener(MouseEvent.MOUSE_DOWN,this.onMouseDown);
+         this.eventSource.removeEventListener(MouseEvent.MOUSE_MOVE,this.onMouseMove);
+         this.eventSource.removeEventListener(FULL_SCREEN_INTERACTIVE_ACCEPTED,this.onFullScreen);
+         this.eventSource.removeEventListener(FullScreenEvent.FULL_SCREEN,this.onFullScreen);
       }
       
-      private function onFullScreen(param1:FullScreenEvent) : void
+      private function onFullScreen(fullScreenEvent:FullScreenEvent) : void
       {
-         if(param1.fullScreen && (param1.type == kygiwu || Capabilities.isDebugger && param1.type == womefivy))
+         if(fullScreenEvent.fullScreen && (fullScreenEvent.type == FULL_SCREEN_INTERACTIVE_ACCEPTED || Capabilities.isDebugger && fullScreenEvent.type == FULL_SCREEN))
          {
             this.enableMouseMode();
          }
@@ -183,22 +183,22 @@ package alternativa.tanks.vehicles.tank.controllers
       
       private function enableMouseMode() : void
       {
-         this.wezet = true;
+         this.mouseModeRequested = true;
       }
       
       private function doEnableBouseMode() : *
       {
          if(GameData.mouseEnabled && !finished && this.isFullScreen())
          {
-            GameData.stage[cud] = true;
+            GameData.stage[MOUSE_LOCK] = true;
             GameData.kumiteva = true;
-            this.raliw = false;
-            this.qicucufov = getDirection() + jygef;
-            this.kowywyq = true;
-            this.gofucuheg = 0;
-            applyControlState(this.gofucuheg);
+            this.mouseMoved = false;
+            this.mouseDirection = getDirection() + tankDirection;
+            this.skipMouseMove = true;
+            this.controlState = 0;
+            applyControlState(this.controlState);
             GameData.stage.dispatchEvent(new ControlModeChangeEvent());
-            this.wezet = false;
+            this.mouseModeRequested = false;
          }
       }
       
@@ -206,102 +206,102 @@ package alternativa.tanks.vehicles.tank.controllers
       {
          if(GameData.mouseEnabled && this.isFullScreen())
          {
-            GameData.stage[cud] = false;
+            GameData.stage[MOUSE_LOCK] = false;
          }
          GameData.kumiteva = false;
-         this.gofucuheg = 0;
-         applyControlState(this.gofucuheg);
+         this.controlState = 0;
+         applyControlState(this.controlState);
          GameData.stage.dispatchEvent(new ControlModeChangeEvent());
       }
       
-      private function onKey(param1:KeyboardEvent) : void
+      private function onKey(keyboardEvent:KeyboardEvent) : void
       {
-         var _loc3_:int = 0;
-         var _loc2_:Function = this.ridima[param1.keyCode];
-         if(_loc2_ != null)
+         var state:int = 0;
+         var handler:Function = this.handlers[keyboardEvent.keyCode];
+         if(handler != null)
          {
             if(GameData.kumiteva)
             {
                this.disableMouseMode();
             }
-            _loc3_ = _loc2_(param1.type == KeyboardEvent.KEY_DOWN);
-            if(_loc3_ != this.gofucuheg)
+            state = handler(keyboardEvent.type == KeyboardEvent.KEY_DOWN);
+            if(state != this.controlState)
             {
-               this.gofucuheg = MathUtils.changeBitValue(_loc3_,heravytu,false);
-               applyControlState(_loc3_);
+               this.controlState = MathUtils.changeBitValue(state,CENTER,false);
+               applyControlState(state);
             }
          }
       }
       
-      private function onKeyLeft(param1:Boolean) : int
+      private function onKeyLeft(pressed:Boolean) : int
       {
-         return MathUtils.changeBitValue(this.gofucuheg,wogop,param1);
+         return MathUtils.changeBitValue(this.controlState,LEFT,pressed);
       }
       
-      private function onKeyRight(param1:Boolean) : int
+      private function onKeyRight(pressed:Boolean) : int
       {
-         return MathUtils.changeBitValue(this.gofucuheg,dad,param1);
+         return MathUtils.changeBitValue(this.controlState,RIGHT,pressed);
       }
       
-      private function onKeyCenter(param1:Boolean) : int
+      private function onKeyCenter(pressed:Boolean) : int
       {
-         return MathUtils.changeBitValue(this.gofucuheg,heravytu,param1);
+         return MathUtils.changeBitValue(this.controlState,CENTER,pressed);
       }
       
-      private function setHandlers(param1:Vector.<uint>, param2:Function) : void
+      private function setHandlers(keyCodes:Vector.<uint>, handler:Function) : void
       {
-         var _loc3_:uint = 0;
-         for each(_loc3_ in param1)
+         var keyCode:uint = 0;
+         for each(keyCode in keyCodes)
          {
-            this.ridima[_loc3_] = param2;
+            this.handlers[keyCode] = handler;
          }
       }
       
-      override public function rotate(param1:Number) : void
+      override public function rotate(dt:Number) : void
       {
          if(this.behu)
          {
-            this.zadawe = true;
+            this.active = true;
             this.behu = false;
          }
-         if(this.wezet)
+         if(this.mouseModeRequested)
          {
             this.doEnableBouseMode();
          }
          if(GameData.kumiteva && !GameData.qazul)
          {
-            this.jipuzy = this.qicucufov - jygef;
-            this.updateMouse(param1);
+            this.targetDirection = this.mouseDirection - tankDirection;
+            this.updateMouse(dt);
          }
-         super.rotate(param1);
+         super.rotate(dt);
       }
       
-      private function updateMouse(param1:Number) : void
+      private function updateMouse(dt:Number) : void
       {
-         var _loc2_:Number = this.angleDiff(this.jipuzy,getDirection());
-         var _loc3_:Number = getMaxTurnSpeed() * param1;
-         if(Math.abs(_loc2_) < _loc3_ && !this.raliw)
+         var angle:Number = this.angleDiff(this.targetDirection,getDirection());
+         var maxAngle:Number = getMaxTurnSpeed() * dt;
+         if(Math.abs(angle) < maxAngle && !this.mouseMoved)
          {
-            this.jipuzy = getDirection();
-            this.gofucuheg = 0;
+            this.targetDirection = getDirection();
+            this.controlState = 0;
          }
-         else if(_loc2_ < 0)
+         else if(angle < 0)
          {
-            this.gofucuheg = MathUtils.changeBitValue(this.gofucuheg,dad,true);
-            this.gofucuheg = MathUtils.changeBitValue(this.gofucuheg,wogop,false);
+            this.controlState = MathUtils.changeBitValue(this.controlState,RIGHT,true);
+            this.controlState = MathUtils.changeBitValue(this.controlState,LEFT,false);
          }
          else
          {
-            this.gofucuheg = MathUtils.changeBitValue(this.gofucuheg,wogop,true);
-            this.gofucuheg = MathUtils.changeBitValue(this.gofucuheg,dad,false);
+            this.controlState = MathUtils.changeBitValue(this.controlState,LEFT,true);
+            this.controlState = MathUtils.changeBitValue(this.controlState,RIGHT,false);
          }
-         this.raliw = false;
-         applyControlState(this.gofucuheg);
+         this.mouseMoved = false;
+         applyControlState(this.controlState);
       }
       
-      private function angleDiff(param1:Number, param2:Number) : Number
+      private function angleDiff(a:Number, b:Number) : Number
       {
-         return Math.atan2(Math.sin(param1 - param2),Math.cos(param1 - param2));
+         return Math.atan2(Math.sin(a - b),Math.cos(a - b));
       }
       
       private function isFullScreen() : Boolean
@@ -316,7 +316,7 @@ package alternativa.tanks.vehicles.tank.controllers
       
       override public function getCameraDirection() : Number
       {
-         return this.qicucufov - jygef;
+         return this.mouseDirection - tankDirection;
       }
       
       override public function reset() : void
@@ -325,12 +325,12 @@ package alternativa.tanks.vehicles.tank.controllers
          this.cyzogi = true;
       }
       
-      override public function setTankDirection(param1:Number) : void
+      override public function setTankDirection(value:Number) : void
       {
-         super.setTankDirection(param1);
+         super.setTankDirection(value);
          if(this.cyzogi)
          {
-            this.qicucufov = jygef;
+            this.mouseDirection = tankDirection;
             this.cyzogi = false;
          }
       }
@@ -339,17 +339,17 @@ package alternativa.tanks.vehicles.tank.controllers
       {
          super.finish();
          this.disableMouseMode();
-         this.selijy.removeEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
-         this.selijy.removeEventListener(KeyboardEvent.KEY_UP,this.onKey);
+         this.eventSource.removeEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
+         this.eventSource.removeEventListener(KeyboardEvent.KEY_UP,this.onKey);
          if(GameData.mouseEnabled)
          {
-            this.selijy.removeEventListener(MouseEvent.MOUSE_DOWN,this.onMouseDown);
-            this.selijy.removeEventListener(MouseEvent.MOUSE_MOVE,this.onMouseMove);
-            this.selijy.removeEventListener(kygiwu,this.onFullScreen);
-            this.selijy.removeEventListener(FullScreenEvent.FULL_SCREEN,this.onFullScreen);
-            this.selijy.removeEventListener(Event.ACTIVATE,this.onActivate);
-            this.selijy.removeEventListener(Event.DEACTIVATE,this.onDeactivate);
-            this.selijy.removeEventListener(Event.MOUSE_LEAVE,this.onMouseLeave);
+            this.eventSource.removeEventListener(MouseEvent.MOUSE_DOWN,this.onMouseDown);
+            this.eventSource.removeEventListener(MouseEvent.MOUSE_MOVE,this.onMouseMove);
+            this.eventSource.removeEventListener(FULL_SCREEN_INTERACTIVE_ACCEPTED,this.onFullScreen);
+            this.eventSource.removeEventListener(FullScreenEvent.FULL_SCREEN,this.onFullScreen);
+            this.eventSource.removeEventListener(Event.ACTIVATE,this.onActivate);
+            this.eventSource.removeEventListener(Event.DEACTIVATE,this.onDeactivate);
+            this.eventSource.removeEventListener(Event.MOUSE_LEAVE,this.onMouseLeave);
          }
       }
    }

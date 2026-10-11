@@ -13,309 +13,309 @@ package alternativa.tanks.vehicles.tank
       
       private static const tyqufisen:Number = 400;
       
-      private static const dibi:Vector3 = new Vector3();
+      private static const xAxis:Vector3 = new Vector3();
       
-      private static const domypujag:Vector3 = new Vector3();
+      private static const yAxis:Vector3 = new Vector3();
       
-      private static const jidovivo:Vector3 = new Vector3();
+      private static const zAxis:Vector3 = new Vector3();
       
-      private static const mavejok:Vector3 = new Vector3();
+      private static const surfaceVelocity:Vector3 = new Vector3();
       
-      private static const jeke:Vector3 = new Vector3();
+      private static const surfaceAngularVelocity:Vector3 = new Vector3();
       
-      private static const jyz:Vector3 = new Vector3();
+      private static const relativeVelocity:Vector3 = new Vector3();
       
-      private static const qupe:Vector3 = new Vector3();
+      private static const relativeAngularVelocity:Vector3 = new Vector3();
       
-      private static const kugariz:Vector3 = new Vector3();
+      private static const force:Vector3 = new Vector3();
       
-      private static const vejavus:Vector3 = new Vector3();
+      private static const contactsCenter:Vector3 = new Vector3();
       
       private var body:Body;
       
-      private var gobo:SuspensionParams;
+      private var suspensionParams:SuspensionParams;
       
-      private var jifav:ValueSmoother;
+      private var maxSpeedSmoother:ValueSmoother;
       
-      internal var vapal:Track;
+      internal var leftTrack:Track;
       
-      internal var mof:Track;
+      internal var rightTrack:Track;
       
-      internal var dajy:Boolean;
+      internal var movementLocked:Boolean;
       
-      internal var rucumopak:int;
+      internal var movementDirection:int;
       
-      internal var wuzyvodew:int;
+      internal var turnDirection:int;
       
       internal var cewubegy:Boolean;
       
-      private var dis:Number = 1306;
+      private var acceleration:Number = 1306;
       
-      private var canako:Number = 1461;
+      private var reverseAcceleration:Number = 1461;
       
-      private var hageb:Number = 1439;
+      private var sideAcceleration:Number = 1439;
       
-      private var nasykatag:Number = MathUtils.toRadians(141.9);
+      private var turnAcceleration:Number = MathUtils.toRadians(141.9);
       
-      private var jikivemuh:Number = MathUtils.toRadians(203.9);
+      private var reverseTurnAcceleration:Number = MathUtils.toRadians(203.9);
       
-      public function TrackedChassis(param1:Body, param2:SuspensionParams, param3:ValueSmoother, param4:Vector3)
+      public function TrackedChassis(body:Body, suspensionParams:SuspensionParams, maxSpeedSmoother:ValueSmoother, size:Vector3)
       {
          super();
-         this.body = param1;
-         this.gobo = param2;
-         this.jifav = param3;
-         this.createTracks(TankConst.nybi,param4);
+         this.body = body;
+         this.suspensionParams = suspensionParams;
+         this.maxSpeedSmoother = maxSpeedSmoother;
+         this.createTracks(TankConst.NUM_RAYS_PER_TRACK,size);
       }
       
-      private function createTracks(param1:int, param2:Vector3) : void
+      private function createTracks(numRays:int, size:Vector3) : void
       {
-         var _loc3_:Number = param2.y * 0.8;
-         var _loc4_:Number = param2.x - 40;
-         this.vapal = new Track(this.body,param1,new Vector3(-0.5 * _loc4_,0,-0.5 * param2.z + TankConst.kyr),_loc3_,this.gobo,-1);
-         this.mof = new Track(this.body,param1,new Vector3(0.5 * _loc4_,0,-0.5 * param2.z + TankConst.kyr),_loc3_,this.gobo,1);
+         var trackLength:Number = size.y * 0.8;
+         var trackSpacing:Number = size.x - 40;
+         this.leftTrack = new Track(this.body,numRays,new Vector3(-0.5 * trackSpacing,0,-0.5 * size.z + TankConst.kyr),trackLength,this.suspensionParams,-1);
+         this.rightTrack = new Track(this.body,numRays,new Vector3(0.5 * trackSpacing,0,-0.5 * size.z + TankConst.kyr),trackLength,this.suspensionParams,1);
       }
       
-      public function setAcceleration(param1:Number) : void
+      public function setAcceleration(value:Number) : void
       {
-         this.dis = param1;
+         this.acceleration = value;
       }
       
-      public function setReverseAcceleration(param1:Number) : void
+      public function setReverseAcceleration(value:Number) : void
       {
-         this.canako = param1;
+         this.reverseAcceleration = value;
       }
       
-      public function setSideAcceleration(param1:Number) : void
+      public function setSideAcceleration(value:Number) : void
       {
-         this.hageb = param1;
+         this.sideAcceleration = value;
       }
       
-      public function setTurnAcceleration(param1:Number) : void
+      public function setTurnAcceleration(value:Number) : void
       {
-         this.nasykatag = param1;
+         this.turnAcceleration = value;
       }
       
-      public function setReverseTurnAcceleration(param1:Number) : void
+      public function setReverseTurnAcceleration(value:Number) : void
       {
-         this.jikivemuh = param1;
+         this.reverseTurnAcceleration = value;
       }
       
       public function getAcceleration() : Number
       {
-         return this.dis;
+         return this.acceleration;
       }
       
       public function getActualMovementDirection() : int
       {
-         return this.dajy ? 0 : this.rucumopak;
+         return this.movementLocked ? 0 : this.movementDirection;
       }
       
       public function getActualTurnDirection() : int
       {
-         return this.dajy ? 0 : this.wuzyvodew;
+         return this.movementLocked ? 0 : this.turnDirection;
       }
       
-      public function setTracksCollisionGroup(param1:int) : void
+      public function setTracksCollisionGroup(collisionGroup:int) : void
       {
-         this.vapal.setCollisionGroup(param1);
-         this.mof.setCollisionGroup(param1);
+         this.leftTrack.setCollisionGroup(collisionGroup);
+         this.rightTrack.setCollisionGroup(collisionGroup);
       }
       
-      public function applyForces(param1:Number, param2:Number, param3:Number) : void
+      public function applyForces(maxSpeed:Number, maxTurnSpeed:Number, dt:Number) : void
       {
          this.adjustSuspensionSpringCoeff();
-         this.calculateSuspensionContacts(param3);
-         this.applyMovementForces(param1,param2,param3);
+         this.calculateSuspensionContacts(dt);
+         this.applyMovementForces(maxSpeed,maxTurnSpeed,dt);
          this.applySlopeHack();
       }
       
       private function adjustSuspensionSpringCoeff() : void
       {
-         var _loc1_:Number = this.body.scene.gravity.length() * this.body.mass;
-         this.gobo.jakopunu = _loc1_ / (2 * TankConst.nybi * (this.gobo.tovudov - this.gobo.vocuqih));
+         var weight:Number = this.body.scene.gravity.length() * this.body.mass;
+         this.suspensionParams.springCoeff = weight / (2 * TankConst.NUM_RAYS_PER_TRACK * (this.suspensionParams.rayLength - this.suspensionParams.nominalRayLength));
       }
       
-      private function calculateSuspensionContacts(param1:Number) : void
+      private function calculateSuspensionContacts(dt:Number) : void
       {
-         this.vapal.calculateSuspensionContacts(param1);
-         this.mof.calculateSuspensionContacts(param1);
+         this.leftTrack.calculateSuspensionContacts(dt);
+         this.rightTrack.calculateSuspensionContacts(dt);
       }
       
-      private function applyMovementForces(param1:Number, param2:Number, param3:Number) : void
+      private function applyMovementForces(maxSpeed:Number, maxTurnSpeed:Number, dt:Number) : void
       {
-         if(this.vapal.jim + this.mof.jim > 0)
+         if(this.leftTrack.numContacts + this.rightTrack.numContacts > 0)
          {
-            this.doApplyMovementForces(param1,param2,param3);
+            this.doApplyMovementForces(maxSpeed,maxTurnSpeed,dt);
          }
       }
       
-      private function doApplyMovementForces(param1:Number, param2:Number, param3:Number) : void
+      private function doApplyMovementForces(maxSpeed:Number, maxTurnSpeed:Number, dt:Number) : void
       {
-         var _loc7_:Vector3 = null;
-         var _loc8_:Matrix3 = null;
-         var _loc9_:Number = NaN;
-         var _loc20_:Number = NaN;
-         var _loc21_:Number = NaN;
-         var _loc22_:Number = NaN;
+         var rotation:Vector3 = null;
+         var matrix:Matrix3 = null;
+         var slopeCoeff:Number = NaN;
+         var speedDelta:Number = NaN;
+         var newSpeed:Number = NaN;
+         var actualSpeedDelta:Number = NaN;
          var _loc23_:Number = NaN;
-         var _loc24_:Number = NaN;
-         var _loc25_:Number = NaN;
-         var _loc26_:Number = NaN;
-         var _loc27_:int = 0;
+         var remainingSpeedRatio:Number = NaN;
+         var requiredAcceleration:Number = NaN;
+         var totalForce:Number = NaN;
+         var numContacts:int = 0;
          var _loc28_:Number = NaN;
-         var _loc29_:Number = NaN;
-         var _loc30_:Number = NaN;
-         var _loc31_:Number = NaN;
-         var _loc32_:int = 0;
-         var _loc33_:Number = NaN;
-         var _loc34_:Number = NaN;
-         var _loc35_:Number = NaN;
-         var _loc4_:int = this.dajy ? 0 : this.rucumopak;
-         var _loc5_:int = this.dajy ? 0 : this.wuzyvodew;
-         var _loc6_:Vector3 = this.body.state.velocity;
-         _loc7_ = this.body.state.rotation;
-         _loc8_ = this.body.orientationMatrix;
-         dibi.x = _loc8_.ma;
-         dibi.y = _loc8_.me;
-         dibi.z = _loc8_.mi;
-         domypujag.x = _loc8_.mb;
-         domypujag.y = _loc8_.mf;
-         domypujag.z = _loc8_.mj;
-         jidovivo.x = _loc8_.mc;
-         jidovivo.y = _loc8_.mg;
-         jidovivo.z = _loc8_.mk;
-         _loc9_ = 1;
-         var _loc10_:Number = Math.PI / 4;
-         var _loc11_:Number = Math.PI / 3;
-         if(jidovivo.z < Math.cos(_loc10_))
+         var forcePerRay:Number = NaN;
+         var minRaySlopeAngle:Number = NaN;
+         var maxRaySlopeAngle:Number = NaN;
+         var i:int = 0;
+         var turnSpeedCoeff:Number = NaN;
+         var turnSpeedDelta:Number = NaN;
+         var newTurnSpeed:Number = NaN;
+         var actualMovementDirection:int = this.movementLocked ? 0 : this.movementDirection;
+         var actualTurnDirection:int = this.movementLocked ? 0 : this.turnDirection;
+         var velocity:Vector3 = this.body.state.velocity;
+         rotation = this.body.state.rotation;
+         matrix = this.body.orientationMatrix;
+         xAxis.x = matrix.ma;
+         xAxis.y = matrix.me;
+         xAxis.z = matrix.mi;
+         yAxis.x = matrix.mb;
+         yAxis.y = matrix.mf;
+         yAxis.z = matrix.mj;
+         zAxis.x = matrix.mc;
+         zAxis.y = matrix.mg;
+         zAxis.z = matrix.mk;
+         slopeCoeff = 1;
+         var minSlopeAngle:Number = Math.PI / 4;
+         var maxSlopeAngle:Number = Math.PI / 3;
+         if(zAxis.z < Math.cos(minSlopeAngle))
          {
-            if(jidovivo.z < Math.cos(_loc11_))
+            if(zAxis.z < Math.cos(maxSlopeAngle))
             {
-               _loc9_ = 0;
+               slopeCoeff = 0;
             }
             else
             {
-               _loc9_ = (_loc11_ - Math.acos(jidovivo.z)) / (_loc11_ - _loc10_);
+               slopeCoeff = (maxSlopeAngle - Math.acos(zAxis.z)) / (maxSlopeAngle - minSlopeAngle);
             }
          }
-         this.calculateSurfaceVelocities(mavejok,jeke);
-         jyz.x = _loc6_.x - mavejok.x;
-         jyz.y = _loc6_.y - mavejok.y;
-         jyz.z = _loc6_.z - mavejok.z;
-         qupe.x = _loc7_.x - jeke.x;
-         qupe.y = _loc7_.y - jeke.y;
-         qupe.z = _loc7_.z - jeke.z;
-         var _loc12_:Number = jyz.x * domypujag.x + jyz.y * domypujag.y + jyz.z * domypujag.z;
-         var _loc13_:Number = qupe.x * jidovivo.x + qupe.y * jidovivo.y + qupe.z * jidovivo.z;
-         var _loc14_:Number = jyz.x * dibi.x + jyz.y * dibi.y + jyz.z * dibi.z;
-         var _loc15_:Number = this.hageb * _loc9_ * param3;
-         if(_loc14_ < 0)
+         this.calculateSurfaceVelocities(surfaceVelocity,surfaceAngularVelocity);
+         relativeVelocity.x = velocity.x - surfaceVelocity.x;
+         relativeVelocity.y = velocity.y - surfaceVelocity.y;
+         relativeVelocity.z = velocity.z - surfaceVelocity.z;
+         relativeAngularVelocity.x = rotation.x - surfaceAngularVelocity.x;
+         relativeAngularVelocity.y = rotation.y - surfaceAngularVelocity.y;
+         relativeAngularVelocity.z = rotation.z - surfaceAngularVelocity.z;
+         var forwardSpeed:Number = relativeVelocity.x * yAxis.x + relativeVelocity.y * yAxis.y + relativeVelocity.z * yAxis.z;
+         var turnSpeed:Number = relativeAngularVelocity.x * zAxis.x + relativeAngularVelocity.y * zAxis.y + relativeAngularVelocity.z * zAxis.z;
+         var sideSpeed:Number = relativeVelocity.x * xAxis.x + relativeVelocity.y * xAxis.y + relativeVelocity.z * xAxis.z;
+         var sideSpeedDelta:Number = this.sideAcceleration * slopeCoeff * dt;
+         if(sideSpeed < 0)
          {
-            if(_loc15_ > -_loc14_)
+            if(sideSpeedDelta > -sideSpeed)
             {
-               _loc14_ = 0;
+               sideSpeed = 0;
             }
             else
             {
-               _loc14_ += _loc15_;
+               sideSpeed += sideSpeedDelta;
             }
          }
-         else if(_loc14_ > 0)
+         else if(sideSpeed > 0)
          {
-            if(_loc15_ > _loc14_)
+            if(sideSpeedDelta > sideSpeed)
             {
-               _loc14_ = 0;
+               sideSpeed = 0;
             }
             else
             {
-               _loc14_ -= _loc15_;
+               sideSpeed -= sideSpeedDelta;
             }
          }
-         jyz.setLengthAlongDirection(dibi,_loc14_);
-         _loc6_.x = mavejok.x + jyz.x;
-         _loc6_.y = mavejok.y + jyz.y;
-         _loc6_.z = mavejok.z + jyz.z;
-         var _loc16_:int = this.vapal.jim;
-         var _loc17_:int = this.mof.jim;
-         var _loc18_:Number = this.dis;
-         var _loc19_:Number = this.nasykatag;
-         if(_loc16_ > 0 || _loc17_ > 0)
+         relativeVelocity.setLengthAlongDirection(xAxis,sideSpeed);
+         velocity.x = surfaceVelocity.x + relativeVelocity.x;
+         velocity.y = surfaceVelocity.y + relativeVelocity.y;
+         velocity.z = surfaceVelocity.z + relativeVelocity.z;
+         var numLeftContacts:int = this.leftTrack.numContacts;
+         var numRightContacts:int = this.rightTrack.numContacts;
+         var linearAcceleration:Number = this.acceleration;
+         var angularAcceleration:Number = this.turnAcceleration;
+         if(numLeftContacts > 0 || numRightContacts > 0)
          {
-            _loc20_ = 0;
-            if(_loc4_ == 0)
+            speedDelta = 0;
+            if(actualMovementDirection == 0)
             {
-               _loc20_ = -MathUtils.sign(_loc12_) * _loc18_ * param3;
-               if(MathUtils.sign(_loc12_) != MathUtils.sign(_loc12_ + _loc20_))
+               speedDelta = -MathUtils.sign(forwardSpeed) * linearAcceleration * dt;
+               if(MathUtils.sign(forwardSpeed) != MathUtils.sign(forwardSpeed + speedDelta))
                {
-                  _loc20_ = -_loc12_;
+                  speedDelta = -forwardSpeed;
                }
             }
             else
             {
-               if(MathUtils.sign(_loc12_) * MathUtils.sign(_loc4_) < 0)
+               if(MathUtils.sign(forwardSpeed) * MathUtils.sign(actualMovementDirection) < 0)
                {
-                  _loc18_ = this.canako;
+                  linearAcceleration = this.reverseAcceleration;
                }
-               _loc20_ = _loc4_ * _loc18_ * param3;
+               speedDelta = actualMovementDirection * linearAcceleration * dt;
             }
-            _loc21_ = MathUtils.clamp(_loc12_ + _loc20_,-param1,param1);
-            _loc22_ = _loc21_ - _loc12_;
+            newSpeed = MathUtils.clamp(forwardSpeed + speedDelta,-maxSpeed,maxSpeed);
+            actualSpeedDelta = newSpeed - forwardSpeed;
             _loc23_ = 1;
-            _loc24_ = MathUtils.clamp(1 - Math.abs(_loc12_ / param1),0,1);
-            if(_loc24_ < _loc23_ && _loc4_ * MathUtils.sign(_loc12_) > 0)
+            remainingSpeedRatio = MathUtils.clamp(1 - Math.abs(forwardSpeed / maxSpeed),0,1);
+            if(remainingSpeedRatio < _loc23_ && actualMovementDirection * MathUtils.sign(forwardSpeed) > 0)
             {
-               _loc22_ *= _loc24_ / _loc23_;
+               actualSpeedDelta *= remainingSpeedRatio / _loc23_;
             }
-            _loc25_ = _loc22_ / param3;
-            if(Math.abs(_loc25_) < tyqufisen && Math.abs(_loc21_) > 0.5 * this.jifav.getTargetValue())
+            requiredAcceleration = actualSpeedDelta / dt;
+            if(Math.abs(requiredAcceleration) < tyqufisen && Math.abs(newSpeed) > 0.5 * this.maxSpeedSmoother.getTargetValue())
             {
-               _loc25_ = MathUtils.numberSign(_loc25_,0.1) * tyqufisen;
+               requiredAcceleration = MathUtils.numberSign(requiredAcceleration,0.1) * tyqufisen;
             }
-            _loc26_ = _loc25_ * this.body.mass;
-            _loc27_ = _loc16_ + _loc17_;
-            _loc28_ = _loc26_ * (_loc27_ + 0.42 * (10 - _loc16_)) / 10;
-            _loc29_ = _loc28_ / _loc27_;
-            _loc30_ = Math.PI / 4;
-            _loc31_ = Math.PI / 3;
-            _loc32_ = 0;
-            while(_loc32_ < TankConst.nybi)
+            totalForce = requiredAcceleration * this.body.mass;
+            numContacts = numLeftContacts + numRightContacts;
+            _loc28_ = totalForce * (numContacts + 0.42 * (10 - numLeftContacts)) / 10;
+            forcePerRay = _loc28_ / numContacts;
+            minRaySlopeAngle = Math.PI / 4;
+            maxRaySlopeAngle = Math.PI / 3;
+            i = 0;
+            while(i < TankConst.NUM_RAYS_PER_TRACK)
             {
-               this.applyForceFromRay(this.vapal.mofovoti[_loc32_],domypujag,_loc29_,_loc31_,_loc30_);
-               this.applyForceFromRay(this.mof.mofovoti[_loc32_],domypujag,_loc29_,_loc31_,_loc30_);
-               _loc32_++;
+               this.applyForceFromRay(this.leftTrack.rays[i],yAxis,forcePerRay,maxRaySlopeAngle,minRaySlopeAngle);
+               this.applyForceFromRay(this.rightTrack.rays[i],yAxis,forcePerRay,maxRaySlopeAngle,minRaySlopeAngle);
+               i++;
             }
-            _loc33_ = 1;
-            if(_loc16_ == 0 || _loc17_ == 0)
+            turnSpeedCoeff = 1;
+            if(numLeftContacts == 0 || numRightContacts == 0)
             {
-               _loc33_ = 0.5;
+               turnSpeedCoeff = 0.5;
             }
-            _loc34_ = 0;
-            if(_loc5_ == 0)
+            turnSpeedDelta = 0;
+            if(actualTurnDirection == 0)
             {
-               _loc34_ = -MathUtils.sign(_loc13_) * _loc19_ * _loc9_ * param3;
-               if(MathUtils.sign(_loc13_) != MathUtils.sign(_loc13_ + _loc34_))
+               turnSpeedDelta = -MathUtils.sign(turnSpeed) * angularAcceleration * slopeCoeff * dt;
+               if(MathUtils.sign(turnSpeed) != MathUtils.sign(turnSpeed + turnSpeedDelta))
                {
-                  _loc34_ = -_loc13_;
+                  turnSpeedDelta = -turnSpeed;
                }
             }
             else
             {
-               if(this.isReversedTurn(_loc5_,_loc13_))
+               if(this.isReversedTurn(actualTurnDirection,turnSpeed))
                {
-                  _loc19_ = this.jikivemuh;
+                  angularAcceleration = this.reverseTurnAcceleration;
                }
-               _loc34_ = _loc5_ * _loc19_ * _loc9_ * param3;
-               if(_loc4_ == -1 && this.cewubegy)
+               turnSpeedDelta = actualTurnDirection * angularAcceleration * slopeCoeff * dt;
+               if(actualMovementDirection == -1 && this.cewubegy)
                {
-                  _loc34_ = -_loc34_;
+                  turnSpeedDelta = -turnSpeedDelta;
                }
             }
-            _loc35_ = MathUtils.clamp(_loc13_ + _loc34_,-param2 * _loc33_,param2 * _loc33_);
-            qupe.setLengthAlongDirection(jidovivo,_loc35_);
-            _loc7_.x = jeke.x + qupe.x;
-            _loc7_.y = jeke.y + qupe.y;
-            _loc7_.z = jeke.z + qupe.z;
+            newTurnSpeed = MathUtils.clamp(turnSpeed + turnSpeedDelta,-maxTurnSpeed * turnSpeedCoeff,maxTurnSpeed * turnSpeedCoeff);
+            relativeAngularVelocity.setLengthAlongDirection(zAxis,newTurnSpeed);
+            rotation.x = surfaceAngularVelocity.x + relativeAngularVelocity.x;
+            rotation.y = surfaceAngularVelocity.y + relativeAngularVelocity.y;
+            rotation.z = surfaceAngularVelocity.z + relativeAngularVelocity.z;
          }
       }
       
@@ -324,133 +324,133 @@ package alternativa.tanks.vehicles.tank
          return param1 * param2 < 0;
       }
       
-      private function calculateSurfaceVelocities(param1:Vector3, param2:Vector3) : void
+      private function calculateSurfaceVelocities(velocity:Vector3, angularVelocity:Vector3) : void
       {
-         var _loc4_:SuspensionRay = null;
-         var _loc5_:int = 0;
-         var _loc6_:Vector3 = null;
-         var _loc8_:Number = NaN;
-         var _loc9_:Number = NaN;
-         var _loc3_:Number = 1 / (this.vapal.jim + this.mof.jim);
-         var _loc7_:Number = 0;
-         _loc8_ = 0;
-         _loc9_ = 0;
-         _loc5_ = 0;
-         while(_loc5_ < TankConst.nybi)
+         var ray:SuspensionRay = null;
+         var i:int = 0;
+         var position:Vector3 = null;
+         var y:Number = NaN;
+         var z:Number = NaN;
+         var invNumContacts:Number = 1 / (this.leftTrack.numContacts + this.rightTrack.numContacts);
+         var x:Number = 0;
+         y = 0;
+         z = 0;
+         i = 0;
+         while(i < TankConst.NUM_RAYS_PER_TRACK)
          {
-            _loc4_ = this.vapal.mofovoti[_loc5_];
-            if(_loc4_.vivi)
+            ray = this.leftTrack.rays[i];
+            if(ray.colliding)
             {
-               _loc6_ = _loc4_.wonuhig.position;
-               _loc7_ += _loc6_.x;
-               _loc8_ += _loc6_.y;
-               _loc9_ += _loc6_.z;
+               position = ray.rayHit.position;
+               x += position.x;
+               y += position.y;
+               z += position.z;
             }
-            _loc4_ = this.mof.mofovoti[_loc5_];
-            if(_loc4_.vivi)
+            ray = this.rightTrack.rays[i];
+            if(ray.colliding)
             {
-               _loc6_ = _loc4_.wonuhig.position;
-               _loc7_ += _loc6_.x;
-               _loc8_ += _loc6_.y;
-               _loc9_ += _loc6_.z;
+               position = ray.rayHit.position;
+               x += position.x;
+               y += position.y;
+               z += position.z;
             }
-            _loc5_++;
+            i++;
          }
-         _loc7_ *= _loc3_;
-         _loc8_ *= _loc3_;
-         _loc9_ *= _loc3_;
-         vejavus.x = _loc7_;
-         vejavus.y = _loc8_;
-         vejavus.z = _loc9_;
-         param1.x = 0;
-         param1.y = 0;
-         param1.z = 0;
-         param2.x = 0;
-         param2.y = 0;
-         param2.z = 0;
-         _loc5_ = 0;
-         while(_loc5_ < TankConst.nybi)
+         x *= invNumContacts;
+         y *= invNumContacts;
+         z *= invNumContacts;
+         contactsCenter.x = x;
+         contactsCenter.y = y;
+         contactsCenter.z = z;
+         velocity.x = 0;
+         velocity.y = 0;
+         velocity.z = 0;
+         angularVelocity.x = 0;
+         angularVelocity.y = 0;
+         angularVelocity.z = 0;
+         i = 0;
+         while(i < TankConst.NUM_RAYS_PER_TRACK)
          {
-            this.addVelocitiesFromRay(this.vapal.mofovoti[_loc5_],vejavus,param1,param2);
-            this.addVelocitiesFromRay(this.mof.mofovoti[_loc5_],vejavus,param1,param2);
-            _loc5_++;
+            this.addVelocitiesFromRay(this.leftTrack.rays[i],contactsCenter,velocity,angularVelocity);
+            this.addVelocitiesFromRay(this.rightTrack.rays[i],contactsCenter,velocity,angularVelocity);
+            i++;
          }
-         param1.x *= _loc3_;
-         param1.y *= _loc3_;
-         param1.z *= _loc3_;
-         param2.x *= _loc3_;
-         param2.y *= _loc3_;
-         param2.z *= _loc3_;
+         velocity.x *= invNumContacts;
+         velocity.y *= invNumContacts;
+         velocity.z *= invNumContacts;
+         angularVelocity.x *= invNumContacts;
+         angularVelocity.y *= invNumContacts;
+         angularVelocity.z *= invNumContacts;
       }
       
-      private function addVelocitiesFromRay(param1:SuspensionRay, param2:Vector3, param3:Vector3, param4:Vector3) : void
+      private function addVelocitiesFromRay(ray:SuspensionRay, center:Vector3, velocity:Vector3, angularVelocity:Vector3) : void
       {
-         var _loc5_:Vector3 = null;
-         var _loc6_:Number = NaN;
-         var _loc7_:Number = NaN;
-         var _loc8_:Number = NaN;
-         var _loc9_:Number = NaN;
-         var _loc10_:Number = NaN;
-         var _loc11_:Vector3 = null;
-         var _loc12_:Number = NaN;
-         var _loc13_:Number = NaN;
-         var _loc14_:Number = NaN;
-         if(param1.vivi)
+         var position:Vector3 = null;
+         var dx:Number = NaN;
+         var dy:Number = NaN;
+         var dz:Number = NaN;
+         var distanceSqr:Number = NaN;
+         var invDistanceSqr:Number = NaN;
+         var contactVelocity:Vector3 = null;
+         var wx:Number = NaN;
+         var wy:Number = NaN;
+         var wz:Number = NaN;
+         if(ray.colliding)
          {
-            param3.x += param1.poseze.x;
-            param3.y += param1.poseze.y;
-            param3.z += param1.poseze.z;
-            _loc5_ = param1.wonuhig.position;
-            _loc6_ = _loc5_.x - param2.x;
-            _loc7_ = _loc5_.y - param2.y;
-            _loc8_ = _loc5_.z - param2.z;
-            _loc9_ = _loc6_ * _loc6_ + _loc7_ * _loc7_ + _loc8_ * _loc8_;
-            if(_loc9_ > 1)
+            velocity.x += ray.contactVelocity.x;
+            velocity.y += ray.contactVelocity.y;
+            velocity.z += ray.contactVelocity.z;
+            position = ray.rayHit.position;
+            dx = position.x - center.x;
+            dy = position.y - center.y;
+            dz = position.z - center.z;
+            distanceSqr = dx * dx + dy * dy + dz * dz;
+            if(distanceSqr > 1)
             {
-               _loc10_ = 1 / _loc9_;
-               _loc11_ = param1.poseze;
-               _loc12_ = (_loc7_ * _loc11_.z - _loc8_ * _loc11_.y) * _loc10_;
-               _loc13_ = (_loc8_ * _loc11_.x - _loc6_ * _loc11_.z) * _loc10_;
-               _loc14_ = (_loc6_ * _loc11_.y - _loc7_ * _loc11_.x) * _loc10_;
-               param4.x += _loc12_;
-               param4.y += _loc13_;
-               param4.z += _loc14_;
+               invDistanceSqr = 1 / distanceSqr;
+               contactVelocity = ray.contactVelocity;
+               wx = (dy * contactVelocity.z - dz * contactVelocity.y) * invDistanceSqr;
+               wy = (dz * contactVelocity.x - dx * contactVelocity.z) * invDistanceSqr;
+               wz = (dx * contactVelocity.y - dy * contactVelocity.x) * invDistanceSqr;
+               angularVelocity.x += wx;
+               angularVelocity.y += wy;
+               angularVelocity.z += wz;
             }
          }
       }
       
-      private function applyForceFromRay(param1:SuspensionRay, param2:Vector3, param3:Number, param4:Number, param5:Number) : void
+      private function applyForceFromRay(ray:SuspensionRay, direction:Vector3, forceMagnitude:Number, maxAngle:Number, minAngle:Number) : void
       {
-         var _loc6_:Number = NaN;
-         var _loc7_:Number = NaN;
-         var _loc8_:Number = NaN;
-         var _loc9_:Number = NaN;
-         var _loc10_:Number = NaN;
-         var _loc11_:Number = NaN;
-         if(param1.vivi)
+         var dx:Number = NaN;
+         var dy:Number = NaN;
+         var dz:Number = NaN;
+         var lengthSqr:Number = NaN;
+         var slopeAngle:Number = NaN;
+         var forceScale:Number = NaN;
+         if(ray.colliding)
          {
-            _loc6_ = param2.x;
-            _loc7_ = param2.y;
-            _loc8_ = param2.z;
-            _loc9_ = _loc6_ * _loc6_ + _loc7_ * _loc7_ + _loc8_ * _loc8_;
-            if(_loc9_ > 0.00001)
+            dx = direction.x;
+            dy = direction.y;
+            dz = direction.z;
+            lengthSqr = dx * dx + dy * dy + dz * dz;
+            if(lengthSqr > 0.00001)
             {
-               _loc10_ = Math.acos(param1.wonuhig.normal.z);
-               if(_loc10_ < 0)
+               slopeAngle = Math.acos(ray.rayHit.normal.z);
+               if(slopeAngle < 0)
                {
-                  _loc10_ = -_loc10_;
+                  slopeAngle = -slopeAngle;
                }
-               if(_loc10_ < param4)
+               if(slopeAngle < maxAngle)
                {
-                  _loc11_ = param3 / Math.sqrt(_loc9_);
-                  if(_loc10_ > param5)
+                  forceScale = forceMagnitude / Math.sqrt(lengthSqr);
+                  if(slopeAngle > minAngle)
                   {
-                     _loc11_ *= (param4 - _loc10_) / (param4 - param5);
+                     forceScale *= (maxAngle - slopeAngle) / (maxAngle - minAngle);
                   }
-                  kugariz.x = _loc6_ * _loc11_;
-                  kugariz.y = _loc7_ * _loc11_;
-                  kugariz.z = _loc8_ * _loc11_;
-                  this.body.addWorldForceAtLocalPoint(param1.getOrigin(),kugariz);
+                  force.x = dx * forceScale;
+                  force.y = dy * forceScale;
+                  force.z = dz * forceScale;
+                  this.body.addWorldForceAtLocalPoint(ray.getOrigin(),force);
                }
             }
          }
@@ -458,27 +458,27 @@ package alternativa.tanks.vehicles.tank
       
       private function applySlopeHack() : void
       {
-         var _loc1_:Matrix3 = null;
-         var _loc2_:Vector3 = null;
-         var _loc3_:Number = NaN;
-         var _loc4_:Number = NaN;
-         var _loc5_:Number = NaN;
-         var _loc6_:Number = NaN;
-         var _loc7_:Number = NaN;
-         var _loc8_:Number = NaN;
-         if(this.mof.jim >= this.mof.wavi >> 1 || this.vapal.jim >= this.vapal.wavi >> 1)
+         var matrix:Matrix3 = null;
+         var gravity:Vector3 = null;
+         var dot:Number = NaN;
+         var gravityMagnitude:Number = NaN;
+         var threshold:Number = NaN;
+         var fx:Number = NaN;
+         var fy:Number = NaN;
+         var fz:Number = NaN;
+         if(this.rightTrack.numContacts >= this.rightTrack.numRays >> 1 || this.leftTrack.numContacts >= this.leftTrack.numRays >> 1)
          {
-            _loc1_ = this.body.orientationMatrix;
-            _loc2_ = this.body.scene.gravity;
-            _loc3_ = _loc2_.x * _loc1_.mc + _loc2_.y * _loc1_.mg + _loc2_.z * _loc1_.mk;
-            _loc4_ = _loc2_.length();
-            _loc5_ = Math.SQRT1_2 * _loc4_;
-            if(_loc3_ < -_loc5_ || _loc3_ > _loc5_)
+            matrix = this.body.orientationMatrix;
+            gravity = this.body.scene.gravity;
+            dot = gravity.x * matrix.mc + gravity.y * matrix.mg + gravity.z * matrix.mk;
+            gravityMagnitude = gravity.length();
+            threshold = Math.SQRT1_2 * gravityMagnitude;
+            if(dot < -threshold || dot > threshold)
             {
-               _loc6_ = (_loc1_.mc * _loc3_ - _loc2_.x) * this.body.mass;
-               _loc7_ = (_loc1_.mg * _loc3_ - _loc2_.y) * this.body.mass;
-               _loc8_ = (_loc1_.mk * _loc3_ - _loc2_.z) * this.body.mass;
-               this.body.addForceXYZ(_loc6_,_loc7_,_loc8_);
+               fx = (matrix.mc * dot - gravity.x) * this.body.mass;
+               fy = (matrix.mg * dot - gravity.y) * this.body.mass;
+               fz = (matrix.mk * dot - gravity.z) * this.body.mass;
+               this.body.addForceXYZ(fx,fy,fz);
             }
          }
       }

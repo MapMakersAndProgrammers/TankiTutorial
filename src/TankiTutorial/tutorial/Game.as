@@ -245,9 +245,9 @@ package tutorial
          GameData.camera.controller = DummyCameraController.instance;
          GameData.playerTank.turretController.lock(1);
          GameData.playerTank.turretController.finish();
-         GameData.playerTank.kakow.hide();
-         GameData.playerTank.kat = false;
-         GameData.playerTank.lysecof.setSilentMode();
+         GameData.playerTank.userTitle.hide();
+         GameData.playerTank.alive = false;
+         GameData.playerTank.sounds.setSilentMode();
          if(Assets.hasData("finish",MovieClip))
          {
             GameData.screenMovieClipManager.showMovie(Assets.getData("finish",MovieClip),StageAlign.TOP_LEFT);
@@ -334,7 +334,7 @@ package tutorial
          if(controller.isRecording())
          {
             record = controller.getRecord();
-            text = "<enemy hull=\"" + tank.nariw.name + "\" turret=\"" + tank.firaqe.name + "\" color=\"red\" position=\"" + this.position.x.toFixed(0) + " " + this.position.y.toFixed(0) + " " + this.position.z.toFixed(0) + "\" orientation=\"" + this.orientation.w.toFixed(4) + " " + this.orientation.x.toFixed(4) + " " + this.orientation.y.toFixed(4) + " " + this.orientation.z.toFixed(6) + "\" data=\"" + record + "\">\n</enemy>";
+            text = "<enemy hull=\"" + tank.hull.name + "\" turret=\"" + tank.turret.name + "\" color=\"red\" position=\"" + this.position.x.toFixed(0) + " " + this.position.y.toFixed(0) + " " + this.position.z.toFixed(0) + "\" orientation=\"" + this.orientation.w.toFixed(4) + " " + this.orientation.x.toFixed(4) + " " + this.orientation.y.toFixed(4) + " " + this.orientation.z.toFixed(6) + "\" data=\"" + record + "\">\n</enemy>";
             controller.stopRecording();
             this.setText(text);
          }
@@ -354,7 +354,7 @@ package tutorial
          {
             this.position = tank.body.state.position.clone();
             this.orientation = tank.body.state.orientation.clone();
-            this.setText("<player.spawn hull=\"" + tank.nariw.name + "\" turret=\"" + tank.firaqe.name + "\" color=\"green\" position=\"" + this.position.x.toFixed(4) + " " + this.position.y.toFixed(4) + " " + this.position.z.toFixed(4) + "\" orientation=\"" + this.orientation.w.toFixed(4) + " " + this.orientation.x.toFixed(4) + " " + this.orientation.y.toFixed(4) + " " + this.orientation.z.toFixed(4) + "\"/>");
+            this.setText("<player.spawn hull=\"" + tank.hull.name + "\" turret=\"" + tank.turret.name + "\" color=\"green\" position=\"" + this.position.x.toFixed(4) + " " + this.position.y.toFixed(4) + " " + this.position.z.toFixed(4) + "\" orientation=\"" + this.orientation.w.toFixed(4) + " " + this.orientation.x.toFixed(4) + " " + this.orientation.y.toFixed(4) + " " + this.orientation.z.toFixed(4) + "\"/>");
          }
       }
       

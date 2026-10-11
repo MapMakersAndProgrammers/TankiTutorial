@@ -25,7 +25,7 @@ package alternativa.tanks.sfx.flamethrower
          this.scale = param4;
          starting = true;
          time = 0;
-         kat = true;
+         alive = true;
          stopping = false;
          stopTime = 0;
       }
