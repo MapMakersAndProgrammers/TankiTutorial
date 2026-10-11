@@ -10,13 +10,13 @@ package alternativa.tanks.sfx
    public class MuzzlePositionProvider extends PooledObject implements Object3DPositionProvider
    {
       
-      private static const bul:Matrix4 = new Matrix4();
+      private static const matrix:Matrix4 = new Matrix4();
       
-      private static const dogeny:Vector3 = new Vector3();
+      private static const position:Vector3 = new Vector3();
       
-      private var firaqe:Object3D;
+      private var turret:Object3D;
       
-      private var fodunuhul:Vector3 = new Vector3();
+      private var localMuzzlePosition:Vector3 = new Vector3();
       
       public function MuzzlePositionProvider(param1:Pool)
       {
@@ -25,30 +25,30 @@ package alternativa.tanks.sfx
       
       public function init(param1:Object3D, param2:Vector3, param3:Number) : void
       {
-         this.firaqe = param1;
-         this.fodunuhul.copy(param2);
-         this.fodunuhul.y += param3;
+         this.turret = param1;
+         this.localMuzzlePosition.copy(param2);
+         this.localMuzzlePosition.y += param3;
       }
       
-      public function initPosition(param1:Object3D) : void
+      public function initPosition(object:Object3D) : void
       {
-         param1.x = 0;
-         param1.y = 0;
-         param1.z = 0;
+         object.x = 0;
+         object.y = 0;
+         object.z = 0;
       }
       
-      public function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void
+      public function updateObjectPosition(object:Object3D, camera:GameCamera, deltaTime:int) : void
       {
-         bul.setMatrix(this.firaqe.x,this.firaqe.y,this.firaqe.z,this.firaqe.rotationX,this.firaqe.rotationY,this.firaqe.rotationZ);
-         bul.transformVector(this.fodunuhul,dogeny);
-         param1.x = dogeny.x;
-         param1.y = dogeny.y;
-         param1.z = dogeny.z;
+         matrix.setMatrix(this.turret.x,this.turret.y,this.turret.z,this.turret.rotationX,this.turret.rotationY,this.turret.rotationZ);
+         matrix.transformVector(this.localMuzzlePosition,position);
+         object.x = position.x;
+         object.y = position.y;
+         object.z = position.z;
       }
       
       public function destroy() : void
       {
-         this.firaqe = null;
+         this.turret = null;
          recycle();
       }
    }

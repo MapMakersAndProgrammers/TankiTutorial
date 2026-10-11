@@ -381,7 +381,7 @@ package alternativa.tanks.vehicles.tank
          }
          this.hogys.body.state.velocity.z += 500;
          this.hogys.body.state.rotation.reset(2,2,2);
-         var _loc1_:Sound3D = Sound3D.create(Assets.getData("tank_explosion",Sound),SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,radanigys);
+         var _loc1_:Sound3D = Sound3D.create(Assets.getData("tank_explosion",Sound),SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,radanigys);
          this.soundManager.addEffect(Sound3DEffect.create(this.objectPool,this.hogys.body.state.position,_loc1_,0,0));
       }
       

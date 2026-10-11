@@ -6,9 +6,9 @@ package alternativa.tanks.sfx
    public class AnimatedSprite3D extends Sprite3D
    {
       
-      private var gepoky:Vector.<UVFrame>;
+      private var frames:Vector.<UVFrame>;
       
-      private var nomupiz:int;
+      private var numFrames:int;
       
       public function AnimatedSprite3D(param1:Number, param2:Number, param3:Material = null)
       {
@@ -17,36 +17,36 @@ package alternativa.tanks.sfx
          useLight = false;
       }
       
-      public function setAnimationData(param1:TextureAnimation) : void
+      public function setAnimationData(animation:TextureAnimation) : void
       {
-         material = param1.material;
-         this.gepoky = param1.qyvoladeg;
-         this.nomupiz = this.gepoky.length;
+         material = animation.material;
+         this.frames = animation.frames;
+         this.numFrames = this.frames.length;
       }
       
       public function getNumFrames() : int
       {
-         return this.nomupiz;
+         return this.numFrames;
       }
       
       public function clear() : void
       {
-         this.gepoky = null;
+         this.frames = null;
          material = null;
-         this.nomupiz = 0;
+         this.numFrames = 0;
       }
       
       public function setFrameIndex(param1:int) : void
       {
-         this.setFrame(this.gepoky[param1 % this.nomupiz]);
+         this.setFrame(this.frames[param1 % this.numFrames]);
       }
       
-      private function setFrame(param1:UVFrame) : void
+      private function setFrame(frame:UVFrame) : void
       {
-         topLeftU = param1.picylyno;
-         topLeftV = param1.lesenac;
-         bottomRightU = param1.pusunawy;
-         bottomRightV = param1.salemat;
+         topLeftU = frame.topLeftU;
+         topLeftV = frame.topLeftV;
+         bottomRightU = frame.bottomRightU;
+         bottomRightV = frame.bottomRightV;
       }
    }
 }

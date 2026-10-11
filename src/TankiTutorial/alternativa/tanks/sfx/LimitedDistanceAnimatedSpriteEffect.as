@@ -14,82 +14,82 @@ package alternativa.tanks.sfx
    public class LimitedDistanceAnimatedSpriteEffect extends PooledObject implements GraphicEffect
    {
       
-      private static const bakowy:Vector3 = new Vector3();
+      private static const position:Vector3 = new Vector3();
       
-      private var wahy:AnimatedSprite3D;
+      private var sprite:AnimatedSprite3D;
       
-      private var lamutameq:Number;
+      private var frameIndex:Number;
       
       private var luzulo:Number;
       
-      private var goqo:int;
+      private var numLoops:int;
       
-      private var toz:Object3DPositionProvider;
+      private var positionProvider:Object3DPositionProvider;
       
-      private var qiqimary:Number;
+      private var nearDistance:Number;
       
-      private var naliwy:Number;
+      private var farDistance:Number;
       
-      private var fidemujil:Number;
+      private var alphaMultiplier:Number;
       
       public function LimitedDistanceAnimatedSpriteEffect(param1:Pool)
       {
          super(param1);
-         this.wahy = new AnimatedSprite3D(1,1);
-         this.wahy.useShadowMap = true;
-         this.wahy.useLight = false;
+         this.sprite = new AnimatedSprite3D(1,1);
+         this.sprite.useShadowMap = true;
+         this.sprite.useLight = false;
       }
       
-      public function init(param1:Number, param2:Number, param3:TextureAnimation, param4:Number, param5:Object3DPositionProvider, param6:Number = 0.5, param7:Number = 0.5, param8:ColorTransform = null, param9:Number = 130, param10:String = "normal", param11:Number = 1000000, param12:Number = 1000000, param13:Number = 1) : void
+      public function init(width:Number, height:Number, animation:TextureAnimation, rotation:Number, param5:Object3DPositionProvider, originX:Number = 0.5, originY:Number = 0.5, colorTransform:ColorTransform = null, softAttenuation:Number = 130, blendMode:String = "normal", param11:Number = 1000000, param12:Number = 1000000, param13:Number = 1) : void
       {
-         this.fidemujil = param13;
-         this.initSprite(param1,param2,param4,param6,param7,param8,param3,param9,param10);
-         this.qiqimary = param11;
-         this.naliwy = param12;
-         param5.initPosition(this.wahy);
-         this.luzulo = 0.001 * param3.fps;
-         this.toz = param5;
-         this.lamutameq = 0;
-         this.goqo = 1;
+         this.alphaMultiplier = param13;
+         this.initSprite(width,height,rotation,originX,originY,colorTransform,animation,softAttenuation,blendMode);
+         this.nearDistance = param11;
+         this.farDistance = param12;
+         param5.initPosition(this.sprite);
+         this.luzulo = 0.001 * animation.fps;
+         this.positionProvider = param5;
+         this.frameIndex = 0;
+         this.numLoops = 1;
       }
       
-      public function addedToScene(param1:Object3DContainer) : void
+      public function addedToScene(container:Object3DContainer) : void
       {
-         param1.addChild(this.wahy);
+         container.addChild(this.sprite);
       }
       
-      public function play(param1:int, param2:GameCamera) : Boolean
+      public function play(deltaTime:int, camera:GameCamera) : Boolean
       {
-         this.wahy.setFrameIndex(this.lamutameq);
-         this.lamutameq += param1 * this.luzulo;
-         this.toz.updateObjectPosition(this.wahy,param2,param1);
-         if(this.goqo > 0 && this.lamutameq >= this.wahy.getNumFrames())
+         this.sprite.setFrameIndex(this.frameIndex);
+         this.frameIndex += deltaTime * this.luzulo;
+         this.positionProvider.updateObjectPosition(this.sprite,camera,deltaTime);
+         if(this.numLoops > 0 && this.frameIndex >= this.sprite.getNumFrames())
          {
-            --this.goqo;
-            if(this.goqo == 0)
+            --this.numLoops;
+            if(this.numLoops == 0)
             {
                return false;
             }
-            this.lamutameq -= this.wahy.getNumFrames();
+            this.frameIndex -= this.sprite.getNumFrames();
          }
-         bakowy.x = this.wahy.x;
-         bakowy.y = this.wahy.y;
-         bakowy.z = this.wahy.z;
-         var _loc3_:Number = Number(bakowy.distanceTo(param2.position));
-         if(_loc3_ > this.naliwy)
+         position.x = this.sprite.x;
+         position.y = this.sprite.y;
+         position.z = this.sprite.z;
+         var distance:Number = Number(position.distanceTo(camera.position));
+         if(distance > this.farDistance)
          {
-            this.wahy.visible = false;
+            this.sprite.visible = false;
          }
          else
          {
-            this.wahy.visible = true;
-            if(_loc3_ > this.qiqimary)
+            this.sprite.visible = true;
+            if(distance > this.nearDistance)
             {
-               this.wahy.alpha = this.fidemujil * (this.naliwy - _loc3_) / (this.naliwy - this.qiqimary);
+               this.sprite.alpha = this.alphaMultiplier * (this.farDistance - distance) / (this.farDistance - this.nearDistance);
             }
             else
             {
-               this.wahy.alpha = this.fidemujil;
+               this.sprite.alpha = this.alphaMultiplier;
             }
          }
          return true;
@@ -97,30 +97,30 @@ package alternativa.tanks.sfx
       
       public function destroy() : void
       {
-         this.wahy.removeFromParent();
-         this.wahy.clear();
-         this.toz.destroy();
-         this.toz = null;
+         this.sprite.removeFromParent();
+         this.sprite.clear();
+         this.positionProvider.destroy();
+         this.positionProvider = null;
          recycle();
       }
       
       public function kill() : void
       {
-         this.goqo = 1;
-         this.lamutameq = this.wahy.getNumFrames();
+         this.numLoops = 1;
+         this.frameIndex = this.sprite.getNumFrames();
       }
       
-      private function initSprite(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:ColorTransform, param7:TextureAnimation, param8:Number, param9:String) : void
+      private function initSprite(width:Number, height:Number, rotation:Number, originX:Number, originY:Number, colorTransform:ColorTransform, animation:TextureAnimation, softAttenuation:Number, blendMode:String) : void
       {
-         this.wahy.width = param1;
-         this.wahy.height = param2;
-         this.wahy.rotation = param3;
-         this.wahy.originX = param4;
-         this.wahy.originY = param5;
-         this.wahy.blendMode = param9;
-         this.wahy.colorTransform = param6;
-         this.wahy.softAttenuation = param8;
-         this.wahy.setAnimationData(param7);
+         this.sprite.width = width;
+         this.sprite.height = height;
+         this.sprite.rotation = rotation;
+         this.sprite.originX = originX;
+         this.sprite.originY = originY;
+         this.sprite.blendMode = blendMode;
+         this.sprite.colorTransform = colorTransform;
+         this.sprite.softAttenuation = softAttenuation;
+         this.sprite.setAnimationData(animation);
       }
    }
 }

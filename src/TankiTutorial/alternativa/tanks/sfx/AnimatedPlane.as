@@ -15,9 +15,9 @@ package alternativa.tanks.sfx
       
       private var rok:Vertex;
       
-      private var gepoky:Vector.<UVFrame>;
+      private var frames:Vector.<UVFrame>;
       
-      private var nomupiz:int;
+      private var numFrames:int;
       
       private var lelypa:Number = 0;
       
@@ -37,11 +37,11 @@ package alternativa.tanks.sfx
       
       private function createFaces(param1:Number) : void
       {
-         var _loc2_:Number = param1 / 2;
-         var _loc3_:Vector.<Number> = Vector.<Number>([-_loc2_,_loc2_,0,-_loc2_,-_loc2_,0,_loc2_,-_loc2_,0,_loc2_,_loc2_,0]);
-         var _loc4_:Vector.<Number> = Vector.<Number>([0,0,0,1,1,1,1,0]);
-         var _loc5_:Vector.<int> = Vector.<int>([4,0,1,2,3,4,0,3,2,1]);
-         addVerticesAndFaces(_loc3_,_loc4_,_loc5_,true);
+         var halfSize:Number = param1 / 2;
+         var _loc3_:Vector.<Number> = Vector.<Number>([-halfSize,halfSize,0,-halfSize,-halfSize,0,halfSize,-halfSize,0,halfSize,halfSize,0]);
+         var uvs:Vector.<Number> = Vector.<Number>([0,0,0,1,1,1,1,0]);
+         var indices:Vector.<int> = Vector.<int>([4,0,1,2,3,4,0,3,2,1]);
+         addVerticesAndFaces(_loc3_,uvs,indices,true);
       }
       
       private function writeVertices() : void
@@ -53,46 +53,46 @@ package alternativa.tanks.sfx
          this.rok = _loc1_[3];
       }
       
-      public function init(param1:TextureAnimation, param2:Number) : void
+      public function init(animation:TextureAnimation, param2:Number) : void
       {
-         setMaterialToAllFaces(param1.material);
-         this.gepoky = param1.qyvoladeg;
-         this.nomupiz = this.gepoky.length;
+         setMaterialToAllFaces(animation.material);
+         this.frames = animation.frames;
+         this.numFrames = this.frames.length;
          this.lelypa = param2;
       }
       
       public function setTime(param1:Number) : void
       {
-         var _loc2_:int = param1 * this.lelypa;
-         if(_loc2_ >= this.nomupiz)
+         var frameIndex:int = param1 * this.lelypa;
+         if(frameIndex >= this.numFrames)
          {
-            _loc2_ = this.nomupiz - 1;
+            frameIndex = this.numFrames - 1;
          }
-         this.setFrame(this.gepoky[_loc2_]);
+         this.setFrame(this.frames[frameIndex]);
       }
       
       public function clear() : void
       {
          setMaterialToAllFaces(null);
-         this.gepoky = null;
-         this.nomupiz = 0;
+         this.frames = null;
+         this.numFrames = 0;
       }
       
       public function getOneLoopTime() : Number
       {
-         return this.nomupiz / this.lelypa;
+         return this.numFrames / this.lelypa;
       }
       
-      private function setFrame(param1:UVFrame) : void
+      private function setFrame(frame:UVFrame) : void
       {
-         this.gar.u = param1.picylyno;
-         this.gar.v = param1.lesenac;
-         this.nityt.u = param1.picylyno;
-         this.nityt.v = param1.salemat;
-         this.fysu.u = param1.pusunawy;
-         this.fysu.v = param1.salemat;
-         this.rok.u = param1.pusunawy;
-         this.rok.v = param1.lesenac;
+         this.gar.u = frame.topLeftU;
+         this.gar.v = frame.topLeftV;
+         this.nityt.u = frame.topLeftU;
+         this.nityt.v = frame.bottomRightV;
+         this.fysu.u = frame.bottomRightU;
+         this.fysu.v = frame.bottomRightV;
+         this.rok.u = frame.bottomRightU;
+         this.rok.v = frame.topLeftV;
       }
    }
 }

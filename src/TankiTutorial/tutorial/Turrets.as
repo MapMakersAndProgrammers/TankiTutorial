@@ -70,9 +70,9 @@ package tutorial
       private static function getFlamethrowerEffects() : FlamethrowerEffects
       {
          var sfxData:StreamWeaponSFXData = new StreamWeaponSFXData();
-         sfxData.mutovudi = Assets.getData("flame",Sound);
-         sfxData.qywyr = Assets.getData("flame",TextureAnimation);
-         sfxData.qywyr.fps = 30;
+         sfxData.flameSound = Assets.getData("flame",Sound);
+         sfxData.particleAnimation = Assets.getData("flame",TextureAnimation);
+         sfxData.particleAnimation.fps = 30;
          return new FlamethrowerEffects(2000,20 * Math.PI / 180,sfxData);
       }
    }

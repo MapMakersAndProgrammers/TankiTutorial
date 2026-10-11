@@ -18,7 +18,7 @@ package alternativa.tanks.sfx
       
       private static var gik:Vector3 = new Vector3();
       
-      private static var fyqynyfy:Vector3 = new Vector3();
+      private static var eulerAngles:Vector3 = new Vector3();
       
       private static var nywo:Vector3 = new Vector3();
       
@@ -33,81 +33,81 @@ package alternativa.tanks.sfx
          super();
       }
       
-      public static function parseAnimationStrip(param1:BitmapData, param2:int, param3:Number) : Vector.<Material>
+      public static function parseAnimationStrip(texture:BitmapData, frameWidth:int, resolution:Number) : Vector.<Material>
       {
-         var _loc9_:BitmapData = null;
-         var _loc4_:Vector.<Material> = new Vector.<Material>();
-         var _loc5_:int = param1.width / param2;
-         var _loc6_:Rectangle = new Rectangle(0,0,param2,param1.height);
-         var _loc7_:Point = new Point();
-         var _loc8_:int = 0;
-         while(_loc8_ < _loc5_)
+         var bitmapData:BitmapData = null;
+         var materials:Vector.<Material> = new Vector.<Material>();
+         var numFrames:int = texture.width / frameWidth;
+         var rect:Rectangle = new Rectangle(0,0,frameWidth,texture.height);
+         var point:Point = new Point();
+         var i:int = 0;
+         while(i < numFrames)
          {
-            _loc9_ = new BitmapData(param2,param1.height,true,0);
-            _loc9_.copyPixels(param1,_loc6_,_loc7_);
-            _loc4_[_loc8_] = new TextureMaterial(_loc9_,false,true,MipMapping.PER_PIXEL,param3);
-            _loc6_.x += param2;
-            _loc8_++;
+            bitmapData = new BitmapData(frameWidth,texture.height,true,0);
+            bitmapData.copyPixels(texture,rect,point);
+            materials[i] = new TextureMaterial(bitmapData,false,true,MipMapping.PER_PIXEL,resolution);
+            rect.x += frameWidth;
+            i++;
          }
-         return _loc4_;
+         return materials;
       }
       
-      public static function alignObjectPlaneToView(param1:Object3D, param2:Vector3, param3:Vector3, param4:Vector3) : void
+      public static function alignObjectPlaneToView(object:Object3D, position:Vector3, direction:Vector3, cameraPosition:Vector3) : void
       {
-         var _loc5_:Number = NaN;
-         var _loc6_:Number = NaN;
-         if(param3.y < -0.99999 || param3.y > 0.99999)
+         var angle:Number = NaN;
+         var dot:Number = NaN;
+         if(direction.y < -0.99999 || direction.y > 0.99999)
          {
             zeq.x = 0;
             zeq.y = 0;
             zeq.z = 1;
-            _loc5_ = param3.y < 0 ? Math.PI : 0;
+            angle = direction.y < 0 ? Math.PI : 0;
          }
          else
          {
-            zeq.x = param3.z;
+            zeq.x = direction.z;
             zeq.y = 0;
-            zeq.z = -param3.x;
+            zeq.z = -direction.x;
             zeq.normalize();
-            _loc5_ = Math.acos(param3.y);
+            angle = Math.acos(direction.y);
          }
-         zob.fromAxisAngle(zeq,_loc5_);
-         nywo.x = param4.x - param2.x;
-         nywo.y = param4.y - param2.y;
-         nywo.z = param4.z - param2.z;
-         _loc6_ = nywo.x * param3.x + nywo.y * param3.y + nywo.z * param3.z;
-         nywo.x -= _loc6_ * param3.x;
-         nywo.y -= _loc6_ * param3.y;
-         nywo.z -= _loc6_ * param3.z;
+         zob.fromAxisAngle(zeq,angle);
+         nywo.x = cameraPosition.x - position.x;
+         nywo.y = cameraPosition.y - position.y;
+         nywo.z = cameraPosition.z - position.z;
+         dot = nywo.x * direction.x + nywo.y * direction.y + nywo.z * direction.z;
+         nywo.x -= dot * direction.x;
+         nywo.y -= dot * direction.y;
+         nywo.z -= dot * direction.z;
          nywo.normalize();
          zob.transformVector(Vector3.zAxis,qomusawe);
-         _loc6_ = qomusawe.x * nywo.x + qomusawe.y * nywo.y + qomusawe.z * nywo.z;
+         dot = qomusawe.x * nywo.x + qomusawe.y * nywo.y + qomusawe.z * nywo.z;
          gik.x = qomusawe.y * nywo.z - qomusawe.z * nywo.y;
          gik.y = qomusawe.z * nywo.x - qomusawe.x * nywo.z;
          gik.z = qomusawe.x * nywo.y - qomusawe.y * nywo.x;
          gik.normalize();
-         _loc5_ = Math.acos(_loc6_);
-         bohibotiq.fromAxisAngle(gik,_loc5_);
+         angle = Math.acos(dot);
+         bohibotiq.fromAxisAngle(gik,angle);
          zob.append(bohibotiq);
-         zob.getEulerAngles(fyqynyfy);
-         param1.rotationX = fyqynyfy.x;
-         param1.rotationY = fyqynyfy.y;
-         param1.rotationZ = fyqynyfy.z;
-         param1.x = param2.x;
-         param1.y = param2.y;
-         param1.z = param2.z;
+         zob.getEulerAngles(eulerAngles);
+         object.rotationX = eulerAngles.x;
+         object.rotationY = eulerAngles.y;
+         object.rotationZ = eulerAngles.z;
+         object.x = position.x;
+         object.y = position.y;
+         object.z = position.z;
       }
       
-      public static function copyColorTransform(param1:ColorTransform, param2:ColorTransform) : void
+      public static function copyColorTransform(src:ColorTransform, result:ColorTransform) : void
       {
-         param2.redMultiplier = param1.redMultiplier;
-         param2.greenMultiplier = param1.greenMultiplier;
-         param2.blueMultiplier = param1.blueMultiplier;
-         param2.alphaMultiplier = param1.alphaMultiplier;
-         param2.redOffset = param1.redOffset;
-         param2.greenOffset = param1.greenOffset;
-         param2.blueOffset = param1.blueOffset;
-         param2.alphaOffset = param1.alphaOffset;
+         result.redMultiplier = src.redMultiplier;
+         result.greenMultiplier = src.greenMultiplier;
+         result.blueMultiplier = src.blueMultiplier;
+         result.alphaMultiplier = src.alphaMultiplier;
+         result.redOffset = src.redOffset;
+         result.greenOffset = src.greenOffset;
+         result.blueOffset = src.blueOffset;
+         result.alphaOffset = src.alphaOffset;
       }
    }
 }

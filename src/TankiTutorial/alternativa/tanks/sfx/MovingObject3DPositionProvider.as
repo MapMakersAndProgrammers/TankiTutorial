@@ -9,47 +9,47 @@ package alternativa.tanks.sfx
    public class MovingObject3DPositionProvider extends PooledObject implements Object3DPositionProvider
    {
       
-      private var kiji:Vector3 = new Vector3();
+      private var position:Vector3 = new Vector3();
       
-      private var zerus:Vector3 = new Vector3();
+      private var velocity:Vector3 = new Vector3();
       
-      private var cozo:Number;
+      private var acceleration:Number;
       
       public function MovingObject3DPositionProvider(param1:Pool)
       {
          super(param1);
       }
       
-      public function initPosition(param1:Object3D) : void
+      public function initPosition(object:Object3D) : void
       {
-         param1.x = this.kiji.x;
-         param1.y = this.kiji.y;
-         param1.z = this.kiji.z;
+         object.x = this.position.x;
+         object.y = this.position.y;
+         object.z = this.position.z;
       }
       
       public function init(param1:Vector3, param2:Vector3, param3:Number) : void
       {
-         this.kiji.copy(param1);
-         this.zerus.copy(param2);
-         this.cozo = param3;
+         this.position.copy(param1);
+         this.velocity.copy(param2);
+         this.acceleration = param3;
       }
       
-      public function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void
+      public function updateObjectPosition(object:Object3D, camera:GameCamera, deltaTime:int) : void
       {
-         var _loc4_:Number = 0.001 * param3;
-         param1.x += this.zerus.x * _loc4_;
-         param1.y += this.zerus.y * _loc4_;
-         param1.z += this.zerus.z * _loc4_;
-         var _loc5_:Number = Number(this.zerus.length());
-         _loc5_ += this.cozo * _loc4_;
-         if(_loc5_ <= 0)
+         var dt:Number = 0.001 * deltaTime;
+         object.x += this.velocity.x * dt;
+         object.y += this.velocity.y * dt;
+         object.z += this.velocity.z * dt;
+         var speed:Number = Number(this.velocity.length());
+         speed += this.acceleration * dt;
+         if(speed <= 0)
          {
-            this.zerus.reset();
+            this.velocity.reset();
          }
          else
          {
-            this.zerus.normalize();
-            this.zerus.scale(_loc5_);
+            this.velocity.normalize();
+            this.velocity.scale(speed);
          }
       }
       

@@ -10,13 +10,13 @@ package alternativa.tanks.sfx.flamethrower
    public class StreamWeaponParticlesPositionProvider extends PooledObject implements Object3DPositionProvider
    {
       
-      private var gucoqub:StreamWeaponGraphicEffect;
+      private var graphicEffect:StreamWeaponGraphicEffect;
       
-      private var podelidi:CollisionObject3DPositionProvider;
+      private var collisionPositionProvider:CollisionObject3DPositionProvider;
       
-      private var zedyhitem:Array = [0.1,0.3,0.5,0.8,0.9,1];
+      private var distances:Array = [0.1,0.3,0.5,0.8,0.9,1];
       
-      private var logigap:Array = [0.5,0.8,1,0.5,0.3,0.05];
+      private var weights:Array = [0.5,0.8,1,0.5,0.3,0.05];
       
       public function StreamWeaponParticlesPositionProvider(param1:Pool)
       {
@@ -25,74 +25,74 @@ package alternativa.tanks.sfx.flamethrower
       
       public function init(param1:StreamWeaponGraphicEffect, param2:CollisionObject3DPositionProvider) : void
       {
-         this.gucoqub = param1;
-         this.podelidi = param2;
+         this.graphicEffect = param1;
+         this.collisionPositionProvider = param2;
       }
       
-      public function initPosition(param1:Object3D) : void
+      public function initPosition(object:Object3D) : void
       {
-         var _loc6_:Vector.<StreamWeaponParticle> = null;
-         var _loc7_:int = 0;
-         var _loc8_:StreamWeaponParticle = null;
-         var _loc9_:Number = NaN;
-         var _loc10_:Number = NaN;
-         var _loc2_:Number = 0;
-         var _loc3_:Number = 0;
-         var _loc4_:Number = 0;
-         var _loc5_:Number = 0;
-         if(this.gucoqub.numParticles == 0)
+         var particles:Vector.<StreamWeaponParticle> = null;
+         var i:int = 0;
+         var particle:StreamWeaponParticle = null;
+         var t:Number = NaN;
+         var weight:Number = NaN;
+         var x:Number = 0;
+         var y:Number = 0;
+         var z:Number = 0;
+         var totalWeight:Number = 0;
+         if(this.graphicEffect.numParticles == 0)
          {
-            this.podelidi.initPosition(param1);
+            this.collisionPositionProvider.initPosition(object);
          }
          else
          {
-            _loc6_ = this.gucoqub.particles;
-            _loc7_ = 0;
-            while(_loc7_ < this.gucoqub.numParticles)
+            particles = this.graphicEffect.particles;
+            i = 0;
+            while(i < this.graphicEffect.numParticles)
             {
-               _loc8_ = _loc6_[_loc7_];
-               _loc9_ = _loc8_.hyn / this.gucoqub.range;
-               _loc10_ = this.getWeight(_loc9_);
-               _loc5_ += _loc10_;
-               _loc2_ += _loc8_.x * _loc10_;
-               _loc3_ += _loc8_.y * _loc10_;
-               _loc4_ += _loc8_.z * _loc10_;
-               _loc7_++;
+               particle = particles[i];
+               t = particle.flightDistance / this.graphicEffect.range;
+               weight = this.getWeight(t);
+               totalWeight += weight;
+               x += particle.x * weight;
+               y += particle.y * weight;
+               z += particle.z * weight;
+               i++;
             }
-            _loc2_ /= _loc5_;
-            _loc3_ /= _loc5_;
-            _loc4_ /= _loc5_;
-            param1.x = _loc2_;
-            param1.y = _loc3_;
-            param1.z = _loc4_;
+            x /= totalWeight;
+            y /= totalWeight;
+            z /= totalWeight;
+            object.x = x;
+            object.y = y;
+            object.z = z;
          }
       }
       
-      private function getWeight(param1:Number) : Number
+      private function getWeight(t:Number) : Number
       {
-         var _loc3_:Number = NaN;
-         var _loc2_:int = 0;
-         while(_loc2_ < this.zedyhitem.length)
+         var distance:Number = NaN;
+         var i:int = 0;
+         while(i < this.distances.length)
          {
-            _loc3_ = Number(this.zedyhitem[_loc2_]);
-            if(_loc3_ >= param1)
+            distance = Number(this.distances[i]);
+            if(distance >= t)
             {
-               return this.logigap[_loc2_];
+               return this.weights[i];
             }
-            _loc2_++;
+            i++;
          }
          return 0;
       }
       
-      public function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void
+      public function updateObjectPosition(object:Object3D, camera:GameCamera, deltaTime:int) : void
       {
-         this.initPosition(param1);
+         this.initPosition(object);
       }
       
       public function destroy() : void
       {
-         this.gucoqub = null;
-         this.podelidi = null;
+         this.graphicEffect = null;
+         this.collisionPositionProvider = null;
       }
    }
 }

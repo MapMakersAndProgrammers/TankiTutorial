@@ -5,34 +5,34 @@ package alternativa.tanks.sfx.flamethrower
       
       public var jomuc:Number;
       
-      public var kukuv:Number;
+      public var redMultiplier:Number;
       
-      public var bofo:Number;
+      public var greenMultiplier:Number;
       
-      public var zybyjaweb:Number;
+      public var blueMultiplier:Number;
       
-      public var fidemujil:Number;
+      public var alphaMultiplier:Number;
       
-      public var goror:int;
+      public var redOffset:int;
       
-      public var ruh:int;
+      public var greenOffset:int;
       
-      public var totejigi:int;
+      public var blueOffset:int;
       
-      public var jadig:int;
+      public var alphaOffset:int;
       
-      public function ColorTransformEntry(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number, param7:Number, param8:Number, param9:Number)
+      public function ColorTransformEntry(redMultiplier:Number, greenMultiplier:Number, blueMultiplier:Number, alphaMultiplier:Number, redOffset:Number, greenOffset:Number, blueOffset:Number, alphaOffset:Number, param9:Number)
       {
          super();
          this.jomuc = param9;
-         this.kukuv = param1;
-         this.bofo = param2;
-         this.zybyjaweb = param3;
-         this.fidemujil = param4;
-         this.goror = param5;
-         this.ruh = param6;
-         this.totejigi = param7;
-         this.jadig = param8;
+         this.redMultiplier = redMultiplier;
+         this.greenMultiplier = greenMultiplier;
+         this.blueMultiplier = blueMultiplier;
+         this.alphaMultiplier = alphaMultiplier;
+         this.redOffset = redOffset;
+         this.greenOffset = greenOffset;
+         this.blueOffset = blueOffset;
+         this.alphaOffset = alphaOffset;
       }
    }
 }

@@ -272,7 +272,7 @@ package alternativa.tanks.bonuses
          var position:Vector3 = null;
          if(this.bonusData.pickupSound != null)
          {
-            sound = Sound3D.create(this.bonusData.pickupSound,SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,0.5);
+            sound = Sound3D.create(this.bonusData.pickupSound,SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,0.5);
             position = new Vector3(this.bonusMesh.x,this.bonusMesh.y,this.bonusMesh.z);
             this.battleService.addSound3DEffect(Sound3DEffect.create(this.battleService.getObjectPool(),position,sound));
          }

@@ -7,7 +7,7 @@ package alternativa.tanks.sfx.flamethrower
    public interface StreamWeaponEffects
    {
       
-      function startEffects(param1:Body, param2:Vector3, param3:Mesh) : void;
+      function startEffects(body:Body, localMuzzlePosition:Vector3, turretMesh:Mesh) : void;
       
       function stopEffects() : void;
    }

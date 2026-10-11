@@ -16,27 +16,27 @@ package alternativa.tanks.sfx.flamethrower
       
       public function init(param1:Object3DPositionProvider, param2:LightAnimation, param3:LightAnimation, param4:Number = 1) : void
       {
-         this.toz = param1;
+         this.positionProvider = param1;
          this.racefom = param2.getLiveTime();
-         this.bibe = param3.getLiveTime();
-         this.zituciky = param2;
-         this.ged = param3;
-         this.tize = bibe / 4;
+         this.loopTime = param3.getLiveTime();
+         this.startAnimation = param2;
+         this.loopAnimation = param3;
+         this.tize = loopTime / 4;
          this.scale = param4;
-         dozalij = true;
-         wyzunime = 0;
+         starting = true;
+         time = 0;
          kat = true;
-         rawo = false;
-         jam = 0;
+         stopping = false;
+         stopTime = 0;
       }
       
-      override public function play(param1:int, param2:GameCamera) : Boolean
+      override public function play(deltaTime:int, camera:GameCamera) : Boolean
       {
-         var _loc3_:Boolean = super.play(param1,param2);
-         var _loc4_:OmniLight = OmniLight(qarehop);
-         _loc4_.attenuationBegin *= scale;
-         _loc4_.attenuationEnd *= scale;
-         return _loc3_;
+         var result:Boolean = super.play(deltaTime,camera);
+         var omniLight:OmniLight = OmniLight(light);
+         omniLight.attenuationBegin *= scale;
+         omniLight.attenuationEnd *= scale;
+         return result;
       }
    }
 }

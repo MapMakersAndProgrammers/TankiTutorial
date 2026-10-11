@@ -23,7 +23,7 @@ package alternativa.tanks.vehicles.tank.weapons.twins
          this.effects = new PlasmaEffects();
          var _loc1_:Number = 10 * Math.PI / 180;
          var _loc2_:Number = 14 * Math.PI / 180;
-         this.namekazaf = new CommonTargetingSystem(PlasmaShot.qyk,_loc1_,WeaponSettings.getNumRays(_loc1_),_loc2_,WeaponSettings.getNumRays(_loc2_),GameData.collisionDetector,new DMCommonTargetEvaluator());
+         this.namekazaf = new CommonTargetingSystem(PlasmaShot.MAX_DISTANCE,_loc1_,WeaponSettings.getNumRays(_loc1_),_loc2_,WeaponSettings.getNumRays(_loc2_),GameData.collisionDetector,new DMCommonTargetEvaluator());
       }
    }
 }

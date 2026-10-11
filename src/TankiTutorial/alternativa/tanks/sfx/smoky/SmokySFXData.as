@@ -12,21 +12,21 @@ package alternativa.tanks.sfx.smoky
    public class SmokySFXData
    {
       
-      public var pasinavuj:TextureMaterial;
+      public var shotMaterial:TextureMaterial;
       
-      public var zabe:TextureAnimation;
+      public var explosionAnimation:TextureAnimation;
       
       public var dodywytuq:TextureMaterial;
       
-      public var kopefus:Sound;
+      public var shotSound:Sound;
       
-      public var lyrydab:Sound;
+      public var explosionSound:Sound;
       
-      public var quf:LightAnimation = LightData.defajykeb;
+      public var shotLight:LightAnimation = LightData.smokyShotLight;
       
-      public var zucezu:LightAnimation = LightData.bevevy;
+      public var explosionLight:LightAnimation = LightData.smokyExplosionLight;
       
-      private var qokohywyl:Boolean;
+      private var _isReady:Boolean;
       
       public function SmokySFXData()
       {
@@ -35,16 +35,16 @@ package alternativa.tanks.sfx.smoky
       
       public function init() : void
       {
-         this.zabe = Assets.getData("smoky_explosion",TextureAnimation);
-         this.pasinavuj = new TextureMaterial(Assets.getData("smoky_shot",BitmapData),false,true,MipMapping.PER_PIXEL,2.5);
-         this.lyrydab = Assets.getData("smoky_explosion",Sound);
-         this.kopefus = Assets.getData("smoky_shot",Sound);
-         this.qokohywyl = true;
+         this.explosionAnimation = Assets.getData("smoky_explosion",TextureAnimation);
+         this.shotMaterial = new TextureMaterial(Assets.getData("smoky_shot",BitmapData),false,true,MipMapping.PER_PIXEL,2.5);
+         this.explosionSound = Assets.getData("smoky_explosion",Sound);
+         this.shotSound = Assets.getData("smoky_shot",Sound);
+         this._isReady = true;
       }
       
       public function get isReady() : Boolean
       {
-         return this.qokohywyl;
+         return this._isReady;
       }
    }
 }

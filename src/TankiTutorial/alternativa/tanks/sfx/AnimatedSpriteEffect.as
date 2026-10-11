@@ -13,51 +13,51 @@ package alternativa.tanks.sfx
    public class AnimatedSpriteEffect extends PooledObject implements GraphicEffect
    {
       
-      private var wahy:AnimatedSprite3D;
+      private var sprite:AnimatedSprite3D;
       
-      private var lamutameq:Number;
+      private var frameIndex:Number;
       
       private var luzulo:Number;
       
-      private var maq:Boolean;
+      private var looped:Boolean;
       
-      private var toz:Object3DPositionProvider;
+      private var positionProvider:Object3DPositionProvider;
       
       public function AnimatedSpriteEffect(param1:Pool)
       {
          super(param1);
-         this.wahy = new AnimatedSprite3D(1,1);
-         this.wahy.softAttenuation = 150;
+         this.sprite = new AnimatedSprite3D(1,1);
+         this.sprite.softAttenuation = 150;
       }
       
-      public function init(param1:Number, param2:Number, param3:TextureAnimation, param4:Number, param5:Number, param6:Object3DPositionProvider, param7:Number = 0.5, param8:Number = 0.5, param9:ColorTransform = null) : void
+      public function init(width:Number, height:Number, animation:TextureAnimation, rotation:Number, fps:Number, param6:Object3DPositionProvider, originX:Number = 0.5, originY:Number = 0.5, colorTransform:ColorTransform = null) : void
       {
-         this.initSprite(param1,param2,param4,param7,param8,param9,param3);
-         param6.initPosition(this.wahy);
-         this.luzulo = 0.001 * param5;
-         this.toz = param6;
-         this.lamutameq = 0;
-         this.maq = false;
+         this.initSprite(width,height,rotation,originX,originY,colorTransform,animation);
+         param6.initPosition(this.sprite);
+         this.luzulo = 0.001 * fps;
+         this.positionProvider = param6;
+         this.frameIndex = 0;
+         this.looped = false;
       }
       
-      public function initLooped(param1:Number, param2:Number, param3:TextureAnimation, param4:Number, param5:Number, param6:Object3DPositionProvider, param7:Number = 0.5, param8:Number = 0.5, param9:ColorTransform = null) : void
+      public function initLooped(width:Number, height:Number, animation:TextureAnimation, rotation:Number, fps:Number, param6:Object3DPositionProvider, originX:Number = 0.5, originY:Number = 0.5, colorTransform:ColorTransform = null) : void
       {
-         this.init(param1,param2,param3,param4,param5,param6,param7,param8,param9);
-         this.maq = true;
+         this.init(width,height,animation,rotation,fps,param6,originX,originY,colorTransform);
+         this.looped = true;
       }
       
-      public function addedToScene(param1:Object3DContainer) : void
+      public function addedToScene(container:Object3DContainer) : void
       {
-         param1.addChild(this.wahy);
+         container.addChild(this.sprite);
       }
       
-      public function play(param1:int, param2:GameCamera) : Boolean
+      public function play(deltaTime:int, camera:GameCamera) : Boolean
       {
-         if(this.maq || this.lamutameq < this.wahy.getNumFrames())
+         if(this.looped || this.frameIndex < this.sprite.getNumFrames())
          {
-            this.wahy.setFrameIndex(this.lamutameq);
-            this.lamutameq += param1 * this.luzulo;
-            this.toz.updateObjectPosition(this.wahy,param2,param1);
+            this.sprite.setFrameIndex(this.frameIndex);
+            this.frameIndex += deltaTime * this.luzulo;
+            this.positionProvider.updateObjectPosition(this.sprite,camera,deltaTime);
             return true;
          }
          return false;
@@ -65,28 +65,28 @@ package alternativa.tanks.sfx
       
       public function destroy() : void
       {
-         this.wahy.removeFromParent();
-         this.wahy.clear();
-         this.toz.destroy();
-         this.toz = null;
+         this.sprite.removeFromParent();
+         this.sprite.clear();
+         this.positionProvider.destroy();
+         this.positionProvider = null;
          recycle();
       }
       
       public function kill() : void
       {
-         this.maq = false;
-         this.lamutameq = this.wahy.getNumFrames();
+         this.looped = false;
+         this.frameIndex = this.sprite.getNumFrames();
       }
       
-      private function initSprite(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:ColorTransform, param7:TextureAnimation) : void
+      private function initSprite(width:Number, height:Number, rotation:Number, originX:Number, originY:Number, colorTransform:ColorTransform, animation:TextureAnimation) : void
       {
-         this.wahy.width = param1;
-         this.wahy.height = param2;
-         this.wahy.rotation = param3;
-         this.wahy.originX = param4;
-         this.wahy.originY = param5;
-         this.wahy.colorTransform = param6;
-         this.wahy.setAnimationData(param7);
+         this.sprite.width = width;
+         this.sprite.height = height;
+         this.sprite.rotation = rotation;
+         this.sprite.originX = originX;
+         this.sprite.originY = originY;
+         this.sprite.colorTransform = colorTransform;
+         this.sprite.setAnimationData(animation);
       }
    }
 }

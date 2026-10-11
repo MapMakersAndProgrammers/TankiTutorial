@@ -16,9 +16,9 @@ package alternativa.tanks.sfx.flamethrower
    public class FlamethrowerEffects implements StreamWeaponEffects
    {
       
-      private static const migeru:int = 20;
+      private static const MAX_PARTICLES:int = 20;
       
-      private static const zesim:int = 2000;
+      private static const PARTICLE_SPEED:int = 2000;
       
       private static const jelymy:Number = 1;
       
@@ -34,80 +34,80 @@ package alternativa.tanks.sfx.flamethrower
       
       private var range:Number;
       
-      private var mopojuk:Number;
+      private var coneAngle:Number;
       
-      private var dymojes:StreamWeaponSFXData;
+      private var sfxData:StreamWeaponSFXData;
       
-      private var kologak:StreamWeaponGraphicEffect;
+      private var graphicEffect:StreamWeaponGraphicEffect;
       
-      private var tyzysala:MobileSound3DEffect;
+      private var soundEffect:MobileSound3DEffect;
       
-      private var gagez:OmniStreamLightEffect;
+      private var muzzleLightEffect:OmniStreamLightEffect;
       
-      private var veliqe:OmniStreamLightEffect;
+      private var streamLightEffect:OmniStreamLightEffect;
       
-      public function FlamethrowerEffects(param1:Number, param2:Number, param3:StreamWeaponSFXData)
+      public function FlamethrowerEffects(range:Number, coneAngle:Number, sfxData:StreamWeaponSFXData)
       {
          super();
-         this.range = param1;
-         this.mopojuk = param2;
-         this.dymojes = param3;
+         this.range = range;
+         this.coneAngle = coneAngle;
+         this.sfxData = sfxData;
       }
       
-      public function startEffects(param1:Body, param2:Vector3, param3:Mesh) : void
+      public function startEffects(body:Body, localMuzzlePosition:Vector3, turretMesh:Mesh) : void
       {
-         var _loc4_:Sound3D = null;
-         var _loc5_:MuzzlePositionProvider = null;
-         var _loc6_:CollisionObject3DPositionProvider = null;
-         var _loc7_:StreamWeaponParticlesPositionProvider = null;
-         if(this.kologak == null)
+         var sound:Sound3D = null;
+         var muzzlePositionProvider:MuzzlePositionProvider = null;
+         var collisionPositionProvider:CollisionObject3DPositionProvider = null;
+         var particlesPositionProvider:StreamWeaponParticlesPositionProvider = null;
+         if(this.graphicEffect == null)
          {
-            this.kologak = StreamWeaponGraphicEffect(this.objectPool.getObject(StreamWeaponGraphicEffect));
-            this.kologak.init(param1,this.range,this.mopojuk,FlamethrowerEffectsParams.zesim,param2,param3,this.dymojes,GameData.physicsScene.collisionDetector,FlamethrowerEffectsParams.qezizyj,FlamethrowerEffectsParams.kykihyf,FlamethrowerEffectsParams.vip,FlamethrowerEffectsParams.colarac,FlamethrowerEffectsParams.coteci,FlamethrowerEffectsParams.tasimep);
-            this.effects.addEffect(this.kologak);
-            _loc4_ = Sound3D.create(this.dymojes.mutovudi,SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,FlamethrowerEffectsParams.jelymy);
-            if(_loc4_ != null)
+            this.graphicEffect = StreamWeaponGraphicEffect(this.objectPool.getObject(StreamWeaponGraphicEffect));
+            this.graphicEffect.init(body,this.range,this.coneAngle,FlamethrowerEffectsParams.PARTICLE_SPEED,localMuzzlePosition,turretMesh,this.sfxData,GameData.physicsScene.collisionDetector,FlamethrowerEffectsParams.PLANE_WIDTH,FlamethrowerEffectsParams.PLANE_LENGTH,FlamethrowerEffectsParams.vip,FlamethrowerEffectsParams.colarac,FlamethrowerEffectsParams.coteci,FlamethrowerEffectsParams.tasimep);
+            this.effects.addEffect(this.graphicEffect);
+            sound = Sound3D.create(this.sfxData.flameSound,SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,FlamethrowerEffectsParams.jelymy);
+            if(sound != null)
             {
-               this.tyzysala = MobileSound3DEffect(this.objectPool.getObject(MobileSound3DEffect));
-               this.tyzysala.init(_loc4_,param3,0,2);
-               this.soundManager.addEffect(this.tyzysala);
+               this.soundEffect = MobileSound3DEffect(this.objectPool.getObject(MobileSound3DEffect));
+               this.soundEffect.init(sound,turretMesh,0,2);
+               this.soundManager.addEffect(this.soundEffect);
             }
-            this.gagez = OmniStreamLightEffect(this.objectPool.getObject(OmniStreamLightEffect));
-            _loc5_ = MuzzlePositionProvider(this.objectPool.getObject(MuzzlePositionProvider));
-            _loc5_.init(param3,param2,0);
-            this.gagez.init(_loc5_,this.dymojes.puvulo,this.dymojes.div);
-            this.effects.addEffect(this.gagez);
-            this.veliqe = OmniStreamLightEffect(this.objectPool.getObject(OmniStreamLightEffect));
-            _loc6_ = CollisionObject3DPositionProvider(this.objectPool.getObject(CollisionObject3DPositionProvider));
-            _loc6_.init(param3,param2,GameData.physicsScene.collisionDetector,FlamethrowerEffectsParams.zowoma);
-            _loc7_ = StreamWeaponParticlesPositionProvider(this.objectPool.getObject(StreamWeaponParticlesPositionProvider));
-            _loc7_.init(this.kologak,_loc6_);
-            this.veliqe.init(_loc7_,this.dymojes.jebiq,this.dymojes.defuhusyq);
-            this.effects.addEffect(this.veliqe);
+            this.muzzleLightEffect = OmniStreamLightEffect(this.objectPool.getObject(OmniStreamLightEffect));
+            muzzlePositionProvider = MuzzlePositionProvider(this.objectPool.getObject(MuzzlePositionProvider));
+            muzzlePositionProvider.init(turretMesh,localMuzzlePosition,0);
+            this.muzzleLightEffect.init(muzzlePositionProvider,this.sfxData.muzzleStartLight,this.sfxData.div);
+            this.effects.addEffect(this.muzzleLightEffect);
+            this.streamLightEffect = OmniStreamLightEffect(this.objectPool.getObject(OmniStreamLightEffect));
+            collisionPositionProvider = CollisionObject3DPositionProvider(this.objectPool.getObject(CollisionObject3DPositionProvider));
+            collisionPositionProvider.init(turretMesh,localMuzzlePosition,GameData.physicsScene.collisionDetector,FlamethrowerEffectsParams.zowoma);
+            particlesPositionProvider = StreamWeaponParticlesPositionProvider(this.objectPool.getObject(StreamWeaponParticlesPositionProvider));
+            particlesPositionProvider.init(this.graphicEffect,collisionPositionProvider);
+            this.streamLightEffect.init(particlesPositionProvider,this.sfxData.streamStartLight,this.sfxData.streamLoopLight);
+            this.effects.addEffect(this.streamLightEffect);
          }
       }
       
       public function stopEffects() : void
       {
-         if(this.kologak != null)
+         if(this.graphicEffect != null)
          {
-            this.kologak.kill();
-            this.kologak = null;
+            this.graphicEffect.kill();
+            this.graphicEffect = null;
          }
-         if(Boolean(this.tyzysala))
+         if(Boolean(this.soundEffect))
          {
-            this.tyzysala.kill();
-            this.tyzysala = null;
+            this.soundEffect.kill();
+            this.soundEffect = null;
          }
-         if(Boolean(this.gagez))
+         if(Boolean(this.muzzleLightEffect))
          {
-            this.gagez.stop();
-            this.gagez = null;
+            this.muzzleLightEffect.stop();
+            this.muzzleLightEffect = null;
          }
-         if(this.veliqe != null)
+         if(this.streamLightEffect != null)
          {
-            this.veliqe.stop();
-            this.veliqe = null;
+            this.streamLightEffect.stop();
+            this.streamLightEffect = null;
          }
       }
    }

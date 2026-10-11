@@ -26,63 +26,63 @@ package alternativa.tanks.sfx.flamethrower
    public class StreamWeaponGraphicEffect extends PooledObject implements GraphicEffect
    {
       
-      private static const migeru:int = 20;
+      private static const MAX_PARTICLES:int = 20;
       
-      private static const dygusuf:Number = 3;
+      private static const ROTATION_SPEED:Number = 3;
       
       private static const gijalatyt:Matrix3 = new Matrix3();
       
-      private static const bul:Matrix4 = new Matrix4();
+      private static const matrix:Matrix4 = new Matrix4();
       
-      private static const fybumu:Vector3 = new Vector3();
+      private static const barrelOrigin:Vector3 = new Vector3();
       
       private static const direction:Vector3 = new Vector3();
       
-      private static const rygapyv:Vector3 = new Vector3();
+      private static const xAxis:Vector3 = new Vector3();
       
-      private static const dizecoca:Vector3 = new Vector3();
+      private static const particlePosition:Vector3 = new Vector3();
       
-      private static const rinego:Vector3 = new Vector3();
+      private static const muzzlePosition:Vector3 = new Vector3();
       
-      private static const tefydiw:RayHit = new RayHit();
+      private static const rayHit:RayHit = new RayHit();
       
-      private var judawohof:Number;
+      private var _range:Number;
       
       private var marehod:Number;
       
-      private var niq:Number;
+      private var particleSpeed:Number;
       
-      private var toqumyc:Vector3 = new Vector3();
+      private var localMuzzlePosition:Vector3 = new Vector3();
       
-      private var firaqe:Object3D;
+      private var turret:Object3D;
       
-      private var dymojes:StreamWeaponSFXData;
+      private var sfxData:StreamWeaponSFXData;
       
       private var collisionDetector:CollisionDetector;
       
-      private var kygipiz:Vector.<StreamWeaponParticle> = new Vector.<StreamWeaponParticle>(migeru);
+      private var _particles:Vector.<StreamWeaponParticle> = new Vector.<StreamWeaponParticle>(MAX_PARTICLES);
       
       private var jadeqy:Number;
       
-      private var qyz:Number;
+      private var particleInterval:Number;
       
       private var time:int;
       
-      private var bumypaz:int;
+      private var nextParticleTime:int;
       
-      private var gutebovu:int;
+      private var _numParticles:int;
       
       private var container:Object3DContainer;
       
-      private var huzoqeq:Boolean;
+      private var killed:Boolean;
       
-      private var fyqih:StreamWeaponMuzzlePlane;
+      private var muzzlePlane:StreamWeaponMuzzlePlane;
       
       private var taramuty:Body;
       
-      private var molehyzuv:Number;
+      private var minParticleSize:Number;
       
-      private var binijosom:Number;
+      private var maxParticleSize:Number;
       
       private var nel:Number;
       
@@ -91,224 +91,224 @@ package alternativa.tanks.sfx.flamethrower
       public function StreamWeaponGraphicEffect(param1:Pool)
       {
          super(param1);
-         this.fyqih = new StreamWeaponMuzzlePlane();
+         this.muzzlePlane = new StreamWeaponMuzzlePlane();
       }
       
-      public function init(param1:Body, param2:Number, param3:Number, param4:Number, param5:Vector3, param6:Object3D, param7:StreamWeaponSFXData, param8:CollisionDetector, param9:Number, param10:Number, param11:Number, param12:Number, param13:Number, param14:Number) : void
+      public function init(body:Body, param2:Number, coneAngle:Number, param4:Number, param5:Vector3, param6:Object3D, param7:StreamWeaponSFXData, param8:CollisionDetector, planeWidth:Number, planeLength:Number, param11:Number, param12:Number, param13:Number, param14:Number) : void
       {
-         this.taramuty = param1;
-         this.judawohof = param2;
-         this.marehod = Math.tan(0.5 * param3);
-         this.niq = param4;
-         this.toqumyc.copy(param5);
-         this.firaqe = param6;
-         this.dymojes = param7;
+         this.taramuty = body;
+         this._range = param2;
+         this.marehod = Math.tan(0.5 * coneAngle);
+         this.particleSpeed = param4;
+         this.localMuzzlePosition.copy(param5);
+         this.turret = param6;
+         this.sfxData = param7;
          this.collisionDetector = param8;
-         this.molehyzuv = param11;
-         this.binijosom = param12;
+         this.minParticleSize = param11;
+         this.maxParticleSize = param12;
          this.nel = param13;
          this.tizymaku = param14;
-         param7.tazequd = Assets.getData("flame_muzzle",TextureAnimation);
-         this.fyqih.resize(param9,param10);
+         param7.muzzleAnimation = Assets.getData("flame_muzzle",TextureAnimation);
+         this.muzzlePlane.resize(planeWidth,planeLength);
          this.jadeqy = 2 * (param12 - param11) / param2;
-         this.qyz = 1000 * param2 / (migeru * param4);
-         this.gutebovu = 0;
-         this.time = this.bumypaz = getTimer();
+         this.particleInterval = 1000 * param2 / (MAX_PARTICLES * param4);
+         this._numParticles = 0;
+         this.time = this.nextParticleTime = getTimer();
          this.initMuzzlePlane(param7);
-         this.huzoqeq = false;
+         this.killed = false;
       }
       
       private function initMuzzlePlane(param1:StreamWeaponSFXData) : void
       {
-         var _loc2_:ColorTransformEntry = null;
-         var _loc3_:ColorTransform = null;
-         this.fyqih.init(param1.tazequd);
-         if(param1.jowufeq != null)
+         var entry:ColorTransformEntry = null;
+         var colorTransform:ColorTransform = null;
+         this.muzzlePlane.init(param1.muzzleAnimation);
+         if(param1.muzzleColorTransforms != null)
          {
-            _loc2_ = param1.jowufeq[0];
-            _loc3_ = this.fyqih.colorTransform == null ? new ColorTransform() : this.fyqih.colorTransform;
-            _loc3_.alphaMultiplier = _loc2_.fidemujil;
-            _loc3_.alphaOffset = _loc2_.jadig;
-            _loc3_.redMultiplier = _loc2_.kukuv;
-            _loc3_.redOffset = _loc2_.goror;
-            _loc3_.greenMultiplier = _loc2_.bofo;
-            _loc3_.greenOffset = _loc2_.ruh;
-            _loc3_.blueMultiplier = _loc2_.zybyjaweb;
-            _loc3_.blueOffset = _loc2_.totejigi;
-            this.fyqih.colorTransform = _loc3_;
+            entry = param1.muzzleColorTransforms[0];
+            colorTransform = this.muzzlePlane.colorTransform == null ? new ColorTransform() : this.muzzlePlane.colorTransform;
+            colorTransform.alphaMultiplier = entry.alphaMultiplier;
+            colorTransform.alphaOffset = entry.alphaOffset;
+            colorTransform.redMultiplier = entry.redMultiplier;
+            colorTransform.redOffset = entry.redOffset;
+            colorTransform.greenMultiplier = entry.greenMultiplier;
+            colorTransform.greenOffset = entry.greenOffset;
+            colorTransform.blueMultiplier = entry.blueMultiplier;
+            colorTransform.blueOffset = entry.blueOffset;
+            this.muzzlePlane.colorTransform = colorTransform;
          }
          else
          {
-            this.fyqih.colorTransform = null;
+            this.muzzlePlane.colorTransform = null;
          }
       }
       
       public function destroy() : void
       {
-         while(this.gutebovu > 0)
+         while(this._numParticles > 0)
          {
             this.removeParticle(0);
          }
-         this.fyqih.removeFromParent();
-         this.fyqih.clear();
+         this.muzzlePlane.removeFromParent();
+         this.muzzlePlane.clear();
          this.container = null;
          this.taramuty = null;
-         this.firaqe = null;
-         this.dymojes = null;
+         this.turret = null;
+         this.sfxData = null;
          this.collisionDetector = null;
          recycle();
       }
       
-      public function play(param1:int, param2:GameCamera) : Boolean
+      public function play(deltaTime:int, camera:GameCamera) : Boolean
       {
-         var _loc3_:Number = NaN;
-         var _loc5_:StreamWeaponParticle = null;
-         var _loc6_:Vector3 = null;
-         var _loc7_:Number = NaN;
+         var dt:Number = NaN;
+         var particle:StreamWeaponParticle = null;
+         var velocity:Vector3 = null;
+         var size:Number = NaN;
          this.calculateParameters();
-         _loc3_ = param1 / 1000;
-         if(this.collisionDetector.raycastStatic(fybumu,direction,CollisionGroup.STATIC,this.toqumyc.y + this.fyqih.length,null,tefydiw))
+         dt = deltaTime / 1000;
+         if(this.collisionDetector.raycastStatic(barrelOrigin,direction,CollisionGroup.STATIC,this.localMuzzlePosition.y + this.muzzlePlane.length,null,rayHit))
          {
-            this.fyqih.visible = false;
+            this.muzzlePlane.visible = false;
          }
          else
          {
-            this.fyqih.visible = true;
-            this.fyqih.update(_loc3_,this.dymojes.tazequd.fps);
-            SFXUtils.alignObjectPlaneToView(this.fyqih,rinego,direction,param2.position);
+            this.muzzlePlane.visible = true;
+            this.muzzlePlane.update(dt,this.sfxData.muzzleAnimation.fps);
+            SFXUtils.alignObjectPlaneToView(this.muzzlePlane,muzzlePosition,direction,camera.position);
          }
-         if(!this.huzoqeq && this.gutebovu < migeru && this.time >= this.bumypaz)
+         if(!this.killed && this._numParticles < MAX_PARTICLES && this.time >= this.nextParticleTime)
          {
-            this.bumypaz += this.qyz;
+            this.nextParticleTime += this.particleInterval;
             this.addParticle();
          }
-         var _loc4_:int = 0;
-         while(_loc4_ < this.gutebovu)
+         var i:int = 0;
+         while(i < this._numParticles)
          {
-            _loc5_ = this.kygipiz[_loc4_];
-            dizecoca.x = _loc5_.x;
-            dizecoca.y = _loc5_.y;
-            dizecoca.z = _loc5_.z;
-            if(_loc5_.hyn > this.judawohof || Boolean(this.collisionDetector.raycastStatic(dizecoca,_loc5_.velocity,CollisionGroup.WEAPON,_loc3_,null,tefydiw)))
+            particle = this._particles[i];
+            particlePosition.x = particle.x;
+            particlePosition.y = particle.y;
+            particlePosition.z = particle.z;
+            if(particle.flightDistance > this._range || Boolean(this.collisionDetector.raycastStatic(particlePosition,particle.velocity,CollisionGroup.WEAPON,dt,null,rayHit)))
             {
-               this.removeParticle(_loc4_--);
+               this.removeParticle(i--);
             }
             else
             {
-               _loc6_ = _loc5_.velocity;
-               _loc5_.x += _loc6_.x * _loc3_;
-               _loc5_.y += _loc6_.y * _loc3_;
-               _loc5_.z += _loc6_.z * _loc3_;
-               _loc5_.hyn += this.niq * _loc3_;
-               _loc5_.rotation += dygusuf * _loc3_ * _loc5_.huved;
-               _loc5_.setFrameIndex(_loc5_.tyfu);
-               _loc5_.tyfu += this.dymojes.qywyr.fps * _loc3_;
-               _loc7_ = this.molehyzuv + this.jadeqy * _loc5_.hyn;
-               if(_loc7_ > this.binijosom)
+               velocity = particle.velocity;
+               particle.x += velocity.x * dt;
+               particle.y += velocity.y * dt;
+               particle.z += velocity.z * dt;
+               particle.flightDistance += this.particleSpeed * dt;
+               particle.rotation += ROTATION_SPEED * dt * particle.rotationDirection;
+               particle.setFrameIndex(particle.frameIndex);
+               particle.frameIndex += this.sfxData.particleAnimation.fps * dt;
+               size = this.minParticleSize + this.jadeqy * particle.flightDistance;
+               if(size > this.maxParticleSize)
                {
-                  _loc7_ = this.binijosom;
+                  size = this.maxParticleSize;
                }
-               _loc5_.width = _loc7_;
-               _loc5_.height = _loc7_;
-               _loc5_.updateColorTransofrm(this.judawohof,this.dymojes.qob);
+               particle.width = size;
+               particle.height = size;
+               particle.updateColorTransofrm(this._range,this.sfxData.particleColorTransforms);
             }
-            _loc4_++;
+            i++;
          }
-         this.time += param1;
-         return !this.huzoqeq || this.gutebovu > 0;
+         this.time += deltaTime;
+         return !this.killed || this._numParticles > 0;
       }
       
       public function kill() : void
       {
-         if(!this.huzoqeq)
+         if(!this.killed)
          {
-            this.huzoqeq = true;
-            this.fyqih.removeFromParent();
+            this.killed = true;
+            this.muzzlePlane.removeFromParent();
          }
       }
       
       public function addedToScene(param1:Object3DContainer) : void
       {
          this.container = param1;
-         param1.addChild(this.fyqih);
+         param1.addChild(this.muzzlePlane);
       }
       
       private function calculateParameters() : void
       {
          var _loc1_:Number = NaN;
-         bul.setMatrix(this.firaqe.x,this.firaqe.y,this.firaqe.z,this.firaqe.rotationX,this.firaqe.rotationY,this.firaqe.rotationZ);
-         rygapyv.x = bul.ma;
-         rygapyv.y = bul.me;
-         rygapyv.z = bul.mi;
-         direction.x = bul.mb;
-         direction.y = bul.mf;
-         direction.z = bul.mj;
-         bul.transformVector(this.toqumyc,rinego);
-         _loc1_ = Number(this.toqumyc.y);
-         fybumu.x = rinego.x - _loc1_ * direction.x;
-         fybumu.y = rinego.y - _loc1_ * direction.y;
-         fybumu.z = rinego.z - _loc1_ * direction.z;
+         matrix.setMatrix(this.turret.x,this.turret.y,this.turret.z,this.turret.rotationX,this.turret.rotationY,this.turret.rotationZ);
+         xAxis.x = matrix.ma;
+         xAxis.y = matrix.me;
+         xAxis.z = matrix.mi;
+         direction.x = matrix.mb;
+         direction.y = matrix.mf;
+         direction.z = matrix.mj;
+         matrix.transformVector(this.localMuzzlePosition,muzzlePosition);
+         _loc1_ = Number(this.localMuzzlePosition.y);
+         barrelOrigin.x = muzzlePosition.x - _loc1_ * direction.x;
+         barrelOrigin.y = muzzlePosition.y - _loc1_ * direction.y;
+         barrelOrigin.z = muzzlePosition.z - _loc1_ * direction.z;
       }
       
       private function addParticle() : void
       {
-         var _loc1_:Number = this.nel + Math.random() * this.tizymaku;
-         if(!this.fyqih.visible && tefydiw.jomuc < this.toqumyc.y + _loc1_)
+         var distance:Number = this.nel + Math.random() * this.tizymaku;
+         if(!this.muzzlePlane.visible && rayHit.jomuc < this.localMuzzlePosition.y + distance)
          {
             return;
          }
-         var _loc2_:StreamWeaponParticle = StreamWeaponParticle.getParticle();
-         _loc2_.setAnimationData(this.dymojes.qywyr);
-         _loc2_.rotation = Math.random() * Math.PI * 2;
-         _loc2_.tyfu = Math.random() * _loc2_.getNumFrames();
+         var particle:StreamWeaponParticle = StreamWeaponParticle.getParticle();
+         particle.setAnimationData(this.sfxData.particleAnimation);
+         particle.rotation = Math.random() * Math.PI * 2;
+         particle.frameIndex = Math.random() * particle.getNumFrames();
          this.getParticleFlightDirection(direction);
-         _loc2_.velocity.x = this.niq * direction.x;
-         _loc2_.velocity.y = this.niq * direction.y;
-         _loc2_.velocity.z = this.niq * direction.z;
-         _loc2_.velocity.add(this.taramuty.state.velocity);
-         _loc2_.hyn = _loc1_;
-         _loc2_.x = rinego.x + _loc1_ * direction.x;
-         _loc2_.y = rinego.y + _loc1_ * direction.y;
-         _loc2_.z = rinego.z + _loc1_ * direction.z;
-         _loc2_.huved = Math.random() < 0.5 ? 1 : -1;
-         this.kygipiz[this.gutebovu++] = _loc2_;
-         this.container.addChild(_loc2_);
+         particle.velocity.x = this.particleSpeed * direction.x;
+         particle.velocity.y = this.particleSpeed * direction.y;
+         particle.velocity.z = this.particleSpeed * direction.z;
+         particle.velocity.add(this.taramuty.state.velocity);
+         particle.flightDistance = distance;
+         particle.x = muzzlePosition.x + distance * direction.x;
+         particle.y = muzzlePosition.y + distance * direction.y;
+         particle.z = muzzlePosition.z + distance * direction.z;
+         particle.rotationDirection = Math.random() < 0.5 ? 1 : -1;
+         this._particles[this._numParticles++] = particle;
+         this.container.addChild(particle);
       }
       
-      private function removeParticle(param1:int) : void
+      private function removeParticle(index:int) : void
       {
-         var _loc2_:StreamWeaponParticle = this.kygipiz[param1];
-         this.kygipiz[param1] = this.kygipiz[--this.gutebovu];
-         this.kygipiz[this.gutebovu] = null;
-         _loc2_.dispose();
+         var particle:StreamWeaponParticle = this._particles[index];
+         this._particles[index] = this._particles[--this._numParticles];
+         this._particles[this._numParticles] = null;
+         particle.dispose();
       }
       
       private function getParticleFlightDirection(param1:Vector3) : void
       {
          var _loc3_:Number = NaN;
-         var _loc2_:Number = 2 * Math.PI * Math.random();
-         gijalatyt.fromAxisAngle(param1,_loc2_);
-         rygapyv.transform3(gijalatyt);
-         _loc3_ = this.judawohof * this.marehod * Math.random();
-         param1.x = param1.x * this.judawohof + rygapyv.x * _loc3_;
-         param1.y = param1.y * this.judawohof + rygapyv.y * _loc3_;
-         param1.z = param1.z * this.judawohof + rygapyv.z * _loc3_;
+         var angle:Number = 2 * Math.PI * Math.random();
+         gijalatyt.fromAxisAngle(param1,angle);
+         xAxis.transform3(gijalatyt);
+         _loc3_ = this._range * this.marehod * Math.random();
+         param1.x = param1.x * this._range + xAxis.x * _loc3_;
+         param1.y = param1.y * this._range + xAxis.y * _loc3_;
+         param1.z = param1.z * this._range + xAxis.z * _loc3_;
          param1.normalize();
       }
       
       public function get particles() : Vector.<StreamWeaponParticle>
       {
-         return this.kygipiz;
+         return this._particles;
       }
       
       public function get numParticles() : int
       {
-         return this.gutebovu;
+         return this._numParticles;
       }
       
       public function get range() : Number
       {
-         return this.judawohof;
+         return this._range;
       }
    }
 }

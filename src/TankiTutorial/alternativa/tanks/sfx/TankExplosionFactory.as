@@ -15,17 +15,17 @@ package alternativa.tanks.sfx
    public class TankExplosionFactory
    {
       
-      private static var gutipur:TextureAnimation;
+      private static var smokeAnimation:TextureAnimation;
       
-      private static var pawimog:TextureAnimation;
+      private static var shockWaveAnimation:TextureAnimation;
       
-      private static var bucof:TextureAnimation;
+      private static var fireAnimation:TextureAnimation;
       
-      private static const tilubizy:Number = 800;
+      private static const FIRE_SIZE:Number = 800;
       
-      private static const mudova:Number = 400;
+      private static const SMOKE_SIZE:Number = 400;
       
-      private static const safybe:Number = 1000;
+      private static const SHOCK_WAVE_SIZE:Number = 1000;
       
       private static const funa:Number = 600;
       
@@ -33,19 +33,19 @@ package alternativa.tanks.sfx
       
       private static const juwizi:Number = 200;
       
-      private static const nidowyje:Number = -2000;
+      private static const SMOKE_ACCELERATION:Number = -2000;
       
       private static const gubeneb:int = 200;
       
-      private static const wonuhig:RayHit = new RayHit();
+      private static const rayHit:RayHit = new RayHit();
       
       private static const position:Vector3 = new Vector3();
       
-      private static const fyqynyfy:Vector3 = new Vector3();
+      private static const eulerAngles:Vector3 = new Vector3();
       
-      private static const zerus:Vector3 = new Vector3();
+      private static const velocity:Vector3 = new Vector3();
       
-      private static const gijalatyt:Matrix3 = new Matrix3();
+      private static const matrix:Matrix3 = new Matrix3();
       
       private static const wova:Number = 1;
       
@@ -57,107 +57,107 @@ package alternativa.tanks.sfx
       
       private static const bec:Vector3 = new Vector3(0,0,-1);
       
-      private static const zekos:Vector3 = new Vector3();
+      private static const axis:Vector3 = new Vector3();
       
       public function TankExplosionFactory()
       {
          super();
       }
       
-      public static function createEffect(param1:Tank) : void
+      public static function createEffect(tank:Tank) : void
       {
-         var _loc2_:Number = getEffectScale(param1);
-         createExplosionShockWave(param1,_loc2_);
-         createExplosionFire(_loc2_);
-         createExplosionSmoke(_loc2_);
+         var scale:Number = getEffectScale(tank);
+         createExplosionShockWave(tank,scale);
+         createExplosionFire(scale);
+         createExplosionSmoke(scale);
       }
       
-      private static function getEffectScale(param1:Tank) : Number
+      private static function getEffectScale(tank:Tank) : Number
       {
-         var _loc2_:Mesh = param1.kuca.hullMesh;
-         var _loc3_:Number = _loc2_.boundMaxX - _loc2_.boundMinX;
-         var _loc4_:Number = _loc2_.boundMaxY - _loc2_.boundMinY;
-         var _loc5_:Number = _loc2_.boundMaxZ - _loc2_.boundMinZ;
-         var _loc6_:Number = Math.sqrt(_loc3_ * _loc3_ + _loc4_ * _loc4_ + _loc5_ * _loc5_);
-         return _loc6_ / funa;
+         var hullMesh:Mesh = tank.kuca.hullMesh;
+         var sizeX:Number = hullMesh.boundMaxX - hullMesh.boundMinX;
+         var sizeY:Number = hullMesh.boundMaxY - hullMesh.boundMinY;
+         var sizeZ:Number = hullMesh.boundMaxZ - hullMesh.boundMinZ;
+         var size:Number = Math.sqrt(sizeX * sizeX + sizeY * sizeY + sizeZ * sizeZ);
+         return size / funa;
       }
       
-      private static function createExplosionShockWave(param1:Tank, param2:Number) : void
+      private static function createExplosionShockWave(tank:Tank, scale:Number) : void
       {
-         var _loc5_:Number = NaN;
+         var size:Number = NaN;
          var _loc6_:Number = NaN;
-         var _loc7_:Vector3 = null;
-         var _loc8_:Number = NaN;
-         var _loc9_:AnimatedPlaneEffect = null;
-         if(pawimog == null)
+         var normal:Vector3 = null;
+         var angle:Number = NaN;
+         var planeEffect:AnimatedPlaneEffect = null;
+         if(shockWaveAnimation == null)
          {
-            pawimog = Assets.getData("tank_explosion/shockwave",TextureAnimation);
+            shockWaveAnimation = Assets.getData("tank_explosion/shockwave",TextureAnimation);
          }
          var _loc3_:Number = 500;
-         position.copy(param1.hogys.body.state.position);
-         var _loc4_:CollisionDetector = physicsScene.collisionDetector;
-         if(_loc4_.raycastStatic(position,bec,255,_loc3_,null,wonuhig))
+         position.copy(tank.hogys.body.state.position);
+         var collisionDetector:CollisionDetector = physicsScene.collisionDetector;
+         if(collisionDetector.raycastStatic(position,bec,255,_loc3_,null,rayHit))
          {
-            wonuhig.position.z += 10;
-            _loc5_ = safybe;
+            rayHit.position.z += 10;
+            size = SHOCK_WAVE_SIZE;
             _loc6_ = 200;
-            if(wonuhig.jomuc > _loc6_)
+            if(rayHit.jomuc > _loc6_)
             {
-               _loc5_ *= (_loc3_ - wonuhig.jomuc) / (_loc3_ - _loc6_);
+               size *= (_loc3_ - rayHit.jomuc) / (_loc3_ - _loc6_);
             }
-            _loc7_ = wonuhig.normal;
-            _loc8_ = Math.acos(_loc7_.z);
-            zekos.x = -_loc7_.y;
-            zekos.y = _loc7_.x;
-            zekos.z = 0;
-            zekos.normalize();
-            gijalatyt.fromAxisAngle(zekos,_loc8_);
-            gijalatyt.getEulerAngles(fyqynyfy);
-            _loc9_ = AnimatedPlaneEffect(objectPool.getObject(AnimatedPlaneEffect));
-            _loc9_.init(param2 * _loc5_,wonuhig.position,fyqynyfy,pawimog.fps,pawimog,wova);
-            effects.addEffect(_loc9_);
+            normal = rayHit.normal;
+            angle = Math.acos(normal.z);
+            axis.x = -normal.y;
+            axis.y = normal.x;
+            axis.z = 0;
+            axis.normalize();
+            matrix.fromAxisAngle(axis,angle);
+            matrix.getEulerAngles(eulerAngles);
+            planeEffect = AnimatedPlaneEffect(objectPool.getObject(AnimatedPlaneEffect));
+            planeEffect.init(scale * size,rayHit.position,eulerAngles,shockWaveAnimation.fps,shockWaveAnimation,wova);
+            effects.addEffect(planeEffect);
          }
       }
       
-      private static function createExplosionFire(param1:Number) : void
+      private static function createExplosionFire(scale:Number) : void
       {
-         if(bucof == null)
+         if(fireAnimation == null)
          {
-            bucof = Assets.getData("tank_explosion/explosion",TextureAnimation);
+            fireAnimation = Assets.getData("tank_explosion/explosion",TextureAnimation);
          }
          position.z += 50;
-         var _loc2_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(objectPool.getObject(StaticObject3DPositionProvider));
-         _loc2_.init(position,gubeneb);
-         var _loc3_:AnimatedSpriteEffect = AnimatedSpriteEffect(objectPool.getObject(AnimatedSpriteEffect));
-         var _loc4_:Number = tilubizy * param1;
-         _loc3_.init(_loc4_,_loc4_,bucof,Math.random() * 2 * Math.PI,bucof.fps,_loc2_);
-         effects.addEffect(_loc3_);
+         var positionProvider:StaticObject3DPositionProvider = StaticObject3DPositionProvider(objectPool.getObject(StaticObject3DPositionProvider));
+         positionProvider.init(position,gubeneb);
+         var spriteEffect:AnimatedSpriteEffect = AnimatedSpriteEffect(objectPool.getObject(AnimatedSpriteEffect));
+         var size:Number = FIRE_SIZE * scale;
+         spriteEffect.init(size,size,fireAnimation,Math.random() * 2 * Math.PI,fireAnimation.fps,positionProvider);
+         effects.addEffect(spriteEffect);
       }
       
-      private static function createExplosionSmoke(param1:Number) : void
+      private static function createExplosionSmoke(scale:Number) : void
       {
-         var _loc3_:Number = NaN;
-         var _loc4_:MovingObject3DPositionProvider = null;
-         var _loc5_:AnimatedSpriteEffect = null;
-         var _loc6_:Number = NaN;
-         if(gutipur == null)
+         var speed:Number = NaN;
+         var positionProvider:MovingObject3DPositionProvider = null;
+         var spriteEffect:AnimatedSpriteEffect = null;
+         var size:Number = NaN;
+         if(smokeAnimation == null)
          {
-            gutipur = Assets.getData("tank_explosion/smoke",TextureAnimation);
+            smokeAnimation = Assets.getData("tank_explosion/smoke",TextureAnimation);
          }
-         var _loc2_:int = 0;
-         while(_loc2_ < 3)
+         var i:int = 0;
+         while(i < 3)
          {
-            _loc3_ = dyjedic + Math.random() * juwizi;
-            zerus.x = _loc3_ * (1 - 2 * Math.random());
-            zerus.y = _loc3_ * (1 - 2 * Math.random());
-            zerus.z = _loc3_ * 0.5 * (1 + Math.random());
-            _loc4_ = MovingObject3DPositionProvider(objectPool.getObject(MovingObject3DPositionProvider));
-            _loc4_.init(position,zerus,nidowyje);
-            _loc5_ = AnimatedSpriteEffect(objectPool.getObject(AnimatedSpriteEffect));
-            _loc6_ = mudova * param1;
-            _loc5_.init(_loc6_,_loc6_,gutipur,Math.random() * 2 * Math.PI,gutipur.fps,_loc4_);
-            effects.addEffect(_loc5_);
-            _loc2_++;
+            speed = dyjedic + Math.random() * juwizi;
+            velocity.x = speed * (1 - 2 * Math.random());
+            velocity.y = speed * (1 - 2 * Math.random());
+            velocity.z = speed * 0.5 * (1 + Math.random());
+            positionProvider = MovingObject3DPositionProvider(objectPool.getObject(MovingObject3DPositionProvider));
+            positionProvider.init(position,velocity,SMOKE_ACCELERATION);
+            spriteEffect = AnimatedSpriteEffect(objectPool.getObject(AnimatedSpriteEffect));
+            size = SMOKE_SIZE * scale;
+            spriteEffect.init(size,size,smokeAnimation,Math.random() * 2 * Math.PI,smokeAnimation.fps,positionProvider);
+            effects.addEffect(spriteEffect);
+            i++;
          }
       }
    }

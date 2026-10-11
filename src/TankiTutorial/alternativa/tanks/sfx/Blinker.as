@@ -3,113 +3,113 @@ package alternativa.tanks.sfx
    public class Blinker
    {
       
-      private var kebesyqug:int;
+      private var initialInterval:int;
       
-      private var lusimeciw:int;
+      private var minInterval:int;
       
-      private var gywej:int;
+      private var intervalDecrement:int;
       
-      private var zabiso:Number;
+      private var maxValue:Number;
       
-      private var lozusezyr:Number;
+      private var minValue:Number;
       
       private var gahehake:Number;
       
       private var value:Number;
       
-      private var supoly:Number;
+      private var speed:Number;
       
       private var sesibo:Number;
       
-      private var lafujot:int;
+      private var nextSwitchTime:int;
       
-      private var viwohykyr:int;
+      private var currentInterval:int;
       
-      public function Blinker(param1:int, param2:int, param3:int, param4:Number, param5:Number, param6:Number)
+      public function Blinker(initialInterval:int, minInterval:int, intervalDecrement:int, minValue:Number, maxValue:Number, param6:Number)
       {
          super();
-         this.kebesyqug = param1;
-         this.lusimeciw = param2;
-         this.gywej = param3;
-         this.lozusezyr = param4;
-         this.zabiso = param5;
+         this.initialInterval = initialInterval;
+         this.minInterval = minInterval;
+         this.intervalDecrement = intervalDecrement;
+         this.minValue = minValue;
+         this.maxValue = maxValue;
          this.gahehake = param6;
-         this.sesibo = param5 - param4;
+         this.sesibo = maxValue - minValue;
       }
       
-      public function setInitialInterval(param1:int) : void
+      public function setInitialInterval(interval:int) : void
       {
-         this.kebesyqug = param1;
+         this.initialInterval = interval;
       }
       
-      public function init(param1:int) : void
+      public function init(time:int) : void
       {
-         this.value = this.zabiso;
-         this.viwohykyr = this.kebesyqug;
-         this.supoly = this.getSpeed(-1);
-         this.lafujot = param1 + this.viwohykyr;
+         this.value = this.maxValue;
+         this.currentInterval = this.initialInterval;
+         this.speed = this.getSpeed(-1);
+         this.nextSwitchTime = time + this.currentInterval;
       }
       
       public function setMaxValue(param1:Number) : void
       {
-         if(param1 >= this.lozusezyr)
+         if(param1 >= this.minValue)
          {
-            this.zabiso = param1;
-            this.sesibo = this.zabiso - this.lozusezyr;
+            this.maxValue = param1;
+            this.sesibo = this.maxValue - this.minValue;
          }
       }
       
       public function setMinValue(param1:Number) : void
       {
-         if(param1 <= this.zabiso)
+         if(param1 <= this.maxValue)
          {
-            this.lozusezyr = param1;
-            this.sesibo = this.zabiso - this.lozusezyr;
+            this.minValue = param1;
+            this.sesibo = this.maxValue - this.minValue;
          }
       }
       
       public function getMinValue() : Number
       {
-         return this.lozusezyr;
+         return this.minValue;
       }
       
-      public function updateValue(param1:int, param2:int) : Number
+      public function updateValue(time:int, deltaTime:int) : Number
       {
-         this.value += this.supoly * param2;
-         if(this.value > this.zabiso)
+         this.value += this.speed * deltaTime;
+         if(this.value > this.maxValue)
          {
-            this.value = this.zabiso;
+            this.value = this.maxValue;
          }
-         if(this.value < this.lozusezyr)
+         if(this.value < this.minValue)
          {
-            this.value = this.lozusezyr;
+            this.value = this.minValue;
          }
-         if(param1 >= this.lafujot)
+         if(time >= this.nextSwitchTime)
          {
-            if(this.viwohykyr > this.lusimeciw)
+            if(this.currentInterval > this.minInterval)
             {
-               this.viwohykyr -= this.gywej;
-               if(this.viwohykyr < this.lusimeciw)
+               this.currentInterval -= this.intervalDecrement;
+               if(this.currentInterval < this.minInterval)
                {
-                  this.viwohykyr = this.lusimeciw;
+                  this.currentInterval = this.minInterval;
                }
             }
-            this.lafujot = param1 + this.viwohykyr;
-            if(this.supoly < 0)
+            this.nextSwitchTime = time + this.currentInterval;
+            if(this.speed < 0)
             {
-               this.supoly = this.getSpeed(1);
+               this.speed = this.getSpeed(1);
             }
             else
             {
-               this.supoly = this.getSpeed(-1);
+               this.speed = this.getSpeed(-1);
             }
          }
          return this.value;
       }
       
-      private function getSpeed(param1:Number) : Number
+      private function getSpeed(direction:Number) : Number
       {
-         return param1 * this.gahehake * this.sesibo / this.viwohykyr;
+         return direction * this.gahehake * this.sesibo / this.currentInterval;
       }
    }
 }

@@ -6,9 +6,9 @@ package alternativa.tanks.sfx
    public interface Object3DPositionProvider
    {
       
-      function initPosition(param1:Object3D) : void;
+      function initPosition(object:Object3D) : void;
       
-      function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void;
+      function updateObjectPosition(object:Object3D, camera:GameCamera, deltaTime:int) : void;
       
       function destroy() : void;
    }

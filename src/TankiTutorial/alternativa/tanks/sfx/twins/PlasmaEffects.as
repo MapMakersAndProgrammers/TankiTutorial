@@ -19,7 +19,7 @@ package alternativa.tanks.sfx.twins
    public class PlasmaEffects
    {
       
-      private static var mohesefyw:Sound;
+      private static var shotSound:Sound;
       
       private static const zaf:int = 10;
       
@@ -33,43 +33,43 @@ package alternativa.tanks.sfx.twins
       
       private static const soundManager:ISoundManager = GameData.soundManager;
       
-      public var qos:LightAnimation = LightData.soqi;
+      public var muzzleLight:LightAnimation = LightData.plasmaMuzzleLight;
       
       public function PlasmaEffects()
       {
          super();
       }
       
-      public function createShotEffects(param1:Mesh, param2:Vector3) : void
+      public function createShotEffects(turretMesh:Mesh, localMuzzlePosition:Vector3) : void
       {
-         this.createGraphicEffect(param2,param1);
-         this.createMuzzleLightEffect(param2,param1);
-         this.createSoundEffect(param1);
+         this.createGraphicEffect(localMuzzlePosition,turretMesh);
+         this.createMuzzleLightEffect(localMuzzlePosition,turretMesh);
+         this.createSoundEffect(turretMesh);
       }
       
-      private function createGraphicEffect(param1:Vector3, param2:Mesh) : void
+      private function createGraphicEffect(localMuzzlePosition:Vector3, turretMesh:Mesh) : void
       {
       }
       
-      private function createMuzzleLightEffect(param1:Vector3, param2:Mesh) : void
+      private function createMuzzleLightEffect(localMuzzlePosition:Vector3, turretMesh:Mesh) : void
       {
-         var _loc3_:AnimatedLightEffect = AnimatedLightEffect(objectPool.getObject(AnimatedLightEffect));
-         var _loc4_:MuzzlePositionProvider = MuzzlePositionProvider(objectPool.getObject(MuzzlePositionProvider));
-         _loc4_.init(param2,param1,0);
-         _loc3_.init(_loc4_,this.qos);
-         GameData.effects.addEffect(_loc3_);
+         var lightEffect:AnimatedLightEffect = AnimatedLightEffect(objectPool.getObject(AnimatedLightEffect));
+         var positionProvider:MuzzlePositionProvider = MuzzlePositionProvider(objectPool.getObject(MuzzlePositionProvider));
+         positionProvider.init(turretMesh,localMuzzlePosition,0);
+         lightEffect.init(positionProvider,this.muzzleLight);
+         GameData.effects.addEffect(lightEffect);
       }
       
-      private function createSoundEffect(param1:Mesh) : void
+      private function createSoundEffect(turretMesh:Mesh) : void
       {
-         if(mohesefyw == null)
+         if(shotSound == null)
          {
-            mohesefyw = Assets.getData("plasma_shot",Sound);
+            shotSound = Assets.getData("plasma_shot",Sound);
          }
-         var _loc2_:Number = 0.8;
-         var _loc3_:Sound3D = Sound3D.create(mohesefyw,SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,_loc2_);
-         Utils3D.neputi.reset(param1.x,param1.y,param1.z);
-         soundManager.addEffect(Sound3DEffect.create(objectPool,Utils3D.neputi,_loc3_));
+         var volume:Number = 0.8;
+         var sound:Sound3D = Sound3D.create(shotSound,SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,volume);
+         Utils3D.neputi.reset(turretMesh.x,turretMesh.y,turretMesh.z);
+         soundManager.addEffect(Sound3DEffect.create(objectPool,Utils3D.neputi,sound));
       }
    }
 }

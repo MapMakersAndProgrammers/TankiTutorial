@@ -6,15 +6,15 @@ package alternativa.tanks.sfx
    public interface ISound3DEffect
    {
       
-      function play(param1:int, param2:GameCamera) : void;
+      function play(deltaTime:int, camera:GameCamera) : void;
       
       function destroy() : void;
       
       function kill() : void;
       
-      function set enabled(param1:Boolean) : void;
+      function set enabled(value:Boolean) : void;
       
-      function readPosition(param1:Vector3) : void;
+      function readPosition(result:Vector3) : void;
       
       function get numSounds() : int;
    }

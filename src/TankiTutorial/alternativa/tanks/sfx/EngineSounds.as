@@ -8,118 +8,118 @@ package alternativa.tanks.sfx
    public class EngineSounds
    {
       
-      public static const pubevih:int = 0;
+      public static const SILENT_MODE:int = 0;
       
-      public static const qanigak:int = 1;
+      public static const IDLE_MODE:int = 1;
       
-      public static const docic:int = 2;
+      public static const ACCELERATION_MODE:int = 2;
       
-      public static const quqec:int = 3;
+      public static const MOVING_MODE:int = 3;
       
-      public static const daqizinan:int = 4;
+      public static const TURNING_MODE:int = 4;
       
-      private static const fudofeqal:Number = 0.001;
+      private static const FADE_SPEED:Number = 0.001;
       
-      private var junyji:int = 0;
+      private var mode:int = 0;
       
-      private var nusu:Sound3D;
+      private var currentSound:Sound3D;
       
-      private var lifeka:Sound3D;
+      private var idleSound:Sound3D;
       
-      private var logada:Sound3D;
+      private var startSound:Sound3D;
       
-      private var luwecy:Sound3D;
+      private var movingSound:Sound3D;
       
       private var channel:SoundChannel;
       
-      private var rawo:Boolean;
+      private var fading:Boolean;
       
-      private var jetagecon:Number = 1;
+      private var minVolume:Number = 1;
       
-      private var fuvuwyv:Sound3D;
+      private var nextSound:Sound3D;
       
-      public function EngineSounds(param1:Sound, param2:Sound, param3:Sound)
+      public function EngineSounds(idleSound:Sound, startSound:Sound, movingSound:Sound)
       {
          super();
-         var _loc4_:Number = SoundOptions.suwyc;
-         var _loc5_:Number = SoundOptions.bapewa;
+         var nearRadius:Number = SoundOptions.nearRadius;
+         var farRadius:Number = SoundOptions.farRadius;
          var _loc6_:Number = SoundOptions.fyvilyv;
-         var _loc7_:Number = 1;
-         this.lifeka = Sound3D.create(param1,_loc4_,_loc5_,_loc6_,2);
-         this.logada = Sound3D.create(param2,_loc4_,_loc5_,_loc6_,_loc7_);
-         this.luwecy = Sound3D.create(param3,_loc4_,_loc5_,_loc6_,_loc7_);
-         this.nusu = this.lifeka;
+         var volume:Number = 1;
+         this.idleSound = Sound3D.create(idleSound,nearRadius,farRadius,_loc6_,2);
+         this.startSound = Sound3D.create(startSound,nearRadius,farRadius,_loc6_,volume);
+         this.movingSound = Sound3D.create(movingSound,nearRadius,farRadius,_loc6_,volume);
+         this.currentSound = this.idleSound;
       }
       
-      public function update(param1:int, param2:Vector3, param3:Vector3, param4:Vector3) : void
+      public function update(deltaTime:int, cameraPosition:Vector3, position:Vector3, param4:Vector3) : void
       {
-         if(this.junyji != pubevih)
+         if(this.mode != SILENT_MODE)
          {
-            if(this.rawo)
+            if(this.fading)
             {
-               this.nusu.volume -= fudofeqal * param1;
-               if(this.nusu.volume < this.jetagecon)
+               this.currentSound.volume -= FADE_SPEED * deltaTime;
+               if(this.currentSound.volume < this.minVolume)
                {
-                  this.rawo = false;
+                  this.fading = false;
                   this.stop();
-                  this.nusu = this.lifeka;
-                  this.nusu.volume = this.junyji == qanigak ? 2 : 3;
-                  this.nusu.play(0,10000);
+                  this.currentSound = this.idleSound;
+                  this.currentSound.volume = this.mode == IDLE_MODE ? 2 : 3;
+                  this.currentSound.play(0,10000);
                }
             }
-            if(this.fuvuwyv != null)
+            if(this.nextSound != null)
             {
                this.channel = null;
-               this.nusu.stop();
-               this.nusu = this.fuvuwyv;
-               this.nusu.volume = 1;
-               this.nusu.play(0,10000);
-               this.fuvuwyv = null;
+               this.currentSound.stop();
+               this.currentSound = this.nextSound;
+               this.currentSound.volume = 1;
+               this.currentSound.play(0,10000);
+               this.nextSound = null;
             }
-            this.nusu.checkVolume(param2,param3,param4);
+            this.currentSound.checkVolume(cameraPosition,position,param4);
          }
       }
       
       public function setSilentMode() : void
       {
-         if(this.junyji != pubevih)
+         if(this.mode != SILENT_MODE)
          {
-            this.junyji = pubevih;
+            this.mode = SILENT_MODE;
             this.stop();
          }
       }
       
       public function setIdleMode() : void
       {
-         if(this.junyji != qanigak)
+         if(this.mode != IDLE_MODE)
          {
-            if(this.junyji == pubevih)
+            if(this.mode == SILENT_MODE)
             {
-               this.nusu = this.lifeka;
-               this.nusu.volume = 1;
-               this.nusu.play(0,1000);
+               this.currentSound = this.idleSound;
+               this.currentSound.volume = 1;
+               this.currentSound.play(0,1000);
             }
             else
             {
-               this.rawo = true;
-               this.jetagecon = 0.2;
+               this.fading = true;
+               this.minVolume = 0.2;
             }
-            this.junyji = qanigak;
+            this.mode = IDLE_MODE;
          }
       }
       
       public function setAccelerationMode() : void
       {
-         if(this.junyji == docic || this.junyji == quqec)
+         if(this.mode == ACCELERATION_MODE || this.mode == MOVING_MODE)
          {
             return;
          }
-         this.rawo = false;
-         this.junyji = docic;
-         this.nusu.stop();
-         this.nusu = this.logada;
-         this.nusu.volume = 1;
-         this.channel = this.nusu.play(0,0);
+         this.fading = false;
+         this.mode = ACCELERATION_MODE;
+         this.currentSound.stop();
+         this.currentSound = this.startSound;
+         this.currentSound.volume = 1;
+         this.channel = this.currentSound.play(0,0);
          if(this.channel != null)
          {
             this.channel.addEventListener(Event.SOUND_COMPLETE,this.soundComplete);
@@ -128,21 +128,21 @@ package alternativa.tanks.sfx
       
       public function setTurningMode() : void
       {
-         if(this.junyji != daqizinan)
+         if(this.mode != TURNING_MODE)
          {
-            if(this.junyji == qanigak)
+            if(this.mode == IDLE_MODE)
             {
-               if(!this.rawo)
+               if(!this.fading)
                {
-                  this.nusu.volume = 3;
+                  this.currentSound.volume = 3;
                }
             }
             else
             {
-               this.rawo = true;
+               this.fading = true;
             }
-            this.jetagecon = 0.6;
-            this.junyji = daqizinan;
+            this.minVolume = 0.6;
+            this.mode = TURNING_MODE;
          }
       }
       
@@ -153,30 +153,30 @@ package alternativa.tanks.sfx
             this.channel.removeEventListener(Event.SOUND_COMPLETE,this.soundComplete);
             this.channel = null;
          }
-         this.nusu.stop();
+         this.currentSound.stop();
       }
       
       public function destroy() : void
       {
          this.stop();
-         Sound3D.destroy(this.lifeka);
-         this.lifeka = null;
-         Sound3D.destroy(this.logada);
-         this.logada = null;
-         Sound3D.destroy(this.luwecy);
-         this.luwecy = null;
+         Sound3D.destroy(this.idleSound);
+         this.idleSound = null;
+         Sound3D.destroy(this.startSound);
+         this.startSound = null;
+         Sound3D.destroy(this.movingSound);
+         this.movingSound = null;
       }
       
-      private function soundComplete(param1:Event) : void
+      private function soundComplete(e:Event) : void
       {
-         if(this.channel == null || this.junyji != docic)
+         if(this.channel == null || this.mode != ACCELERATION_MODE)
          {
             return;
          }
          this.channel.removeEventListener(Event.SOUND_COMPLETE,this.soundComplete);
-         this.junyji = quqec;
-         this.luwecy.volume = this.logada.volume;
-         this.fuvuwyv = this.luwecy;
+         this.mode = MOVING_MODE;
+         this.movingSound.volume = this.startSound.volume;
+         this.nextSound = this.movingSound;
       }
    }
 }
