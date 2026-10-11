@@ -24,7 +24,7 @@ package alternativa.tanks.sfx.flamethrower
       
       protected var loopAnimation:LightAnimation;
       
-      protected var racefom:int;
+      protected var startTime:int;
       
       protected var loopTime:int;
       
@@ -46,10 +46,10 @@ package alternativa.tanks.sfx.flamethrower
       
       protected var stopTime:int;
       
-      public function StreamLightEffect(param1:Pool, param2:Light3D)
+      public function StreamLightEffect(pool:Pool, light:Light3D)
       {
-         super(param1);
-         this.light = param2;
+         super(pool);
+         this.light = light;
       }
       
       public function addedToScene(container:Object3DContainer) : void
@@ -72,8 +72,8 @@ package alternativa.tanks.sfx.flamethrower
          if(this.starting)
          {
             this.time += deltaTime;
-            this.startAnimation.updateByTime(this.light,this.time,this.racefom);
-            if(this.time >= this.racefom)
+            this.startAnimation.updateByTime(this.light,this.time,this.startTime);
+            if(this.time >= this.startTime)
             {
                this.starting = false;
                this.time = 0;

@@ -20,7 +20,7 @@ package alternativa.tanks.sfx
       
       private var frameIndex:Number;
       
-      private var luzulo:Number;
+      private var framesPerMs:Number;
       
       private var numLoops:int;
       
@@ -32,23 +32,23 @@ package alternativa.tanks.sfx
       
       private var alphaMultiplier:Number;
       
-      public function LimitedDistanceAnimatedSpriteEffect(param1:Pool)
+      public function LimitedDistanceAnimatedSpriteEffect(pool:Pool)
       {
-         super(param1);
+         super(pool);
          this.sprite = new AnimatedSprite3D(1,1);
          this.sprite.useShadowMap = true;
          this.sprite.useLight = false;
       }
       
-      public function init(width:Number, height:Number, animation:TextureAnimation, rotation:Number, param5:Object3DPositionProvider, originX:Number = 0.5, originY:Number = 0.5, colorTransform:ColorTransform = null, softAttenuation:Number = 130, blendMode:String = "normal", param11:Number = 1000000, param12:Number = 1000000, param13:Number = 1) : void
+      public function init(width:Number, height:Number, animation:TextureAnimation, rotation:Number, positionProvider:Object3DPositionProvider, originX:Number = 0.5, originY:Number = 0.5, colorTransform:ColorTransform = null, softAttenuation:Number = 130, blendMode:String = "normal", nearDistance:Number = 1000000, farDistance:Number = 1000000, alphaMultiplier:Number = 1) : void
       {
-         this.alphaMultiplier = param13;
+         this.alphaMultiplier = alphaMultiplier;
          this.initSprite(width,height,rotation,originX,originY,colorTransform,animation,softAttenuation,blendMode);
-         this.nearDistance = param11;
-         this.farDistance = param12;
-         param5.initPosition(this.sprite);
-         this.luzulo = 0.001 * animation.fps;
-         this.positionProvider = param5;
+         this.nearDistance = nearDistance;
+         this.farDistance = farDistance;
+         positionProvider.initPosition(this.sprite);
+         this.framesPerMs = 0.001 * animation.fps;
+         this.positionProvider = positionProvider;
          this.frameIndex = 0;
          this.numLoops = 1;
       }
@@ -61,7 +61,7 @@ package alternativa.tanks.sfx
       public function play(deltaTime:int, camera:GameCamera) : Boolean
       {
          this.sprite.setFrameIndex(this.frameIndex);
-         this.frameIndex += deltaTime * this.luzulo;
+         this.frameIndex += deltaTime * this.framesPerMs;
          this.positionProvider.updateObjectPosition(this.sprite,camera,deltaTime);
          if(this.numLoops > 0 && this.frameIndex >= this.sprite.getNumFrames())
          {

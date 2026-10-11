@@ -43,7 +43,7 @@ package tutorial.tasks
       
       protected var controller:CommonTankController;
       
-      protected var racefom:uint;
+      protected var startTime:uint;
       
       protected var state:int = 0;
       
@@ -95,7 +95,7 @@ package tutorial.tasks
       protected function tryShoot(time:uint) : int
       {
          var target:Tank = null;
-         if(time - this.racefom < this.shootDelay)
+         if(time - this.startTime < this.shootDelay)
          {
             return 0;
          }
@@ -177,7 +177,7 @@ package tutorial.tasks
          var timeData:TimeData = GameData.time;
          if(timeData.time - this.initTime > 1000)
          {
-            this.racefom = getTimer();
+            this.startTime = getTimer();
             this.state = STATE_EXECUTE;
             this.tank.skin.setAlpha(1);
          }

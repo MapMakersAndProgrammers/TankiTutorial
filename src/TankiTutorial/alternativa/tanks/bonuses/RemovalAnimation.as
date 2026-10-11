@@ -40,15 +40,15 @@ package alternativa.tanks.bonuses
       
       private var blinkStarted:Boolean;
       
-      public function RemovalAnimation(param1:Pool)
+      public function RemovalAnimation(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function init(param1:BattleScene3D, bonus:BattleBonus, lifeTime:int) : void
+      public function init(battleScene:BattleScene3D, bonus:BattleBonus, lifeTime:int) : void
       {
          var time:int = getTimer();
-         this.battleScene = param1;
+         this.battleScene = battleScene;
          this.bonusMesh = bonus.getBonusMesh();
          this.blinkStartTime = time + lifeTime - BLINK_DURATION;
          this.blinkStarted = false;
@@ -62,7 +62,7 @@ package alternativa.tanks.bonuses
          {
             this.blinker.setInitialInterval(INITIAL_INTERVAL);
          }
-         param1.addRenderer(this,0);
+         battleScene.addRenderer(this,0);
          bonus.nuziged.addOnce(this.onBonusPickup);
          bonus.lybaluh.addOnce(this.onBonusRemove);
       }

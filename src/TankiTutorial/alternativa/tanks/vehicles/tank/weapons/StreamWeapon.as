@@ -153,7 +153,7 @@ package alternativa.tanks.vehicles.tank.weapons
       private function startShoot(time:int) : void
       {
          var energy:Number = NaN;
-         var _loc3_:Tank = null;
+         var tank:Tank = null;
          if(!this.shooting)
          {
             this.shooting = true;
@@ -161,8 +161,8 @@ package alternativa.tanks.vehicles.tank.weapons
             this.baseTime = this.getBaseTimeForShootingMode(time,energy);
             this.calculateTicksNumber(energy);
             this.nextTickTime = time + this.tickInterval;
-            _loc3_ = getTank();
-            this.effects.startEffects(_loc3_.tankBody.body,_loc3_.turret.muzzles[0],_loc3_.skin.turretMesh);
+            tank = getTank();
+            this.effects.startEffects(tank.tankBody.body,tank.turret.muzzles[0],tank.skin.turretMesh);
          }
       }
       
@@ -189,9 +189,9 @@ package alternativa.tanks.vehicles.tank.weapons
          var body:Body = null;
          var targetTank:Tank = null;
          var turretData:TurretData = getData();
-         var _loc2_:Tank = getTank();
-         turretData.update(_loc2_,0);
-         this.targetingSystem.getTargets(_loc2_.tankBody.body,turretData.barrelLength,qipuji,turretData.barrelOrigin,turretData.direction,turretData.xAxis,targets,distances);
+         var tank:Tank = getTank();
+         turretData.update(tank,0);
+         this.targetingSystem.getTargets(tank.tankBody.body,turretData.barrelLength,qipuji,turretData.barrelOrigin,turretData.direction,turretData.xAxis,targets,distances);
          var numTargets:int = int(targets.length);
          if(numTargets == 1)
          {
@@ -218,11 +218,11 @@ package alternativa.tanks.vehicles.tank.weapons
          var targetTank:Tank = null;
          this.nextTickTime = time + this.tickInterval;
          var turretData:TurretData = getData();
-         var _loc3_:Tank = getTank();
-         turretData.update(_loc3_,0);
+         var tank:Tank = getTank();
+         turretData.update(tank,0);
          targets.length = 0;
          distances.length = 0;
-         this.targetingSystem.getTargets(_loc3_.tankBody.body,turretData.barrelLength,qipuji,turretData.barrelOrigin,turretData.direction,turretData.xAxis,targets,distances);
+         this.targetingSystem.getTargets(tank.tankBody.body,turretData.barrelLength,qipuji,turretData.barrelOrigin,turretData.direction,turretData.xAxis,targets,distances);
          var numTargets:int = int(targets.length);
          var i:int = 0;
          while(i < numTargets)

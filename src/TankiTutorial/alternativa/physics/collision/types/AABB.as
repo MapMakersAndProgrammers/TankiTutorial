@@ -22,14 +22,14 @@ package alternativa.physics.collision.types
          super();
       }
       
-      public function setSize(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number) : void
+      public function setSize(minX:Number, minY:Number, minZ:Number, maxX:Number, maxY:Number, maxZ:Number) : void
       {
-         this.minX = param1;
-         this.minY = param2;
-         this.minZ = param3;
-         this.maxX = param4;
-         this.maxY = param5;
-         this.maxZ = param6;
+         this.minX = minX;
+         this.minY = minY;
+         this.minZ = minZ;
+         this.maxX = maxX;
+         this.maxY = maxY;
+         this.maxZ = maxZ;
       }
       
       public function addBoundBox(boundBox:AABB) : void

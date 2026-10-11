@@ -50,14 +50,14 @@ package alternativa.tanks.sfx.flamethrower
       
       private function setFrame(frame:UVFrame) : void
       {
-         gar.u = frame.topLeftU;
-         gar.v = frame.topLeftV;
-         nityt.u = frame.topLeftU;
-         nityt.v = frame.bottomRightV;
-         fysu.u = frame.bottomRightU;
-         fysu.v = frame.bottomRightV;
-         rok.u = frame.bottomRightU;
-         rok.v = frame.topLeftV;
+         a.u = frame.topLeftU;
+         a.v = frame.topLeftV;
+         b.u = frame.topLeftU;
+         b.v = frame.bottomRightV;
+         c.u = frame.bottomRightU;
+         c.v = frame.bottomRightV;
+         d.u = frame.bottomRightU;
+         d.v = frame.topLeftV;
       }
    }
 }

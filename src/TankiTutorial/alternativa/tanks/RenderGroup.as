@@ -7,38 +7,38 @@ package alternativa.tanks
       
       private var renderers:Vector.<Renderer> = new Vector.<Renderer>();
       
-      private var jiso:int;
+      private var numRenderers:int;
       
       public function RenderGroup()
       {
          super();
       }
       
-      public function addRenderer(param1:Renderer) : void
+      public function addRenderer(renderer:Renderer) : void
       {
-         if(this.renderers.indexOf(param1) < 0)
+         if(this.renderers.indexOf(renderer) < 0)
          {
-            this.renderers[this.jiso++] = param1;
+            this.renderers[this.numRenderers++] = renderer;
          }
       }
       
-      public function removeRenderer(param1:Renderer) : void
+      public function removeRenderer(renderer:Renderer) : void
       {
-         var _loc2_:int = this.renderers.indexOf(param1);
-         if(_loc2_ >= 0)
+         var index:int = this.renderers.indexOf(renderer);
+         if(index >= 0)
          {
-            this.renderers[_loc2_] = this.renderers[--this.jiso];
-            this.renderers[this.jiso] = null;
+            this.renderers[index] = this.renderers[--this.numRenderers];
+            this.renderers[this.numRenderers] = null;
          }
       }
       
-      public function render(param1:int, param2:int) : void
+      public function render(time:int, deltaTime:int) : void
       {
-         var _loc3_:int = 0;
-         while(_loc3_ < this.jiso)
+         var i:int = 0;
+         while(i < this.numRenderers)
          {
-            Renderer(this.renderers[_loc3_]).render(param1,param2);
-            _loc3_++;
+            Renderer(this.renderers[i]).render(time,deltaTime);
+            i++;
          }
       }
    }

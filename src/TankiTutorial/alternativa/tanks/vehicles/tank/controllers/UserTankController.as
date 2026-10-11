@@ -14,16 +14,16 @@ package alternativa.tanks.vehicles.tank.controllers
       
       private var handlers:Dictionary;
       
-      public function UserTankController(param1:IEventDispatcher, param2:Tank)
+      public function UserTankController(eventSource:IEventDispatcher, tank:Tank)
       {
-         super(param2);
+         super(tank);
          this.initKeyHandlers();
-         param1.addEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
-         param1.addEventListener(KeyboardEvent.KEY_UP,this.onKey);
-         param1.addEventListener(MouseEvent.MOUSE_DOWN,this.onMouse);
-         param1.addEventListener(MouseEvent.MOUSE_UP,this.onMouse);
-         param1.addEventListener(ControlModeChangeEvent.CONTROL_MODE_CHANGED,this.onMouseModeChanged);
-         param1.addEventListener(FullScreenEvent.FULL_SCREEN,this.onFullScreen);
+         eventSource.addEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
+         eventSource.addEventListener(KeyboardEvent.KEY_UP,this.onKey);
+         eventSource.addEventListener(MouseEvent.MOUSE_DOWN,this.onMouse);
+         eventSource.addEventListener(MouseEvent.MOUSE_UP,this.onMouse);
+         eventSource.addEventListener(ControlModeChangeEvent.CONTROL_MODE_CHANGED,this.onMouseModeChanged);
+         eventSource.addEventListener(FullScreenEvent.FULL_SCREEN,this.onFullScreen);
       }
       
       private function onFullScreen(fullScreenEvent:FullScreenEvent) : void
@@ -43,7 +43,7 @@ package alternativa.tanks.vehicles.tank.controllers
       private function onMouse(mouseEvent:MouseEvent) : void
       {
          var state:int = 0;
-         if(GameData.kumiteva && Boolean(Tank(tank).turretController.isNotLocked()))
+         if(GameData.mouseModeEnabled && Boolean(Tank(tank).turretController.isNotLocked()))
          {
             state = this.onKeyFire(mouseEvent.type == MouseEvent.MOUSE_DOWN);
             if(state != controlState)
@@ -63,7 +63,7 @@ package alternativa.tanks.vehicles.tank.controllers
          this.setHandlers(ChassisControlKeyMap.fireKeys,this.onKeyFire);
       }
       
-      override public function update(time:int, deltaTime:int, param3:Number) : void
+      override public function update(time:int, deltaTime:int, dt:Number) : void
       {
          if(!_enabled)
          {
@@ -74,7 +74,7 @@ package alternativa.tanks.vehicles.tank.controllers
          {
             controlState &= ~(1 << FIRE);
          }
-         super.update(time,deltaTime,param3);
+         super.update(time,deltaTime,dt);
       }
       
       private function onKey(keyboardEvent:KeyboardEvent) : void

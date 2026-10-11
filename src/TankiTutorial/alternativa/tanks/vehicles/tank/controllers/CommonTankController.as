@@ -24,10 +24,10 @@ package alternativa.tanks.vehicles.tank.controllers
       
       public var tank:Tank;
       
-      public function CommonTankController(param1:Tank)
+      public function CommonTankController(tank:Tank)
       {
          super();
-         this.tank = param1;
+         this.tank = tank;
       }
       
       public function get enabled() : Boolean
@@ -102,12 +102,12 @@ package alternativa.tanks.vehicles.tank.controllers
          this.controlState &= ~(1 << action);
       }
       
-      public function setAction(param1:int) : void
+      public function setAction(controlState:int) : void
       {
-         this.controlState = param1;
+         this.controlState = controlState;
       }
       
-      public function update(time:int, deltaTime:int, param3:Number) : void
+      public function update(time:int, deltaTime:int, dt:Number) : void
       {
          var movementDirection:int = 0;
          var turnDirection:int = 0;

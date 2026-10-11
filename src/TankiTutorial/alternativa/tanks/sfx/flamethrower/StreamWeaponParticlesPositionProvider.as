@@ -18,15 +18,15 @@ package alternativa.tanks.sfx.flamethrower
       
       private var weights:Array = [0.5,0.8,1,0.5,0.3,0.05];
       
-      public function StreamWeaponParticlesPositionProvider(param1:Pool)
+      public function StreamWeaponParticlesPositionProvider(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function init(param1:StreamWeaponGraphicEffect, param2:CollisionObject3DPositionProvider) : void
+      public function init(graphicEffect:StreamWeaponGraphicEffect, collisionPositionProvider:CollisionObject3DPositionProvider) : void
       {
-         this.graphicEffect = param1;
-         this.collisionPositionProvider = param2;
+         this.graphicEffect = graphicEffect;
+         this.collisionPositionProvider = collisionPositionProvider;
       }
       
       public function initPosition(object:Object3D) : void

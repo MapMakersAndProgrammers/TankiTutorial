@@ -119,9 +119,9 @@ package tutorial
       
       public static var mouseEnabled:Boolean = false;
       
-      public static var kumiteva:Boolean = false;
+      public static var mouseModeEnabled:Boolean = false;
       
-      public static var qazul:Boolean = false;
+      public static var rightMousePressed:Boolean = false;
       
       public function GameData()
       {
@@ -293,16 +293,16 @@ package tutorial
       
       private static function calculateColorTransform(ambientColor:uint, lightColor:uint, factor:Number = 1) : ColorTransform
       {
-         var _loc4_:Number = (ambientColor >> 16 & 0xFF) / 255;
-         var _loc5_:Number = (ambientColor >> 8 & 0xFF) / 255;
-         var _loc6_:Number = (ambientColor & 0xFF) / 255;
-         var _loc7_:Number = (lightColor >> 16 & 0xFF) / 255;
-         var _loc8_:Number = (lightColor >> 8 & 0xFF) / 255;
-         var _loc9_:Number = (lightColor & 0xFF) / 255;
+         var ambientR:Number = (ambientColor >> 16 & 0xFF) / 255;
+         var ambientG:Number = (ambientColor >> 8 & 0xFF) / 255;
+         var ambientB:Number = (ambientColor & 0xFF) / 255;
+         var lightR:Number = (lightColor >> 16 & 0xFF) / 255;
+         var lightG:Number = (lightColor >> 8 & 0xFF) / 255;
+         var lightB:Number = (lightColor & 0xFF) / 255;
          var result:ColorTransform = new ColorTransform();
-         result.redMultiplier = (_loc4_ + _loc7_ * factor) * 2;
-         result.greenMultiplier = (_loc5_ + _loc8_ * factor) * 2;
-         result.blueMultiplier = (_loc6_ + _loc9_ * factor) * 2;
+         result.redMultiplier = (ambientR + lightR * factor) * 2;
+         result.greenMultiplier = (ambientG + lightG * factor) * 2;
+         result.blueMultiplier = (ambientB + lightB * factor) * 2;
          return result;
       }
    }

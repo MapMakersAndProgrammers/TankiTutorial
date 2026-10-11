@@ -5,7 +5,7 @@ package
    public class CameraPositionData
    {
       
-      public var jomuc:Number = 0;
+      public var time:Number = 0;
       
       public var widaqurag:Number = 0;
       

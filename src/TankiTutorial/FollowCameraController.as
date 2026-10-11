@@ -35,7 +35,7 @@ package
       
       private static const lilotes:Vector3 = new Vector3();
       
-      private static const bec:Vector3 = new Vector3();
+      private static const direction:Vector3 = new Vector3();
       
       private static const source:Vector3D = new Vector3D();
       
@@ -49,7 +49,7 @@ package
       
       private static const axis:Vector3 = new Vector3();
       
-      private static const janimamu:Vector3 = new Vector3();
+      private static const rayDirection:Vector3 = new Vector3();
       
       public static var visonyh:Number = 10;
       
@@ -67,7 +67,7 @@ package
       
       private static const lucykocah:Vector3 = new Vector3();
       
-      private static const hifoca:Vector3 = new Vector3();
+      private static const rayOrigin:Vector3 = new Vector3();
       
       private static const rejefylyh:Vector3 = new Vector3();
       
@@ -117,15 +117,15 @@ package
       
       private var cameraT:Number = 0;
       
-      private var wuzyrodu:Point = new Point();
+      private var cameraPosition:Point = new Point();
       
-      private var tabu:Point;
+      private var p0:Point;
       
-      private var fybug:Point;
+      private var p1:Point;
       
-      private var vibocyqi:Point;
+      private var p2:Point;
       
-      private var ref:Point;
+      private var p3:Point;
       
       private var collider:EllipsoidCollider;
       
@@ -137,7 +137,7 @@ package
       
       private var tazor:Number = 0;
       
-      private var run:Matrix3 = new Matrix3();
+      private var matrix:Matrix3 = new Matrix3();
       
       private var dodycoli:Number;
       
@@ -149,10 +149,10 @@ package
             throw new ArgumentError("Parameter stage cannot be null");
          }
          this.stage = stage;
-         this.tabu = new Point(145,545);
-         this.fybug = new Point(930,1395);
-         this.vibocyqi = new Point(2245,1565);
-         this.ref = new Point(3105,760);
+         this.p0 = new Point(145,545);
+         this.p1 = new Point(930,1395);
+         this.p2 = new Point(2245,1565);
+         this.p3 = new Point(3105,760);
          this.collider = new EllipsoidCollider(COLLIDER_RADIUS,COLLIDER_RADIUS,COLLIDER_RADIUS);
          this.initCameraComponents();
          this.setCameraT(0.2);
@@ -212,16 +212,16 @@ package
          this.target = target;
       }
       
-      public function setTargetParams(param1:Vector3, param2:Vector3) : void
+      public function setTargetParams(targetPosition:Vector3, targetDirection:Vector3) : void
       {
-         this.targetPosition.copy(param1);
-         this.targetDirection.copy(param2);
+         this.targetPosition.copy(targetPosition);
+         this.targetDirection.copy(targetDirection);
          this.kocu = 0;
-         this.getCameraPositionData(param1,param2,this.cameraPositionData);
+         this.getCameraPositionData(targetPosition,targetDirection,this.cameraPositionData);
          this.position.copy(this.cameraPositionData.position);
          this.rotation.x = this.getPitchAngle(this.cameraPositionData) - 0.5 * Math.PI;
          this.rotation.y = 0;
-         this.rotation.z = Math.atan2(-param2.x,param2.y);
+         this.rotation.z = Math.atan2(-targetDirection.x,targetDirection.y);
          this.setPosition(this.position);
          setOrientation(this.rotation);
       }
@@ -309,52 +309,52 @@ package
          {
             return;
          }
-         var _loc3_:Number = deltaTime * 0.001;
-         if(_loc3_ > 0.1)
+         var dt:Number = deltaTime * 0.001;
+         if(dt > 0.1)
          {
-            _loc3_ = 0.1;
+            dt = 0.1;
          }
-         this.updateCameraHeight(_loc3_);
+         this.updateCameraHeight(dt);
          if(!this.locked)
          {
             this.recalculateTargetData();
          }
-         bec.x = this.targetDirection.x;
-         bec.y = this.targetDirection.y;
-         bec.z = this.targetDirection.z;
-         this.run.fromAxisAngle(Vector3.zAxis,this.angle);
-         bec.transform3(this.run);
-         this.getCameraPositionData(this.targetPosition,bec,this.cameraPositionData);
+         direction.x = this.targetDirection.x;
+         direction.y = this.targetDirection.y;
+         direction.z = this.targetDirection.z;
+         this.matrix.fromAxisAngle(Vector3.zAxis,this.angle);
+         direction.transform3(this.matrix);
+         this.getCameraPositionData(this.targetPosition,direction,this.cameraPositionData);
          if(isNaN(this.cameraPositionData.position.x))
          {
             return;
          }
          wele.diff(this.cameraPositionData.position,this.position);
-         var _loc4_:Number = wele.length();
-         if(_loc4_ > visonyh)
+         var distance:Number = wele.length();
+         if(distance > visonyh)
          {
-            this.linearSpeed = getLinearSpeed(_loc4_ - visonyh);
+            this.linearSpeed = getLinearSpeed(distance - visonyh);
          }
-         var _loc5_:Number = this.linearSpeed * _loc3_;
-         if(_loc5_ > _loc4_)
+         var step:Number = this.linearSpeed * dt;
+         if(step > distance)
          {
-            _loc5_ = _loc4_;
+            step = distance;
          }
-         wele.normalize().scale(_loc5_);
+         wele.normalize().scale(step);
          var pitch:Number = this.getPitchAngle(this.cameraPositionData);
-         var yaw:Number = Math.atan2(-bec.x,bec.y);
+         var yaw:Number = Math.atan2(-direction.x,direction.y);
          var _loc8_:Number = MathUtils.clampAngle(this.rotation.x + 0.5 * Math.PI);
          var _loc9_:Number = MathUtils.clampAngle(this.rotation.z);
          var _loc10_:Number = MathUtils.clampAngleFast(pitch - _loc8_);
          this.pitchSpeed = getAngularSpeed(_loc10_,this.pitchSpeed);
-         var _loc11_:Number = this.pitchSpeed * _loc3_;
+         var _loc11_:Number = this.pitchSpeed * dt;
          if(_loc10_ > 0 && _loc11_ > _loc10_ || _loc10_ < 0 && _loc11_ < _loc10_)
          {
             _loc11_ = _loc10_;
          }
          var _loc12_:Number = MathUtils.clampAngleFast(yaw - _loc9_);
          this.yawSpeed = getAngularSpeed(_loc12_,this.yawSpeed);
-         var _loc13_:Number = this.yawSpeed * _loc3_;
+         var _loc13_:Number = this.yawSpeed * dt;
          if(_loc12_ > 0 && _loc13_ > _loc12_ || _loc12_ < 0 && _loc13_ < _loc12_)
          {
             _loc13_ = _loc12_;
@@ -392,10 +392,10 @@ package
       {
          var _loc2_:Number = MathUtils.clamp(this.cameraT + this.vycy * 0.1,0,1);
          this.cameraT = MathUtils.clamp(t,0,1);
-         this.wuzyrodu.x = bezier(_loc2_,this.tabu.x,this.fybug.x,this.vibocyqi.x,this.ref.x);
-         this.wuzyrodu.y = bezier(_loc2_,this.tabu.y,this.fybug.y,this.vibocyqi.y,this.ref.y);
-         this.dycanaki = Math.atan2(this.wuzyrodu.x,this.wuzyrodu.y);
-         this.qahe = this.wuzyrodu.length;
+         this.cameraPosition.x = bezier(_loc2_,this.p0.x,this.p1.x,this.p2.x,this.p3.x);
+         this.cameraPosition.y = bezier(_loc2_,this.p0.y,this.p1.y,this.p2.y,this.p3.y);
+         this.dycanaki = Math.atan2(this.cameraPosition.x,this.cameraPosition.y);
+         this.qahe = this.cameraPosition.length;
          this.kocu = 0;
       }
       
@@ -412,7 +412,7 @@ package
          this.target.getCameraParams(this.targetPosition,this.targetDirection);
       }
       
-      private function getCameraPositionData(param1:Vector3, param2:Vector3, param3:CameraPositionData) : void
+      private function getCameraPositionData(param1:Vector3, param2:Vector3, result:CameraPositionData) : void
       {
          var _loc7_:Number = NaN;
          var _loc4_:Number = this.dycanaki;
@@ -427,24 +427,24 @@ package
             rejefylyh.x = param2.x / _loc5_;
             rejefylyh.y = param2.y / _loc5_;
          }
-         param3.widaqurag = 0;
-         param3.jomuc = 1;
-         hifoca.copy(param1);
+         result.widaqurag = 0;
+         result.time = 1;
+         rayOrigin.copy(param1);
          axis.x = rejefylyh.y;
          axis.y = -rejefylyh.x;
          rejefylyh.reverse();
          gizynuzelu.fromAxisAngle(axis,-_loc4_);
-         gizynuzelu.transformVector(rejefylyh,janimamu);
-         this.getCollisionPoint(hifoca,janimamu,this.qahe,bawen);
-         var _loc6_:Number = lilotes.copy(hifoca).subtract(bawen).length();
-         param3.jomuc = _loc6_ / this.qahe;
-         if(_loc6_ < rucuha)
+         gizynuzelu.transformVector(rejefylyh,rayDirection);
+         this.getCollisionPoint(rayOrigin,rayDirection,this.qahe,bawen);
+         var distance:Number = lilotes.copy(rayOrigin).subtract(bawen).length();
+         result.time = distance / this.qahe;
+         if(distance < rucuha)
          {
-            hifoca.copy(bawen);
-            _loc7_ = rucuha - _loc6_;
-            this.getCollisionPoint(hifoca,Vector3.zAxis,_loc7_,bawen);
+            rayOrigin.copy(bawen);
+            _loc7_ = rucuha - distance;
+            this.getCollisionPoint(rayOrigin,Vector3.zAxis,_loc7_,bawen);
          }
-         param3.position.copy(bawen);
+         result.position.copy(bawen);
       }
       
       private function getCollisionPoint(origin:Vector3, direction:Vector3, distance:Number, result:Vector3) : void
@@ -479,9 +479,9 @@ package
          }
       }
       
-      private function updateCameraHeight(param1:Number) : void
+      private function updateCameraHeight(dt:Number) : void
       {
-         var _loc2_:int = 0;
+         var dir:int = 0;
          if(this.tasufuwa < 0)
          {
             this.upPressed = true;
@@ -504,8 +504,8 @@ package
          }
          if(!this.nis && this.upPressed != this.downPressed)
          {
-            _loc2_ = this.upPressed ? 1 : -1;
-            this.tazor = this.getCameraT() + _loc2_ * camVSpeed.value * param1;
+            dir = this.upPressed ? 1 : -1;
+            this.tazor = this.getCameraT() + dir * camVSpeed.value * dt;
             this.setCameraT(this.tazor);
          }
          else
@@ -521,12 +521,12 @@ package
          {
             _loc2_ = 0;
          }
-         var _loc3_:Number = param1.jomuc;
+         var _loc3_:Number = param1.time;
          if(_loc3_ >= 1 || _loc2_ < giviwazyr || !this.alternateSettings)
          {
             return param1.widaqurag - _loc2_;
          }
-         var _loc4_:Number = this.wuzyrodu.x;
+         var _loc4_:Number = this.cameraPosition.x;
          return param1.widaqurag - Math.atan2(_loc3_ * _loc4_,nimogot * _loc4_ * (1 / Math.tan(_loc2_) - (1 - _loc3_) / Math.tan(this.dycanaki)));
       }
    }

@@ -36,10 +36,10 @@ package alternativa.tanks.bonuses
          this.bonus = bonus;
       }
       
-      public function init(param1:Vector3, param2:Vector3) : void
+      public function init(pivot:Vector3, normal:Vector3) : void
       {
-         this.pivot.copy(param1);
-         this.normal.copy(param2);
+         this.pivot.copy(pivot);
+         this.normal.copy(normal);
       }
       
       public function start() : void

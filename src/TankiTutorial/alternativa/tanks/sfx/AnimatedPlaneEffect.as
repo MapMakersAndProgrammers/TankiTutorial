@@ -27,9 +27,9 @@ package alternativa.tanks.sfx
       
       private var duration:int;
       
-      public function AnimatedPlaneEffect(param1:Pool)
+      public function AnimatedPlaneEffect(pool:Pool)
       {
-         super(param1);
+         super(pool);
          this.plane = new AnimatedPlane(BASE_SIZE);
       }
       

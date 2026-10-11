@@ -20,11 +20,11 @@ package alternativa.tanks.sfx.flamethrower
       
       private static const PARTICLE_SPEED:int = 2000;
       
-      private static const jelymy:Number = 1;
+      private static const SOUND_VOLUME:Number = 1;
       
-      private static const buwy:int = 100;
+      private static const PLANE_WIDTH:int = 100;
       
-      private static const buku:int = 300;
+      private static const PLANE_LENGTH:int = 300;
       
       private var objectPool:ObjectPool = GameData.objectPool;
       
@@ -63,9 +63,9 @@ package alternativa.tanks.sfx.flamethrower
          if(this.graphicEffect == null)
          {
             this.graphicEffect = StreamWeaponGraphicEffect(this.objectPool.getObject(StreamWeaponGraphicEffect));
-            this.graphicEffect.init(body,this.range,this.coneAngle,FlamethrowerEffectsParams.PARTICLE_SPEED,localMuzzlePosition,turretMesh,this.sfxData,GameData.physicsScene.collisionDetector,FlamethrowerEffectsParams.PLANE_WIDTH,FlamethrowerEffectsParams.PLANE_LENGTH,FlamethrowerEffectsParams.vip,FlamethrowerEffectsParams.colarac,FlamethrowerEffectsParams.coteci,FlamethrowerEffectsParams.tasimep);
+            this.graphicEffect.init(body,this.range,this.coneAngle,FlamethrowerEffectsParams.PARTICLE_SPEED,localMuzzlePosition,turretMesh,this.sfxData,GameData.physicsScene.collisionDetector,FlamethrowerEffectsParams.PLANE_WIDTH,FlamethrowerEffectsParams.PLANE_LENGTH,FlamethrowerEffectsParams.MIN_PARTICLE_SIZE,FlamethrowerEffectsParams.MAX_PARTICLE_SIZE,FlamethrowerEffectsParams.coteci,FlamethrowerEffectsParams.tasimep);
             this.effects.addEffect(this.graphicEffect);
-            sound = Sound3D.create(this.sfxData.flameSound,SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,FlamethrowerEffectsParams.jelymy);
+            sound = Sound3D.create(this.sfxData.flameSound,SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,FlamethrowerEffectsParams.SOUND_VOLUME);
             if(sound != null)
             {
                this.soundEffect = MobileSound3DEffect(this.objectPool.getObject(MobileSound3DEffect));
@@ -75,7 +75,7 @@ package alternativa.tanks.sfx.flamethrower
             this.muzzleLightEffect = OmniStreamLightEffect(this.objectPool.getObject(OmniStreamLightEffect));
             muzzlePositionProvider = MuzzlePositionProvider(this.objectPool.getObject(MuzzlePositionProvider));
             muzzlePositionProvider.init(turretMesh,localMuzzlePosition,0);
-            this.muzzleLightEffect.init(muzzlePositionProvider,this.sfxData.muzzleStartLight,this.sfxData.div);
+            this.muzzleLightEffect.init(muzzlePositionProvider,this.sfxData.muzzleStartLight,this.sfxData.muzzleLoopLight);
             this.effects.addEffect(this.muzzleLightEffect);
             this.streamLightEffect = OmniStreamLightEffect(this.objectPool.getObject(OmniStreamLightEffect));
             collisionPositionProvider = CollisionObject3DPositionProvider(this.objectPool.getObject(CollisionObject3DPositionProvider));

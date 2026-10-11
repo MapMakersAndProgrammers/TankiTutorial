@@ -54,15 +54,15 @@ package alternativa.tanks.vehicles.tank
       
       private static const qalolyris:Vector3 = new Vector3();
       
-      private static const dedit:Vector3 = new Vector3();
+      private static const zAxis:Vector3 = new Vector3();
       
-      private static const hyqirufy:Vector3 = new Vector3();
+      private static const position:Vector3 = new Vector3();
       
-      private static const jygef:Vector3 = new Vector3();
+      private static const direction:Vector3 = new Vector3();
       
-      private static const baven:Vector3 = new Vector3();
+      private static const xAxis:Vector3 = new Vector3();
       
-      private static const gof:Vector3 = new Vector3();
+      private static const yAxis:Vector3 = new Vector3();
       
       private const interpolatedPosition:Vector3 = new Vector3();
       
@@ -194,16 +194,16 @@ package alternativa.tanks.vehicles.tank
          return this.health;
       }
       
-      public function init(hullName:String, turretName:String, param3:String, param4:Number = 0) : void
+      public function init(hullName:String, turretName:String, colormapName:String, param4:Number = 0) : void
       {
          if(param4 > 0)
          {
             this.momomafoj = param4;
          }
-         this.colormapName = param3;
+         this.colormapName = colormapName;
          this.setHull(hullName);
          this.setTurret(turretName);
-         this.setColormap(param3);
+         this.setColormap(colormapName);
       }
       
       public function setHull(hullName:String) : void
@@ -276,14 +276,14 @@ package alternativa.tanks.vehicles.tank
          this.visibilityPoints = Vector.<Vector3>([new Vector3(-halfX,halfY,0),new Vector3(halfX,halfY,0),new Vector3(-halfX,0,0),new Vector3(halfX,0,0),new Vector3(-halfX,-halfY,0),new Vector3(halfX,-halfY,0)]);
       }
       
-      private function createChassis(size:Vector3, param2:TankHull) : void
+      private function createChassis(size:Vector3, tankHull:TankHull) : void
       {
          this.chassis = new TrackedChassis(this.tankBody.body,this.suspensionParams,this.maxSpeedSmoother,size);
-         this.chassis.setAcceleration(param2.acceleration);
-         this.chassis.setReverseAcceleration(param2.reverseAcceleration);
-         this.chassis.setSideAcceleration(param2.sideAcceleration);
-         this.chassis.setTurnAcceleration(param2.turnAcceleration);
-         this.chassis.setReverseTurnAcceleration(param2.reverseTurnAcceleration);
+         this.chassis.setAcceleration(tankHull.acceleration);
+         this.chassis.setReverseAcceleration(tankHull.reverseAcceleration);
+         this.chassis.setSideAcceleration(tankHull.sideAcceleration);
+         this.chassis.setTurnAcceleration(tankHull.turnAcceleration);
+         this.chassis.setReverseTurnAcceleration(tankHull.reverseTurnAcceleration);
          this.tracksAnimator = new TracksAnimator(this.chassis,this.skin,this.maxSpeedSmoother);
       }
       
@@ -321,7 +321,7 @@ package alternativa.tanks.vehicles.tank
          lilotes.z += this.zCorrection * wokymityf.mk;
          qef.setFromMatrix3(wokymityf,lilotes);
          var mountPoint:Vector3 = this.skin.getHull().mountPoint;
-         rizy.setMatrix(mountPoint.x,mountPoint.y,mountPoint.z,0,0,GameData.kumiteva ? Number(this._turretController.getCameraDirection()) : Number(this._turretController.getDirection()));
+         rizy.setMatrix(mountPoint.x,mountPoint.y,mountPoint.z,0,0,GameData.mouseModeEnabled ? Number(this._turretController.getCameraDirection()) : Number(this._turretController.getDirection()));
          rizy.append(qef);
          position.reset(rizy.md,rizy.mh,rizy.ml);
          direction.reset(rizy.mb,rizy.mf,rizy.mj);
@@ -528,24 +528,24 @@ package alternativa.tanks.vehicles.tank
       private function calculateTankDirection() : Number
       {
          this.interpolatedOrientation.toMatrix3(wokymityf);
-         wokymityf.transformVector(Vector3.zAxis,dedit);
-         dedit.normalize();
+         wokymityf.transformVector(Vector3.zAxis,zAxis);
+         zAxis.normalize();
          qalolyris.z = this.zCorrection;
          lilotes.reset();
          lilotes.transform3(wokymityf);
          lilotes.add(this.interpolatedPosition);
          qef.setFromMatrix3(wokymityf,lilotes);
-         hyqirufy.reset(qef.md,qef.mh,qef.ml);
-         jygef.reset(qef.mb,qef.mf,qef.mj);
-         jygef.normalize();
-         baven.copy(Vector3.xAxis);
-         gof.copy(Vector3.yAxis);
-         baven.projectOnPlane(dedit);
-         gof.projectOnPlane(dedit);
-         baven.normalize();
-         gof.normalize();
-         var yDot:Number = Number(gof.dot(jygef));
-         var xDot:Number = Number(baven.dot(jygef));
+         position.reset(qef.md,qef.mh,qef.ml);
+         direction.reset(qef.mb,qef.mf,qef.mj);
+         direction.normalize();
+         xAxis.copy(Vector3.xAxis);
+         yAxis.copy(Vector3.yAxis);
+         xAxis.projectOnPlane(zAxis);
+         yAxis.projectOnPlane(zAxis);
+         xAxis.normalize();
+         yAxis.normalize();
+         var yDot:Number = Number(yAxis.dot(direction));
+         var xDot:Number = Number(xAxis.dot(direction));
          return Math.acos(yDot) * (xDot > 0 ? -1 : 1);
       }
       

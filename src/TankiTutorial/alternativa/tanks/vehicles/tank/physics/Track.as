@@ -22,26 +22,26 @@ package alternativa.tanks.vehicles.tank.physics
       
       public const averageContactVelocity:Vector3 = new Vector3();
       
-      public function Track(param1:Body, param2:int, param3:Vector3, param4:Number, param5:SuspensionParams, param6:int)
+      public function Track(body:Body, numRays:int, center:Vector3, trackLength:Number, suspensionParams:SuspensionParams, side:int)
       {
          super();
-         this.body = param1;
-         this.side = param6;
-         this.setTrackParams(param2,param3,param4,param5);
+         this.body = body;
+         this.side = side;
+         this.setTrackParams(numRays,center,trackLength,suspensionParams);
       }
       
-      public function setTrackParams(param1:int, center:Vector3, trackLength:Number, param4:SuspensionParams) : void
+      public function setTrackParams(numRays:int, center:Vector3, trackLength:Number, suspensionParams:SuspensionParams) : void
       {
          var rayOrigin:Vector3 = null;
-         this.numRays = param1;
-         this.suspensionParams = param4;
-         this.rays = new Vector.<SuspensionRay>(param1);
-         var raySpacing:Number = trackLength / (param1 - 1);
+         this.numRays = numRays;
+         this.suspensionParams = suspensionParams;
+         this.rays = new Vector.<SuspensionRay>(numRays);
+         var raySpacing:Number = trackLength / (numRays - 1);
          var i:int = 0;
-         while(i < param1)
+         while(i < numRays)
          {
             rayOrigin = new Vector3(center.x,center.y + 0.5 * trackLength - i * raySpacing,center.z);
-            this.rays[i] = new SuspensionRay(this.body,rayOrigin,Vector3.down,param4);
+            this.rays[i] = new SuspensionRay(this.body,rayOrigin,Vector3.down,suspensionParams);
             i++;
          }
       }

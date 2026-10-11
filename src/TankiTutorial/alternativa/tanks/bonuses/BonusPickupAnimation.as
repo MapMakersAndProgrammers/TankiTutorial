@@ -35,19 +35,19 @@ package alternativa.tanks.bonuses
       
       private var colorOffset:int;
       
-      public function BonusPickupAnimation(param1:Pool)
+      public function BonusPickupAnimation(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function start(param1:BonusMesh, param2:BattleScene3D) : void
+      public function start(bonusMesh:BonusMesh, battleScene:BattleScene3D) : void
       {
-         this.bonusMesh = param1;
-         this.battleScene = param2;
+         this.bonusMesh = bonusMesh;
+         this.battleScene = battleScene;
          this.bonusMesh.colorTransform = this.colorTransform;
          this.timeLeft = DURATION;
          this.colorOffset = 0;
-         param2.addRenderer(this,0);
+         battleScene.addRenderer(this,0);
       }
       
       public function render(time:int, deltaTime:int) : void

@@ -9,20 +9,20 @@ package alternativa.tanks.sfx.flamethrower
    public final class OmniStreamLightEffect extends StreamLightEffect
    {
       
-      public function OmniStreamLightEffect(param1:Pool)
+      public function OmniStreamLightEffect(pool:Pool)
       {
-         super(param1,new OmniLight(0,0,0));
+         super(pool,new OmniLight(0,0,0));
       }
       
-      public function init(param1:Object3DPositionProvider, param2:LightAnimation, param3:LightAnimation, param4:Number = 1) : void
+      public function init(positionProvider:Object3DPositionProvider, startAnimation:LightAnimation, loopAnimation:LightAnimation, scale:Number = 1) : void
       {
-         this.positionProvider = param1;
-         this.racefom = param2.getLiveTime();
-         this.loopTime = param3.getLiveTime();
-         this.startAnimation = param2;
-         this.loopAnimation = param3;
+         this.positionProvider = positionProvider;
+         this.startTime = startAnimation.getLiveTime();
+         this.loopTime = loopAnimation.getLiveTime();
+         this.startAnimation = startAnimation;
+         this.loopAnimation = loopAnimation;
          this.tize = loopTime / 4;
-         this.scale = param4;
+         this.scale = scale;
          starting = true;
          time = 0;
          alive = true;

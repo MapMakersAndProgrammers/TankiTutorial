@@ -35,24 +35,24 @@ package alternativa.tanks.sfx
       
       private var fadeSpeed:Number;
       
-      public function MobileSound3DEffect(param1:Pool)
+      public function MobileSound3DEffect(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function init(param1:Sound3D, param2:Object3D, param3:int, param4:int) : void
+      public function init(sound:Sound3D, object:Object3D, delay:int, loops:int) : void
       {
-         this.sound = param1;
-         this.object = param2;
-         this.delay = param3;
-         this.loops = param4;
+         this.sound = sound;
+         this.object = object;
+         this.delay = delay;
+         this.loops = loops;
          this.killed = false;
          this.started = false;
          this._enabled = false;
          this.time = 0;
-         if(param1 != null)
+         if(sound != null)
          {
-            this.volume = param1.volume;
+            this.volume = sound.volume;
          }
          this.fadeSpeed = 0;
       }

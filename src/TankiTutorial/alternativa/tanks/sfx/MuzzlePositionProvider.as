@@ -18,15 +18,15 @@ package alternativa.tanks.sfx
       
       private var localMuzzlePosition:Vector3 = new Vector3();
       
-      public function MuzzlePositionProvider(param1:Pool)
+      public function MuzzlePositionProvider(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function init(param1:Object3D, param2:Vector3, param3:Number) : void
+      public function init(turret:Object3D, localMuzzlePosition:Vector3, param3:Number) : void
       {
-         this.turret = param1;
-         this.localMuzzlePosition.copy(param2);
+         this.turret = turret;
+         this.localMuzzlePosition.copy(localMuzzlePosition);
          this.localMuzzlePosition.y += param3;
       }
       

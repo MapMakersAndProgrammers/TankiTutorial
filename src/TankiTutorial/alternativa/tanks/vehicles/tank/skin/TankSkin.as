@@ -94,18 +94,18 @@ package alternativa.tanks.vehicles.tank.skin
          }
       }
       
-      public function addToContainer(param1:Object3DContainer, param2:Camera3D) : void
+      public function addToContainer(container:Object3DContainer, camera:Camera3D) : void
       {
-         this.container = param1;
+         this.container = container;
          if(this._hullMesh != null)
          {
-            param1.addChild(this._hullMesh);
+            container.addChild(this._hullMesh);
          }
          if(this._turretMesh != null)
          {
-            param1.addChild(this._turretMesh);
+            container.addChild(this._turretMesh);
          }
-         this.camera = param2;
+         this.camera = camera;
          this.shadow = new Shadow(128,8,100,5000,10000,516,0.95);
          this.shadow.offset = 100;
          this.shadow.backFadeRange = 100;
@@ -118,7 +118,7 @@ package alternativa.tanks.vehicles.tank.skin
          {
             this.shadow.addCaster(this._turretMesh);
          }
-         param2.addShadow(this.shadow);
+         camera.addShadow(this.shadow);
       }
       
       public function removeFromContainer() : void
@@ -158,13 +158,13 @@ package alternativa.tanks.vehicles.tank.skin
          return this.hull;
       }
       
-      public function setHull(param1:TankHull) : void
+      public function setHull(hull:TankHull) : void
       {
          if(this.hull != null && this.container != null)
          {
             this.container.removeChild(this._hullMesh);
          }
-         this.hull = param1;
+         this.hull = hull;
          if(this.hull != null)
          {
             this._hullMesh = Mesh(this.hull.skin.clone());
@@ -226,7 +226,7 @@ package alternativa.tanks.vehicles.tank.skin
          return this.turret;
       }
       
-      public function setTurret(param1:TankTurret) : void
+      public function setTurret(turret:TankTurret) : void
       {
          var parentContainer:Object3DContainer = null;
          var oldMesh:Mesh = null;
@@ -236,7 +236,7 @@ package alternativa.tanks.vehicles.tank.skin
             this._turretMesh.removeFromParent();
             oldMesh = this._turretMesh;
          }
-         this.turret = param1;
+         this.turret = turret;
          if(this.turret != null)
          {
             this._turretMesh = Mesh(this.turret.skin.clone());
@@ -270,11 +270,11 @@ package alternativa.tanks.vehicles.tank.skin
          }
       }
       
-      public function setColormap(param1:BitmapData) : void
+      public function setColormap(colormap:BitmapData) : void
       {
-         if(param1 != null)
+         if(colormap != null)
          {
-            this.colormap = param1;
+            this.colormap = colormap;
             this.updatePartTexture(this.hull,this._hullMesh);
             this.updatePartTexture(this.turret,this._turretMesh);
          }
@@ -358,9 +358,9 @@ use namespace alternativa3d;
 class TrackMaterial extends TextureMaterial
 {
    
-   public function TrackMaterial(param1:BitmapData = null, param2:Boolean = false, param3:Boolean = true, param4:int = 0, param5:Number = 1)
+   public function TrackMaterial(texture:BitmapData = null, repeat:Boolean = false, smooth:Boolean = true, mipMapping:int = 0, resolution:Number = 1)
    {
-      super(param1,param2,param3,param4,param5);
+      super(texture,repeat,smooth,mipMapping,resolution);
    }
    
    override alternativa3d function get transparent() : Boolean

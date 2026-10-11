@@ -37,9 +37,9 @@ package alternativa.tanks.sfx
       
       private var localMuzzlePosition:Vector3 = new Vector3();
       
-      public function SmokyMuzzleFlashEffect(param1:Pool)
+      public function SmokyMuzzleFlashEffect(pool:Pool)
       {
-         super(param1);
+         super(pool);
          this.plane = new SimplePlane(PLANE_WIDTH,PLANE_LENGTH,0.5,0);
          this.plane.setUVs(0,0,0,1,1,1,1,0);
          this.plane.useShadowMap = false;
@@ -48,11 +48,11 @@ package alternativa.tanks.sfx
          this.plane.depthMapAlphaThreshold = 2;
       }
       
-      public function init(param1:Vector3, param2:Object3D, material:TextureMaterial, param4:int) : void
+      public function init(localMuzzlePosition:Vector3, turret:Object3D, material:TextureMaterial, timeLeft:int) : void
       {
-         this.localMuzzlePosition.copy(param1);
-         this.turret = param2;
-         this.timeLeft = param4;
+         this.localMuzzlePosition.copy(localMuzzlePosition);
+         this.turret = turret;
+         this.timeLeft = timeLeft;
          this.plane.setMaterialToAllFaces(material);
          var texture:BitmapData = material.texture;
          material.resolution = this.plane.calculateResolution(texture.width,texture.height);

@@ -78,7 +78,7 @@ package alternativa.tanks.sfx.flamethrower
       
       private var muzzlePlane:StreamWeaponMuzzlePlane;
       
-      private var taramuty:Body;
+      private var body:Body;
       
       private var minParticleSize:Number;
       
@@ -88,33 +88,33 @@ package alternativa.tanks.sfx.flamethrower
       
       private var tizymaku:Number;
       
-      public function StreamWeaponGraphicEffect(param1:Pool)
+      public function StreamWeaponGraphicEffect(pool:Pool)
       {
-         super(param1);
+         super(pool);
          this.muzzlePlane = new StreamWeaponMuzzlePlane();
       }
       
-      public function init(body:Body, param2:Number, coneAngle:Number, param4:Number, param5:Vector3, param6:Object3D, param7:StreamWeaponSFXData, param8:CollisionDetector, planeWidth:Number, planeLength:Number, param11:Number, param12:Number, param13:Number, param14:Number) : void
+      public function init(body:Body, range:Number, coneAngle:Number, particleSpeed:Number, localMuzzlePosition:Vector3, turret:Object3D, sfxData:StreamWeaponSFXData, collisionDetector:CollisionDetector, planeWidth:Number, planeLength:Number, minParticleSize:Number, maxParticleSize:Number, param13:Number, param14:Number) : void
       {
-         this.taramuty = body;
-         this._range = param2;
+         this.body = body;
+         this._range = range;
          this.marehod = Math.tan(0.5 * coneAngle);
-         this.particleSpeed = param4;
-         this.localMuzzlePosition.copy(param5);
-         this.turret = param6;
-         this.sfxData = param7;
-         this.collisionDetector = param8;
-         this.minParticleSize = param11;
-         this.maxParticleSize = param12;
+         this.particleSpeed = particleSpeed;
+         this.localMuzzlePosition.copy(localMuzzlePosition);
+         this.turret = turret;
+         this.sfxData = sfxData;
+         this.collisionDetector = collisionDetector;
+         this.minParticleSize = minParticleSize;
+         this.maxParticleSize = maxParticleSize;
          this.nel = param13;
          this.tizymaku = param14;
-         param7.muzzleAnimation = Assets.getData("flame_muzzle",TextureAnimation);
+         sfxData.muzzleAnimation = Assets.getData("flame_muzzle",TextureAnimation);
          this.muzzlePlane.resize(planeWidth,planeLength);
-         this.jadeqy = 2 * (param12 - param11) / param2;
-         this.particleInterval = 1000 * param2 / (MAX_PARTICLES * param4);
+         this.jadeqy = 2 * (maxParticleSize - minParticleSize) / range;
+         this.particleInterval = 1000 * range / (MAX_PARTICLES * particleSpeed);
          this._numParticles = 0;
          this.time = this.nextParticleTime = getTimer();
-         this.initMuzzlePlane(param7);
+         this.initMuzzlePlane(sfxData);
          this.killed = false;
       }
       
@@ -152,7 +152,7 @@ package alternativa.tanks.sfx.flamethrower
          this.muzzlePlane.removeFromParent();
          this.muzzlePlane.clear();
          this.container = null;
-         this.taramuty = null;
+         this.body = null;
          this.turret = null;
          this.sfxData = null;
          this.collisionDetector = null;
@@ -227,10 +227,10 @@ package alternativa.tanks.sfx.flamethrower
          }
       }
       
-      public function addedToScene(param1:Object3DContainer) : void
+      public function addedToScene(container:Object3DContainer) : void
       {
-         this.container = param1;
-         param1.addChild(this.muzzlePlane);
+         this.container = container;
+         container.addChild(this.muzzlePlane);
       }
       
       private function calculateParameters() : void
@@ -253,7 +253,7 @@ package alternativa.tanks.sfx.flamethrower
       private function addParticle() : void
       {
          var distance:Number = this.nel + Math.random() * this.tizymaku;
-         if(!this.muzzlePlane.visible && rayHit.jomuc < this.localMuzzlePosition.y + distance)
+         if(!this.muzzlePlane.visible && rayHit.time < this.localMuzzlePosition.y + distance)
          {
             return;
          }
@@ -265,7 +265,7 @@ package alternativa.tanks.sfx.flamethrower
          particle.velocity.x = this.particleSpeed * direction.x;
          particle.velocity.y = this.particleSpeed * direction.y;
          particle.velocity.z = this.particleSpeed * direction.z;
-         particle.velocity.add(this.taramuty.state.velocity);
+         particle.velocity.add(this.body.state.velocity);
          particle.flightDistance = distance;
          particle.x = muzzlePosition.x + distance * direction.x;
          particle.y = muzzlePosition.y + distance * direction.y;

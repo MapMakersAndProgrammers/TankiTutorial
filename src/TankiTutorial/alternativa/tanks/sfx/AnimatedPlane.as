@@ -7,24 +7,24 @@ package alternativa.tanks.sfx
    public class AnimatedPlane extends Mesh
    {
       
-      private var gar:Vertex;
+      private var a:Vertex;
       
-      private var nityt:Vertex;
+      private var b:Vertex;
       
-      private var fysu:Vertex;
+      private var c:Vertex;
       
-      private var rok:Vertex;
+      private var d:Vertex;
       
       private var frames:Vector.<UVFrame>;
       
       private var numFrames:int;
       
-      private var lelypa:Number = 0;
+      private var framesPerMs:Number = 0;
       
-      public function AnimatedPlane(param1:Number)
+      public function AnimatedPlane(size:Number)
       {
          super();
-         this.createFaces(param1);
+         this.createFaces(size);
          sorting = Sorting.DYNAMIC_BSP;
          calculateBounds();
          calculateFacesNormals();
@@ -35,9 +35,9 @@ package alternativa.tanks.sfx
          depthMapAlphaThreshold = 2;
       }
       
-      private function createFaces(param1:Number) : void
+      private function createFaces(size:Number) : void
       {
-         var halfSize:Number = param1 / 2;
+         var halfSize:Number = size / 2;
          var _loc3_:Vector.<Number> = Vector.<Number>([-halfSize,halfSize,0,-halfSize,-halfSize,0,halfSize,-halfSize,0,halfSize,halfSize,0]);
          var uvs:Vector.<Number> = Vector.<Number>([0,0,0,1,1,1,1,0]);
          var indices:Vector.<int> = Vector.<int>([4,0,1,2,3,4,0,3,2,1]);
@@ -47,23 +47,23 @@ package alternativa.tanks.sfx
       private function writeVertices() : void
       {
          var _loc1_:Vector.<Vertex> = this.vertices;
-         this.gar = _loc1_[0];
-         this.nityt = _loc1_[1];
-         this.fysu = _loc1_[2];
-         this.rok = _loc1_[3];
+         this.a = _loc1_[0];
+         this.b = _loc1_[1];
+         this.c = _loc1_[2];
+         this.d = _loc1_[3];
       }
       
-      public function init(animation:TextureAnimation, param2:Number) : void
+      public function init(animation:TextureAnimation, framesPerMs:Number) : void
       {
          setMaterialToAllFaces(animation.material);
          this.frames = animation.frames;
          this.numFrames = this.frames.length;
-         this.lelypa = param2;
+         this.framesPerMs = framesPerMs;
       }
       
-      public function setTime(param1:Number) : void
+      public function setTime(time:Number) : void
       {
-         var frameIndex:int = param1 * this.lelypa;
+         var frameIndex:int = time * this.framesPerMs;
          if(frameIndex >= this.numFrames)
          {
             frameIndex = this.numFrames - 1;
@@ -80,19 +80,19 @@ package alternativa.tanks.sfx
       
       public function getOneLoopTime() : Number
       {
-         return this.numFrames / this.lelypa;
+         return this.numFrames / this.framesPerMs;
       }
       
       private function setFrame(frame:UVFrame) : void
       {
-         this.gar.u = frame.topLeftU;
-         this.gar.v = frame.topLeftV;
-         this.nityt.u = frame.topLeftU;
-         this.nityt.v = frame.bottomRightV;
-         this.fysu.u = frame.bottomRightU;
-         this.fysu.v = frame.bottomRightV;
-         this.rok.u = frame.bottomRightU;
-         this.rok.v = frame.topLeftV;
+         this.a.u = frame.topLeftU;
+         this.a.v = frame.topLeftV;
+         this.b.u = frame.topLeftU;
+         this.b.v = frame.bottomRightV;
+         this.c.u = frame.bottomRightU;
+         this.c.v = frame.bottomRightV;
+         this.d.u = frame.bottomRightU;
+         this.d.v = frame.topLeftV;
       }
    }
 }

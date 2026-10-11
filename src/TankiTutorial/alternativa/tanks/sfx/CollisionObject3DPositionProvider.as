@@ -41,9 +41,9 @@ package alternativa.tanks.sfx
       
       private var distance:Number = 0;
       
-      public function CollisionObject3DPositionProvider(param1:Pool)
+      public function CollisionObject3DPositionProvider(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
       private function calculateParameters() : void
@@ -62,12 +62,12 @@ package alternativa.tanks.sfx
          barrelOrigin.z = muzzlePosition.z - _loc1_ * direction.z;
       }
       
-      public function init(param1:Object3D, param2:Vector3, param3:CollisionDetector, param4:Number, param5:Number = 0.5) : void
+      public function init(turret:Object3D, localMuzzlePosition:Vector3, collisionDetector:CollisionDetector, maxDistance:Number, param5:Number = 0.5) : void
       {
-         this.turret = param1;
-         this.localMuzzlePosition = param2;
-         this.collisionDetector = param3;
-         this.maxDistance = param4;
+         this.turret = turret;
+         this.localMuzzlePosition = localMuzzlePosition;
+         this.collisionDetector = collisionDetector;
+         this.maxDistance = maxDistance;
          this.cyrare = param5;
          this.distance = 0;
       }

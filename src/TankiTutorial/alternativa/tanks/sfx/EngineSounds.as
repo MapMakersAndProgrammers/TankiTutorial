@@ -51,7 +51,7 @@ package alternativa.tanks.sfx
          this.currentSound = this.idleSound;
       }
       
-      public function update(deltaTime:int, cameraPosition:Vector3, position:Vector3, param4:Vector3) : void
+      public function update(deltaTime:int, cameraPosition:Vector3, position:Vector3, cameraXAxis:Vector3) : void
       {
          if(this.mode != SILENT_MODE)
          {
@@ -76,7 +76,7 @@ package alternativa.tanks.sfx
                this.currentSound.play(0,10000);
                this.nextSound = null;
             }
-            this.currentSound.checkVolume(cameraPosition,position,param4);
+            this.currentSound.checkVolume(cameraPosition,position,cameraXAxis);
          }
       }
       

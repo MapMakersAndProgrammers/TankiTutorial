@@ -92,17 +92,17 @@ package alternativa.math
       
       public function normalize() : Vector3
       {
-         var _loc1_:Number = this.x * this.x + this.y * this.y + this.z * this.z;
-         if(_loc1_ == 0)
+         var len:Number = this.x * this.x + this.y * this.y + this.z * this.z;
+         if(len == 0)
          {
             this.x = 1;
          }
          else
          {
-            _loc1_ = Math.sqrt(_loc1_);
-            this.x /= _loc1_;
-            this.y /= _loc1_;
-            this.z /= _loc1_;
+            len = Math.sqrt(len);
+            this.x /= len;
+            this.y /= len;
+            this.z /= len;
          }
          return this;
       }
@@ -250,11 +250,11 @@ package alternativa.math
          return this;
       }
       
-      public function reset(param1:Number = 0, param2:Number = 0, param3:Number = 0) : Vector3
+      public function reset(x:Number = 0, y:Number = 0, z:Number = 0) : Vector3
       {
-         this.x = param1;
-         this.y = param2;
-         this.z = param3;
+         this.x = x;
+         this.y = y;
+         this.z = z;
          return this;
       }
       

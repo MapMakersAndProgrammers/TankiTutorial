@@ -15,9 +15,9 @@ package alternativa.tanks.sfx
       
       private var acceleration:Number;
       
-      public function MovingObject3DPositionProvider(param1:Pool)
+      public function MovingObject3DPositionProvider(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
       public function initPosition(object:Object3D) : void
@@ -27,11 +27,11 @@ package alternativa.tanks.sfx
          object.z = this.position.z;
       }
       
-      public function init(param1:Vector3, param2:Vector3, param3:Number) : void
+      public function init(position:Vector3, velocity:Vector3, acceleration:Number) : void
       {
-         this.position.copy(param1);
-         this.velocity.copy(param2);
-         this.acceleration = param3;
+         this.position.copy(position);
+         this.velocity.copy(velocity);
+         this.acceleration = acceleration;
       }
       
       public function updateObjectPosition(object:Object3D, camera:GameCamera, deltaTime:int) : void

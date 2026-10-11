@@ -13,13 +13,13 @@ package alternativa.tanks.vehicles.tank.weapons
       
       public var reloadTime:uint;
       
-      public function WeaponSettings(param1:Number, param2:Number, param3:Number, param4:int)
+      public function WeaponSettings(param1:Number, param2:Number, damage:Number, reloadTime:int)
       {
          super();
          this.impactForce = param1 * bogahyten;
          this.recoilForce = param2 * bogahyten;
-         this.damage = param3;
-         this.reloadTime = param4;
+         this.damage = damage;
+         this.reloadTime = reloadTime;
       }
       
       public static function getNumRays(angle:Number) : int

@@ -8,7 +8,7 @@ package alternativa.tanks.bonuses
       
       function get bonusId() : Long;
       
-      function spawn(position:Vector3, param2:int, param3:Number, param4:Function) : void;
+      function spawn(position:Vector3, param2:int, fallSpeed:Number, callback:Function) : void;
       
       function pickup() : void;
       

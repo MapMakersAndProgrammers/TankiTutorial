@@ -288,14 +288,14 @@ package tutorial
          var _loc1_:Number = 12;
          var _loc2_:Number = 16;
          var _loc3_:Number = 9;
-         var _loc4_:Number = Math.PI / 2;
+         var fov:Number = Math.PI / 2;
          var width:Number = Number(this.camera.view.width);
          var height:Number = Number(this.camera.view.height);
          var _loc7_:Number = height / _loc3_;
          var _loc8_:Number = width / _loc7_;
          if(_loc8_ <= _loc1_)
          {
-            this.camera.fov = _loc4_;
+            this.camera.fov = fov;
          }
          else
          {
@@ -305,7 +305,7 @@ package tutorial
                _loc9_ = _loc1_;
             }
             _loc10_ = _loc9_ * _loc7_;
-            _loc11_ = Math.sqrt(_loc10_ * _loc10_ + height * height) * 0.5 / Math.tan(_loc4_ * 0.5);
+            _loc11_ = Math.sqrt(_loc10_ * _loc10_ + height * height) * 0.5 / Math.tan(fov * 0.5);
             this.camera.fov = Math.atan(Math.sqrt(width * width + height * height) * 0.5 / _loc11_) * 2;
          }
       }

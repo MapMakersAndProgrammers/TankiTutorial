@@ -43,11 +43,11 @@ package alternativa.tanks.vehicles.tank.weapons
       
       private var targetDistances:Dictionary;
       
-      public function ConicAreaTargetingSystem(range:Number, param2:Number, numRays:int, numSectors:int, collisionDetector:CollisionDetector, targetValidator:ConicAreaTargetValidator)
+      public function ConicAreaTargetingSystem(range:Number, coneAngle:Number, numRays:int, numSectors:int, collisionDetector:CollisionDetector, targetValidator:ConicAreaTargetValidator)
       {
          super();
          this.range = range;
-         this.halfConeAngle = 0.5 * param2;
+         this.halfConeAngle = 0.5 * coneAngle;
          this.numRays = numRays;
          this.numSectors = numSectors;
          this.collisionDetector = collisionDetector;
@@ -130,8 +130,8 @@ package alternativa.tanks.vehicles.tank.weapons
             {
                break;
             }
-            rayPoint.addScaled(this.rayHit.jomuc,direction);
-            distance += this.rayHit.jomuc;
+            rayPoint.addScaled(this.rayHit.time,direction);
+            distance += this.rayHit.time;
             if(this.targetValidator.isValidTarget(body))
             {
                this.collisionFilter.addTarget(body);
@@ -145,7 +145,7 @@ package alternativa.tanks.vehicles.tank.weapons
             {
                this.collisionFilter.addInvalidTarget(body);
             }
-            length -= this.rayHit.jomuc;
+            length -= this.rayHit.time;
          }
          this.collisionFilter.clearTargets();
       }

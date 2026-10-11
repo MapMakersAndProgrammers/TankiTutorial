@@ -28,12 +28,12 @@ package alternativa.tanks.bonuses
          this.collisionBox = new CollisionBox(new Vector3(halfSize,halfSize,halfSize),CollisionGroup.BONUS,PhysicsMaterial.defaultMaterial);
       }
       
-      public function enable(param1:BattleRunner) : void
+      public function enable(battleRunner:BattleRunner) : void
       {
          if(this.battleRunner == null)
          {
-            this.battleRunner = param1;
-            param1.addTrigger(this);
+            this.battleRunner = battleRunner;
+            battleRunner.addTrigger(this);
          }
       }
       

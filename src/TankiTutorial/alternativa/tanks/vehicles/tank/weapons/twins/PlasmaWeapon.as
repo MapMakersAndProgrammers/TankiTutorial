@@ -64,9 +64,9 @@ package alternativa.tanks.vehicles.tank.weapons.twins
       override public function getTarget() : Tank
       {
          var turretData:TurretData = getData();
-         var _loc2_:Tank = getTank();
-         turretData.update(_loc2_,0);
-         if(this.targetingSystem.getTarget(turretData.barrelOrigin,turretData.direction,turretData.xAxis,_loc2_.tankBody.body,10000000000,hitInfo))
+         var tank:Tank = getTank();
+         turretData.update(tank,0);
+         if(this.targetingSystem.getTarget(turretData.barrelOrigin,turretData.direction,turretData.xAxis,tank.tankBody.body,10000000000,hitInfo))
          {
             if(hitInfo.body != null)
             {
@@ -79,18 +79,18 @@ package alternativa.tanks.vehicles.tank.weapons.twins
       private function shoot() : void
       {
          this.nextShotTime = getTimer() + this.settings.reloadTime;
-         var _loc1_:Tank = getTank();
-         var turretMesh:Mesh = _loc1_.skin.turretMesh;
-         var muzzle:Vector3 = _loc1_.turret.muzzles[this.muzzleIndex];
+         var tank:Tank = getTank();
+         var turretMesh:Mesh = tank.skin.turretMesh;
+         var muzzle:Vector3 = tank.turret.muzzles[this.muzzleIndex];
          var turretData:TurretData = getData();
-         turretData.update(_loc1_,this.muzzleIndex);
-         _loc1_.tankBody.body.addWorldForceScaled(turretData.muzzlePosition,turretData.direction,-this.settings.recoilForce);
-         this.effects.createShotEffects(turretMesh,_loc1_.turret.muzzles[this.muzzleIndex]);
+         turretData.update(tank,this.muzzleIndex);
+         tank.tankBody.body.addWorldForceScaled(turretData.muzzlePosition,turretData.direction,-this.settings.recoilForce);
+         this.effects.createShotEffects(turretMesh,tank.turret.muzzles[this.muzzleIndex]);
          if(this.barrelCollidesWithStatic(turretData.barrelOrigin,turretData.direction,muzzle.y))
          {
             shotDirection.copy(turretData.direction);
          }
-         else if(this.targetingSystem.getTarget(turretData.barrelOrigin,turretData.direction,turretData.xAxis,_loc1_.tankBody.body,10000000000,hitInfo))
+         else if(this.targetingSystem.getTarget(turretData.barrelOrigin,turretData.direction,turretData.xAxis,tank.tankBody.body,10000000000,hitInfo))
          {
             shotDirection.diff(hitInfo.position,turretData.muzzlePosition).normalize();
          }
@@ -100,7 +100,7 @@ package alternativa.tanks.vehicles.tank.weapons.twins
          }
          var shot:PlasmaShot = PlasmaShot(this.objectPool.getObject(PlasmaShot));
          shot.init(this.settings.impactForce,this.settings.damage * damageMultiplier);
-         shot.addToGame(turretData.barrelOrigin,turretData.muzzlePosition,shotDirection,_loc1_.tankBody.body);
+         shot.addToGame(turretData.barrelOrigin,turretData.muzzlePosition,shotDirection,tank.tankBody.body);
          this.muzzleIndex = (this.muzzleIndex + 1) % this.numMuzzles;
       }
       

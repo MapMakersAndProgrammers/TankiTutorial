@@ -16,9 +16,9 @@ package alternativa.tanks.vehicles.tank.controllers
       
       private var time:uint;
       
-      public function RecordTankController(param1:IEventDispatcher, param2:Tank)
+      public function RecordTankController(eventSource:IEventDispatcher, tank:Tank)
       {
-         super(param1,param2);
+         super(eventSource,tank);
       }
       
       public function getRecord() : String
@@ -73,11 +73,11 @@ package alternativa.tanks.vehicles.tank.controllers
          this.prevControlState = controlState;
       }
       
-      override public function update(param1:int, deltaTime:int, param3:Number) : void
+      override public function update(time:int, deltaTime:int, dt:Number) : void
       {
          if(!(GameData.camera.controller is SpectatorCameraController))
          {
-            super.update(param1,deltaTime,param3);
+            super.update(time,deltaTime,dt);
          }
       }
       

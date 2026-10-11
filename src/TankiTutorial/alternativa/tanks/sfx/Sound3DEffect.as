@@ -29,30 +29,30 @@ package alternativa.tanks.sfx
       
       private var destructionListener:ISoundEffectDestructionListener;
       
-      public function Sound3DEffect(param1:Pool)
+      public function Sound3DEffect(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public static function create(objectPool:ObjectPool, param2:Vector3, param3:Sound3D, param4:int = 0, param5:int = 0, param6:ISoundEffectDestructionListener = null) : Sound3DEffect
+      public static function create(objectPool:ObjectPool, position:Vector3, sound:Sound3D, delay:int = 0, startTime:int = 0, destructionListener:ISoundEffectDestructionListener = null) : Sound3DEffect
       {
          var effect:Sound3DEffect = null;
-         if(param3 != null)
+         if(sound != null)
          {
             effect = Sound3DEffect(objectPool.getObject(Sound3DEffect));
-            effect.init(param2,param3,param4,param5,param6);
+            effect.init(position,sound,delay,startTime,destructionListener);
             return effect;
          }
          return null;
       }
       
-      public function init(param1:Vector3, param2:Sound3D, param3:int = 0, param4:int = 0, param5:ISoundEffectDestructionListener = null) : void
+      public function init(position:Vector3, sound:Sound3D, delay:int = 0, startTime:int = 0, destructionListener:ISoundEffectDestructionListener = null) : void
       {
-         this.position.copy(param1);
-         this.sound = param2;
-         this.delay = param3;
-         this.startTime = param4;
-         this.destructionListener = param5;
+         this.position.copy(position);
+         this.sound = sound;
+         this.delay = delay;
+         this.startTime = startTime;
+         this.destructionListener = destructionListener;
          this._enabled = false;
          this.started = false;
       }

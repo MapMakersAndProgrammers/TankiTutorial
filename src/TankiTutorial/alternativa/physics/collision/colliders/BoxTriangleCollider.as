@@ -117,7 +117,7 @@ package alternativa.physics.collision.colliders
          {
             return false;
          }
-         edge = triangle.dodupypic;
+         edge = triangle.e0;
          this.axis20.x = triangleTransform.ma * edge.x + triangleTransform.mb * edge.y + triangleTransform.mc * edge.z;
          this.axis20.y = triangleTransform.me * edge.x + triangleTransform.mf * edge.y + triangleTransform.mg * edge.z;
          this.axis20.z = triangleTransform.mi * edge.x + triangleTransform.mj * edge.y + triangleTransform.mk * edge.z;
@@ -133,7 +133,7 @@ package alternativa.physics.collision.colliders
          {
             return false;
          }
-         edge = triangle.cilozuj;
+         edge = triangle.e1;
          this.axis21.x = triangleTransform.ma * edge.x + triangleTransform.mb * edge.y + triangleTransform.mc * edge.z;
          this.axis21.y = triangleTransform.me * edge.x + triangleTransform.mf * edge.y + triangleTransform.mg * edge.z;
          this.axis21.z = triangleTransform.mi * edge.x + triangleTransform.mj * edge.y + triangleTransform.mk * edge.z;
@@ -149,7 +149,7 @@ package alternativa.physics.collision.colliders
          {
             return false;
          }
-         edge = triangle.dij;
+         edge = triangle.e2;
          this.axis22.x = triangleTransform.ma * edge.x + triangleTransform.mb * edge.y + triangleTransform.mc * edge.z;
          this.axis22.y = triangleTransform.me * edge.x + triangleTransform.mf * edge.y + triangleTransform.mg * edge.z;
          this.axis22.z = triangleTransform.mi * edge.x + triangleTransform.mj * edge.y + triangleTransform.mk * edge.z;
@@ -244,9 +244,9 @@ package alternativa.physics.collision.colliders
          var ay:Number = triangleTransform.mb * separatingAxis.x + triangleTransform.mf * separatingAxis.y + triangleTransform.mj * separatingAxis.z;
          var az:Number = triangleTransform.mc * separatingAxis.x + triangleTransform.mg * separatingAxis.y + triangleTransform.mk * separatingAxis.z;
          var triangleProjection:Number = 0;
-         var p0:Vector3 = triangle.lyzud;
-         var p1:Vector3 = triangle.pedake;
-         var p2:Vector3 = triangle.bykecy;
+         var p0:Vector3 = triangle.v0;
+         var p1:Vector3 = triangle.v1;
+         var p2:Vector3 = triangle.v2;
          if(distance < 0)
          {
             distance = -distance;

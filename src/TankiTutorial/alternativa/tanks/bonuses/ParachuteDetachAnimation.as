@@ -22,18 +22,18 @@ package alternativa.tanks.bonuses
       
       private var fallSpeed:Number;
       
-      public function ParachuteDetachAnimation(param1:Pool)
+      public function ParachuteDetachAnimation(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function start(param1:BattleScene3D, param2:Parachute, param3:Cords, param4:Number) : void
+      public function start(battleScene:BattleScene3D, parachute:Parachute, cords:Cords, param4:Number) : void
       {
-         this.battleScene = param1;
-         this.parachute = param2;
-         this.cords = param3;
+         this.battleScene = battleScene;
+         this.parachute = parachute;
+         this.cords = cords;
          this.fallSpeed = param4 / 1000;
-         param1.addRenderer(this,0);
+         battleScene.addRenderer(this,0);
       }
       
       public function render(time:int, deltaTime:int) : void

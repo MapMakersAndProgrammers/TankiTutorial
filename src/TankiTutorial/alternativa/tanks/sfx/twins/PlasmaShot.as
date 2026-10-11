@@ -117,9 +117,9 @@ package alternativa.tanks.sfx.twins
       
       private var positionProvider:ExternalObject3DPositionProvider;
       
-      public function PlasmaShot(param1:Pool)
+      public function PlasmaShot(pool:Pool)
       {
-         super(param1);
+         super(pool);
          this.radialPoints = new Vector.<Vector3>(NUM_RADIAL_POINTS);
          var i:int = 0;
          while(i < NUM_RADIAL_POINTS)
@@ -170,14 +170,14 @@ package alternativa.tanks.sfx.twins
          }
       }
       
-      public function init(param1:Number, param2:Number) : void
+      public function init(impactForce:Number, damage:Number) : void
       {
          if(shotAnimation == null)
          {
             shotAnimation = Assets.getData("plasma",TextureAnimation);
          }
-         this.impactForce = param1;
-         this.damage = param2;
+         this.impactForce = impactForce;
+         this.damage = damage;
          this.sprite.setAnimationData(shotAnimation);
          this.numFrames = this.sprite.getNumFrames();
          this.frameIndex = this.numFrames * Math.random();
@@ -186,21 +186,21 @@ package alternativa.tanks.sfx.twins
          this.firstTick = true;
       }
       
-      public function addToGame(param1:Vector3, muzzlePosition:Vector3, param3:Vector3, body:Body) : void
+      public function addToGame(barrelOrigin:Vector3, muzzlePosition:Vector3, direction:Vector3, body:Body) : void
       {
-         this.barrelOrigin.copy(param1);
+         this.barrelOrigin.copy(barrelOrigin);
          this.currentPosition.copy(muzzlePosition);
          this.prevPosition.copy(muzzlePosition);
          this.interpolatedPosition.copy(muzzlePosition);
          this.sprite.x = muzzlePosition.x;
          this.sprite.y = muzzlePosition.y;
          this.sprite.z = muzzlePosition.z;
-         this.direction.copy(param3);
+         this.direction.copy(direction);
          this.taramuty = body;
          this.lightEffect = AnimatedLightEffect(objectPool.getObject(AnimatedLightEffect));
          this.positionProvider = ExternalObject3DPositionProvider(objectPool.getObject(ExternalObject3DPositionProvider));
          this.positionProvider.setPosition(muzzlePosition);
-         this.lightEffect.init(this.positionProvider,this.shotLight,AnimatedLightEffect.nimowu,true);
+         this.lightEffect.init(this.positionProvider,this.shotLight,AnimatedLightEffect.DEFAULT_MAX_DISTANCE,true);
          effects.addEffect(this.lightEffect);
          physicsScene.addPhysicsController(this);
          physicsScene.addPhysicsInterpolator(this);
@@ -372,7 +372,7 @@ package alternativa.tanks.sfx.twins
          dir.normalize();
          if(collisionDetector.raycast(this.barrelOrigin,dir,CollisionGroup.WEAPON,rayLength,this,rayHit))
          {
-            this.barrelOrigin.addScaled(rayHit.jomuc,dir);
+            this.barrelOrigin.addScaled(rayHit.time,dir);
             this.applyImpact(rayHit.shape.body,this.barrelOrigin,dir,0);
             this.destroy();
             return true;
@@ -387,7 +387,7 @@ package alternativa.tanks.sfx.twins
                body = rayHit.shape.body;
                if(body != null)
                {
-                  this.barrelOrigin.addScaled(rayHit.jomuc,dir);
+                  this.barrelOrigin.addScaled(rayHit.time,dir);
                   this.applyImpact(body,this.barrelOrigin,dir,0);
                   this.destroy();
                   return true;

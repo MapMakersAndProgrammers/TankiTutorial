@@ -16,18 +16,18 @@ package alternativa.tanks.bonuses
       
       private var alpha:Number = 0;
       
-      public function SpawnAnimation(param1:Pool)
+      public function SpawnAnimation(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function start(param1:BattleBonus, param2:BattleScene3D) : void
+      public function start(bonus:BattleBonus, battleScene:BattleScene3D) : void
       {
-         this.bonus = param1;
-         this.battleScene = param2;
+         this.bonus = bonus;
+         this.battleScene = battleScene;
          this.alpha = 0;
-         param1.gave.add(this.destroy);
-         param2.addRenderer(this,0);
+         bonus.gave.add(this.destroy);
+         battleScene.addRenderer(this,0);
       }
       
       public function render(time:int, deltaTime:int) : void

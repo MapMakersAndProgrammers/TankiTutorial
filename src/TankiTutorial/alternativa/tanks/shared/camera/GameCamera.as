@@ -40,24 +40,24 @@ package alternativa.tanks.shared.camera
       
       public function calculateAdditionalData() : void
       {
-         var _loc8_:Number = NaN;
-         var _loc1_:Number = Math.cos(rotationX);
-         var _loc2_:Number = Math.sin(rotationX);
-         var _loc3_:Number = Math.cos(rotationY);
-         var _loc4_:Number = Math.sin(rotationY);
-         var _loc5_:Number = Math.cos(rotationZ);
-         var _loc6_:Number = Math.sin(rotationZ);
-         var _loc7_:Number = _loc5_ * _loc4_;
-         _loc8_ = _loc6_ * _loc4_;
-         this.xAxis.x = _loc5_ * _loc3_;
-         this.yAxis.x = _loc7_ * _loc2_ - _loc6_ * _loc1_;
-         this.zAxis.x = _loc7_ * _loc1_ + _loc6_ * _loc2_;
-         this.xAxis.y = _loc6_ * _loc3_;
-         this.yAxis.y = _loc8_ * _loc2_ + _loc5_ * _loc1_;
-         this.zAxis.y = _loc8_ * _loc1_ - _loc5_ * _loc2_;
-         this.xAxis.z = -_loc4_;
-         this.yAxis.z = _loc3_ * _loc2_;
-         this.zAxis.z = _loc3_ * _loc1_;
+         var sinZsinY:Number = NaN;
+         var cosX:Number = Math.cos(rotationX);
+         var sinX:Number = Math.sin(rotationX);
+         var cosY:Number = Math.cos(rotationY);
+         var sinY:Number = Math.sin(rotationY);
+         var cosZ:Number = Math.cos(rotationZ);
+         var sinZ:Number = Math.sin(rotationZ);
+         var cosZsinY:Number = cosZ * sinY;
+         sinZsinY = sinZ * sinY;
+         this.xAxis.x = cosZ * cosY;
+         this.yAxis.x = cosZsinY * sinX - sinZ * cosX;
+         this.zAxis.x = cosZsinY * cosX + sinZ * sinX;
+         this.xAxis.y = sinZ * cosY;
+         this.yAxis.y = sinZsinY * sinX + cosZ * cosX;
+         this.zAxis.y = sinZsinY * cosX - cosZ * sinX;
+         this.xAxis.z = -sinY;
+         this.yAxis.z = cosY * sinX;
+         this.zAxis.z = cosY * cosX;
          this.position.x = x;
          this.position.y = y;
          this.position.z = z;

@@ -420,18 +420,18 @@ package tutorial
          var j:int = 0;
          var len:int = 0;
          var point:Vector3D = null;
-         var _loc7_:Number = NaN;
-         var _loc8_:int = 0;
+         var minDistance:Number = NaN;
+         var index:int = 0;
          var a:Vector3D = null;
          var b:Vector3D = null;
-         var _loc11_:Number = NaN;
-         var _loc12_:Number = NaN;
-         var _loc13_:Number = NaN;
+         var dx:Number = NaN;
+         var dy:Number = NaN;
+         var dz:Number = NaN;
          var _loc14_:Number = NaN;
          var _loc15_:Number = NaN;
          var _loc16_:Number = NaN;
          var _loc17_:Number = NaN;
-         var _loc18_:Number = NaN;
+         var dot:Number = NaN;
          this.camera.calculateRay(this.origin,this.direction,this.camera.view.mouseX,this.camera.view.mouseY);
          var data:RayIntersectionData = this.container.intersectRay(this.origin,this.direction,this.decals);
          if(data != null)
@@ -457,59 +457,59 @@ package tutorial
                point = data.object.localToGlobal(data.point);
                if(len > 1)
                {
-                  _loc7_ = 1e+22;
-                  _loc8_ = -1;
+                  minDistance = 1e+22;
+                  index = -1;
                   i = 0;
                   j = 1;
                   while(i < len - 1)
                   {
                      a = this.points[i];
                      b = this.points[j];
-                     _loc11_ = b.x - a.x;
-                     _loc12_ = b.y - a.y;
-                     _loc13_ = b.z - a.z;
-                     _loc14_ = Math.sqrt(_loc11_ * _loc11_ + _loc12_ * _loc12_ + _loc13_ * _loc13_);
-                     _loc11_ /= _loc14_;
-                     _loc12_ /= _loc14_;
-                     _loc13_ /= _loc14_;
+                     dx = b.x - a.x;
+                     dy = b.y - a.y;
+                     dz = b.z - a.z;
+                     _loc14_ = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                     dx /= _loc14_;
+                     dy /= _loc14_;
+                     dz /= _loc14_;
                      _loc15_ = point.x - a.x;
                      _loc16_ = point.y - a.y;
                      _loc17_ = point.z - a.z;
-                     _loc18_ = _loc15_ * _loc11_ + _loc16_ * _loc12_ + _loc17_ * _loc13_;
-                     if(_loc18_ >= 0)
+                     dot = _loc15_ * dx + _loc16_ * dy + _loc17_ * dz;
+                     if(dot >= 0)
                      {
-                        if(_loc18_ <= _loc14_)
+                        if(dot <= _loc14_)
                         {
-                           _loc11_ = point.x - (a.x + _loc11_ * _loc18_);
-                           _loc12_ = point.y - (a.y + _loc12_ * _loc18_);
-                           _loc13_ = point.z - (a.z + _loc13_ * _loc18_);
-                           _loc14_ = Math.sqrt(_loc11_ * _loc11_ + _loc12_ * _loc12_ + _loc13_ * _loc13_);
-                           if(_loc14_ < _loc7_)
+                           dx = point.x - (a.x + dx * dot);
+                           dy = point.y - (a.y + dy * dot);
+                           dz = point.z - (a.z + dz * dot);
+                           _loc14_ = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                           if(_loc14_ < minDistance)
                            {
-                              _loc7_ = _loc14_;
-                              _loc8_ = i + 1;
+                              minDistance = _loc14_;
+                              index = i + 1;
                            }
                         }
                         else
                         {
-                           _loc11_ = point.x - b.x;
-                           _loc12_ = point.y - b.y;
-                           _loc13_ = point.z - b.z;
-                           _loc14_ = Math.sqrt(_loc11_ * _loc11_ + _loc12_ * _loc12_ + _loc13_ * _loc13_);
-                           if(_loc14_ < _loc7_)
+                           dx = point.x - b.x;
+                           dy = point.y - b.y;
+                           dz = point.z - b.z;
+                           _loc14_ = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                           if(_loc14_ < minDistance)
                            {
-                              _loc7_ = _loc14_;
-                              _loc8_ = j + 1;
+                              minDistance = _loc14_;
+                              index = j + 1;
                            }
                         }
                      }
                      else
                      {
                         _loc14_ = Math.sqrt(_loc15_ * _loc15_ + _loc16_ * _loc16_ + _loc17_ * _loc17_);
-                        if(_loc14_ < _loc7_)
+                        if(_loc14_ < minDistance)
                         {
-                           _loc7_ = _loc14_;
-                           _loc8_ = i;
+                           minDistance = _loc14_;
+                           index = i;
                         }
                      }
                      i++;
@@ -517,14 +517,14 @@ package tutorial
                   }
                   i = len - 1;
                   j = len;
-                  while(i >= _loc8_)
+                  while(i >= index)
                   {
                      this.points[j] = this.points[i];
                      this.spheres[j] = this.spheres[i];
                      i--;
                      j--;
                   }
-                  this.points[_loc8_] = point;
+                  this.points[index] = point;
                }
                else
                {

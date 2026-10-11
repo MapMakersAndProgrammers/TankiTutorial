@@ -15,15 +15,15 @@ package alternativa.tanks.sfx
       
       private var distance:Number;
       
-      public function StaticObject3DPositionProvider(param1:Pool)
+      public function StaticObject3DPositionProvider(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function init(param1:Vector3, param2:Number) : void
+      public function init(position:Vector3, distance:Number) : void
       {
-         this.position.copy(param1);
-         this.distance = param2;
+         this.position.copy(position);
+         this.distance = distance;
       }
       
       public function setPosition(param1:Vector3) : void

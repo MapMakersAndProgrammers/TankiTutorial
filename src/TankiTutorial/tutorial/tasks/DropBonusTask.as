@@ -27,7 +27,7 @@ package tutorial.tasks
          var bonusData:BattleBonusData = this.getBattleBonusData();
          var bonus:BattleBonus = BattleBonus(GameData.objectPool.getObject(BattleBonus));
          bonus.init(this.getBonusObjectId(),Long.getNext(),bonusData,GameData.battleService);
-         bonus.spawn(this.position,0,BonusData.kudutyje,this.onTankCollision);
+         bonus.spawn(this.position,0,BonusData.FALL_SPEED,this.onTankCollision);
          return true;
       }
       

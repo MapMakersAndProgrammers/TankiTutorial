@@ -20,7 +20,7 @@ package alternativa.tanks.sfx.flamethrower
       
       public var muzzleStartLight:LightAnimation = LightData.flameMuzzleStartLight;
       
-      public var div:LightAnimation = LightData.flameMuzzleLoopLight;
+      public var muzzleLoopLight:LightAnimation = LightData.flameMuzzleLoopLight;
       
       public var streamStartLight:LightAnimation = LightData.flameStreamStartLight;
       

@@ -15,9 +15,9 @@ package alternativa.tanks.sfx
       
       private var ceki:Number;
       
-      public function ScalingObject3DPositionProvider(param1:Pool)
+      public function ScalingObject3DPositionProvider(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
       public function initPosition(object:Object3D) : void
@@ -30,10 +30,10 @@ package alternativa.tanks.sfx
          object.scaleZ = 1;
       }
       
-      public function init(param1:Vector3, param2:Vector3, param3:Number) : void
+      public function init(position:Vector3, velocity:Vector3, param3:Number) : void
       {
-         this.position.copy(param1);
-         this.velocity.copy(param2);
+         this.position.copy(position);
+         this.velocity.copy(velocity);
          this.ceki = param3;
       }
       

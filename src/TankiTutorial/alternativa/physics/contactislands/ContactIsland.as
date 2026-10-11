@@ -317,13 +317,13 @@ package alternativa.physics.contactislands
          contact.binormalImpulse = newBinormalImpulse;
          if(body1.movable)
          {
-            body1.applyWorldImpulseAtLocalPoint(contact.divute,contact.tangent,deltaTangentImpulse);
-            body1.applyWorldImpulseAtLocalPoint(contact.divute,contact.binormal,deltaBinormalImpulse);
+            body1.applyWorldImpulseAtLocalPoint(contact.r1,contact.tangent,deltaTangentImpulse);
+            body1.applyWorldImpulseAtLocalPoint(contact.r1,contact.binormal,deltaBinormalImpulse);
          }
          if(body2.movable)
          {
-            body2.applyWorldImpulseAtLocalPoint(contact.bamod,contact.tangent,-deltaTangentImpulse);
-            body2.applyWorldImpulseAtLocalPoint(contact.bamod,contact.binormal,-deltaBinormalImpulse);
+            body2.applyWorldImpulseAtLocalPoint(contact.r2,contact.tangent,-deltaTangentImpulse);
+            body2.applyWorldImpulseAtLocalPoint(contact.r2,contact.binormal,-deltaBinormalImpulse);
          }
          this.calculateRelativeVelocity(contact,relativeVelocity);
          vn = relativeVelocity.x * n.x + relativeVelocity.y * n.y + relativeVelocity.z * n.z;
@@ -337,11 +337,11 @@ package alternativa.physics.contactislands
          contact.normalImpulse = newNormalImpulse;
          if(body1.movable)
          {
-            body1.applyWorldImpulseAtLocalPoint(contact.divute,contact.normal,deltaNormalImpulse);
+            body1.applyWorldImpulseAtLocalPoint(contact.r1,contact.normal,deltaNormalImpulse);
          }
          if(body2.movable)
          {
-            body2.applyWorldImpulseAtLocalPoint(contact.bamod,contact.normal,-deltaNormalImpulse);
+            body2.applyWorldImpulseAtLocalPoint(contact.r2,contact.normal,-deltaNormalImpulse);
          }
       }
       
@@ -349,7 +349,7 @@ package alternativa.physics.contactislands
       {
          var v:Vector3 = null;
          var angularVelocity:Vector3 = contact.shape1.body.state.rotation;
-         v = contact.divute;
+         v = contact.r1;
          var cx:Number = angularVelocity.y * v.z - angularVelocity.z * v.y;
          var cy:Number = angularVelocity.z * v.x - angularVelocity.x * v.z;
          var cz:Number = angularVelocity.x * v.y - angularVelocity.y * v.x;
@@ -358,7 +358,7 @@ package alternativa.physics.contactislands
          result.y = v.y + cy;
          result.z = v.z + cz;
          angularVelocity = contact.shape2.body.state.rotation;
-         v = contact.bamod;
+         v = contact.r2;
          cx = angularVelocity.y * v.z - angularVelocity.z * v.y;
          cy = angularVelocity.z * v.x - angularVelocity.x * v.z;
          cz = angularVelocity.x * v.y - angularVelocity.y * v.x;
@@ -377,11 +377,11 @@ package alternativa.physics.contactislands
          var impulse:Number = deltaVelocity / contact.normalInvMass;
          if(contact.shape1.body.movable)
          {
-            contact.shape1.body.applyWorldPseudoImpulseAtLocalPoint(contact.divute,contact.normal,impulse);
+            contact.shape1.body.applyWorldPseudoImpulseAtLocalPoint(contact.r1,contact.normal,impulse);
          }
          if(contact.shape2.body.movable)
          {
-            contact.shape2.body.applyWorldPseudoImpulseAtLocalPoint(contact.bamod,contact.normal,-impulse);
+            contact.shape2.body.applyWorldPseudoImpulseAtLocalPoint(contact.r2,contact.normal,-impulse);
          }
       }
       
@@ -390,7 +390,7 @@ package alternativa.physics.contactislands
          var v:Vector3 = null;
          var cz:Number = NaN;
          var angularVelocity:Vector3 = contact.shape1.body.pseudoRotation;
-         v = contact.divute;
+         v = contact.r1;
          var cx:Number = angularVelocity.y * v.z - angularVelocity.z * v.y;
          var cy:Number = angularVelocity.z * v.x - angularVelocity.x * v.z;
          cz = angularVelocity.x * v.y - angularVelocity.y * v.x;
@@ -399,7 +399,7 @@ package alternativa.physics.contactislands
          result.y = v.y + cy;
          result.z = v.z + cz;
          angularVelocity = contact.shape2.body.pseudoRotation;
-         v = contact.bamod;
+         v = contact.r2;
          cx = angularVelocity.y * v.z - angularVelocity.z * v.y;
          cy = angularVelocity.z * v.x - angularVelocity.x * v.z;
          cz = angularVelocity.x * v.y - angularVelocity.y * v.x;

@@ -70,7 +70,7 @@ package alternativa.tanks.vehicles.tank.weapons
          {
             this.normal.copy(rayHit.normal);
             this.targetDirection.copy(direction);
-            this.targetDistance = rayHit.jomuc;
+            this.targetDistance = rayHit.time;
             hitBody = rayHit.shape.body;
             if(hitBody != null)
             {
@@ -89,7 +89,7 @@ package alternativa.tanks.vehicles.tank.weapons
          this.collisionFilter.excludedBody = null;
          if(this.targetDistance <= this.maxDistance)
          {
-            result.jomuc = this.targetDistance;
+            result.time = this.targetDistance;
             result.direction.copy(this.targetDirection);
             result.position.copy(origin).addScaled(this.targetDistance,this.targetDirection);
             result.body = this.targetBody;
@@ -121,13 +121,13 @@ package alternativa.tanks.vehicles.tank.weapons
                hitBody = rayHit.shape.body;
                if(hitBody != null)
                {
-                  priority = this.targetEvaluator.getTargetPriority(hitBody,rayHit.jomuc,angle,param6,maxAngle);
+                  priority = this.targetEvaluator.getTargetPriority(hitBody,rayHit.time,angle,param6,maxAngle);
                   if(priority > this.maxPriority)
                   {
                      this.maxPriority = priority;
                      this.targetBody = hitBody;
                      this.targetDirection.copy(rayDirection);
-                     this.targetDistance = rayHit.jomuc;
+                     this.targetDistance = rayHit.time;
                   }
                }
             }

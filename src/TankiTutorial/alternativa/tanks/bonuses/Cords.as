@@ -36,22 +36,22 @@ package alternativa.tanks.bonuses
       
       private var alphaMultiplier:Number = 1;
       
-      public function Cords(radius:Number, param2:Number, numCords:int, material:Material)
+      public function Cords(radius:Number, halfSize:Number, numCords:int, material:Material)
       {
          super();
          this.numCords = numCords;
          this.parachuteVertices = new Vector.<Vertex>(2 * numCords);
          this.parachutePoints = new Vector.<Vector3>(numCords);
-         this.createGeometry(radius,param2);
+         this.createGeometry(radius,halfSize);
          setMaterialToAllFaces(material);
          shadowMapAlphaThreshold = 2;
          depthMapAlphaThreshold = 2;
       }
       
-      public function init(param1:BonusMesh, param2:Parachute) : void
+      public function init(bonusMesh:BonusMesh, parachute:Parachute) : void
       {
-         this.bonusMesh = param1;
-         this.parachute = param2;
+         this.bonusMesh = bonusMesh;
+         this.parachute = parachute;
          scaleX = 1;
          scaleY = 1;
          scaleZ = 1;
@@ -100,14 +100,14 @@ package alternativa.tanks.bonuses
          calculateFacesNormals();
       }
       
-      private function createGeometry(radius:Number, param2:Number) : void
+      private function createGeometry(radius:Number, halfSize:Number) : void
       {
          var angle:Number = NaN;
          var point:Vector3 = null;
          var _loc8_:int = 0;
          var _loc9_:int = 0;
-         this.bonusPoint = new Vector3(0,0,param2);
-         this.bonusVertex = this.createVertex(0,0,param2,0,1);
+         this.bonusPoint = new Vector3(0,0,halfSize);
+         this.bonusVertex = this.createVertex(0,0,halfSize,0,1);
          var angleStep:Number = 2 * Math.PI / this.numCords;
          var i:int = 0;
          while(i < this.numCords)
@@ -134,7 +134,7 @@ package alternativa.tanks.bonuses
          }
       }
       
-      private function createVertex(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number) : Vertex
+      private function createVertex(param1:Number, param2:Number, param3:Number, u:Number, v:Number) : Vertex
       {
          var vertex:Vertex = new Vertex();
          vertex.next = vertexList;
@@ -142,8 +142,8 @@ package alternativa.tanks.bonuses
          vertex.x = param1;
          vertex.y = param2;
          vertex.z = param3;
-         vertex.u = param4;
-         vertex.v = param5;
+         vertex.u = u;
+         vertex.v = v;
          return vertex;
       }
       

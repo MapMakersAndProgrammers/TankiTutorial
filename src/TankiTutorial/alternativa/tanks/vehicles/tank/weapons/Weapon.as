@@ -17,10 +17,10 @@ package alternativa.tanks.vehicles.tank.weapons
       
       protected var _status:Number;
       
-      public function Weapon(param1:String)
+      public function Weapon(name:String)
       {
          super();
-         this.name = param1;
+         this.name = name;
       }
       
       public function getData() : TurretData
@@ -33,9 +33,9 @@ package alternativa.tanks.vehicles.tank.weapons
          return this.tank;
       }
       
-      public function setTank(param1:Tank) : void
+      public function setTank(tank:Tank) : void
       {
-         this.tank = param1;
+         this.tank = tank;
       }
       
       public function get status() : Number

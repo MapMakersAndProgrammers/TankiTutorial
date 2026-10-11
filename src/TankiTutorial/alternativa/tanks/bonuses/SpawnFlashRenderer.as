@@ -24,20 +24,20 @@ package alternativa.tanks.bonuses
       
       private var battleScene:BattleScene3D;
       
-      public function SpawnFlashRenderer(param1:Pool)
+      public function SpawnFlashRenderer(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function start(param1:BattleBonus, param2:BattleScene3D) : void
+      public function start(bonus:BattleBonus, battleScene:BattleScene3D) : void
       {
-         this.bonus = param1;
-         this.battleScene = param2;
-         param1.lybaluh.add(this.destroy);
-         param1.nuziged.add(this.destroy);
-         param1.gave.add(this.destroy);
-         param1.getBonusMesh().colorTransform = this.colorTransform.colorTransform;
-         param2.addRenderer(this,0);
+         this.bonus = bonus;
+         this.battleScene = battleScene;
+         bonus.lybaluh.add(this.destroy);
+         bonus.nuziged.add(this.destroy);
+         bonus.gave.add(this.destroy);
+         bonus.getBonusMesh().colorTransform = this.colorTransform.colorTransform;
+         battleScene.addRenderer(this,0);
          this.animation.start();
       }
       

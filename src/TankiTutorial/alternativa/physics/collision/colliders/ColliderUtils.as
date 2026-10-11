@@ -216,16 +216,16 @@ package alternativa.physics.collision.colliders
       {
          var vertex:Vertex = null;
          vertex = vertices[0];
-         vertex.localPosition.x = triangle.lyzud.x;
-         vertex.localPosition.y = triangle.lyzud.y;
+         vertex.localPosition.x = triangle.v0.x;
+         vertex.localPosition.y = triangle.v0.y;
          vertex.localPosition.z = 0;
          vertex = vertices[1];
-         vertex.localPosition.x = triangle.pedake.x;
-         vertex.localPosition.y = triangle.pedake.y;
+         vertex.localPosition.x = triangle.v1.x;
+         vertex.localPosition.y = triangle.v1.y;
          vertex.localPosition.z = 0;
          vertex = vertices[2];
-         vertex.localPosition.x = triangle.bykecy.x;
-         vertex.localPosition.y = triangle.bykecy.y;
+         vertex.localPosition.x = triangle.v2.x;
+         vertex.localPosition.y = triangle.v2.y;
          vertex.localPosition.z = 0;
          var matrix:Matrix4 = triangle.transform;
          var dot:Number = normal.x * matrix.mc + normal.y * matrix.mg + normal.z * matrix.mk;

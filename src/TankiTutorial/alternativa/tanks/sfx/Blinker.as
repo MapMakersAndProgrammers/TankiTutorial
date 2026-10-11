@@ -19,7 +19,7 @@ package alternativa.tanks.sfx
       
       private var speed:Number;
       
-      private var sesibo:Number;
+      private var valueRange:Number;
       
       private var nextSwitchTime:int;
       
@@ -34,7 +34,7 @@ package alternativa.tanks.sfx
          this.minValue = minValue;
          this.maxValue = maxValue;
          this.gahehake = param6;
-         this.sesibo = maxValue - minValue;
+         this.valueRange = maxValue - minValue;
       }
       
       public function setInitialInterval(interval:int) : void
@@ -50,21 +50,21 @@ package alternativa.tanks.sfx
          this.nextSwitchTime = time + this.currentInterval;
       }
       
-      public function setMaxValue(param1:Number) : void
+      public function setMaxValue(maxValue:Number) : void
       {
-         if(param1 >= this.minValue)
+         if(maxValue >= this.minValue)
          {
-            this.maxValue = param1;
-            this.sesibo = this.maxValue - this.minValue;
+            this.maxValue = maxValue;
+            this.valueRange = this.maxValue - this.minValue;
          }
       }
       
-      public function setMinValue(param1:Number) : void
+      public function setMinValue(minValue:Number) : void
       {
-         if(param1 <= this.maxValue)
+         if(minValue <= this.maxValue)
          {
-            this.minValue = param1;
-            this.sesibo = this.maxValue - this.minValue;
+            this.minValue = minValue;
+            this.valueRange = this.maxValue - this.minValue;
          }
       }
       
@@ -109,7 +109,7 @@ package alternativa.tanks.sfx
       
       private function getSpeed(direction:Number) : Number
       {
-         return direction * this.gahehake * this.sesibo / this.currentInterval;
+         return direction * this.gahehake * this.valueRange / this.currentInterval;
       }
    }
 }

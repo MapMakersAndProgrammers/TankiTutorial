@@ -32,9 +32,9 @@ package
       
       private static const RIGHT:int = 3;
       
-      private static const desu:int = 4;
+      private static const DOWN:int = 4;
       
-      private static const sulu:int = 5;
+      private static const UP:int = 5;
       
       private static const ACCELERATE:int = 6;
       
@@ -48,7 +48,7 @@ package
       
       public var mousePressed:Boolean;
       
-      private var ses:BitMask = new BitMask();
+      private var controlState:BitMask = new BitMask();
       
       private var byc:Number;
       
@@ -58,7 +58,7 @@ package
       
       private var qotok:Number;
       
-      private var sema:Vector3 = new Vector3();
+      private var localVector:Vector3 = new Vector3();
       
       private var direction:Vector3 = new Vector3();
       
@@ -82,8 +82,8 @@ package
          this.keyMap[Keyboard.S] = BACK;
          this.keyMap[Keyboard.A] = LEFT;
          this.keyMap[Keyboard.D] = RIGHT;
-         this.keyMap[Keyboard.Q] = sulu;
-         this.keyMap[Keyboard.E] = desu;
+         this.keyMap[Keyboard.Q] = UP;
+         this.keyMap[Keyboard.E] = DOWN;
          this.keyMap[Keyboard.SHIFT] = ACCELERATE;
          this.keyMap[Keyboard.SPACE] = giquju;
       }
@@ -101,42 +101,42 @@ package
       
       public function update(time:int, deltaTime:int) : void
       {
-         var _loc3_:Number = NaN;
+         var dt:Number = NaN;
          var _loc4_:Number = NaN;
          if(this.camera != null)
          {
-            _loc3_ = deltaTime / 1000;
-            if(this.ses.getBitValue(giquju) > 0)
+            dt = deltaTime / 1000;
+            if(this.controlState.getBitValue(giquju) > 0)
             {
-               this.sema.x = this.getDirection(RIGHT,LEFT);
-               this.sema.y = 0;
-               this.sema.z = this.getDirection(FORWARD,BACK);
-               this.camera.getGlobalVector(this.sema,this.direction);
+               this.localVector.x = this.getDirection(RIGHT,LEFT);
+               this.localVector.y = 0;
+               this.localVector.z = this.getDirection(FORWARD,BACK);
+               this.camera.getGlobalVector(this.localVector,this.direction);
                this.direction.z = 0;
                if(this.direction.lengthSqr() > 0)
                {
                   this.direction.normalize();
                }
-               this.direction.z = -this.getDirection(sulu,desu);
+               this.direction.z = -this.getDirection(UP,DOWN);
             }
             else
             {
-               this.sema.x = this.getDirection(RIGHT,LEFT);
-               this.sema.y = this.getDirection(sulu,desu);
-               this.sema.z = this.getDirection(FORWARD,BACK);
-               this.camera.getGlobalVector(this.sema,this.direction);
+               this.localVector.x = this.getDirection(RIGHT,LEFT);
+               this.localVector.y = this.getDirection(UP,DOWN);
+               this.localVector.z = this.getDirection(FORWARD,BACK);
+               this.camera.getGlobalVector(this.localVector,this.direction);
             }
             if(this.direction.lengthSqr() > 0)
             {
                this.direction.normalize();
             }
-            if(this.ses.getBitValue(ACCELERATE) > 0)
+            if(this.controlState.getBitValue(ACCELERATE) > 0)
             {
-               this.direction.scale(camSpeed.value * camAcc.value * _loc3_);
+               this.direction.scale(camSpeed.value * camAcc.value * dt);
             }
             else
             {
-               this.direction.scale(camSpeed.value * _loc3_);
+               this.direction.scale(camSpeed.value * dt);
             }
             this.position.x += this.direction.x;
             this.position.y += this.direction.y;
@@ -164,9 +164,9 @@ package
          }
       }
       
-      private function getDirection(param1:int, param2:int) : int
+      private function getDirection(positiveAction:int, negativeAction:int) : int
       {
-         return this.ses.getBitValue(param1) - this.ses.getBitValue(param2);
+         return this.controlState.getBitValue(positiveAction) - this.controlState.getBitValue(negativeAction);
       }
       
       public function activate() : void
@@ -198,7 +198,7 @@ package
       {
          if(this.keyMap[keyboardEvent.keyCode] != null)
          {
-            this.ses.clearBit(this.keyMap[keyboardEvent.keyCode]);
+            this.controlState.clearBit(this.keyMap[keyboardEvent.keyCode]);
          }
       }
       
@@ -206,7 +206,7 @@ package
       {
          if(this.keyMap[keyboardEvent.keyCode] != null)
          {
-            this.ses.setBit(this.keyMap[keyboardEvent.keyCode]);
+            this.controlState.setBit(this.keyMap[keyboardEvent.keyCode]);
          }
       }
       

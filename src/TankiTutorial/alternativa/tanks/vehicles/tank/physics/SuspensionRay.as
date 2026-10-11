@@ -71,14 +71,14 @@ package alternativa.tanks.vehicles.tank.physics
          this.globalOrigin.z += position.z;
          if(this.colliding)
          {
-            this.prevCompression = this.suspensionParams.rayLength - this.rayHit.jomuc;
+            this.prevCompression = this.suspensionParams.rayLength - this.rayHit.time;
          }
          this.colliding = this.body.scene.collisionDetector.raycast(this.globalOrigin,this.globalDirection,this.collisionGroup,this.suspensionParams.rayLength,this.collisionFilter,this.rayHit);
       }
       
       public function calculateSpringForce(dt:Number) : void
       {
-         var compression:Number = this.suspensionParams.rayLength - this.rayHit.jomuc;
+         var compression:Number = this.suspensionParams.rayLength - this.rayHit.time;
          this.springForce = this.suspensionParams.springCoeff * compression;
          var compressionSpeed:Number = (compression - this.prevCompression) / dt;
          this.springForce += compressionSpeed * this.suspensionParams.dampingCoeff;
@@ -141,7 +141,7 @@ package alternativa.tanks.vehicles.tank.physics
       {
          if(this.colliding)
          {
-            return this.rayHit.jomuc;
+            return this.rayHit.time;
          }
          return this.suspensionParams.rayLength;
       }

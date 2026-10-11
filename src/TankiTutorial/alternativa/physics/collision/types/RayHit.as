@@ -12,7 +12,7 @@ package alternativa.physics.collision.types
       
       public var normal:Vector3 = new Vector3();
       
-      public var jomuc:Number = 0;
+      public var time:Number = 0;
       
       public function RayHit()
       {
@@ -24,7 +24,7 @@ package alternativa.physics.collision.types
          this.shape = src.shape;
          this.position.copy(src.position);
          this.normal.copy(src.normal);
-         this.jomuc = src.jomuc;
+         this.time = src.time;
       }
       
       public function clear() : void

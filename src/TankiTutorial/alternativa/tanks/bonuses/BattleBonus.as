@@ -86,9 +86,9 @@ package alternativa.tanks.bonuses
       
       private const hery:ISignal = new Signal();
       
-      public function BattleBonus(param1:Pool)
+      public function BattleBonus(pool:Pool)
       {
-         super(param1);
+         super(pool);
          this.trigger = new BonusTrigger(this);
          this.fallController = new FallController(this);
          this.landingController = new LandingController(this);
@@ -99,20 +99,20 @@ package alternativa.tanks.bonuses
          return normal.z > BonusConst.bepy;
       }
       
-      public function init(param1:Long, param2:Long, param3:BattleBonusData, param4:BattleService) : void
+      public function init(objectId:Long, bonusId:Long, bonusData:BattleBonusData, battleService:BattleService) : void
       {
-         this.objectId = param1;
-         this._bonusId = param2;
-         this.bonusData = param3;
-         this.battleService = param4;
+         this.objectId = objectId;
+         this._bonusId = bonusId;
+         this.bonusData = bonusData;
+         this.battleService = battleService;
          this.controllers.length = 0;
       }
       
-      public function spawn(position:Vector3, param2:int, param3:Number, param4:Function) : void
+      public function spawn(position:Vector3, param2:int, fallSpeed:Number, callback:Function) : void
       {
          var fallTime:int = 0;
-         this.fallSpeed = param3;
-         this.hery.add(param4);
+         this.fallSpeed = fallSpeed;
+         this.hery.add(callback);
          this.initBonusMesh();
          this.active = false;
          this.controllers.length = 0;
@@ -125,7 +125,7 @@ package alternativa.tanks.bonuses
          {
             this.initAirborne(position,groundPoint,groundNormal,param2);
             this.trigger.enable(this.battleService.getBattleRunner());
-            fallTime = (groundPoint.distanceTo(position) - BonusConst.BONUS_HALF_SIZE) / param3 * 1000;
+            fallTime = (groundPoint.distanceTo(position) - BonusConst.BONUS_HALF_SIZE) / fallSpeed * 1000;
          }
          this.initRemovalAnimation(fallTime + this.bonusData.lifeTime - param2);
          if(this.runNextController())

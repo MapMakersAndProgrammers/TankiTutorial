@@ -10,9 +10,9 @@ package alternativa.tanks.sfx
       
       private var numFrames:int;
       
-      public function AnimatedSprite3D(param1:Number, param2:Number, param3:Material = null)
+      public function AnimatedSprite3D(width:Number, height:Number, material:Material = null)
       {
-         super(param1,param2,param3);
+         super(width,height,material);
          useShadowMap = false;
          useLight = false;
       }
@@ -36,9 +36,9 @@ package alternativa.tanks.sfx
          this.numFrames = 0;
       }
       
-      public function setFrameIndex(param1:int) : void
+      public function setFrameIndex(frameIndex:int) : void
       {
-         this.setFrame(this.frames[param1 % this.numFrames]);
+         this.setFrame(this.frames[frameIndex % this.numFrames]);
       }
       
       private function setFrame(frame:UVFrame) : void

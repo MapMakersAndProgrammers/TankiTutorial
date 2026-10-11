@@ -11,14 +11,14 @@ package alternativa.tanks.sfx
       
       private var position:Vector3 = new Vector3();
       
-      public function ExternalObject3DPositionProvider(param1:Pool)
+      public function ExternalObject3DPositionProvider(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function setPosition(param1:Vector3) : void
+      public function setPosition(position:Vector3) : void
       {
-         this.position.copy(param1);
+         this.position.copy(position);
       }
       
       public function initPosition(object:Object3D) : void

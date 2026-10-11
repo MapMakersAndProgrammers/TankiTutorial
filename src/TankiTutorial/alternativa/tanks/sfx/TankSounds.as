@@ -118,12 +118,12 @@ package alternativa.tanks.sfx
          }
       }
       
-      public function setTank(param1:Tank) : void
+      public function setTank(tank:Tank) : void
       {
-         this.tank = param1;
+         this.tank = tank;
       }
       
-      public function playTurretSound(param1:Boolean) : void
+      public function playTurretSound(rotating:Boolean) : void
       {
          var channel:SoundChannel = null;
          this.initTurretSound();
@@ -131,7 +131,7 @@ package alternativa.tanks.sfx
          {
             if(this._enabled)
             {
-               if(param1 && this._turretSoundEnabled)
+               if(rotating && this._turretSoundEnabled)
                {
                   if(!this.turretSound.isPlaying())
                   {

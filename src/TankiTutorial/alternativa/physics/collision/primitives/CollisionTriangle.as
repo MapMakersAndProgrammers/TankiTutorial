@@ -9,17 +9,17 @@ package alternativa.physics.collision.primitives
    public class CollisionTriangle extends CollisionShape
    {
       
-      public var lyzud:Vector3 = new Vector3();
+      public var v0:Vector3 = new Vector3();
       
-      public var pedake:Vector3 = new Vector3();
+      public var v1:Vector3 = new Vector3();
       
-      public var bykecy:Vector3 = new Vector3();
+      public var v2:Vector3 = new Vector3();
       
-      public var dodupypic:Vector3 = new Vector3();
+      public var e0:Vector3 = new Vector3();
       
-      public var cilozuj:Vector3 = new Vector3();
+      public var e1:Vector3 = new Vector3();
       
-      public var dij:Vector3 = new Vector3();
+      public var e2:Vector3 = new Vector3();
       
       public function CollisionTriangle(v0:Vector3, v1:Vector3, v2:Vector3, collisionGroup:int, material:PhysicsMaterial)
       {
@@ -37,7 +37,7 @@ package alternativa.physics.collision.primitives
          var _loc6_:Number = epsilon * matrix.mc;
          var _loc7_:Number = epsilon * matrix.mg;
          var _loc8_:Number = epsilon * matrix.mk;
-         _loc4_ = this.lyzud.x * matrix.ma + this.lyzud.y * matrix.mb;
+         _loc4_ = this.v0.x * matrix.ma + this.v0.y * matrix.mb;
          bounds.minX = bounds.maxX = _loc4_ + _loc6_;
          _loc5_ = _loc4_ - _loc6_;
          if(_loc5_ > bounds.maxX)
@@ -48,7 +48,7 @@ package alternativa.physics.collision.primitives
          {
             bounds.minX = _loc5_;
          }
-         _loc4_ = this.lyzud.x * matrix.me + this.lyzud.y * matrix.mf;
+         _loc4_ = this.v0.x * matrix.me + this.v0.y * matrix.mf;
          bounds.minY = bounds.maxY = _loc4_ + _loc7_;
          _loc5_ = _loc4_ - _loc7_;
          if(_loc5_ > bounds.maxY)
@@ -59,7 +59,7 @@ package alternativa.physics.collision.primitives
          {
             bounds.minY = _loc5_;
          }
-         _loc4_ = this.lyzud.x * matrix.mi + this.lyzud.y * matrix.mj;
+         _loc4_ = this.v0.x * matrix.mi + this.v0.y * matrix.mj;
          bounds.minZ = bounds.maxZ = _loc4_ + _loc8_;
          _loc5_ = _loc4_ - _loc8_;
          if(_loc5_ > bounds.maxZ)
@@ -70,7 +70,7 @@ package alternativa.physics.collision.primitives
          {
             bounds.minZ = _loc5_;
          }
-         _loc4_ = this.pedake.x * matrix.ma + this.pedake.y * matrix.mb;
+         _loc4_ = this.v1.x * matrix.ma + this.v1.y * matrix.mb;
          _loc5_ = _loc4_ + _loc6_;
          if(_loc5_ > bounds.maxX)
          {
@@ -89,7 +89,7 @@ package alternativa.physics.collision.primitives
          {
             bounds.minX = _loc5_;
          }
-         _loc4_ = this.pedake.x * matrix.me + this.pedake.y * matrix.mf;
+         _loc4_ = this.v1.x * matrix.me + this.v1.y * matrix.mf;
          _loc5_ = _loc4_ + _loc7_;
          if(_loc5_ > bounds.maxY)
          {
@@ -108,7 +108,7 @@ package alternativa.physics.collision.primitives
          {
             bounds.minY = _loc5_;
          }
-         _loc4_ = this.pedake.x * matrix.mi + this.pedake.y * matrix.mj;
+         _loc4_ = this.v1.x * matrix.mi + this.v1.y * matrix.mj;
          _loc5_ = _loc4_ + _loc8_;
          if(_loc5_ > bounds.maxZ)
          {
@@ -127,7 +127,7 @@ package alternativa.physics.collision.primitives
          {
             bounds.minZ = _loc5_;
          }
-         _loc4_ = this.bykecy.x * matrix.ma + this.bykecy.y * matrix.mb;
+         _loc4_ = this.v2.x * matrix.ma + this.v2.y * matrix.mb;
          _loc5_ = _loc4_ + _loc6_;
          if(_loc5_ > bounds.maxX)
          {
@@ -146,7 +146,7 @@ package alternativa.physics.collision.primitives
          {
             bounds.minX = _loc5_;
          }
-         _loc4_ = this.bykecy.x * matrix.me + this.bykecy.y * matrix.mf;
+         _loc4_ = this.v2.x * matrix.me + this.v2.y * matrix.mf;
          _loc5_ = _loc4_ + _loc7_;
          if(_loc5_ > bounds.maxY)
          {
@@ -165,7 +165,7 @@ package alternativa.physics.collision.primitives
          {
             bounds.minY = _loc5_;
          }
-         _loc4_ = this.bykecy.x * matrix.mi + this.bykecy.y * matrix.mj;
+         _loc4_ = this.v2.x * matrix.mi + this.v2.y * matrix.mj;
          _loc5_ = _loc4_ + _loc8_;
          if(_loc5_ > bounds.maxZ)
          {
@@ -215,7 +215,7 @@ package alternativa.physics.collision.primitives
          var oy:Number = _loc7_ * matrix.mb + _loc8_ * matrix.mf + _loc9_ * matrix.mj;
          _loc7_ = ox + t * (direction.x * matrix.ma + direction.y * matrix.me + direction.z * matrix.mi);
          _loc8_ = oy + t * (direction.x * matrix.mb + direction.y * matrix.mf + direction.z * matrix.mj);
-         if(this.dodupypic.x * (_loc8_ - this.lyzud.y) - this.dodupypic.y * (_loc7_ - this.lyzud.x) < 0 || this.cilozuj.x * (_loc8_ - this.pedake.y) - this.cilozuj.y * (_loc7_ - this.pedake.x) < 0 || this.dij.x * (_loc8_ - this.bykecy.y) - this.dij.y * (_loc7_ - this.bykecy.x) < 0)
+         if(this.e0.x * (_loc8_ - this.v0.y) - this.e0.y * (_loc7_ - this.v0.x) < 0 || this.e1.x * (_loc8_ - this.v1.y) - this.e1.y * (_loc7_ - this.v1.x) < 0 || this.e2.x * (_loc8_ - this.v2.y) - this.e2.y * (_loc7_ - this.v2.x) < 0)
          {
             return -1;
          }
@@ -240,32 +240,32 @@ package alternativa.physics.collision.primitives
          var triangle:CollisionTriangle = source as CollisionTriangle;
          if(triangle != null)
          {
-            this.lyzud.copy(triangle.lyzud);
-            this.pedake.copy(triangle.pedake);
-            this.bykecy.copy(triangle.bykecy);
-            this.dodupypic.copy(triangle.dodupypic);
-            this.cilozuj.copy(triangle.cilozuj);
-            this.dij.copy(triangle.dij);
+            this.v0.copy(triangle.v0);
+            this.v1.copy(triangle.v1);
+            this.v2.copy(triangle.v2);
+            this.e0.copy(triangle.e0);
+            this.e1.copy(triangle.e1);
+            this.e2.copy(triangle.e2);
          }
          return this;
       }
       
       override protected function createPrimitive() : CollisionShape
       {
-         return new CollisionTriangle(this.lyzud,this.pedake,this.bykecy,collisionGroup,material);
+         return new CollisionTriangle(this.v0,this.v1,this.v2,collisionGroup,material);
       }
       
       private function initVertices(a:Vector3, b:Vector3, c:Vector3) : void
       {
-         this.lyzud.copy(a);
-         this.pedake.copy(b);
-         this.bykecy.copy(c);
-         this.dodupypic.diff(b,a);
-         this.dodupypic.normalize();
-         this.cilozuj.diff(c,b);
-         this.cilozuj.normalize();
-         this.dij.diff(a,c);
-         this.dij.normalize();
+         this.v0.copy(a);
+         this.v1.copy(b);
+         this.v2.copy(c);
+         this.e0.diff(b,a);
+         this.e0.normalize();
+         this.e1.diff(c,b);
+         this.e1.normalize();
+         this.e2.diff(a,c);
+         this.e2.normalize();
       }
    }
 }

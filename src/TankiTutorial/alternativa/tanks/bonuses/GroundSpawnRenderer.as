@@ -16,20 +16,20 @@ package alternativa.tanks.bonuses
       
       private var scale:Number;
       
-      public function GroundSpawnRenderer(param1:Pool)
+      public function GroundSpawnRenderer(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function start(param1:BattleBonus, param2:BattleService) : void
+      public function start(bonus:BattleBonus, battleService:BattleService) : void
       {
-         this.bonus = param1;
-         this.battleService = param2;
+         this.bonus = bonus;
+         this.battleService = battleService;
          this.scale = 0;
-         param1.lybaluh.add(this.destroy);
-         param1.nuziged.add(this.destroy);
-         param1.gave.add(this.destroy);
-         param2.getBattleScene3D().addRenderer(this,0);
+         bonus.lybaluh.add(this.destroy);
+         bonus.nuziged.add(this.destroy);
+         bonus.gave.add(this.destroy);
+         battleService.getBattleScene3D().addRenderer(this,0);
       }
       
       public function render(time:int, deltaTime:int) : void

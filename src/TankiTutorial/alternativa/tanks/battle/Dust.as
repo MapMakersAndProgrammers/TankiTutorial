@@ -55,14 +55,14 @@ package alternativa.tanks.battle
          vector.z += (Math.random() - 0.5) * 2 * amount;
       }
       
-      public function init(param1:TextureAnimation, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number) : void
+      public function init(animation:TextureAnimation, farDistance:Number, nearDistance:Number, particleSize:Number, intensity:Number, dustProbability:Number) : void
       {
-         this.animation = param1;
-         this.farDistance = param2;
-         this.nearDistance = param3;
-         this.particleSize = param4;
-         this.intensity = param5;
-         this.dustProbability = param6;
+         this.animation = animation;
+         this.farDistance = farDistance;
+         this.nearDistance = nearDistance;
+         this.particleSize = particleSize;
+         this.intensity = intensity;
+         this.dustProbability = dustProbability;
       }
       
       public function addTank(tank:Tank) : void

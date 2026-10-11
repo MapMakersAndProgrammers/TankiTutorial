@@ -52,9 +52,9 @@ package alternativa.tanks.vehicles.tank.controllers
       
       private var mouseModeRequested:Boolean = false;
       
-      public function LocalTurretController(param1:Number, param2:Number, eventSource:InteractiveObject)
+      public function LocalTurretController(maxTurnSpeed:Number, turnAcceleration:Number, eventSource:InteractiveObject)
       {
-         super(param1,param2,false);
+         super(maxTurnSpeed,turnAcceleration,false);
          this.eventSource = eventSource;
          this.setDefaultKeyMap();
          eventSource.addEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
@@ -76,14 +76,14 @@ package alternativa.tanks.vehicles.tank.controllers
       
       private function onRightMouseDown(e:Event) : void
       {
-         GameData.qazul = true;
+         GameData.rightMousePressed = true;
          this.controlState = 0;
          applyControlState(this.controlState);
       }
       
       private function onRightMouseUp(e:Event) : void
       {
-         GameData.qazul = false;
+         GameData.rightMousePressed = false;
       }
       
       private function onMouseLeave(e:Event) : void
@@ -104,7 +104,7 @@ package alternativa.tanks.vehicles.tank.controllers
          if(!this.active)
          {
             this.behu = true;
-            if(GameData.kumiteva)
+            if(GameData.mouseModeEnabled)
             {
                this.enableMouseMode();
             }
@@ -118,7 +118,7 @@ package alternativa.tanks.vehicles.tank.controllers
             this.skipMouseMove = false;
             return;
          }
-         if(GameData.kumiteva && isNotLocked())
+         if(GameData.mouseModeEnabled && isNotLocked())
          {
             this.mouseDirection -= mouseEvent[MOVEMENT_X] * MOUSE_SENSITIVITY;
             this.mouseDirection = MathUtils.clampAngle(this.mouseDirection);
@@ -128,7 +128,7 @@ package alternativa.tanks.vehicles.tank.controllers
       
       private function onMouseDown(mouseEvent:MouseEvent) : void
       {
-         if(!GameData.kumiteva && this.active)
+         if(!GameData.mouseModeEnabled && this.active)
          {
             if(!this.isFullScreen())
             {
@@ -147,15 +147,15 @@ package alternativa.tanks.vehicles.tank.controllers
          this.setKeyMap(TurretControlKeyMap.getDefaultKeyMap());
       }
       
-      public function setKeyMap(param1:TurretControlKeyMap) : void
+      public function setKeyMap(keyMap:TurretControlKeyMap) : void
       {
-         this.keyMap = param1;
+         this.keyMap = keyMap;
          this.controlState = 0;
          applyControlState(0);
          this.handlers = new Dictionary();
-         this.setHandlers(param1.leftKeys,this.onKeyLeft);
-         this.setHandlers(param1.rightKeys,this.onKeyRight);
-         this.setHandlers(param1.centerKeys,this.onKeyCenter);
+         this.setHandlers(keyMap.leftKeys,this.onKeyLeft);
+         this.setHandlers(keyMap.rightKeys,this.onKeyRight);
+         this.setHandlers(keyMap.centerKeys,this.onKeyCenter);
       }
       
       override public function destroy() : void
@@ -191,7 +191,7 @@ package alternativa.tanks.vehicles.tank.controllers
          if(GameData.mouseEnabled && !finished && this.isFullScreen())
          {
             GameData.stage[MOUSE_LOCK] = true;
-            GameData.kumiteva = true;
+            GameData.mouseModeEnabled = true;
             this.mouseMoved = false;
             this.mouseDirection = getDirection() + tankDirection;
             this.skipMouseMove = true;
@@ -208,7 +208,7 @@ package alternativa.tanks.vehicles.tank.controllers
          {
             GameData.stage[MOUSE_LOCK] = false;
          }
-         GameData.kumiteva = false;
+         GameData.mouseModeEnabled = false;
          this.controlState = 0;
          applyControlState(this.controlState);
          GameData.stage.dispatchEvent(new ControlModeChangeEvent());
@@ -220,7 +220,7 @@ package alternativa.tanks.vehicles.tank.controllers
          var handler:Function = this.handlers[keyboardEvent.keyCode];
          if(handler != null)
          {
-            if(GameData.kumiteva)
+            if(GameData.mouseModeEnabled)
             {
                this.disableMouseMode();
             }
@@ -268,7 +268,7 @@ package alternativa.tanks.vehicles.tank.controllers
          {
             this.doEnableBouseMode();
          }
-         if(GameData.kumiteva && !GameData.qazul)
+         if(GameData.mouseModeEnabled && !GameData.rightMousePressed)
          {
             this.targetDirection = this.mouseDirection - tankDirection;
             this.updateMouse(dt);

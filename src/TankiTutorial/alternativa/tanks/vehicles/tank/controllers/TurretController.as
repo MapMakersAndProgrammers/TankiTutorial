@@ -42,11 +42,11 @@ package alternativa.tanks.vehicles.tank.controllers
       
       protected var finished:Boolean = false;
       
-      public function TurretController(param1:Number, turnAcceleration:Number, param3:Boolean)
+      public function TurretController(maxTurnSpeed:Number, turnAcceleration:Number, param3:Boolean)
       {
          super();
          this.rakyraqeh = param3;
-         this.setMaxTurnSpeed(param1,true);
+         this.setMaxTurnSpeed(maxTurnSpeed,true);
          this.turnAcceleration = turnAcceleration;
       }
       

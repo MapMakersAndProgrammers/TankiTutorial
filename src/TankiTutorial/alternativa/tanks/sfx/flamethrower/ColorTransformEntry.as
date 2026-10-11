@@ -3,7 +3,7 @@ package alternativa.tanks.sfx.flamethrower
    public class ColorTransformEntry
    {
       
-      public var jomuc:Number;
+      public var time:Number;
       
       public var redMultiplier:Number;
       
@@ -21,10 +21,10 @@ package alternativa.tanks.sfx.flamethrower
       
       public var alphaOffset:int;
       
-      public function ColorTransformEntry(redMultiplier:Number, greenMultiplier:Number, blueMultiplier:Number, alphaMultiplier:Number, redOffset:Number, greenOffset:Number, blueOffset:Number, alphaOffset:Number, param9:Number)
+      public function ColorTransformEntry(redMultiplier:Number, greenMultiplier:Number, blueMultiplier:Number, alphaMultiplier:Number, redOffset:Number, greenOffset:Number, blueOffset:Number, alphaOffset:Number, time:Number)
       {
          super();
-         this.jomuc = param9;
+         this.time = time;
          this.redMultiplier = redMultiplier;
          this.greenMultiplier = greenMultiplier;
          this.blueMultiplier = blueMultiplier;

@@ -55,7 +55,7 @@ package alternativa.tanks.sfx
       
       private static const objectPool:ObjectPool = GameData.objectPool;
       
-      private static const bec:Vector3 = new Vector3(0,0,-1);
+      private static const direction:Vector3 = new Vector3(0,0,-1);
       
       private static const axis:Vector3 = new Vector3();
       
@@ -93,17 +93,17 @@ package alternativa.tanks.sfx
          {
             shockWaveAnimation = Assets.getData("tank_explosion/shockwave",TextureAnimation);
          }
-         var _loc3_:Number = 500;
+         var rayLength:Number = 500;
          position.copy(tank.tankBody.body.state.position);
          var collisionDetector:CollisionDetector = physicsScene.collisionDetector;
-         if(collisionDetector.raycastStatic(position,bec,255,_loc3_,null,rayHit))
+         if(collisionDetector.raycastStatic(position,direction,255,rayLength,null,rayHit))
          {
             rayHit.position.z += 10;
             size = SHOCK_WAVE_SIZE;
             _loc6_ = 200;
-            if(rayHit.jomuc > _loc6_)
+            if(rayHit.time > _loc6_)
             {
-               size *= (_loc3_ - rayHit.jomuc) / (_loc3_ - _loc6_);
+               size *= (rayLength - rayHit.time) / (rayLength - _loc6_);
             }
             normal = rayHit.normal;
             angle = Math.acos(normal.z);

@@ -317,7 +317,7 @@ package alternativa.tanks.shared.physics
          }
          if(dynamicHit && staticHit)
          {
-            if(result.jomuc > this.dynamicRayHit.jomuc)
+            if(result.time > this.dynamicRayHit.time)
             {
                result.copy(this.dynamicRayHit);
             }
@@ -362,7 +362,7 @@ package alternativa.tanks.shared.physics
             this.minMax.max = maxTime;
          }
          var hit:Boolean = this.testRayAgainstNode(this.kdTree.rootNode,origin,this.point,direction,collisionGroup,this.minMax.min,this.minMax.max,filter,result);
-         return hit ? result.jomuc <= maxTime : false;
+         return hit ? result.time <= maxTime : false;
       }
       
       public function hasStaticHit(origin:Vector3, direction:Vector3, collisionGroup:int, maxTime:Number, filter:IRayCollisionFilter = null) : Boolean
@@ -575,7 +575,7 @@ package alternativa.tanks.shared.physics
          result.position.x = origin.x + direction.x * minTime;
          result.position.y = origin.y + direction.y * minTime;
          result.position.z = origin.z + direction.z * minTime;
-         result.jomuc = minTime;
+         result.time = minTime;
          return true;
       }
       
@@ -749,8 +749,8 @@ package alternativa.tanks.shared.physics
                   {
                      if(!(filter != null && !filter.considerBody(shape.body)))
                      {
-                        result.jomuc = shape.raycast(origin,direction,this.threshold,result.normal);
-                        if(result.jomuc >= 0)
+                        result.time = shape.raycast(origin,direction,this.threshold,result.normal);
+                        if(result.time >= 0)
                         {
                            result.position.copy(this.point);
                            result.shape = shape;
@@ -799,7 +799,7 @@ package alternativa.tanks.shared.physics
          result.position.x = origin.x + direction.x * minTime;
          result.position.y = origin.y + direction.y * minTime;
          result.position.z = origin.z + direction.z * minTime;
-         result.jomuc = minTime;
+         result.time = minTime;
          return true;
       }
       

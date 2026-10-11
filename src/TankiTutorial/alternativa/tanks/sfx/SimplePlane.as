@@ -6,13 +6,13 @@ package alternativa.tanks.sfx
    public class SimplePlane extends Mesh
    {
       
-      protected var gar:Vertex;
+      protected var a:Vertex;
       
-      protected var nityt:Vertex;
+      protected var b:Vertex;
       
-      protected var fysu:Vertex;
+      protected var c:Vertex;
       
-      protected var rok:Vertex;
+      protected var d:Vertex;
       
       private var originX:Number;
       
@@ -44,28 +44,28 @@ package alternativa.tanks.sfx
       private function writeVertices() : void
       {
          var _loc1_:Vector.<Vertex> = this.vertices;
-         this.gar = _loc1_[0];
-         this.nityt = _loc1_[1];
-         this.fysu = _loc1_[2];
-         this.rok = _loc1_[3];
+         this.a = _loc1_[0];
+         this.b = _loc1_[1];
+         this.c = _loc1_[2];
+         this.d = _loc1_[3];
       }
       
       public function setUVs(u0:Number, v0:Number, u1:Number, v1:Number, u2:Number, v2:Number, u3:Number, v3:Number) : void
       {
-         this.gar.u = u0;
-         this.gar.v = v0;
-         this.nityt.u = u1;
-         this.nityt.v = v1;
-         this.fysu.u = u2;
-         this.fysu.v = v2;
-         this.rok.u = u3;
-         this.rok.v = v3;
+         this.a.u = u0;
+         this.a.v = v0;
+         this.b.u = u1;
+         this.b.v = v1;
+         this.c.u = u2;
+         this.c.v = v2;
+         this.d.u = u3;
+         this.d.v = v3;
       }
       
       public function set width(value:Number) : void
       {
-         boundMinX = this.gar.x = this.rok.x = -this.originX * value;
-         boundMaxX = this.nityt.x = this.fysu.x = boundMinX + value;
+         boundMinX = this.a.x = this.d.x = -this.originX * value;
+         boundMaxX = this.b.x = this.c.x = boundMinX + value;
       }
       
       public function get length() : Number
@@ -75,14 +75,14 @@ package alternativa.tanks.sfx
       
       public function set length(value:Number) : void
       {
-         boundMinY = this.gar.y = this.nityt.y = -this.originY * value;
-         boundMaxY = this.rok.y = this.fysu.y = boundMinY + value;
+         boundMinY = this.a.y = this.b.y = -this.originY * value;
+         boundMaxY = this.d.y = this.c.y = boundMinY + value;
       }
       
-      public function resize(param1:Number, param2:Number) : void
+      public function resize(width:Number, length:Number) : void
       {
-         this.width = param1;
-         this.length = param2;
+         this.width = width;
+         this.length = length;
       }
    }
 }

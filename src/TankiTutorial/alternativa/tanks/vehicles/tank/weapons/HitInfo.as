@@ -6,7 +6,7 @@ package alternativa.tanks.vehicles.tank.weapons
    public class HitInfo
    {
       
-      public var jomuc:Number;
+      public var time:Number;
       
       public var body:Body;
       

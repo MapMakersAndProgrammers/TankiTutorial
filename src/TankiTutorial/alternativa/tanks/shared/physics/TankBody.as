@@ -19,10 +19,10 @@ package alternativa.tanks.shared.physics
       
       public var put:Boolean;
       
-      public function TankBody(param1:Body)
+      public function TankBody(body:Body)
       {
          super();
-         this.body = param1;
+         this.body = body;
       }
       
       public function clearCollisionShapes() : void

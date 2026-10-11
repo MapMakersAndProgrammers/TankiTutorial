@@ -54,11 +54,11 @@ package
       
       private function start() : void
       {
-         var _loc1_:* = undefined;
-         for(_loc1_ in InitialDataLoader.textures)
+         var bitmapData:* = undefined;
+         for(bitmapData in InitialDataLoader.textures)
          {
-            GameData.colorize(_loc1_);
-            delete InitialDataLoader.textures[_loc1_];
+            GameData.colorize(bitmapData);
+            delete InitialDataLoader.textures[bitmapData];
          }
          InitialDataLoader.onAfterComplete();
          this.game = new Game();

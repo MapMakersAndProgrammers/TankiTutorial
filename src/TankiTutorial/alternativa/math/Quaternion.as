@@ -47,29 +47,29 @@ package alternativa.math
          return res;
       }
       
-      public function reset(param1:Number = 1, param2:Number = 0, param3:Number = 0, param4:Number = 0) : Quaternion
+      public function reset(w:Number = 1, x:Number = 0, y:Number = 0, z:Number = 0) : Quaternion
       {
-         this.w = param1;
-         this.x = param2;
-         this.y = param3;
-         this.z = param4;
+         this.w = w;
+         this.x = x;
+         this.y = y;
+         this.z = z;
          return this;
       }
       
       public function normalize() : Quaternion
       {
-         var _loc1_:Number = this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
-         if(_loc1_ == 0)
+         var len:Number = this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
+         if(len == 0)
          {
             this.w = 1;
          }
          else
          {
-            _loc1_ = 1 / Math.sqrt(_loc1_);
-            this.w *= _loc1_;
-            this.x *= _loc1_;
-            this.y *= _loc1_;
-            this.z *= _loc1_;
+            len = 1 / Math.sqrt(len);
+            this.w *= len;
+            this.x *= len;
+            this.y *= len;
+            this.z *= len;
          }
          return this;
       }
@@ -126,18 +126,18 @@ package alternativa.math
          this.x += 0.5 * dx;
          this.y += 0.5 * dy;
          this.z += 0.5 * dz;
-         var _loc10_:Number = this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
-         if(_loc10_ == 0)
+         var len:Number = this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
+         if(len == 0)
          {
             this.w = 1;
          }
          else
          {
-            _loc10_ = 1 / Math.sqrt(_loc10_);
-            this.w *= _loc10_;
-            this.x *= _loc10_;
-            this.y *= _loc10_;
-            this.z *= _loc10_;
+            len = 1 / Math.sqrt(len);
+            this.w *= len;
+            this.x *= len;
+            this.y *= len;
+            this.z *= len;
          }
          return this;
       }

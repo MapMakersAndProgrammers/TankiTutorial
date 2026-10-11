@@ -20,7 +20,7 @@ package alternativa.tanks.sfx.smoky
       
       public static const EXPLOSION_SIZE:Number = 900;
       
-      private static const nydas:Number = 1;
+      private static const SHOT_SOUND_VOLUME:Number = 1;
       
       private static const qalibi:Number = 200;
       
@@ -57,7 +57,7 @@ package alternativa.tanks.sfx.smoky
       
       private function createShotSoundEffect(turretMesh:Mesh) : void
       {
-         var sound:Sound3D = Sound3D.create(this.sfxData.shotSound,SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,nydas);
+         var sound:Sound3D = Sound3D.create(this.sfxData.shotSound,SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,SHOT_SOUND_VOLUME);
          this.soundManager.addEffect(Sound3DEffect.create(this.objectPool,new Vector3(turretMesh.x,turretMesh.y,turretMesh.z),sound));
       }
       

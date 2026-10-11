@@ -14,7 +14,7 @@ package alternativa.tanks.sfx
    public final class AnimatedLightEffect extends PooledObject implements GraphicEffect
    {
       
-      public static const nimowu:Number = 99999;
+      public static const DEFAULT_MAX_DISTANCE:Number = 99999;
       
       public var light:OmniLight;
       
@@ -36,33 +36,33 @@ package alternativa.tanks.sfx
       
       private var position:Vector3 = new Vector3();
       
-      public function AnimatedLightEffect(param1:Pool)
+      public function AnimatedLightEffect(pool:Pool)
       {
-         super(param1);
+         super(pool);
          this.light = new OmniLight(0,0,0);
       }
       
-      public function init(param1:Object3DPositionProvider, param2:LightAnimation, param3:Number = 99999, param4:Boolean = false) : void
+      public function init(positionProvider:Object3DPositionProvider, animation:LightAnimation, maxDistance:Number = 99999, looped:Boolean = false) : void
       {
-         this.initFromTime(param1,param2.getLiveTime(),param2,param3,param4);
+         this.initFromTime(positionProvider,animation.getLiveTime(),animation,maxDistance,looped);
       }
       
-      public function initFromTime(param1:Object3DPositionProvider, param2:int, param3:LightAnimation, param4:Number = 99999, param5:Boolean = false) : void
+      public function initFromTime(positionProvider:Object3DPositionProvider, duration:int, animation:LightAnimation, maxDistance:Number = 99999, looped:Boolean = false) : void
       {
-         this.positionProvider = param1;
-         this.duration = param2;
+         this.positionProvider = positionProvider;
+         this.duration = duration;
          this.time = 0;
-         this.animation = param3;
-         this.looped = param5;
+         this.animation = animation;
+         this.looped = looped;
          this.alive = true;
-         this.maxDistance = param4;
-         this.fadeDistance = param4 / 4 * 3;
-         param1.initPosition(this.light);
+         this.maxDistance = maxDistance;
+         this.fadeDistance = maxDistance / 4 * 3;
+         positionProvider.initPosition(this.light);
       }
       
-      public function initFromAnimation(param1:Object3DPositionProvider, param2:TextureAnimation, param3:LightAnimation, param4:Number = 99999, param5:Boolean = false) : void
+      public function initFromAnimation(positionProvider:Object3DPositionProvider, textureAnimation:TextureAnimation, animation:LightAnimation, maxDistance:Number = 99999, looped:Boolean = false) : void
       {
-         this.initFromTime(param1,param2.frames.length / param2.fps * 1000,param3,param4,param5);
+         this.initFromTime(positionProvider,textureAnimation.frames.length / textureAnimation.fps * 1000,animation,maxDistance,looped);
       }
       
       public function addedToScene(container:Object3DContainer) : void

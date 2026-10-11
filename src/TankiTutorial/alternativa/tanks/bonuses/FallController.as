@@ -45,17 +45,17 @@ package alternativa.tanks.bonuses
          this.bonus = bonus;
       }
       
-      public function init(position:Vector3, param2:Number, param3:Number, param4:Number, param5:Number, startingAngleZ:Number) : void
+      public function init(position:Vector3, fallSpeed:Number, minZ:Number, timeOffset:Number, time:Number, startingAngleZ:Number) : void
       {
          this.x = position.x;
          this.y = position.y;
-         this.state.z = position.z + BonusConst.wucaruw - param2 * param5;
-         this.state.rotationX = SWING_AMPLITUDE * Math.sin(SWING_FREQUENCY * param4);
-         this.state.rotationZ = startingAngleZ + BonusConst.ROTATION_SPEED * param5;
-         this.fallSpeed = param2;
-         this.minZ = param3;
-         this.timeOffset = param4;
-         this.time = param5;
+         this.state.z = position.z + BonusConst.wucaruw - fallSpeed * time;
+         this.state.rotationX = SWING_AMPLITUDE * Math.sin(SWING_FREQUENCY * timeOffset);
+         this.state.rotationZ = startingAngleZ + BonusConst.ROTATION_SPEED * time;
+         this.fallSpeed = fallSpeed;
+         this.minZ = minZ;
+         this.timeOffset = timeOffset;
+         this.time = time;
          this.prevState.copy(this.state);
          this.interpolatePhysicsState(1);
       }

@@ -20,18 +20,18 @@ package alternativa.tanks.sound
          this.effect = effect;
       }
       
-      public static function create(param1:Number, param2:ISound3DEffect) : SoundEffectData
+      public static function create(distanceSqr:Number, effect:ISound3DEffect) : SoundEffectData
       {
          var soundEffectData:SoundEffectData = null;
          if(numObjects > 0)
          {
             soundEffectData = pool[--numObjects];
             pool[numObjects] = null;
-            soundEffectData.distanceSqr = param1;
-            soundEffectData.effect = param2;
+            soundEffectData.distanceSqr = distanceSqr;
+            soundEffectData.effect = effect;
             return soundEffectData;
          }
-         return new SoundEffectData(param1,param2);
+         return new SoundEffectData(distanceSqr,effect);
       }
       
       public static function destroy(soundEffectData:SoundEffectData) : void

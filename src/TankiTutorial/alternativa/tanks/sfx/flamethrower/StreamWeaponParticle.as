@@ -11,11 +11,11 @@ package alternativa.tanks.sfx.flamethrower
    public class StreamWeaponParticle extends AnimatedSprite3D
    {
       
-      private static var resym:int = 20;
+      private static var poolSize:int = 20;
       
-      private static var pool:Vector.<StreamWeaponParticle> = new Vector.<StreamWeaponParticle>(resym);
+      private static var pool:Vector.<StreamWeaponParticle> = new Vector.<StreamWeaponParticle>(poolSize);
       
-      private static var byqe:int = -1;
+      private static var poolIndex:int = -1;
       
       public var velocity:Vector3 = new Vector3();
       
@@ -34,25 +34,25 @@ package alternativa.tanks.sfx.flamethrower
       
       public static function getParticle() : StreamWeaponParticle
       {
-         if(byqe == -1)
+         if(poolIndex == -1)
          {
             return new StreamWeaponParticle();
          }
-         var particle:StreamWeaponParticle = pool[byqe];
-         pool[byqe--] = null;
+         var particle:StreamWeaponParticle = pool[poolIndex];
+         pool[poolIndex--] = null;
          return particle;
       }
       
-      private static function interpolateColorTransform(entry1:ColorTransformEntry, entry2:ColorTransformEntry, param3:Number, result:ColorTransform) : void
+      private static function interpolateColorTransform(entry1:ColorTransformEntry, entry2:ColorTransformEntry, t:Number, result:ColorTransform) : void
       {
-         result.alphaMultiplier = entry1.alphaMultiplier + param3 * (entry2.alphaMultiplier - entry1.alphaMultiplier);
-         result.alphaOffset = entry1.alphaOffset + param3 * (entry2.alphaOffset - entry1.alphaOffset);
-         result.redMultiplier = entry1.redMultiplier + param3 * (entry2.redMultiplier - entry1.redMultiplier);
-         result.redOffset = entry1.redOffset + param3 * (entry2.redOffset - entry1.redOffset);
-         result.greenMultiplier = entry1.greenMultiplier + param3 * (entry2.greenMultiplier - entry1.greenMultiplier);
-         result.greenOffset = entry1.greenOffset + param3 * (entry2.greenOffset - entry1.greenOffset);
-         result.blueMultiplier = entry1.blueMultiplier + param3 * (entry2.blueMultiplier - entry1.blueMultiplier);
-         result.blueOffset = entry1.blueOffset + param3 * (entry2.blueOffset - entry1.blueOffset);
+         result.alphaMultiplier = entry1.alphaMultiplier + t * (entry2.alphaMultiplier - entry1.alphaMultiplier);
+         result.alphaOffset = entry1.alphaOffset + t * (entry2.alphaOffset - entry1.alphaOffset);
+         result.redMultiplier = entry1.redMultiplier + t * (entry2.redMultiplier - entry1.redMultiplier);
+         result.redOffset = entry1.redOffset + t * (entry2.redOffset - entry1.redOffset);
+         result.greenMultiplier = entry1.greenMultiplier + t * (entry2.greenMultiplier - entry1.greenMultiplier);
+         result.greenOffset = entry1.greenOffset + t * (entry2.greenOffset - entry1.greenOffset);
+         result.blueMultiplier = entry1.blueMultiplier + t * (entry2.blueMultiplier - entry1.blueMultiplier);
+         result.blueOffset = entry1.blueOffset + t * (entry2.blueOffset - entry1.blueOffset);
       }
       
       private static function copyStructToColorTransform(entry:ColorTransformEntry, result:ColorTransform) : void
@@ -71,41 +71,41 @@ package alternativa.tanks.sfx.flamethrower
       {
          removeFromParent();
          clear();
-         pool[++byqe] = this;
+         pool[++poolIndex] = this;
       }
       
       public function updateColorTransofrm(range:Number, colorTransforms:Vector.<ColorTransformEntry>) : void
       {
-         var _loc3_:Number = NaN;
+         var t:Number = NaN;
          var entry1:ColorTransformEntry = null;
          var entry2:ColorTransformEntry = null;
-         var _loc6_:int = 0;
+         var i:int = 0;
          if(colorTransforms != null)
          {
-            _loc3_ = this.flightDistance / range;
-            if(_loc3_ <= 0)
+            t = this.flightDistance / range;
+            if(t <= 0)
             {
                entry1 = colorTransforms[0];
                copyStructToColorTransform(entry1,colorTransform);
             }
-            else if(_loc3_ >= 1)
+            else if(t >= 1)
             {
                entry1 = colorTransforms[colorTransforms.length - 1];
                copyStructToColorTransform(entry1,colorTransform);
             }
             else
             {
-               _loc6_ = 1;
+               i = 1;
                entry1 = colorTransforms[0];
                entry2 = colorTransforms[1];
-               while(entry2.jomuc < _loc3_)
+               while(entry2.time < t)
                {
-                  _loc6_++;
+                  i++;
                   entry1 = entry2;
-                  entry2 = colorTransforms[_loc6_];
+                  entry2 = colorTransforms[i];
                }
-               _loc3_ = (_loc3_ - entry1.jomuc) / (entry2.jomuc - entry1.jomuc);
-               interpolateColorTransform(entry1,entry2,_loc3_,colorTransform);
+               t = (t - entry1.time) / (entry2.time - entry1.time);
+               interpolateColorTransform(entry1,entry2,t,colorTransform);
             }
             alpha = colorTransform.alphaMultiplier;
          }

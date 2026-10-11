@@ -187,12 +187,12 @@ package alternativa.tanks.sfx
          light.attenuationEnd = lerpNumber(attenuationEnd1,attenuationEnd2,t);
       }
       
-      public function updateByTime(light:Light3D, param2:int, param3:int = -1) : void
+      public function updateByTime(light:Light3D, param2:int, duration:int = -1) : void
       {
          var _loc4_:Number = 1;
-         if(param3 > 0 && this.numFrames > 0)
+         if(duration > 0 && this.numFrames > 0)
          {
-            _loc4_ = this.time[this.numFrames - 1] / param3;
+            _loc4_ = this.time[this.numFrames - 1] / duration;
          }
          var frame:Number = this.getFrameByTime(param2 * _loc4_);
          this.updateByFrame(light,frame);

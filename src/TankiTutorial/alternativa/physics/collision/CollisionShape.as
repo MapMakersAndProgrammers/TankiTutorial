@@ -39,22 +39,22 @@ package alternativa.physics.collision
          this.material = material;
       }
       
-      public function setBody(param1:Body, param2:Matrix4 = null) : void
+      public function setBody(body:Body, localTransform:Matrix4 = null) : void
       {
-         if(this.body == param1)
+         if(this.body == body)
          {
             return;
          }
-         this.body = param1;
-         if(param1 != null)
+         this.body = body;
+         if(body != null)
          {
-            if(param2 != null)
+            if(localTransform != null)
             {
                if(this.localTransform == null)
                {
                   this.localTransform = new Matrix4();
                }
-               this.localTransform.copy(param2);
+               this.localTransform.copy(localTransform);
             }
             else
             {

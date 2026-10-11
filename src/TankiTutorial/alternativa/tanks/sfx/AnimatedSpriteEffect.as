@@ -17,32 +17,32 @@ package alternativa.tanks.sfx
       
       private var frameIndex:Number;
       
-      private var luzulo:Number;
+      private var framesPerMs:Number;
       
       private var looped:Boolean;
       
       private var positionProvider:Object3DPositionProvider;
       
-      public function AnimatedSpriteEffect(param1:Pool)
+      public function AnimatedSpriteEffect(pool:Pool)
       {
-         super(param1);
+         super(pool);
          this.sprite = new AnimatedSprite3D(1,1);
          this.sprite.softAttenuation = 150;
       }
       
-      public function init(width:Number, height:Number, animation:TextureAnimation, rotation:Number, fps:Number, param6:Object3DPositionProvider, originX:Number = 0.5, originY:Number = 0.5, colorTransform:ColorTransform = null) : void
+      public function init(width:Number, height:Number, animation:TextureAnimation, rotation:Number, fps:Number, positionProvider:Object3DPositionProvider, originX:Number = 0.5, originY:Number = 0.5, colorTransform:ColorTransform = null) : void
       {
          this.initSprite(width,height,rotation,originX,originY,colorTransform,animation);
-         param6.initPosition(this.sprite);
-         this.luzulo = 0.001 * fps;
-         this.positionProvider = param6;
+         positionProvider.initPosition(this.sprite);
+         this.framesPerMs = 0.001 * fps;
+         this.positionProvider = positionProvider;
          this.frameIndex = 0;
          this.looped = false;
       }
       
-      public function initLooped(width:Number, height:Number, animation:TextureAnimation, rotation:Number, fps:Number, param6:Object3DPositionProvider, originX:Number = 0.5, originY:Number = 0.5, colorTransform:ColorTransform = null) : void
+      public function initLooped(width:Number, height:Number, animation:TextureAnimation, rotation:Number, fps:Number, positionProvider:Object3DPositionProvider, originX:Number = 0.5, originY:Number = 0.5, colorTransform:ColorTransform = null) : void
       {
-         this.init(width,height,animation,rotation,fps,param6,originX,originY,colorTransform);
+         this.init(width,height,animation,rotation,fps,positionProvider,originX,originY,colorTransform);
          this.looped = true;
       }
       
@@ -56,7 +56,7 @@ package alternativa.tanks.sfx
          if(this.looped || this.frameIndex < this.sprite.getNumFrames())
          {
             this.sprite.setFrameIndex(this.frameIndex);
-            this.frameIndex += deltaTime * this.luzulo;
+            this.frameIndex += deltaTime * this.framesPerMs;
             this.positionProvider.updateObjectPosition(this.sprite,camera,deltaTime);
             return true;
          }

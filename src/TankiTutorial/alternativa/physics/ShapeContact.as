@@ -43,9 +43,9 @@ package alternativa.physics
       
       public var binormalAngularTerm2:Number;
       
-      public var divute:Vector3 = new Vector3();
+      public var r1:Vector3 = new Vector3();
       
-      public var bamod:Vector3 = new Vector3();
+      public var r2:Vector3 = new Vector3();
       
       public var normalImpulse:Number;
       
@@ -106,13 +106,13 @@ package alternativa.physics
             this.friction = friction2;
          }
          bodyPosition = this.shape1.body.state.position;
-         this.divute.x = this.position.x - bodyPosition.x;
-         this.divute.y = this.position.y - bodyPosition.y;
-         this.divute.z = this.position.z - bodyPosition.z;
+         this.r1.x = this.position.x - bodyPosition.x;
+         this.r1.y = this.position.y - bodyPosition.y;
+         this.r1.z = this.position.z - bodyPosition.z;
          bodyPosition = this.shape2.body.state.position;
-         this.bamod.x = this.position.x - bodyPosition.x;
-         this.bamod.y = this.position.y - bodyPosition.y;
-         this.bamod.z = this.position.z - bodyPosition.z;
+         this.r2.x = this.position.x - bodyPosition.x;
+         this.r2.y = this.position.y - bodyPosition.y;
+         this.r2.z = this.position.z - bodyPosition.z;
          if(Math.abs(this.normal.x) < Math.abs(this.normal.y))
          {
             this.tangent.cross2(this.normal,Vector3.xAxis).normalize();
@@ -130,18 +130,18 @@ package alternativa.physics
          this.binormalInvMass = 0;
          if(body1.movable)
          {
-            this.normalAngularTerm1 = this.calculateAngularInertiaTerm(this.normal,this.divute,body1.invInertiaWorld);
-            this.tangentAngularTerm1 = this.calculateAngularInertiaTerm(this.tangent,this.divute,body1.invInertiaWorld);
-            this.binormalAngularTerm1 = this.calculateAngularInertiaTerm(this.binormal,this.divute,body1.invInertiaWorld);
+            this.normalAngularTerm1 = this.calculateAngularInertiaTerm(this.normal,this.r1,body1.invInertiaWorld);
+            this.tangentAngularTerm1 = this.calculateAngularInertiaTerm(this.tangent,this.r1,body1.invInertiaWorld);
+            this.binormalAngularTerm1 = this.calculateAngularInertiaTerm(this.binormal,this.r1,body1.invInertiaWorld);
             this.normalInvMass += body1.invMass + this.normalAngularTerm1;
             this.tangentInvMass += body1.invMass + this.tangentAngularTerm1;
             this.binormalInvMass += body1.invMass + this.binormalAngularTerm1;
          }
          if(body2.movable)
          {
-            this.normalAngularTerm2 = this.calculateAngularInertiaTerm(this.normal,this.bamod,body2.invInertiaWorld);
-            this.tangentAngularTerm2 = this.calculateAngularInertiaTerm(this.tangent,this.bamod,body2.invInertiaWorld);
-            this.binormalAngularTerm2 = this.calculateAngularInertiaTerm(this.binormal,this.bamod,body2.invInertiaWorld);
+            this.normalAngularTerm2 = this.calculateAngularInertiaTerm(this.normal,this.r2,body2.invInertiaWorld);
+            this.tangentAngularTerm2 = this.calculateAngularInertiaTerm(this.tangent,this.r2,body2.invInertiaWorld);
+            this.binormalAngularTerm2 = this.calculateAngularInertiaTerm(this.binormal,this.r2,body2.invInertiaWorld);
             this.normalInvMass += body2.invMass + this.normalAngularTerm2;
             this.tangentInvMass += body2.invMass + this.tangentAngularTerm2;
             this.binormalInvMass += body2.invMass + this.binormalAngularTerm2;
@@ -170,17 +170,17 @@ package alternativa.physics
       public function getSeparationVelocity() : Number
       {
          var angularVelocity:Vector3 = this.shape1.body.state.rotation;
-         var cx:Number = angularVelocity.y * this.divute.z - angularVelocity.z * this.divute.y;
-         var cy:Number = angularVelocity.z * this.divute.x - angularVelocity.x * this.divute.z;
-         var cz:Number = angularVelocity.x * this.divute.y - angularVelocity.y * this.divute.x;
+         var cx:Number = angularVelocity.y * this.r1.z - angularVelocity.z * this.r1.y;
+         var cy:Number = angularVelocity.z * this.r1.x - angularVelocity.x * this.r1.z;
+         var cz:Number = angularVelocity.x * this.r1.y - angularVelocity.y * this.r1.x;
          var v:Vector3 = this.shape1.body.state.velocity;
          var vx:Number = v.x + cx;
          var vy:Number = v.y + cy;
          var vz:Number = v.z + cz;
          angularVelocity = this.shape2.body.state.rotation;
-         cx = angularVelocity.y * this.bamod.z - angularVelocity.z * this.bamod.y;
-         cy = angularVelocity.z * this.bamod.x - angularVelocity.x * this.bamod.z;
-         cz = angularVelocity.x * this.bamod.y - angularVelocity.y * this.bamod.x;
+         cx = angularVelocity.y * this.r2.z - angularVelocity.z * this.r2.y;
+         cy = angularVelocity.z * this.r2.x - angularVelocity.x * this.r2.z;
+         cz = angularVelocity.x * this.r2.y - angularVelocity.y * this.r2.x;
          v = this.shape2.body.state.velocity;
          vx -= v.x + cx;
          vy -= v.y + cy;

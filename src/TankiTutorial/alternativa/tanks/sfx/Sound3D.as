@@ -29,26 +29,26 @@ package alternativa.tanks.sfx
       
       private var effectiveVolume:Number = 1;
       
-      public function Sound3D(param1:Sound, param2:Number, param3:Number, param4:Number, param5:Number)
+      public function Sound3D(sound:Sound, nearRadius:Number, farRadius:Number, param4:Number, param5:Number)
       {
          super();
-         this.init(param1,param2,param3,param4,param5);
+         this.init(sound,nearRadius,farRadius,param4,param5);
       }
       
-      public static function create(param1:Sound, param2:Number, param3:Number, param4:Number, param5:Number) : Sound3D
+      public static function create(sound:Sound, nearRadius:Number, farRadius:Number, param4:Number, param5:Number) : Sound3D
       {
-         var _loc6_:Sound3D = null;
-         if(param1 != null)
+         var sound3D:Sound3D = null;
+         if(sound != null)
          {
             if(pool == null)
             {
-               return new Sound3D(param1,param2,param3,param4,param5);
+               return new Sound3D(sound,nearRadius,farRadius,param4,param5);
             }
-            _loc6_ = pool;
-            _loc6_.init(param1,param2,param3,param4,param5);
-            pool = _loc6_.next;
-            _loc6_.next = null;
-            return _loc6_;
+            sound3D = pool;
+            sound3D.init(sound,nearRadius,farRadius,param4,param5);
+            pool = sound3D.next;
+            sound3D.next = null;
+            return sound3D;
          }
          return null;
       }
@@ -82,16 +82,16 @@ package alternativa.tanks.sfx
          return this._channel == null ? 0 : this._channel.position;
       }
       
-      public function init(param1:Sound, param2:Number, param3:Number, param4:Number, param5:Number) : void
+      public function init(sound:Sound, nearRadius:Number, farRadius:Number, param4:Number, param5:Number) : void
       {
-         if(param1 == null)
+         if(sound == null)
          {
             throw new ArgumentError("sound should not be null");
          }
-         this.sound = param1;
-         this.nearRadius = param2;
+         this.sound = sound;
+         this.nearRadius = nearRadius;
          this.tacacihob = param5;
-         this.jaji = (Math.sqrt(param4) - 1) / (param3 - param2);
+         this.jaji = (Math.sqrt(param4) - 1) / (farRadius - nearRadius);
          this.volume = 1;
          this.updateEffectiveVolume();
       }
@@ -113,7 +113,7 @@ package alternativa.tanks.sfx
          this.updateEffectiveVolume();
       }
       
-      public function calculateSoundProperties(cameraPosition:Vector3, soundPosition:Vector3, param3:Vector3, result:SoundTransform) : void
+      public function calculateSoundProperties(cameraPosition:Vector3, soundPosition:Vector3, cameraXAxis:Vector3, result:SoundTransform) : void
       {
          var _loc9_:Number = NaN;
          var dx:Number = soundPosition.x - cameraPosition.x;
@@ -134,16 +134,16 @@ package alternativa.tanks.sfx
             dx *= distance;
             dy *= distance;
             dz *= distance;
-            result.pan = (dx * param3.x + dy * param3.y + dz * param3.z) * (1 - _loc9_);
+            result.pan = (dx * cameraXAxis.x + dy * cameraXAxis.y + dz * cameraXAxis.z) * (1 - _loc9_);
          }
       }
       
-      public function checkVolume(cameraPosition:Vector3, soundPosition:Vector3, param3:Vector3) : void
+      public function checkVolume(cameraPosition:Vector3, soundPosition:Vector3, cameraXAxis:Vector3) : void
       {
          this.updateEffectiveVolume();
          if(this._channel != null)
          {
-            this.calculateSoundProperties(cameraPosition,soundPosition,param3,this.soundTransform);
+            this.calculateSoundProperties(cameraPosition,soundPosition,cameraXAxis,this.soundTransform);
             this.soundTransform.volume *= this.effectiveVolume;
             this._channel.soundTransform = this.soundTransform;
          }

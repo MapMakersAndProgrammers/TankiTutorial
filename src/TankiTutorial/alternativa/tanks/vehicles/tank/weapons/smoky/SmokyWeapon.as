@@ -46,9 +46,9 @@ package alternativa.tanks.vehicles.tank.weapons.smoky
       override public function getTarget() : Tank
       {
          var turretData:TurretData = getData();
-         var _loc2_:Tank = getTank();
-         turretData.update(_loc2_,0);
-         if(this.targetingSystem.getTarget(turretData.barrelOrigin,turretData.direction,turretData.xAxis,_loc2_.body,10000000000,this.hitInfo))
+         var tank:Tank = getTank();
+         turretData.update(tank,0);
+         if(this.targetingSystem.getTarget(turretData.barrelOrigin,turretData.direction,turretData.xAxis,tank.body,10000000000,this.hitInfo))
          {
             if(this.hitInfo.body != null)
             {
@@ -62,10 +62,10 @@ package alternativa.tanks.vehicles.tank.weapons.smoky
       {
          var target:Tank = null;
          var turretData:TurretData = getData();
-         var _loc2_:Tank = getTank();
-         turretData.update(_loc2_,0);
+         var tank:Tank = getTank();
+         turretData.update(tank,0);
          this.effects.createShotEffects(turretData.localMuzzlePosition,turretData.turretMesh);
-         if(this.targetingSystem.getTarget(turretData.barrelOrigin,turretData.direction,turretData.xAxis,_loc2_.body,10000000000,this.hitInfo))
+         if(this.targetingSystem.getTarget(turretData.barrelOrigin,turretData.direction,turretData.xAxis,tank.body,10000000000,this.hitInfo))
          {
             this.effects.createExplosionEffects(this.hitInfo.position,1);
             if(this.hitInfo.body != null)
@@ -78,7 +78,7 @@ package alternativa.tanks.vehicles.tank.weapons.smoky
                }
             }
          }
-         _loc2_.body.addWorldForceScaled(turretData.barrelOrigin,turretData.direction,-this.settings.recoilForce);
+         tank.body.addWorldForceScaled(turretData.barrelOrigin,turretData.direction,-this.settings.recoilForce);
       }
    }
 }

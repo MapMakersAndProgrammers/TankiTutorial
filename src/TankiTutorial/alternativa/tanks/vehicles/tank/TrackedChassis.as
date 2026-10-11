@@ -319,9 +319,9 @@ package alternativa.tanks.vehicles.tank
          }
       }
       
-      private function isReversedTurn(param1:int, param2:Number) : Boolean
+      private function isReversedTurn(direction:int, turnSpeed:Number) : Boolean
       {
-         return param1 * param2 < 0;
+         return direction * turnSpeed < 0;
       }
       
       private function calculateSurfaceVelocities(velocity:Vector3, angularVelocity:Vector3) : void
