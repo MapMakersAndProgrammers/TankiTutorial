@@ -12,7 +12,7 @@ package alternativa.tanks.battle
       
       function getObjectPool() : ObjectPool;
       
-      function addSound3DEffect(param1:ISound3DEffect) : void;
+      function addSound3DEffect(effect:ISound3DEffect) : void;
    }
 }
 

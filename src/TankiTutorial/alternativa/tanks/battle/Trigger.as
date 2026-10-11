@@ -5,7 +5,7 @@ package alternativa.tanks.battle
    public interface Trigger
    {
       
-      function checkTrigger(param1:Body) : void;
+      function checkTrigger(body:Body) : void;
    }
 }
 

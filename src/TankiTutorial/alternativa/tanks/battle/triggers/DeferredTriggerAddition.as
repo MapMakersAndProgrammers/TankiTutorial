@@ -6,20 +6,20 @@ package alternativa.tanks.battle.triggers
    public class DeferredTriggerAddition implements DeferredAction
    {
       
-      private var nykoto:Triggers;
+      private var triggers:Triggers;
       
-      private var wyqitywi:Trigger;
+      private var trigger:Trigger;
       
-      public function DeferredTriggerAddition(param1:Triggers, param2:Trigger)
+      public function DeferredTriggerAddition(triggers:Triggers, trigger:Trigger)
       {
          super();
-         this.nykoto = param1;
-         this.wyqitywi = param2;
+         this.triggers = triggers;
+         this.trigger = trigger;
       }
       
       public function execute() : void
       {
-         this.nykoto.add(this.wyqitywi);
+         this.triggers.add(this.trigger);
       }
    }
 }
