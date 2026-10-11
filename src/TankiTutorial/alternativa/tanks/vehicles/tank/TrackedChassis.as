@@ -176,15 +176,15 @@ package alternativa.tanks.vehicles.tank
          var _loc6_:Vector3 = this.body.state.zerus;
          _loc7_ = this.body.state.fev;
          _loc8_ = this.body.jefe;
-         dibi.x = _loc8_.gusat;
-         dibi.y = _loc8_.sig;
-         dibi.z = _loc8_.vug;
-         domypujag.x = _loc8_.cydop;
-         domypujag.y = _loc8_.qanezycap;
-         domypujag.z = _loc8_.luwym;
-         jidovivo.x = _loc8_.sivy;
-         jidovivo.y = _loc8_.wyvukog;
-         jidovivo.z = _loc8_.tari;
+         dibi.x = _loc8_.ma;
+         dibi.y = _loc8_.me;
+         dibi.z = _loc8_.mi;
+         domypujag.x = _loc8_.mb;
+         domypujag.y = _loc8_.mf;
+         domypujag.z = _loc8_.mj;
+         jidovivo.x = _loc8_.mc;
+         jidovivo.y = _loc8_.mg;
+         jidovivo.z = _loc8_.mk;
          _loc9_ = 1;
          var _loc10_:Number = Math.PI / 4;
          var _loc11_:Number = Math.PI / 3;
@@ -470,14 +470,14 @@ package alternativa.tanks.vehicles.tank
          {
             _loc1_ = this.body.jefe;
             _loc2_ = this.body.scene.tem;
-            _loc3_ = _loc2_.x * _loc1_.sivy + _loc2_.y * _loc1_.wyvukog + _loc2_.z * _loc1_.tari;
+            _loc3_ = _loc2_.x * _loc1_.mc + _loc2_.y * _loc1_.mg + _loc2_.z * _loc1_.mk;
             _loc4_ = _loc2_.length();
             _loc5_ = Math.SQRT1_2 * _loc4_;
             if(_loc3_ < -_loc5_ || _loc3_ > _loc5_)
             {
-               _loc6_ = (_loc1_.sivy * _loc3_ - _loc2_.x) * this.body.tuwykus;
-               _loc7_ = (_loc1_.wyvukog * _loc3_ - _loc2_.y) * this.body.tuwykus;
-               _loc8_ = (_loc1_.tari * _loc3_ - _loc2_.z) * this.body.tuwykus;
+               _loc6_ = (_loc1_.mc * _loc3_ - _loc2_.x) * this.body.tuwykus;
+               _loc7_ = (_loc1_.mg * _loc3_ - _loc2_.y) * this.body.tuwykus;
+               _loc8_ = (_loc1_.mk * _loc3_ - _loc2_.z) * this.body.tuwykus;
                this.body.addForceXYZ(_loc6_,_loc7_,_loc8_);
             }
          }

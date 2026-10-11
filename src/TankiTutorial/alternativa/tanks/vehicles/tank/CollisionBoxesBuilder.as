@@ -74,14 +74,14 @@ package alternativa.tanks.vehicles.tank
          var _loc24_:Number = param2 * 3 / 4;
          var _loc25_:Vector3 = new Vector3(param1.x,param1.y * _loc7_,_loc24_ / 2);
          var _loc26_:Matrix4 = new Matrix4();
-         _loc26_.sunafepo = _loc25_.z - param1.z;
+         _loc26_.ml = _loc25_.z - param1.z;
          var _loc27_:CollisionBox = new CollisionBox(_loc25_,CollisionGroup.neli,lymuwykos);
          param3.body.addCollisionShape(_loc27_,_loc26_);
          param3.kodasy.push(_loc27_);
          var _loc28_:Number = param2 * 3 / 4;
          var _loc29_:Vector3 = new Vector3(param1.x,param1.y * _loc7_,_loc28_ / 2);
          var _loc30_:Matrix4 = new Matrix4();
-         _loc30_.sunafepo = param2 - _loc29_.z - param1.z;
+         _loc30_.ml = param2 - _loc29_.z - param1.z;
          var _loc31_:CollisionBox = new CollisionBox(_loc29_,CollisionGroup.neli,zabybam);
          param3.body.addCollisionShape(_loc31_,_loc30_);
          param3.kodasy.push(_loc31_);
@@ -92,7 +92,7 @@ package alternativa.tanks.vehicles.tank
          var _loc4_:Vector3 = new Vector3(param1.x,param1.y,param2 / 2);
          var _loc5_:CollisionBox = new CollisionBox(_loc4_,0,lymuwykos);
          var _loc6_:Matrix4 = new Matrix4();
-         _loc6_.sunafepo = param2 / 2 - param1.z;
+         _loc6_.ml = param2 / 2 - param1.z;
          param3.body.addCollisionShape(_loc5_,_loc6_);
          param3.kyripama = _loc5_;
       }

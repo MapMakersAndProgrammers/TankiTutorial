@@ -322,7 +322,7 @@ package
          bec.x = this.targetDirection.x;
          bec.y = this.targetDirection.y;
          bec.z = this.targetDirection.z;
-         this.run.fromAxisAngle(Vector3.nesicuryn,this.angle);
+         this.run.fromAxisAngle(Vector3.zAxis,this.angle);
          bec.transform3(this.run);
          this.getCameraPositionData(this.targetPosition,bec,this.cameraPositionData);
          if(isNaN(this.cameraPositionData.position.x))
@@ -442,7 +442,7 @@ package
          {
             hifoca.copy(bawen);
             _loc7_ = rucuha - _loc6_;
-            this.getCollisionPoint(hifoca,Vector3.nesicuryn,_loc7_,bawen);
+            this.getCollisionPoint(hifoca,Vector3.zAxis,_loc7_,bawen);
          }
          param3.position.copy(bawen);
       }

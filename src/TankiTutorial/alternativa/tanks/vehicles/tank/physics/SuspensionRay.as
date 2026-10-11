@@ -59,13 +59,13 @@ package alternativa.tanks.vehicles.tank.physics
       private function raycast() : void
       {
          var _loc1_:Matrix3 = this.body.jefe;
-         this.dozykamu.x = _loc1_.gusat * this.direction.x + _loc1_.cydop * this.direction.y + _loc1_.sivy * this.direction.z;
-         this.dozykamu.y = _loc1_.sig * this.direction.x + _loc1_.qanezycap * this.direction.y + _loc1_.wyvukog * this.direction.z;
-         this.dozykamu.z = _loc1_.vug * this.direction.x + _loc1_.luwym * this.direction.y + _loc1_.tari * this.direction.z;
+         this.dozykamu.x = _loc1_.ma * this.direction.x + _loc1_.mb * this.direction.y + _loc1_.mc * this.direction.z;
+         this.dozykamu.y = _loc1_.me * this.direction.x + _loc1_.mf * this.direction.y + _loc1_.mg * this.direction.z;
+         this.dozykamu.z = _loc1_.mi * this.direction.x + _loc1_.mj * this.direction.y + _loc1_.mk * this.direction.z;
          var _loc2_:Vector3 = this.body.state.position;
-         this.ralowano.x = _loc1_.gusat * this.vyhomopog.x + _loc1_.cydop * this.vyhomopog.y + _loc1_.sivy * this.vyhomopog.z;
-         this.ralowano.y = _loc1_.sig * this.vyhomopog.x + _loc1_.qanezycap * this.vyhomopog.y + _loc1_.wyvukog * this.vyhomopog.z;
-         this.ralowano.z = _loc1_.vug * this.vyhomopog.x + _loc1_.luwym * this.vyhomopog.y + _loc1_.tari * this.vyhomopog.z;
+         this.ralowano.x = _loc1_.ma * this.vyhomopog.x + _loc1_.mb * this.vyhomopog.y + _loc1_.mc * this.vyhomopog.z;
+         this.ralowano.y = _loc1_.me * this.vyhomopog.x + _loc1_.mf * this.vyhomopog.y + _loc1_.mg * this.vyhomopog.z;
+         this.ralowano.z = _loc1_.mi * this.vyhomopog.x + _loc1_.mj * this.vyhomopog.y + _loc1_.mk * this.vyhomopog.z;
          this.ralowano.x += _loc2_.x;
          this.ralowano.y += _loc2_.y;
          this.ralowano.z += _loc2_.z;

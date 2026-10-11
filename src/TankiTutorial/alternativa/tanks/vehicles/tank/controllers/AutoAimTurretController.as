@@ -37,7 +37,7 @@ package alternativa.tanks.vehicles.tank.controllers
          lyje.y = _loc3_.y - _loc2_.y;
          lyje.z = _loc3_.z - _loc2_.z;
          this.tank.hogys.body.state.bej.toMatrix4(rinal);
-         rinal.deltaTransformVector(Vector3.pypymu,pedake);
+         rinal.deltaTransformVector(Vector3.yAxis,pedake);
          pedake.normalize();
          lyje.normalize();
          var _loc4_:Number = Math.atan2(lyje.y,lyje.x);
@@ -45,11 +45,11 @@ package alternativa.tanks.vehicles.tank.controllers
          var _loc6_:Number = _loc4_ - _loc5_;
          if(_loc6_ < -Math.PI)
          {
-            _loc6_ += MathUtils.qubabyby;
+            _loc6_ += MathUtils.PI2;
          }
          else if(_loc6_ > Math.PI)
          {
-            _loc6_ -= MathUtils.qubabyby;
+            _loc6_ -= MathUtils.PI2;
          }
          setDirectionImmediate(_loc6_);
       }

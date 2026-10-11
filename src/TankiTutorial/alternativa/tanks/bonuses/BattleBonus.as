@@ -144,7 +144,7 @@ package alternativa.tanks.bonuses
          }
          else
          {
-            zekos.cross2(Vector3.nesicuryn,param2);
+            zekos.cross2(Vector3.zAxis,param2);
             zekos.normalize();
             _loc3_ = Math.acos(param2.z);
             run.fromAxisAngle(zekos,_loc3_);
@@ -190,15 +190,15 @@ package alternativa.tanks.bonuses
          }
          else
          {
-            jarunazyk.cross2(param3,Vector3.nesicuryn);
+            jarunazyk.cross2(param3,Vector3.zAxis);
             jarunazyk.normalize();
             natyjy.cross2(param3,jarunazyk);
-            cokis.cross2(Vector3.nesicuryn,jarunazyk);
+            cokis.cross2(Vector3.zAxis,jarunazyk);
             vyhomopog.copy(param1);
             vyhomopog.addScaled(-BonusConst.numij,cokis);
             nuk.copy(param2);
             nuk.addScaled(-BonusConst.numij / param3.z,natyjy);
-            if(this.battleService.getBattleRunner().getCollisionDetector().raycastStatic(vyhomopog,Vector3.lasis,CollisionGroup.neli,manytaq,null,tet))
+            if(this.battleService.getBattleRunner().getCollisionDetector().raycastStatic(vyhomopog,Vector3.down,CollisionGroup.neli,manytaq,null,tet))
             {
                if(param2.z < tet.position.z && tet.position.z < nuk.z)
                {
@@ -233,20 +233,20 @@ package alternativa.tanks.bonuses
       private function isUnderCeil(param1:Vector3) : Boolean
       {
          var _loc2_:CollisionDetector = this.battleService.getBattleRunner().getCollisionDetector();
-         return _loc2_.hasStaticHit(param1,Vector3.nesicuryn,CollisionGroup.neli,manytaq);
+         return _loc2_.hasStaticHit(param1,Vector3.zAxis,CollisionGroup.neli,manytaq);
       }
       
       private function getGroundPointAndNormal(param1:Vector3, param2:Vector3, param3:Vector3) : void
       {
          var _loc4_:CollisionDetector = this.battleService.getBattleRunner().getCollisionDetector();
-         if(_loc4_.raycastStatic(param1,Vector3.lasis,CollisionGroup.neli,manytaq,null,tet))
+         if(_loc4_.raycastStatic(param1,Vector3.down,CollisionGroup.neli,manytaq,null,tet))
          {
             param3.copy(tet.lefugefo);
             param2.copy(tet.position);
          }
          else
          {
-            param3.copy(Vector3.nesicuryn);
+            param3.copy(Vector3.zAxis);
             param2.copy(param1);
             param2.z -= 1000;
          }

@@ -82,43 +82,43 @@ package alternativa.physics.collision.colliders
          }
          var _loc5_:Matrix4 = _loc3_.wet;
          var _loc6_:Matrix4 = _loc4_.wet;
-         this.tupanamer.x = _loc5_.kyvuru - _loc6_.kyvuru;
-         this.tupanamer.y = _loc5_.zumidynip - _loc6_.zumidynip;
-         this.tupanamer.z = _loc5_.sunafepo - _loc6_.sunafepo;
-         this.rapag.x = _loc6_.sivy;
-         this.rapag.y = _loc6_.wyvukog;
-         this.rapag.z = _loc6_.tari;
+         this.tupanamer.x = _loc5_.md - _loc6_.md;
+         this.tupanamer.y = _loc5_.mh - _loc6_.mh;
+         this.tupanamer.z = _loc5_.ml - _loc6_.ml;
+         this.rapag.x = _loc6_.mc;
+         this.rapag.y = _loc6_.mg;
+         this.rapag.z = _loc6_.mk;
          if(!this.testMainAxis(_loc3_,_loc4_,this.rapag,this.tupanamer))
          {
             return false;
          }
-         this.gisepimin.x = _loc5_.gusat;
-         this.gisepimin.y = _loc5_.sig;
-         this.gisepimin.z = _loc5_.vug;
+         this.gisepimin.x = _loc5_.ma;
+         this.gisepimin.y = _loc5_.me;
+         this.gisepimin.z = _loc5_.mi;
          if(!this.testMainAxis(_loc3_,_loc4_,this.gisepimin,this.tupanamer))
          {
             return false;
          }
-         this.zimep.x = _loc5_.cydop;
-         this.zimep.y = _loc5_.qanezycap;
-         this.zimep.z = _loc5_.luwym;
+         this.zimep.x = _loc5_.mb;
+         this.zimep.y = _loc5_.mf;
+         this.zimep.z = _loc5_.mj;
          if(!this.testMainAxis(_loc3_,_loc4_,this.zimep,this.tupanamer))
          {
             return false;
          }
-         this.naruqe.x = _loc5_.sivy;
-         this.naruqe.y = _loc5_.wyvukog;
-         this.naruqe.z = _loc5_.tari;
+         this.naruqe.x = _loc5_.mc;
+         this.naruqe.y = _loc5_.mg;
+         this.naruqe.z = _loc5_.mk;
          if(!this.testMainAxis(_loc3_,_loc4_,this.naruqe,this.tupanamer))
          {
             return false;
          }
-         this.gizy.x = _loc6_.gusat;
-         this.gizy.y = _loc6_.sig;
-         this.gizy.z = _loc6_.vug;
-         this.vas.x = _loc6_.cydop;
-         this.vas.y = _loc6_.qanezycap;
-         this.vas.z = _loc6_.luwym;
+         this.gizy.x = _loc6_.ma;
+         this.gizy.y = _loc6_.me;
+         this.gizy.z = _loc6_.mi;
+         this.vas.x = _loc6_.mb;
+         this.vas.y = _loc6_.mf;
+         this.vas.z = _loc6_.mj;
          if(!this.testDerivedAxis(_loc3_,_loc4_,this.gisepimin,this.gizy,this.tupanamer))
          {
             return false;
@@ -174,32 +174,32 @@ package alternativa.physics.collision.colliders
       private function getOverlapOnAxis(param1:CollisionBox, param2:CollisionRect, param3:Vector3, param4:Vector3) : Number
       {
          var _loc5_:Matrix4 = param1.wet;
-         var _loc6_:Number = (_loc5_.gusat * param3.x + _loc5_.sig * param3.y + _loc5_.vug * param3.z) * param1.nezav.x;
+         var _loc6_:Number = (_loc5_.ma * param3.x + _loc5_.me * param3.y + _loc5_.mi * param3.z) * param1.nezav.x;
          if(_loc6_ < 0)
          {
             _loc6_ = -_loc6_;
          }
          var _loc7_:Number = _loc6_;
-         _loc6_ = (_loc5_.cydop * param3.x + _loc5_.qanezycap * param3.y + _loc5_.luwym * param3.z) * param1.nezav.y;
+         _loc6_ = (_loc5_.mb * param3.x + _loc5_.mf * param3.y + _loc5_.mj * param3.z) * param1.nezav.y;
          if(_loc6_ < 0)
          {
             _loc6_ = -_loc6_;
          }
          _loc7_ += _loc6_;
-         _loc6_ = (_loc5_.sivy * param3.x + _loc5_.wyvukog * param3.y + _loc5_.tari * param3.z) * param1.nezav.z;
+         _loc6_ = (_loc5_.mc * param3.x + _loc5_.mg * param3.y + _loc5_.mk * param3.z) * param1.nezav.z;
          if(_loc6_ < 0)
          {
             _loc6_ = -_loc6_;
          }
          _loc7_ += _loc6_;
          _loc5_ = param2.wet;
-         _loc6_ = (_loc5_.gusat * param3.x + _loc5_.sig * param3.y + _loc5_.vug * param3.z) * param2.nezav.x;
+         _loc6_ = (_loc5_.ma * param3.x + _loc5_.me * param3.y + _loc5_.mi * param3.z) * param2.nezav.x;
          if(_loc6_ < 0)
          {
             _loc6_ = -_loc6_;
          }
          _loc7_ += _loc6_;
-         _loc6_ = (_loc5_.cydop * param3.x + _loc5_.qanezycap * param3.y + _loc5_.luwym * param3.z) * param2.nezav.y;
+         _loc6_ = (_loc5_.mb * param3.x + _loc5_.mf * param3.y + _loc5_.mj * param3.z) * param2.nezav.y;
          if(_loc6_ < 0)
          {
             _loc6_ = -_loc6_;
@@ -240,9 +240,9 @@ package alternativa.physics.collision.colliders
          _loc5_ = param1.wet;
          var _loc6_:Matrix4 = param2.wet;
          var _loc7_:Vector3 = this.tupanamer;
-         _loc7_.x = _loc5_.kyvuru - _loc6_.kyvuru;
-         _loc7_.y = _loc5_.zumidynip - _loc6_.zumidynip;
-         _loc7_.z = _loc5_.sunafepo - _loc6_.sunafepo;
+         _loc7_.x = _loc5_.md - _loc6_.md;
+         _loc7_.y = _loc5_.mh - _loc6_.mh;
+         _loc7_.z = _loc5_.ml - _loc6_.ml;
          if(param3.x * _loc7_.x + param3.y * _loc7_.y + param3.z * _loc7_.z < 0)
          {
             param3.x = -param3.x;
@@ -263,9 +263,9 @@ package alternativa.physics.collision.colliders
          {
             _loc12_ = param4[_loc11_];
             _loc13_ = _loc12_.lefugefo;
-            _loc14_ = _loc6_.sivy;
-            _loc15_ = _loc6_.wyvukog;
-            _loc16_ = _loc6_.tari;
+            _loc14_ = _loc6_.mc;
+            _loc15_ = _loc6_.mg;
+            _loc16_ = _loc6_.mk;
             if(_loc13_.x * _loc14_ + _loc13_.y * _loc15_ + _loc13_.z * _loc16_ < 0)
             {
                _loc12_.dispose();
@@ -274,7 +274,7 @@ package alternativa.physics.collision.colliders
                param4[_loc10_] = null;
                _loc11_--;
             }
-            else if(Math.abs(_loc6_.tari) > 0.999)
+            else if(Math.abs(_loc6_.mk) > 0.999)
             {
                _loc13_.x = _loc14_;
                _loc13_.y = _loc15_;

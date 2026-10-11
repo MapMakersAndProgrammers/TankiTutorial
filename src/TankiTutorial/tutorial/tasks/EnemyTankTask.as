@@ -82,8 +82,8 @@ package tutorial.tasks
             distanceSqr = this.direction.x * this.direction.x + this.direction.y * this.direction.y;
             this.direction.normalize();
             matrix = enemyTank.body.jefe;
-            forward.x = matrix.cydop;
-            forward.y = matrix.qanezycap;
+            forward.x = matrix.mb;
+            forward.y = matrix.mf;
             forward.normalize();
             cross = forward.x * this.direction.y - forward.y * this.direction.x;
             angle = Math.asin(cross);

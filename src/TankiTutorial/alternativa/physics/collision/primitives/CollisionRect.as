@@ -23,28 +23,28 @@ package alternativa.physics.collision.primitives
       {
          var _loc1_:Matrix4 = null;
          _loc1_ = wet;
-         var _loc2_:Number = _loc1_.gusat < 0 ? -_loc1_.gusat : _loc1_.gusat;
-         var _loc3_:Number = _loc1_.cydop < 0 ? -_loc1_.cydop : _loc1_.cydop;
-         var _loc4_:Number = _loc1_.sivy < 0 ? -_loc1_.sivy : _loc1_.sivy;
+         var _loc2_:Number = _loc1_.ma < 0 ? -_loc1_.ma : _loc1_.ma;
+         var _loc3_:Number = _loc1_.mb < 0 ? -_loc1_.mb : _loc1_.mb;
+         var _loc4_:Number = _loc1_.mc < 0 ? -_loc1_.mc : _loc1_.mc;
          var _loc5_:AABB = this.raruluk;
          _loc5_.jys = this.nezav.x * _loc2_ + this.nezav.y * _loc3_ + nabyjyge * _loc4_;
          _loc5_.cubegyw = -_loc5_.jys;
-         _loc2_ = _loc1_.sig < 0 ? -_loc1_.sig : _loc1_.sig;
-         _loc3_ = _loc1_.qanezycap < 0 ? -_loc1_.qanezycap : _loc1_.qanezycap;
-         _loc4_ = _loc1_.wyvukog < 0 ? -_loc1_.wyvukog : _loc1_.wyvukog;
+         _loc2_ = _loc1_.me < 0 ? -_loc1_.me : _loc1_.me;
+         _loc3_ = _loc1_.mf < 0 ? -_loc1_.mf : _loc1_.mf;
+         _loc4_ = _loc1_.mg < 0 ? -_loc1_.mg : _loc1_.mg;
          _loc5_.juri = this.nezav.x * _loc2_ + this.nezav.y * _loc3_ + nabyjyge * _loc4_;
          _loc5_.nicomosa = -_loc5_.juri;
-         _loc2_ = _loc1_.vug < 0 ? -_loc1_.vug : _loc1_.vug;
-         _loc3_ = _loc1_.luwym < 0 ? -_loc1_.luwym : _loc1_.luwym;
-         _loc4_ = _loc1_.tari < 0 ? -_loc1_.tari : _loc1_.tari;
+         _loc2_ = _loc1_.mi < 0 ? -_loc1_.mi : _loc1_.mi;
+         _loc3_ = _loc1_.mj < 0 ? -_loc1_.mj : _loc1_.mj;
+         _loc4_ = _loc1_.mk < 0 ? -_loc1_.mk : _loc1_.mk;
          _loc5_.zepoci = this.nezav.x * _loc2_ + this.nezav.y * _loc3_ + nabyjyge * _loc4_;
          _loc5_.gesuwi = -_loc5_.zepoci;
-         _loc5_.cubegyw += _loc1_.kyvuru;
-         _loc5_.jys += _loc1_.kyvuru;
-         _loc5_.nicomosa += _loc1_.zumidynip;
-         _loc5_.juri += _loc1_.zumidynip;
-         _loc5_.gesuwi += _loc1_.sunafepo;
-         _loc5_.zepoci += _loc1_.sunafepo;
+         _loc5_.cubegyw += _loc1_.md;
+         _loc5_.jys += _loc1_.md;
+         _loc5_.nicomosa += _loc1_.mh;
+         _loc5_.juri += _loc1_.mh;
+         _loc5_.gesuwi += _loc1_.ml;
+         _loc5_.zepoci += _loc1_.ml;
          return _loc5_;
       }
       
@@ -69,15 +69,15 @@ package alternativa.physics.collision.primitives
       {
          var _loc5_:Matrix4 = null;
          _loc5_ = this.wet;
-         var _loc6_:Number = param1.x - _loc5_.kyvuru;
-         var _loc7_:Number = param1.y - _loc5_.zumidynip;
-         var _loc8_:Number = param1.z - _loc5_.sunafepo;
-         var _loc9_:Number = _loc5_.gusat * _loc6_ + _loc5_.sig * _loc7_ + _loc5_.vug * _loc8_;
-         var _loc10_:Number = _loc5_.cydop * _loc6_ + _loc5_.qanezycap * _loc7_ + _loc5_.luwym * _loc8_;
-         var _loc11_:Number = _loc5_.sivy * _loc6_ + _loc5_.wyvukog * _loc7_ + _loc5_.tari * _loc8_;
-         _loc6_ = _loc5_.gusat * param2.x + _loc5_.sig * param2.y + _loc5_.vug * param2.z;
-         _loc7_ = _loc5_.cydop * param2.x + _loc5_.qanezycap * param2.y + _loc5_.luwym * param2.z;
-         _loc8_ = _loc5_.sivy * param2.x + _loc5_.wyvukog * param2.y + _loc5_.tari * param2.z;
+         var _loc6_:Number = param1.x - _loc5_.md;
+         var _loc7_:Number = param1.y - _loc5_.mh;
+         var _loc8_:Number = param1.z - _loc5_.ml;
+         var _loc9_:Number = _loc5_.ma * _loc6_ + _loc5_.me * _loc7_ + _loc5_.mi * _loc8_;
+         var _loc10_:Number = _loc5_.mb * _loc6_ + _loc5_.mf * _loc7_ + _loc5_.mj * _loc8_;
+         var _loc11_:Number = _loc5_.mc * _loc6_ + _loc5_.mg * _loc7_ + _loc5_.mk * _loc8_;
+         _loc6_ = _loc5_.ma * param2.x + _loc5_.me * param2.y + _loc5_.mi * param2.z;
+         _loc7_ = _loc5_.mb * param2.x + _loc5_.mf * param2.y + _loc5_.mj * param2.z;
+         _loc8_ = _loc5_.mc * param2.x + _loc5_.mg * param2.y + _loc5_.mk * param2.z;
          if(_loc8_ > -param3 && _loc8_ < param3)
          {
             return -1;
@@ -94,17 +94,17 @@ package alternativa.physics.collision.primitives
          {
             return -1;
          }
-         if(param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.z * _loc5_.tari > 0)
+         if(param2.x * _loc5_.mc + param2.y * _loc5_.mg + param2.z * _loc5_.mk > 0)
          {
-            param4.x = -_loc5_.sivy;
-            param4.y = -_loc5_.wyvukog;
-            param4.z = -_loc5_.tari;
+            param4.x = -_loc5_.mc;
+            param4.y = -_loc5_.mg;
+            param4.z = -_loc5_.mk;
          }
          else
          {
-            param4.x = _loc5_.sivy;
-            param4.y = _loc5_.wyvukog;
-            param4.z = _loc5_.tari;
+            param4.x = _loc5_.mc;
+            param4.y = _loc5_.mg;
+            param4.z = _loc5_.mk;
          }
          return _loc12_;
       }

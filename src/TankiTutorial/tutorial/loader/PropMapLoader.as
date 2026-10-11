@@ -260,7 +260,7 @@ package tutorial.loader
          var newShape:CollisionShape = null;
          object = this.parseMesh(object as Mesh,prop.priority,matrix3D);
          this.scene.addDynamic(object);
-         var body:Body = new Body(1,Matrix3.nyra);
+         var body:Body = new Body(1,Matrix3.identity);
          body.name = prop.name;
          body.midorofic = false;
          for each(shape in prop.collisionShapes)

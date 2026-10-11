@@ -59,9 +59,9 @@ package alternativa.physics.collision.colliders
                _loc15_.z = 0.5 * (_loc12_ + _loc13_);
                _loc15_.transform4(param7);
                _loc14_.pefavo = _loc13_ - _loc12_;
-               _loc14_.lefugefo.x = param7.sivy;
-               _loc14_.lefugefo.y = param7.wyvukog;
-               _loc14_.lefugefo.z = param7.tari;
+               _loc14_.lefugefo.x = param7.mc;
+               _loc14_.lefugefo.y = param7.mg;
+               _loc14_.lefugefo.z = param7.mk;
                param8[param8.length] = _loc14_;
             }
             _loc10_++;

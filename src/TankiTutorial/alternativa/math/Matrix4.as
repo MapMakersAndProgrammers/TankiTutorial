@@ -5,462 +5,462 @@ package alternativa.math
    public class Matrix4
    {
       
-      public static const nyra:Matrix4 = new Matrix4();
+      public static const identity:Matrix4 = new Matrix4();
       
-      public var gusat:Number;
+      public var ma:Number;
       
-      public var cydop:Number;
+      public var mb:Number;
       
-      public var sivy:Number;
+      public var mc:Number;
       
-      public var kyvuru:Number;
+      public var md:Number;
       
-      public var sig:Number;
+      public var me:Number;
       
-      public var qanezycap:Number;
+      public var mf:Number;
       
-      public var wyvukog:Number;
+      public var mg:Number;
       
-      public var zumidynip:Number;
+      public var mh:Number;
       
-      public var vug:Number;
+      public var mi:Number;
       
-      public var luwym:Number;
+      public var mj:Number;
       
-      public var tari:Number;
+      public var mk:Number;
       
-      public var sunafepo:Number;
+      public var ml:Number;
       
-      public function Matrix4(param1:Number = 1, param2:Number = 0, param3:Number = 0, param4:Number = 0, param5:Number = 0, param6:Number = 1, param7:Number = 0, param8:Number = 0, param9:Number = 0, param10:Number = 0, param11:Number = 1, param12:Number = 0)
+      public function Matrix4(ma:Number = 1, mb:Number = 0, mc:Number = 0, md:Number = 0, me:Number = 0, mf:Number = 1, mg:Number = 0, mh:Number = 0, mi:Number = 0, mj:Number = 0, mk:Number = 1, ml:Number = 0)
       {
          super();
-         this.gusat = param1;
-         this.cydop = param2;
-         this.sivy = param3;
-         this.kyvuru = param4;
-         this.sig = param5;
-         this.qanezycap = param6;
-         this.wyvukog = param7;
-         this.zumidynip = param8;
-         this.vug = param9;
-         this.luwym = param10;
-         this.tari = param11;
-         this.sunafepo = param12;
+         this.ma = ma;
+         this.mb = mb;
+         this.mc = mc;
+         this.md = md;
+         this.me = me;
+         this.mf = mf;
+         this.mg = mg;
+         this.mh = mh;
+         this.mi = mi;
+         this.mj = mj;
+         this.mk = mk;
+         this.ml = ml;
       }
       
       public function toIdentity() : Matrix4
       {
-         this.gusat = this.qanezycap = this.tari = 1;
-         this.cydop = this.sivy = this.sig = this.wyvukog = this.vug = this.luwym = this.kyvuru = this.zumidynip = this.sunafepo = 0;
+         this.ma = this.mf = this.mk = 1;
+         this.mb = this.mc = this.me = this.mg = this.mi = this.mj = this.md = this.mh = this.ml = 0;
          return this;
       }
       
       public function invert() : Matrix4
       {
-         var _loc1_:Number = this.gusat;
-         var _loc2_:Number = this.cydop;
-         var _loc3_:Number = this.sivy;
-         var _loc4_:Number = this.kyvuru;
-         var _loc5_:Number = this.sig;
-         var _loc6_:Number = this.qanezycap;
-         var _loc7_:Number = this.wyvukog;
-         var _loc8_:Number = this.zumidynip;
-         var _loc9_:Number = this.vug;
-         var _loc10_:Number = this.luwym;
-         var _loc11_:Number = this.tari;
-         var _loc12_:Number = this.sunafepo;
-         var _loc13_:Number = -_loc3_ * _loc6_ * _loc9_ + _loc2_ * _loc7_ * _loc9_ + _loc3_ * _loc5_ * _loc10_ - _loc1_ * _loc7_ * _loc10_ - _loc2_ * _loc5_ * _loc11_ + _loc1_ * _loc6_ * _loc11_;
-         this.gusat = (-_loc7_ * _loc10_ + _loc6_ * _loc11_) / _loc13_;
-         this.cydop = (_loc3_ * _loc10_ - _loc2_ * _loc11_) / _loc13_;
-         this.sivy = (-_loc3_ * _loc6_ + _loc2_ * _loc7_) / _loc13_;
-         this.kyvuru = (_loc4_ * _loc7_ * _loc10_ - _loc3_ * _loc8_ * _loc10_ - _loc4_ * _loc6_ * _loc11_ + _loc2_ * _loc8_ * _loc11_ + _loc3_ * _loc6_ * _loc12_ - _loc2_ * _loc7_ * _loc12_) / _loc13_;
-         this.sig = (_loc7_ * _loc9_ - _loc5_ * _loc11_) / _loc13_;
-         this.qanezycap = (-_loc3_ * _loc9_ + _loc1_ * _loc11_) / _loc13_;
-         this.wyvukog = (_loc3_ * _loc5_ - _loc1_ * _loc7_) / _loc13_;
-         this.zumidynip = (_loc3_ * _loc8_ * _loc9_ - _loc4_ * _loc7_ * _loc9_ + _loc4_ * _loc5_ * _loc11_ - _loc1_ * _loc8_ * _loc11_ - _loc3_ * _loc5_ * _loc12_ + _loc1_ * _loc7_ * _loc12_) / _loc13_;
-         this.vug = (-_loc6_ * _loc9_ + _loc5_ * _loc10_) / _loc13_;
-         this.luwym = (_loc2_ * _loc9_ - _loc1_ * _loc10_) / _loc13_;
-         this.tari = (-_loc2_ * _loc5_ + _loc1_ * _loc6_) / _loc13_;
-         this.sunafepo = (_loc4_ * _loc6_ * _loc9_ - _loc2_ * _loc8_ * _loc9_ - _loc4_ * _loc5_ * _loc10_ + _loc1_ * _loc8_ * _loc10_ + _loc2_ * _loc5_ * _loc12_ - _loc1_ * _loc6_ * _loc12_) / _loc13_;
+         var a:Number = this.ma;
+         var b:Number = this.mb;
+         var c:Number = this.mc;
+         var d:Number = this.md;
+         var e:Number = this.me;
+         var f:Number = this.mf;
+         var g:Number = this.mg;
+         var h:Number = this.mh;
+         var i:Number = this.mi;
+         var j:Number = this.mj;
+         var k:Number = this.mk;
+         var l:Number = this.ml;
+         var det:Number = -c * f * i + b * g * i + c * e * j - a * g * j - b * e * k + a * f * k;
+         this.ma = (-g * j + f * k) / det;
+         this.mb = (c * j - b * k) / det;
+         this.mc = (-c * f + b * g) / det;
+         this.md = (d * g * j - c * h * j - d * f * k + b * h * k + c * f * l - b * g * l) / det;
+         this.me = (g * i - e * k) / det;
+         this.mf = (-c * i + a * k) / det;
+         this.mg = (c * e - a * g) / det;
+         this.mh = (c * h * i - d * g * i + d * e * k - a * h * k - c * e * l + a * g * l) / det;
+         this.mi = (-f * i + e * j) / det;
+         this.mj = (b * i - a * j) / det;
+         this.mk = (-b * e + a * f) / det;
+         this.ml = (d * f * i - b * h * i - d * e * j + a * h * j + b * e * l - a * f * l) / det;
          return this;
       }
       
-      public function append(param1:Matrix4) : Matrix4
+      public function append(matrix:Matrix4) : Matrix4
       {
-         var _loc2_:Number = this.gusat;
-         var _loc3_:Number = this.cydop;
-         var _loc4_:Number = this.sivy;
-         var _loc5_:Number = this.kyvuru;
-         var _loc6_:Number = this.sig;
-         var _loc7_:Number = this.qanezycap;
-         var _loc8_:Number = this.wyvukog;
-         var _loc9_:Number = this.zumidynip;
-         var _loc10_:Number = this.vug;
-         var _loc11_:Number = this.luwym;
-         var _loc12_:Number = this.tari;
-         var _loc13_:Number = this.sunafepo;
-         this.gusat = param1.gusat * _loc2_ + param1.cydop * _loc6_ + param1.sivy * _loc10_;
-         this.cydop = param1.gusat * _loc3_ + param1.cydop * _loc7_ + param1.sivy * _loc11_;
-         this.sivy = param1.gusat * _loc4_ + param1.cydop * _loc8_ + param1.sivy * _loc12_;
-         this.kyvuru = param1.gusat * _loc5_ + param1.cydop * _loc9_ + param1.sivy * _loc13_ + param1.kyvuru;
-         this.sig = param1.sig * _loc2_ + param1.qanezycap * _loc6_ + param1.wyvukog * _loc10_;
-         this.qanezycap = param1.sig * _loc3_ + param1.qanezycap * _loc7_ + param1.wyvukog * _loc11_;
-         this.wyvukog = param1.sig * _loc4_ + param1.qanezycap * _loc8_ + param1.wyvukog * _loc12_;
-         this.zumidynip = param1.sig * _loc5_ + param1.qanezycap * _loc9_ + param1.wyvukog * _loc13_ + param1.zumidynip;
-         this.vug = param1.vug * _loc2_ + param1.luwym * _loc6_ + param1.tari * _loc10_;
-         this.luwym = param1.vug * _loc3_ + param1.luwym * _loc7_ + param1.tari * _loc11_;
-         this.tari = param1.vug * _loc4_ + param1.luwym * _loc8_ + param1.tari * _loc12_;
-         this.sunafepo = param1.vug * _loc5_ + param1.luwym * _loc9_ + param1.tari * _loc13_ + param1.sunafepo;
+         var a:Number = this.ma;
+         var b:Number = this.mb;
+         var c:Number = this.mc;
+         var d:Number = this.md;
+         var e:Number = this.me;
+         var f:Number = this.mf;
+         var g:Number = this.mg;
+         var h:Number = this.mh;
+         var i:Number = this.mi;
+         var j:Number = this.mj;
+         var k:Number = this.mk;
+         var l:Number = this.ml;
+         this.ma = matrix.ma * a + matrix.mb * e + matrix.mc * i;
+         this.mb = matrix.ma * b + matrix.mb * f + matrix.mc * j;
+         this.mc = matrix.ma * c + matrix.mb * g + matrix.mc * k;
+         this.md = matrix.ma * d + matrix.mb * h + matrix.mc * l + matrix.md;
+         this.me = matrix.me * a + matrix.mf * e + matrix.mg * i;
+         this.mf = matrix.me * b + matrix.mf * f + matrix.mg * j;
+         this.mg = matrix.me * c + matrix.mf * g + matrix.mg * k;
+         this.mh = matrix.me * d + matrix.mf * h + matrix.mg * l + matrix.mh;
+         this.mi = matrix.mi * a + matrix.mj * e + matrix.mk * i;
+         this.mj = matrix.mi * b + matrix.mj * f + matrix.mk * j;
+         this.mk = matrix.mi * c + matrix.mj * g + matrix.mk * k;
+         this.ml = matrix.mi * d + matrix.mj * h + matrix.mk * l + matrix.ml;
          return this;
       }
       
-      public function prepend(param1:Matrix4) : Matrix4
+      public function prepend(matrix:Matrix4) : Matrix4
       {
-         var _loc2_:Number = this.gusat;
-         var _loc3_:Number = this.cydop;
-         var _loc4_:Number = this.sivy;
-         var _loc5_:Number = this.kyvuru;
-         var _loc6_:Number = this.sig;
-         var _loc7_:Number = this.qanezycap;
-         var _loc8_:Number = this.wyvukog;
-         var _loc9_:Number = this.zumidynip;
-         var _loc10_:Number = this.vug;
-         var _loc11_:Number = this.luwym;
-         var _loc12_:Number = this.tari;
-         var _loc13_:Number = this.sunafepo;
-         this.gusat = _loc2_ * param1.gusat + _loc3_ * param1.sig + _loc4_ * param1.vug;
-         this.cydop = _loc2_ * param1.cydop + _loc3_ * param1.qanezycap + _loc4_ * param1.luwym;
-         this.sivy = _loc2_ * param1.sivy + _loc3_ * param1.wyvukog + _loc4_ * param1.tari;
-         this.kyvuru = _loc2_ * param1.kyvuru + _loc3_ * param1.zumidynip + _loc4_ * param1.sunafepo + _loc5_;
-         this.sig = _loc6_ * param1.gusat + _loc7_ * param1.sig + _loc8_ * param1.vug;
-         this.qanezycap = _loc6_ * param1.cydop + _loc7_ * param1.qanezycap + _loc8_ * param1.luwym;
-         this.wyvukog = _loc6_ * param1.sivy + _loc7_ * param1.wyvukog + _loc8_ * param1.tari;
-         this.zumidynip = _loc6_ * param1.kyvuru + _loc7_ * param1.zumidynip + _loc8_ * param1.sunafepo + _loc9_;
-         this.vug = _loc10_ * param1.gusat + _loc11_ * param1.sig + _loc12_ * param1.vug;
-         this.luwym = _loc10_ * param1.cydop + _loc11_ * param1.qanezycap + _loc12_ * param1.luwym;
-         this.tari = _loc10_ * param1.sivy + _loc11_ * param1.wyvukog + _loc12_ * param1.tari;
-         this.sunafepo = _loc10_ * param1.kyvuru + _loc11_ * param1.zumidynip + _loc12_ * param1.sunafepo + _loc13_;
+         var a:Number = this.ma;
+         var b:Number = this.mb;
+         var c:Number = this.mc;
+         var d:Number = this.md;
+         var e:Number = this.me;
+         var f:Number = this.mf;
+         var g:Number = this.mg;
+         var h:Number = this.mh;
+         var i:Number = this.mi;
+         var j:Number = this.mj;
+         var k:Number = this.mk;
+         var l:Number = this.ml;
+         this.ma = a * matrix.ma + b * matrix.me + c * matrix.mi;
+         this.mb = a * matrix.mb + b * matrix.mf + c * matrix.mj;
+         this.mc = a * matrix.mc + b * matrix.mg + c * matrix.mk;
+         this.md = a * matrix.md + b * matrix.mh + c * matrix.ml + d;
+         this.me = e * matrix.ma + f * matrix.me + g * matrix.mi;
+         this.mf = e * matrix.mb + f * matrix.mf + g * matrix.mj;
+         this.mg = e * matrix.mc + f * matrix.mg + g * matrix.mk;
+         this.mh = e * matrix.md + f * matrix.mh + g * matrix.ml + h;
+         this.mi = i * matrix.ma + j * matrix.me + k * matrix.mi;
+         this.mj = i * matrix.mb + j * matrix.mf + k * matrix.mj;
+         this.mk = i * matrix.mc + j * matrix.mg + k * matrix.mk;
+         this.ml = i * matrix.md + j * matrix.mh + k * matrix.ml + l;
          return this;
       }
       
-      public function add(param1:Matrix4) : Matrix4
+      public function add(matrix:Matrix4) : Matrix4
       {
-         this.gusat += param1.gusat;
-         this.cydop += param1.cydop;
-         this.sivy += param1.sivy;
-         this.kyvuru += param1.kyvuru;
-         this.sig += param1.sig;
-         this.qanezycap += param1.qanezycap;
-         this.wyvukog += param1.wyvukog;
-         this.zumidynip += param1.zumidynip;
-         this.vug += param1.vug;
-         this.luwym += param1.luwym;
-         this.tari += param1.tari;
-         this.sunafepo += param1.sunafepo;
+         this.ma += matrix.ma;
+         this.mb += matrix.mb;
+         this.mc += matrix.mc;
+         this.md += matrix.md;
+         this.me += matrix.me;
+         this.mf += matrix.mf;
+         this.mg += matrix.mg;
+         this.mh += matrix.mh;
+         this.mi += matrix.mi;
+         this.mj += matrix.mj;
+         this.mk += matrix.mk;
+         this.ml += matrix.ml;
          return this;
       }
       
-      public function subtract(param1:Matrix4) : Matrix4
+      public function subtract(matrix:Matrix4) : Matrix4
       {
-         this.gusat -= param1.gusat;
-         this.cydop -= param1.cydop;
-         this.sivy -= param1.sivy;
-         this.kyvuru -= param1.kyvuru;
-         this.sig -= param1.sig;
-         this.qanezycap -= param1.qanezycap;
-         this.wyvukog -= param1.wyvukog;
-         this.zumidynip -= param1.zumidynip;
-         this.vug -= param1.vug;
-         this.luwym -= param1.luwym;
-         this.tari -= param1.tari;
-         this.sunafepo -= param1.sunafepo;
+         this.ma -= matrix.ma;
+         this.mb -= matrix.mb;
+         this.mc -= matrix.mc;
+         this.md -= matrix.md;
+         this.me -= matrix.me;
+         this.mf -= matrix.mf;
+         this.mg -= matrix.mg;
+         this.mh -= matrix.mh;
+         this.mi -= matrix.mi;
+         this.mj -= matrix.mj;
+         this.mk -= matrix.mk;
+         this.ml -= matrix.ml;
          return this;
       }
       
-      public function transformVector(param1:Vector3, param2:Vector3) : void
+      public function transformVector(src:Vector3, res:Vector3) : void
       {
-         param2.x = this.gusat * param1.x + this.cydop * param1.y + this.sivy * param1.z + this.kyvuru;
-         param2.y = this.sig * param1.x + this.qanezycap * param1.y + this.wyvukog * param1.z + this.zumidynip;
-         param2.z = this.vug * param1.x + this.luwym * param1.y + this.tari * param1.z + this.sunafepo;
+         res.x = this.ma * src.x + this.mb * src.y + this.mc * src.z + this.md;
+         res.y = this.me * src.x + this.mf * src.y + this.mg * src.z + this.mh;
+         res.z = this.mi * src.x + this.mj * src.y + this.mk * src.z + this.ml;
       }
       
-      public function transformVectorInverse(param1:Vector3, param2:Vector3) : void
+      public function transformVectorInverse(src:Vector3, res:Vector3) : void
       {
-         var _loc3_:Number = param1.x - this.kyvuru;
-         var _loc4_:Number = param1.y - this.zumidynip;
-         var _loc5_:Number = param1.z - this.sunafepo;
-         param2.x = this.gusat * _loc3_ + this.sig * _loc4_ + this.vug * _loc5_;
-         param2.y = this.cydop * _loc3_ + this.qanezycap * _loc4_ + this.luwym * _loc5_;
-         param2.z = this.sivy * _loc3_ + this.wyvukog * _loc4_ + this.tari * _loc5_;
+         var dx:Number = src.x - this.md;
+         var dy:Number = src.y - this.mh;
+         var dz:Number = src.z - this.ml;
+         res.x = this.ma * dx + this.me * dy + this.mi * dz;
+         res.y = this.mb * dx + this.mf * dy + this.mj * dz;
+         res.z = this.mc * dx + this.mg * dy + this.mk * dz;
       }
       
-      public function transformVectors(param1:Vector.<Vector3>, param2:Vector.<Vector3>) : void
+      public function transformVectors(sources:Vector.<Vector3>, results:Vector.<Vector3>) : void
       {
-         var _loc4_:Vector3 = null;
-         var _loc5_:Vector3 = null;
-         var _loc3_:int = int(param1.length);
-         var _loc6_:int = 0;
-         while(_loc6_ < _loc3_)
+         var src:Vector3 = null;
+         var res:Vector3 = null;
+         var len:int = int(sources.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc4_ = param1[_loc6_];
-            _loc5_ = param2[_loc6_];
-            _loc5_.x = this.gusat * _loc4_.x + this.cydop * _loc4_.y + this.sivy * _loc4_.z + this.kyvuru;
-            _loc5_.y = this.sig * _loc4_.x + this.qanezycap * _loc4_.y + this.wyvukog * _loc4_.z + this.zumidynip;
-            _loc5_.z = this.vug * _loc4_.x + this.luwym * _loc4_.y + this.tari * _loc4_.z + this.sunafepo;
-            _loc6_++;
+            src = sources[i];
+            res = results[i];
+            res.x = this.ma * src.x + this.mb * src.y + this.mc * src.z + this.md;
+            res.y = this.me * src.x + this.mf * src.y + this.mg * src.z + this.mh;
+            res.z = this.mi * src.x + this.mj * src.y + this.mk * src.z + this.ml;
+            i++;
          }
       }
       
-      public function transformVectorsN(param1:Vector.<Vector3>, param2:Vector.<Vector3>, param3:int) : void
+      public function transformVectorsN(sources:Vector.<Vector3>, results:Vector.<Vector3>, len:int) : void
       {
-         var _loc4_:Vector3 = null;
-         var _loc5_:Vector3 = null;
-         var _loc6_:int = 0;
-         while(_loc6_ < param3)
+         var src:Vector3 = null;
+         var res:Vector3 = null;
+         var i:int = 0;
+         while(i < len)
          {
-            _loc4_ = param1[_loc6_];
-            _loc5_ = param2[_loc6_];
-            _loc5_.x = this.gusat * _loc4_.x + this.cydop * _loc4_.y + this.sivy * _loc4_.z + this.kyvuru;
-            _loc5_.y = this.sig * _loc4_.x + this.qanezycap * _loc4_.y + this.wyvukog * _loc4_.z + this.zumidynip;
-            _loc5_.z = this.vug * _loc4_.x + this.luwym * _loc4_.y + this.tari * _loc4_.z + this.sunafepo;
-            _loc6_++;
+            src = sources[i];
+            res = results[i];
+            res.x = this.ma * src.x + this.mb * src.y + this.mc * src.z + this.md;
+            res.y = this.me * src.x + this.mf * src.y + this.mg * src.z + this.mh;
+            res.z = this.mi * src.x + this.mj * src.y + this.mk * src.z + this.ml;
+            i++;
          }
       }
       
-      public function transformVectorsInverse(param1:Vector.<Vector3>, param2:Vector.<Vector3>) : void
+      public function transformVectorsInverse(sources:Vector.<Vector3>, results:Vector.<Vector3>) : void
       {
-         var _loc4_:Vector3 = null;
-         var _loc5_:Vector3 = null;
-         var _loc7_:Number = NaN;
-         var _loc8_:Number = NaN;
-         var _loc9_:Number = NaN;
-         var _loc3_:int = int(param1.length);
-         var _loc6_:int = 0;
-         while(_loc6_ < _loc3_)
+         var src:Vector3 = null;
+         var res:Vector3 = null;
+         var dx:Number = NaN;
+         var dy:Number = NaN;
+         var dz:Number = NaN;
+         var len:int = int(sources.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc4_ = param1[_loc6_];
-            _loc5_ = param2[_loc6_];
-            _loc7_ = _loc4_.x - this.kyvuru;
-            _loc8_ = _loc4_.y - this.zumidynip;
-            _loc9_ = _loc4_.z - this.sunafepo;
-            _loc5_.x = this.gusat * _loc7_ + this.sig * _loc8_ + this.vug * _loc9_;
-            _loc5_.y = this.cydop * _loc7_ + this.qanezycap * _loc8_ + this.luwym * _loc9_;
-            _loc5_.z = this.sivy * _loc7_ + this.wyvukog * _loc8_ + this.tari * _loc9_;
-            _loc6_++;
+            src = sources[i];
+            res = results[i];
+            dx = src.x - this.md;
+            dy = src.y - this.mh;
+            dz = src.z - this.ml;
+            res.x = this.ma * dx + this.me * dy + this.mi * dz;
+            res.y = this.mb * dx + this.mf * dy + this.mj * dz;
+            res.z = this.mc * dx + this.mg * dy + this.mk * dz;
+            i++;
          }
       }
       
-      public function transformVectorsInverseN(param1:Vector.<Vector3>, param2:Vector.<Vector3>, param3:int) : void
+      public function transformVectorsInverseN(sources:Vector.<Vector3>, results:Vector.<Vector3>, len:int) : void
       {
-         var _loc4_:Vector3 = null;
-         var _loc5_:Vector3 = null;
-         var _loc7_:Number = NaN;
-         var _loc8_:Number = NaN;
-         var _loc9_:Number = NaN;
-         var _loc6_:int = 0;
-         while(_loc6_ < param3)
+         var src:Vector3 = null;
+         var res:Vector3 = null;
+         var dx:Number = NaN;
+         var dy:Number = NaN;
+         var dz:Number = NaN;
+         var i:int = 0;
+         while(i < len)
          {
-            _loc4_ = param1[_loc6_];
-            _loc5_ = param2[_loc6_];
-            _loc7_ = _loc4_.x - this.kyvuru;
-            _loc8_ = _loc4_.y - this.zumidynip;
-            _loc9_ = _loc4_.z - this.sunafepo;
-            _loc5_.x = this.gusat * _loc7_ + this.sig * _loc8_ + this.vug * _loc9_;
-            _loc5_.y = this.cydop * _loc7_ + this.qanezycap * _loc8_ + this.luwym * _loc9_;
-            _loc5_.z = this.sivy * _loc7_ + this.wyvukog * _loc8_ + this.tari * _loc9_;
-            _loc6_++;
+            src = sources[i];
+            res = results[i];
+            dx = src.x - this.md;
+            dy = src.y - this.mh;
+            dz = src.z - this.ml;
+            res.x = this.ma * dx + this.me * dy + this.mi * dz;
+            res.y = this.mb * dx + this.mf * dy + this.mj * dz;
+            res.z = this.mc * dx + this.mg * dy + this.mk * dz;
+            i++;
          }
       }
       
-      public function getAxis(param1:int, param2:Vector3) : void
+      public function getAxis(index:int, axis:Vector3) : void
       {
-         switch(param1)
+         switch(index)
          {
             case 0:
-               param2.x = this.gusat;
-               param2.y = this.sig;
-               param2.z = this.vug;
+               axis.x = this.ma;
+               axis.y = this.me;
+               axis.z = this.mi;
                return;
             case 1:
-               param2.x = this.cydop;
-               param2.y = this.qanezycap;
-               param2.z = this.luwym;
+               axis.x = this.mb;
+               axis.y = this.mf;
+               axis.z = this.mj;
                return;
             case 2:
-               param2.x = this.sivy;
-               param2.y = this.wyvukog;
-               param2.z = this.tari;
+               axis.x = this.mc;
+               axis.y = this.mg;
+               axis.z = this.mk;
                return;
             case 3:
-               param2.x = this.kyvuru;
-               param2.y = this.zumidynip;
-               param2.z = this.sunafepo;
+               axis.x = this.md;
+               axis.y = this.mh;
+               axis.z = this.ml;
                return;
             default:
                return;
          }
       }
       
-      public function deltaTransformVector(param1:Vector3, param2:Vector3) : void
+      public function deltaTransformVector(src:Vector3, res:Vector3) : void
       {
-         param2.x = this.gusat * param1.x + this.cydop * param1.y + this.sivy * param1.z + this.kyvuru;
-         param2.y = this.sig * param1.x + this.qanezycap * param1.y + this.wyvukog * param1.z + this.zumidynip;
-         param2.z = this.vug * param1.x + this.luwym * param1.y + this.tari * param1.z + this.sunafepo;
+         res.x = this.ma * src.x + this.mb * src.y + this.mc * src.z + this.md;
+         res.y = this.me * src.x + this.mf * src.y + this.mg * src.z + this.mh;
+         res.z = this.mi * src.x + this.mj * src.y + this.mk * src.z + this.ml;
       }
       
-      public function deltaTransformVectorInverse(param1:Vector3, param2:Vector3) : void
+      public function deltaTransformVectorInverse(src:Vector3, res:Vector3) : void
       {
-         param2.x = this.gusat * param1.x + this.sig * param1.y + this.vug * param1.z;
-         param2.y = this.cydop * param1.x + this.qanezycap * param1.y + this.luwym * param1.z;
-         param2.z = this.sivy * param1.x + this.wyvukog * param1.y + this.tari * param1.z;
+         res.x = this.ma * src.x + this.me * src.y + this.mi * src.z;
+         res.y = this.mb * src.x + this.mf * src.y + this.mj * src.z;
+         res.z = this.mc * src.x + this.mg * src.y + this.mk * src.z;
       }
       
-      public function copy(param1:Matrix4) : Matrix4
+      public function copy(matrix:Matrix4) : Matrix4
       {
-         this.gusat = param1.gusat;
-         this.cydop = param1.cydop;
-         this.sivy = param1.sivy;
-         this.kyvuru = param1.kyvuru;
-         this.sig = param1.sig;
-         this.qanezycap = param1.qanezycap;
-         this.wyvukog = param1.wyvukog;
-         this.zumidynip = param1.zumidynip;
-         this.vug = param1.vug;
-         this.luwym = param1.luwym;
-         this.tari = param1.tari;
-         this.sunafepo = param1.sunafepo;
+         this.ma = matrix.ma;
+         this.mb = matrix.mb;
+         this.mc = matrix.mc;
+         this.md = matrix.md;
+         this.me = matrix.me;
+         this.mf = matrix.mf;
+         this.mg = matrix.mg;
+         this.mh = matrix.mh;
+         this.mi = matrix.mi;
+         this.mj = matrix.mj;
+         this.mk = matrix.mk;
+         this.ml = matrix.ml;
          return this;
       }
       
-      public function setFromMatrix3(param1:Matrix3, param2:Vector3) : Matrix4
+      public function setFromMatrix3(matrix:Matrix3, position:Vector3) : Matrix4
       {
-         this.gusat = param1.gusat;
-         this.cydop = param1.cydop;
-         this.sivy = param1.sivy;
-         this.kyvuru = param2.x;
-         this.sig = param1.sig;
-         this.qanezycap = param1.qanezycap;
-         this.wyvukog = param1.wyvukog;
-         this.zumidynip = param2.y;
-         this.vug = param1.vug;
-         this.luwym = param1.luwym;
-         this.tari = param1.tari;
-         this.sunafepo = param2.z;
+         this.ma = matrix.ma;
+         this.mb = matrix.mb;
+         this.mc = matrix.mc;
+         this.md = position.x;
+         this.me = matrix.me;
+         this.mf = matrix.mf;
+         this.mg = matrix.mg;
+         this.mh = position.y;
+         this.mi = matrix.mi;
+         this.mj = matrix.mj;
+         this.mk = matrix.mk;
+         this.ml = position.z;
          return this;
       }
       
-      public function setOrientationFromMatrix3(param1:Matrix3) : Matrix4
+      public function setOrientationFromMatrix3(matrix:Matrix3) : Matrix4
       {
-         this.gusat = param1.gusat;
-         this.cydop = param1.cydop;
-         this.sivy = param1.sivy;
-         this.sig = param1.sig;
-         this.qanezycap = param1.qanezycap;
-         this.wyvukog = param1.wyvukog;
-         this.vug = param1.vug;
-         this.luwym = param1.luwym;
-         this.tari = param1.tari;
+         this.ma = matrix.ma;
+         this.mb = matrix.mb;
+         this.mc = matrix.mc;
+         this.me = matrix.me;
+         this.mf = matrix.mf;
+         this.mg = matrix.mg;
+         this.mi = matrix.mi;
+         this.mj = matrix.mj;
+         this.mk = matrix.mk;
          return this;
       }
       
-      public function setRotationMatrix(param1:Number, param2:Number, param3:Number) : Matrix4
+      public function setRotationMatrix(rotationX:Number, rotationY:Number, rotationZ:Number) : Matrix4
       {
-         var _loc4_:Number = Math.cos(param1);
-         var _loc5_:Number = Math.sin(param1);
-         var _loc6_:Number = Math.cos(param2);
-         var _loc7_:Number = Math.sin(param2);
-         var _loc8_:Number = Math.cos(param3);
-         var _loc9_:Number = Math.sin(param3);
-         var _loc10_:Number = _loc8_ * _loc7_;
-         var _loc11_:Number = _loc9_ * _loc7_;
-         this.gusat = _loc8_ * _loc6_;
-         this.cydop = _loc10_ * _loc5_ - _loc9_ * _loc4_;
-         this.sivy = _loc10_ * _loc4_ + _loc9_ * _loc5_;
-         this.sig = _loc9_ * _loc6_;
-         this.qanezycap = _loc11_ * _loc5_ + _loc8_ * _loc4_;
-         this.wyvukog = _loc11_ * _loc4_ - _loc8_ * _loc5_;
-         this.vug = -_loc7_;
-         this.luwym = _loc6_ * _loc5_;
-         this.tari = _loc6_ * _loc4_;
+         var cosX:Number = Math.cos(rotationX);
+         var sinX:Number = Math.sin(rotationX);
+         var cosY:Number = Math.cos(rotationY);
+         var sinY:Number = Math.sin(rotationY);
+         var cosZ:Number = Math.cos(rotationZ);
+         var sinZ:Number = Math.sin(rotationZ);
+         var cosZsinY:Number = cosZ * sinY;
+         var sinZsinY:Number = sinZ * sinY;
+         this.ma = cosZ * cosY;
+         this.mb = cosZsinY * sinX - sinZ * cosX;
+         this.mc = cosZsinY * cosX + sinZ * sinX;
+         this.me = sinZ * cosY;
+         this.mf = sinZsinY * sinX + cosZ * cosX;
+         this.mg = sinZsinY * cosX - cosZ * sinX;
+         this.mi = -sinY;
+         this.mj = cosY * sinX;
+         this.mk = cosY * cosX;
          return this;
       }
       
-      public function setMatrix(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number) : Matrix4
+      public function setMatrix(x:Number, y:Number, z:Number, rotationX:Number, rotationY:Number, rotationZ:Number) : Matrix4
       {
-         var _loc7_:Number = Math.cos(param4);
-         var _loc8_:Number = Math.sin(param4);
-         var _loc9_:Number = Math.cos(param5);
-         var _loc10_:Number = Math.sin(param5);
-         var _loc11_:Number = Math.cos(param6);
-         var _loc12_:Number = Math.sin(param6);
-         var _loc13_:Number = _loc11_ * _loc10_;
-         var _loc14_:Number = _loc12_ * _loc10_;
-         this.gusat = _loc11_ * _loc9_;
-         this.cydop = _loc13_ * _loc8_ - _loc12_ * _loc7_;
-         this.sivy = _loc13_ * _loc7_ + _loc12_ * _loc8_;
-         this.kyvuru = param1;
-         this.sig = _loc12_ * _loc9_;
-         this.qanezycap = _loc14_ * _loc8_ + _loc11_ * _loc7_;
-         this.wyvukog = _loc14_ * _loc7_ - _loc11_ * _loc8_;
-         this.zumidynip = param2;
-         this.vug = -_loc10_;
-         this.luwym = _loc9_ * _loc8_;
-         this.tari = _loc9_ * _loc7_;
-         this.sunafepo = param3;
+         var cosX:Number = Math.cos(rotationX);
+         var sinX:Number = Math.sin(rotationX);
+         var cosY:Number = Math.cos(rotationY);
+         var sinY:Number = Math.sin(rotationY);
+         var cosZ:Number = Math.cos(rotationZ);
+         var sinZ:Number = Math.sin(rotationZ);
+         var cosZsinY:Number = cosZ * sinY;
+         var sinZsinY:Number = sinZ * sinY;
+         this.ma = cosZ * cosY;
+         this.mb = cosZsinY * sinX - sinZ * cosX;
+         this.mc = cosZsinY * cosX + sinZ * sinX;
+         this.md = x;
+         this.me = sinZ * cosY;
+         this.mf = sinZsinY * sinX + cosZ * cosX;
+         this.mg = sinZsinY * cosX - cosZ * sinX;
+         this.mh = y;
+         this.mi = -sinY;
+         this.mj = cosY * sinX;
+         this.mk = cosY * cosX;
+         this.ml = z;
          return this;
       }
       
-      public function getEulerAngles(param1:Vector3) : void
+      public function getEulerAngles(angles:Vector3) : void
       {
-         if(-1 < this.vug && this.vug < 1)
+         if(-1 < this.mi && this.mi < 1)
          {
-            param1.x = Math.atan2(this.luwym,this.tari);
-            param1.y = -Math.asin(this.vug);
-            param1.z = Math.atan2(this.sig,this.gusat);
+            angles.x = Math.atan2(this.mj,this.mk);
+            angles.y = -Math.asin(this.mi);
+            angles.z = Math.atan2(this.me,this.ma);
          }
          else
          {
-            param1.x = 0;
-            param1.y = this.vug <= -1 ? Math.PI : -Math.PI;
-            param1.y *= 0.5;
-            param1.z = Math.atan2(-this.cydop,this.qanezycap);
+            angles.x = 0;
+            angles.y = this.mi <= -1 ? Math.PI : -Math.PI;
+            angles.y *= 0.5;
+            angles.z = Math.atan2(-this.mb,this.mf);
          }
       }
       
-      public function setPosition(param1:Vector3) : void
+      public function setPosition(position:Vector3) : void
       {
-         this.kyvuru = param1.x;
-         this.zumidynip = param1.y;
-         this.sunafepo = param1.z;
+         this.md = position.x;
+         this.mh = position.y;
+         this.ml = position.z;
       }
       
       public function clone() : Matrix4
       {
-         return new Matrix4(this.gusat,this.cydop,this.sivy,this.kyvuru,this.sig,this.qanezycap,this.wyvukog,this.zumidynip,this.vug,this.luwym,this.tari,this.sunafepo);
+         return new Matrix4(this.ma,this.mb,this.mc,this.md,this.me,this.mf,this.mg,this.mh,this.mi,this.mj,this.mk,this.ml);
       }
       
       public function toString() : String
       {
-         return getQualifiedClassName(this) + " (" + this.gusat.toFixed(3) + " " + this.cydop.toFixed(3) + " " + this.sivy.toFixed(3) + " " + this.kyvuru.toFixed(3) + "] [" + this.sig.toFixed(3) + " " + this.qanezycap.toFixed(3) + " " + this.wyvukog.toFixed(3) + " " + this.zumidynip.toFixed(3) + "] [" + this.vug.toFixed(3) + " " + this.luwym.toFixed(3) + " " + this.tari.toFixed(3) + " " + this.sunafepo.toFixed(3) + ")";
+         return getQualifiedClassName(this) + " (" + this.ma.toFixed(3) + " " + this.mb.toFixed(3) + " " + this.mc.toFixed(3) + " " + this.md.toFixed(3) + "] [" + this.me.toFixed(3) + " " + this.mf.toFixed(3) + " " + this.mg.toFixed(3) + " " + this.mh.toFixed(3) + "] [" + this.mi.toFixed(3) + " " + this.mj.toFixed(3) + " " + this.mk.toFixed(3) + " " + this.ml.toFixed(3) + ")";
       }
       
-      public function fromAxisAngle(param1:Vector3, param2:Number) : void
+      public function fromAxisAngle(axis:Vector3, angle:Number) : void
       {
-         var _loc3_:Number = Math.cos(param2);
-         var _loc4_:Number = Math.sin(param2);
-         var _loc5_:Number = 1 - _loc3_;
-         var _loc6_:Number = param1.x;
-         var _loc7_:Number = param1.y;
-         var _loc8_:Number = param1.z;
-         this.gusat = _loc5_ * _loc6_ * _loc6_ + _loc3_;
-         this.cydop = _loc5_ * _loc6_ * _loc7_ - _loc8_ * _loc4_;
-         this.sivy = _loc5_ * _loc6_ * _loc8_ + _loc7_ * _loc4_;
-         this.sig = _loc5_ * _loc6_ * _loc7_ + _loc8_ * _loc4_;
-         this.qanezycap = _loc5_ * _loc7_ * _loc7_ + _loc3_;
-         this.wyvukog = _loc5_ * _loc7_ * _loc8_ - _loc6_ * _loc4_;
-         this.vug = _loc5_ * _loc6_ * _loc8_ - _loc7_ * _loc4_;
-         this.luwym = _loc5_ * _loc7_ * _loc8_ + _loc6_ * _loc4_;
-         this.tari = _loc5_ * _loc8_ * _loc8_ + _loc3_;
+         var c:Number = Math.cos(angle);
+         var s:Number = Math.sin(angle);
+         var t:Number = 1 - c;
+         var x:Number = axis.x;
+         var y:Number = axis.y;
+         var z:Number = axis.z;
+         this.ma = t * x * x + c;
+         this.mb = t * x * y - z * s;
+         this.mc = t * x * z + y * s;
+         this.me = t * x * y + z * s;
+         this.mf = t * y * y + c;
+         this.mg = t * y * z - x * s;
+         this.mi = t * x * z - y * s;
+         this.mj = t * y * z + x * s;
+         this.mk = t * z * z + c;
       }
    }
 }

@@ -53,7 +53,7 @@ package tutorial.tasks
          this.tank = tank;
          this.callback = callback;
          this.wall = wall;
-         this.position = wall.kiw;
+         this.position = wall.indicator;
          this.position.z += 200;
          this.phase = 0;
       }

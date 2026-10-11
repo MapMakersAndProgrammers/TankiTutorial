@@ -65,9 +65,9 @@ package alternativa.tanks.vehicles.tank.skin
       private static function setObjectTransformation(param1:Object3D, param2:Matrix4) : void
       {
          param2.getEulerAngles(fyqynyfy);
-         param1.x = param2.kyvuru;
-         param1.y = param2.zumidynip;
-         param1.z = param2.sunafepo;
+         param1.x = param2.md;
+         param1.y = param2.mh;
+         param1.z = param2.ml;
          param1.rotationX = fyqynyfy.x;
          param1.rotationY = fyqynyfy.y;
          param1.rotationZ = fyqynyfy.z;
@@ -292,7 +292,7 @@ package alternativa.tanks.vehicles.tank.skin
             param2.toMatrix4(qopo);
             qopo.setPosition(param1);
             zyrirerip.toIdentity();
-            zyrirerip.sunafepo = -(this.getHalfHeight() + TankConst.puna);
+            zyrirerip.ml = -(this.getHalfHeight() + TankConst.puna);
             zyrirerip.append(qopo);
             setObjectTransformation(this.mema,zyrirerip);
             if(this.lygawe != null)

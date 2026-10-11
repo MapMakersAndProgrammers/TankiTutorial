@@ -2,12 +2,12 @@ package alternativa.utils
 {
    import flash.utils.Dictionary;
    
-   public function clearDictionary(param1:Dictionary) : void
+   public function clearDictionary(dictionary:Dictionary) : void
    {
-      var _loc2_:* = undefined;
-      for(_loc2_ in param1)
+      var key:* = undefined;
+      for(key in dictionary)
       {
-         delete param1[_loc2_];
+         delete dictionary[key];
       }
    }
 }

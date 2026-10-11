@@ -49,12 +49,12 @@ package alternativa.tanks.sfx
       private function calculateParameters() : void
       {
          bul.setMatrix(this.firaqe.x,this.firaqe.y,this.firaqe.z,this.firaqe.rotationX,this.firaqe.rotationY,this.firaqe.rotationZ);
-         rygapyv.x = bul.gusat;
-         rygapyv.y = bul.sig;
-         rygapyv.z = bul.vug;
-         direction.x = bul.cydop;
-         direction.y = bul.qanezycap;
-         direction.z = bul.luwym;
+         rygapyv.x = bul.ma;
+         rygapyv.y = bul.me;
+         rygapyv.z = bul.mi;
+         direction.x = bul.mb;
+         direction.y = bul.mf;
+         direction.z = bul.mj;
          bul.transformVector(this.toqumyc,rinego);
          var _loc1_:Number = Number(this.toqumyc.y);
          fybumu.x = rinego.x - _loc1_ * direction.x;

@@ -34,10 +34,10 @@ package alternativa.physics.collision.primitives
          var _loc1_:AABB = this.raruluk;
          var _loc2_:Matrix4 = this.wet;
          var _loc3_:Number = 0.005;
-         var _loc6_:Number = _loc3_ * _loc2_.sivy;
-         var _loc7_:Number = _loc3_ * _loc2_.wyvukog;
-         var _loc8_:Number = _loc3_ * _loc2_.tari;
-         _loc4_ = this.lyzud.x * _loc2_.gusat + this.lyzud.y * _loc2_.cydop;
+         var _loc6_:Number = _loc3_ * _loc2_.mc;
+         var _loc7_:Number = _loc3_ * _loc2_.mg;
+         var _loc8_:Number = _loc3_ * _loc2_.mk;
+         _loc4_ = this.lyzud.x * _loc2_.ma + this.lyzud.y * _loc2_.mb;
          _loc1_.cubegyw = _loc1_.jys = _loc4_ + _loc6_;
          _loc5_ = _loc4_ - _loc6_;
          if(_loc5_ > _loc1_.jys)
@@ -48,7 +48,7 @@ package alternativa.physics.collision.primitives
          {
             _loc1_.cubegyw = _loc5_;
          }
-         _loc4_ = this.lyzud.x * _loc2_.sig + this.lyzud.y * _loc2_.qanezycap;
+         _loc4_ = this.lyzud.x * _loc2_.me + this.lyzud.y * _loc2_.mf;
          _loc1_.nicomosa = _loc1_.juri = _loc4_ + _loc7_;
          _loc5_ = _loc4_ - _loc7_;
          if(_loc5_ > _loc1_.juri)
@@ -59,7 +59,7 @@ package alternativa.physics.collision.primitives
          {
             _loc1_.nicomosa = _loc5_;
          }
-         _loc4_ = this.lyzud.x * _loc2_.vug + this.lyzud.y * _loc2_.luwym;
+         _loc4_ = this.lyzud.x * _loc2_.mi + this.lyzud.y * _loc2_.mj;
          _loc1_.gesuwi = _loc1_.zepoci = _loc4_ + _loc8_;
          _loc5_ = _loc4_ - _loc8_;
          if(_loc5_ > _loc1_.zepoci)
@@ -70,7 +70,7 @@ package alternativa.physics.collision.primitives
          {
             _loc1_.gesuwi = _loc5_;
          }
-         _loc4_ = this.pedake.x * _loc2_.gusat + this.pedake.y * _loc2_.cydop;
+         _loc4_ = this.pedake.x * _loc2_.ma + this.pedake.y * _loc2_.mb;
          _loc5_ = _loc4_ + _loc6_;
          if(_loc5_ > _loc1_.jys)
          {
@@ -89,7 +89,7 @@ package alternativa.physics.collision.primitives
          {
             _loc1_.cubegyw = _loc5_;
          }
-         _loc4_ = this.pedake.x * _loc2_.sig + this.pedake.y * _loc2_.qanezycap;
+         _loc4_ = this.pedake.x * _loc2_.me + this.pedake.y * _loc2_.mf;
          _loc5_ = _loc4_ + _loc7_;
          if(_loc5_ > _loc1_.juri)
          {
@@ -108,7 +108,7 @@ package alternativa.physics.collision.primitives
          {
             _loc1_.nicomosa = _loc5_;
          }
-         _loc4_ = this.pedake.x * _loc2_.vug + this.pedake.y * _loc2_.luwym;
+         _loc4_ = this.pedake.x * _loc2_.mi + this.pedake.y * _loc2_.mj;
          _loc5_ = _loc4_ + _loc8_;
          if(_loc5_ > _loc1_.zepoci)
          {
@@ -127,7 +127,7 @@ package alternativa.physics.collision.primitives
          {
             _loc1_.gesuwi = _loc5_;
          }
-         _loc4_ = this.bykecy.x * _loc2_.gusat + this.bykecy.y * _loc2_.cydop;
+         _loc4_ = this.bykecy.x * _loc2_.ma + this.bykecy.y * _loc2_.mb;
          _loc5_ = _loc4_ + _loc6_;
          if(_loc5_ > _loc1_.jys)
          {
@@ -146,7 +146,7 @@ package alternativa.physics.collision.primitives
          {
             _loc1_.cubegyw = _loc5_;
          }
-         _loc4_ = this.bykecy.x * _loc2_.sig + this.bykecy.y * _loc2_.qanezycap;
+         _loc4_ = this.bykecy.x * _loc2_.me + this.bykecy.y * _loc2_.mf;
          _loc5_ = _loc4_ + _loc7_;
          if(_loc5_ > _loc1_.juri)
          {
@@ -165,7 +165,7 @@ package alternativa.physics.collision.primitives
          {
             _loc1_.nicomosa = _loc5_;
          }
-         _loc4_ = this.bykecy.x * _loc2_.vug + this.bykecy.y * _loc2_.luwym;
+         _loc4_ = this.bykecy.x * _loc2_.mi + this.bykecy.y * _loc2_.mj;
          _loc5_ = _loc4_ + _loc8_;
          if(_loc5_ > _loc1_.zepoci)
          {
@@ -184,12 +184,12 @@ package alternativa.physics.collision.primitives
          {
             _loc1_.gesuwi = _loc5_;
          }
-         _loc1_.cubegyw += _loc2_.kyvuru;
-         _loc1_.jys += _loc2_.kyvuru;
-         _loc1_.nicomosa += _loc2_.zumidynip;
-         _loc1_.juri += _loc2_.zumidynip;
-         _loc1_.gesuwi += _loc2_.sunafepo;
-         _loc1_.zepoci += _loc2_.sunafepo;
+         _loc1_.cubegyw += _loc2_.md;
+         _loc1_.jys += _loc2_.md;
+         _loc1_.nicomosa += _loc2_.mh;
+         _loc1_.juri += _loc2_.mh;
+         _loc1_.gesuwi += _loc2_.ml;
+         _loc1_.zepoci += _loc2_.ml;
          return _loc1_;
       }
       
@@ -197,39 +197,39 @@ package alternativa.physics.collision.primitives
       {
          var _loc5_:Matrix4 = null;
          _loc5_ = this.wet;
-         var _loc6_:Number = param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.z * _loc5_.tari;
+         var _loc6_:Number = param2.x * _loc5_.mc + param2.y * _loc5_.mg + param2.z * _loc5_.mk;
          if(_loc6_ < param3 && _loc6_ > -param3)
          {
             return -1;
          }
-         var _loc7_:Number = param1.x - _loc5_.kyvuru;
-         var _loc8_:Number = param1.y - _loc5_.zumidynip;
-         var _loc9_:Number = param1.z - _loc5_.sunafepo;
-         var _loc10_:Number = _loc7_ * _loc5_.sivy + _loc8_ * _loc5_.wyvukog + _loc9_ * _loc5_.tari;
+         var _loc7_:Number = param1.x - _loc5_.md;
+         var _loc8_:Number = param1.y - _loc5_.mh;
+         var _loc9_:Number = param1.z - _loc5_.ml;
+         var _loc10_:Number = _loc7_ * _loc5_.mc + _loc8_ * _loc5_.mg + _loc9_ * _loc5_.mk;
          var _loc11_:Number = -_loc10_ / _loc6_;
          if(_loc11_ < 0)
          {
             return -1;
          }
-         var _loc12_:Number = _loc7_ * _loc5_.gusat + _loc8_ * _loc5_.sig + _loc9_ * _loc5_.vug;
-         var _loc13_:Number = _loc7_ * _loc5_.cydop + _loc8_ * _loc5_.qanezycap + _loc9_ * _loc5_.luwym;
-         _loc7_ = _loc12_ + _loc11_ * (param2.x * _loc5_.gusat + param2.y * _loc5_.sig + param2.z * _loc5_.vug);
-         _loc8_ = _loc13_ + _loc11_ * (param2.x * _loc5_.cydop + param2.y * _loc5_.qanezycap + param2.z * _loc5_.luwym);
+         var _loc12_:Number = _loc7_ * _loc5_.ma + _loc8_ * _loc5_.me + _loc9_ * _loc5_.mi;
+         var _loc13_:Number = _loc7_ * _loc5_.mb + _loc8_ * _loc5_.mf + _loc9_ * _loc5_.mj;
+         _loc7_ = _loc12_ + _loc11_ * (param2.x * _loc5_.ma + param2.y * _loc5_.me + param2.z * _loc5_.mi);
+         _loc8_ = _loc13_ + _loc11_ * (param2.x * _loc5_.mb + param2.y * _loc5_.mf + param2.z * _loc5_.mj);
          if(this.dodupypic.x * (_loc8_ - this.lyzud.y) - this.dodupypic.y * (_loc7_ - this.lyzud.x) < 0 || this.cilozuj.x * (_loc8_ - this.pedake.y) - this.cilozuj.y * (_loc7_ - this.pedake.x) < 0 || this.dij.x * (_loc8_ - this.bykecy.y) - this.dij.y * (_loc7_ - this.bykecy.x) < 0)
          {
             return -1;
          }
-         if(param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.z * _loc5_.tari > 0)
+         if(param2.x * _loc5_.mc + param2.y * _loc5_.mg + param2.z * _loc5_.mk > 0)
          {
-            param4.x = -_loc5_.sivy;
-            param4.y = -_loc5_.wyvukog;
-            param4.z = -_loc5_.tari;
+            param4.x = -_loc5_.mc;
+            param4.y = -_loc5_.mg;
+            param4.z = -_loc5_.mk;
          }
          else
          {
-            param4.x = _loc5_.sivy;
-            param4.y = _loc5_.wyvukog;
-            param4.z = _loc5_.tari;
+            param4.x = _loc5_.mc;
+            param4.y = _loc5_.mg;
+            param4.z = _loc5_.mk;
          }
          return _loc11_;
       }

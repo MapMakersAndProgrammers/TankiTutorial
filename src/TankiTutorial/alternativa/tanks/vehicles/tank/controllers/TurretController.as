@@ -150,11 +150,11 @@ package alternativa.tanks.vehicles.tank.controllers
             }
             if(this.masudaca < -Math.PI)
             {
-               this.masudaca += MathUtils.qubabyby;
+               this.masudaca += MathUtils.PI2;
             }
             else if(this.masudaca > Math.PI)
             {
-               this.masudaca -= MathUtils.qubabyby;
+               this.masudaca -= MathUtils.PI2;
             }
          }
       }
@@ -176,18 +176,18 @@ package alternativa.tanks.vehicles.tank.controllers
          var _loc3_:Number = this.masudaca - this.dypy;
          if(_loc3_ < -Math.PI)
          {
-            _loc2_ = this.dypy + param1 * (MathUtils.qubabyby + _loc3_);
+            _loc2_ = this.dypy + param1 * (MathUtils.PI2 + _loc3_);
             if(_loc2_ > Math.PI)
             {
-               _loc2_ -= MathUtils.qubabyby;
+               _loc2_ -= MathUtils.PI2;
             }
          }
          else if(_loc3_ > Math.PI)
          {
-            _loc2_ = this.dypy - param1 * (MathUtils.qubabyby - _loc3_);
+            _loc2_ = this.dypy - param1 * (MathUtils.PI2 - _loc3_);
             if(_loc2_ < -Math.PI)
             {
-               _loc2_ += MathUtils.qubabyby;
+               _loc2_ += MathUtils.PI2;
             }
          }
          else

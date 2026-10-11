@@ -41,7 +41,7 @@ package alternativa.tanks.vehicles.tank.physics
          while(_loc6_ < param1)
          {
             _loc7_ = new Vector3(param2.x,param2.y + 0.5 * param3 - _loc6_ * _loc5_,param2.z);
-            this.mofovoti[_loc6_] = new SuspensionRay(this.body,_loc7_,Vector3.lasis,param4);
+            this.mofovoti[_loc6_] = new SuspensionRay(this.body,_loc7_,Vector3.down,param4);
             _loc6_++;
          }
       }

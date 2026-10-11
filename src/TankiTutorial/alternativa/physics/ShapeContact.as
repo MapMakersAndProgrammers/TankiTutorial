@@ -115,11 +115,11 @@ package alternativa.physics
          this.bamod.z = this.position.z - _loc5_.z;
          if(Math.abs(this.lefugefo.x) < Math.abs(this.lefugefo.y))
          {
-            this.cabuhyjyp.cross2(this.lefugefo,Vector3.giv).normalize();
+            this.cabuhyjyp.cross2(this.lefugefo,Vector3.xAxis).normalize();
          }
          else
          {
-            this.cabuhyjyp.cross2(this.lefugefo,Vector3.pypymu).normalize();
+            this.cabuhyjyp.cross2(this.lefugefo,Vector3.yAxis).normalize();
          }
          this.tufumiti.cross2(this.lefugefo,this.cabuhyjyp);
          this.lasowicup = 0;
@@ -158,9 +158,9 @@ package alternativa.physics
          var _loc4_:Number = param2.y * param1.z - param2.z * param1.y;
          var _loc5_:Number = param2.z * param1.x - param2.x * param1.z;
          var _loc6_:Number = param2.x * param1.y - param2.y * param1.x;
-         var _loc7_:Number = param3.gusat * _loc4_ + param3.cydop * _loc5_ + param3.sivy * _loc6_;
-         var _loc8_:Number = param3.sig * _loc4_ + param3.qanezycap * _loc5_ + param3.wyvukog * _loc6_;
-         var _loc9_:Number = param3.vug * _loc4_ + param3.luwym * _loc5_ + param3.tari * _loc6_;
+         var _loc7_:Number = param3.ma * _loc4_ + param3.mb * _loc5_ + param3.mc * _loc6_;
+         var _loc8_:Number = param3.me * _loc4_ + param3.mf * _loc5_ + param3.mg * _loc6_;
+         var _loc9_:Number = param3.mi * _loc4_ + param3.mj * _loc5_ + param3.mk * _loc6_;
          _loc4_ = _loc8_ * param2.z - _loc9_ * param2.y;
          _loc5_ = _loc9_ * param2.x - _loc7_ * param2.z;
          _loc6_ = _loc7_ * param2.y - _loc8_ * param2.x;

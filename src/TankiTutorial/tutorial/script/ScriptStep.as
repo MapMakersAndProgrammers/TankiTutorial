@@ -156,7 +156,7 @@ package tutorial.script
                   break;
                case WAYWALL:
                   wall = this.parseWayWall(actionXML);
-                  this.position.copy(wall.kiw);
+                  this.position.copy(wall.indicator);
                   this.tasks.push(new WaywallTask(wall,this.playerTank,this.onStepDone));
                   ++this.numRequired;
                   break;

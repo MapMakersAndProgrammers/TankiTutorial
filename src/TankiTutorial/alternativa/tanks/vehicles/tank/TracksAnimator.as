@@ -55,7 +55,7 @@ package alternativa.tanks.vehicles.tank
       
       private function hasCorrectContacts(param1:Track) : Boolean
       {
-         return param1.body.jefe.tari > 0 && param1.jim > 0;
+         return param1.body.jefe.mk > 0 && param1.jim > 0;
       }
       
       private function animateTrackWithContacts(param1:Track, param2:Number) : void
@@ -82,7 +82,7 @@ package alternativa.tanks.vehicles.tank
          var _loc5_:Number = miqowat.y - _loc2_.y;
          var _loc6_:Number = miqowat.z - _loc2_.z;
          var _loc7_:Matrix3 = param1.body.jefe;
-         return _loc4_ * _loc7_.cydop + _loc5_ * _loc7_.qanezycap + _loc6_ * _loc7_.luwym;
+         return _loc4_ * _loc7_.mb + _loc5_ * _loc7_.mf + _loc6_ * _loc7_.mj;
       }
       
       private function getBodyPointVelocity(param1:Body, param2:Vector3, param3:Vector3) : void

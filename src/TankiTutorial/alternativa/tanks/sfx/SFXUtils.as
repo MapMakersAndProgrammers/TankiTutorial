@@ -80,7 +80,7 @@ package alternativa.tanks.sfx
          nywo.y -= _loc6_ * param3.y;
          nywo.z -= _loc6_ * param3.z;
          nywo.normalize();
-         zob.transformVector(Vector3.nesicuryn,qomusawe);
+         zob.transformVector(Vector3.zAxis,qomusawe);
          _loc6_ = qomusawe.x * nywo.x + qomusawe.y * nywo.y + qomusawe.z * nywo.z;
          gik.x = qomusawe.y * nywo.z - qomusawe.z * nywo.y;
          gik.y = qomusawe.z * nywo.x - qomusawe.x * nywo.z;

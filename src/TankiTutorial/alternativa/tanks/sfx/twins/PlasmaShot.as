@@ -181,7 +181,7 @@ package alternativa.tanks.sfx.twins
          this.wahy.setAnimationData(mofibimap);
          this.nomupiz = this.wahy.getNumFrames();
          this.lamutameq = this.nomupiz * Math.random();
-         this.wahy.rotation = MathUtils.qubabyby * Math.random();
+         this.wahy.rotation = MathUtils.PI2 * Math.random();
          this.ruv = 0;
          this.jac = true;
       }
@@ -323,7 +323,7 @@ package alternativa.tanks.sfx.twins
          var _loc5_:Number = boker * (1 + param2) / 2;
          var _loc6_:AnimatedSpriteEffect = AnimatedSpriteEffect(objectPool.getObject(AnimatedSpriteEffect));
          var _loc7_:int = 20;
-         _loc6_.init(_loc5_,_loc5_,fid,MathUtils.qubabyby * Math.random(),_loc7_,_loc4_,0.5,0.5,null);
+         _loc6_.init(_loc5_,_loc5_,fid,MathUtils.PI2 * Math.random(),_loc7_,_loc4_,0.5,0.5,null);
          effects.addEffect(_loc6_);
          this.createExplsionLightEffect(param1);
       }
@@ -360,7 +360,7 @@ package alternativa.tanks.sfx.twins
          hifoca.copy(this.guripovec);
          var _loc2_:Number = japycepef;
          hifoca.z += _loc2_;
-         if(param1.raycast(hifoca,Vector3.lasis,CollisionGroup.neli,_loc2_,null,wonuhig))
+         if(param1.raycast(hifoca,Vector3.down,CollisionGroup.neli,_loc2_,null,wonuhig))
          {
             this.applyImpact(null,wonuhig.position,null,0);
             this.destroy();

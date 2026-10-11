@@ -240,7 +240,7 @@ package alternativa.tanks.vehicles.tank
          var _loc4_:Body = null;
          if(this.hogys == null)
          {
-            _loc4_ = new Body(param1,Matrix3.nyra);
+            _loc4_ = new Body(param1,Matrix3.identity);
             _loc4_.katuf = this;
             this.hogys = new TankBody(_loc4_);
          }
@@ -266,7 +266,7 @@ package alternativa.tanks.vehicles.tank
       {
          var _loc3_:Vector3 = new Vector3(param1.x,param1.y,param2 / 2);
          var _loc4_:Matrix4 = this.hogys.kyripama.koma;
-         this.fysa = _loc3_.length() + Math.abs(_loc4_.sunafepo);
+         this.fysa = _loc3_.length() + Math.abs(_loc4_.ml);
       }
       
       private function createVisibilityPoints(param1:Vector3) : void
@@ -316,15 +316,15 @@ package alternativa.tanks.vehicles.tank
       {
          this.lobozofeh.toMatrix3(wokymityf);
          lilotes.copy(this.zeneti);
-         lilotes.x += this.nyryp * wokymityf.sivy;
-         lilotes.y += this.nyryp * wokymityf.wyvukog;
-         lilotes.z += this.nyryp * wokymityf.tari;
+         lilotes.x += this.nyryp * wokymityf.mc;
+         lilotes.y += this.nyryp * wokymityf.mg;
+         lilotes.z += this.nyryp * wokymityf.mk;
          qef.setFromMatrix3(wokymityf,lilotes);
          var _loc3_:Vector3 = this.kuca.getHull().sih;
          rizy.setMatrix(_loc3_.x,_loc3_.y,_loc3_.z,0,0,GameData.kumiteva ? Number(this.mum.getCameraDirection()) : Number(this.mum.getDirection()));
          rizy.append(qef);
-         param1.reset(rizy.kyvuru,rizy.zumidynip,rizy.sunafepo);
-         param2.reset(rizy.cydop,rizy.qanezycap,rizy.luwym);
+         param1.reset(rizy.md,rizy.mh,rizy.ml);
+         param2.reset(rizy.mb,rizy.mf,rizy.mj);
       }
       
       public function setMaxSpeed(param1:Number, param2:Boolean) : void
@@ -500,9 +500,9 @@ package alternativa.tanks.vehicles.tank
       {
          this.lobozofeh.toMatrix3(wokymityf);
          lilotes.copy(this.zeneti);
-         lilotes.x += this.nyryp * wokymityf.sivy;
-         lilotes.y += this.nyryp * wokymityf.wyvukog;
-         lilotes.z += this.nyryp * wokymityf.tari;
+         lilotes.x += this.nyryp * wokymityf.mc;
+         lilotes.y += this.nyryp * wokymityf.mg;
+         lilotes.z += this.nyryp * wokymityf.mk;
          this.kuca.updateTransform(lilotes,this.lobozofeh,this.bedepidy);
          var _loc3_:Number = param2 * 0.001;
          this.viqi.animate(_loc3_);
@@ -528,18 +528,18 @@ package alternativa.tanks.vehicles.tank
       private function calculateTankDirection() : Number
       {
          this.lobozofeh.toMatrix3(wokymityf);
-         wokymityf.transformVector(Vector3.nesicuryn,dedit);
+         wokymityf.transformVector(Vector3.zAxis,dedit);
          dedit.normalize();
          qalolyris.z = this.nyryp;
          lilotes.reset();
          lilotes.transform3(wokymityf);
          lilotes.add(this.zeneti);
          qef.setFromMatrix3(wokymityf,lilotes);
-         hyqirufy.reset(qef.kyvuru,qef.zumidynip,qef.sunafepo);
-         jygef.reset(qef.cydop,qef.qanezycap,qef.luwym);
+         hyqirufy.reset(qef.md,qef.mh,qef.ml);
+         jygef.reset(qef.mb,qef.mf,qef.mj);
          jygef.normalize();
-         baven.copy(Vector3.giv);
-         gof.copy(Vector3.pypymu);
+         baven.copy(Vector3.xAxis);
+         gof.copy(Vector3.yAxis);
          baven.projectOnPlane(dedit);
          gof.projectOnPlane(dedit);
          baven.normalize();

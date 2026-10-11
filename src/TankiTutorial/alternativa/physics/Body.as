@@ -133,7 +133,7 @@ package alternativa.physics
          param2.x = this.gomocyl.position.x * _loc4_ + this.state.position.x * param1;
          param2.y = this.gomocyl.position.y * _loc4_ + this.state.position.y * param1;
          param2.z = this.gomocyl.position.z * _loc4_ + this.state.position.z * param1;
-         param3.dige = this.gomocyl.bej.dige * _loc4_ + this.state.bej.dige * param1;
+         param3.w = this.gomocyl.bej.w * _loc4_ + this.state.bej.w * param1;
          param3.x = this.gomocyl.bej.x * _loc4_ + this.state.bej.x * param1;
          param3.y = this.gomocyl.bej.y * _loc4_ + this.state.bej.y * param1;
          param3.z = this.gomocyl.bej.z * _loc4_ + this.state.bej.z * param1;
@@ -186,9 +186,9 @@ package alternativa.physics
          _loc5_ = (param1.y * param2.z - param1.z * param2.y) * param3;
          var _loc6_:Number = (param1.z * param2.x - param1.x * param2.z) * param3;
          _loc7_ = (param1.x * param2.y - param1.y * param2.x) * param3;
-         this.state.fev.x += this.cobugihyh.gusat * _loc5_ + this.cobugihyh.cydop * _loc6_ + this.cobugihyh.sivy * _loc7_;
-         this.state.fev.y += this.cobugihyh.sig * _loc5_ + this.cobugihyh.qanezycap * _loc6_ + this.cobugihyh.wyvukog * _loc7_;
-         this.state.fev.z += this.cobugihyh.vug * _loc5_ + this.cobugihyh.luwym * _loc6_ + this.cobugihyh.tari * _loc7_;
+         this.state.fev.x += this.cobugihyh.ma * _loc5_ + this.cobugihyh.mb * _loc6_ + this.cobugihyh.mc * _loc7_;
+         this.state.fev.y += this.cobugihyh.me * _loc5_ + this.cobugihyh.mf * _loc6_ + this.cobugihyh.mg * _loc7_;
+         this.state.fev.z += this.cobugihyh.mi * _loc5_ + this.cobugihyh.mj * _loc6_ + this.cobugihyh.mk * _loc7_;
       }
       
       public function applyWorldPseudoImpulseAtLocalPoint(param1:Vector3, param2:Vector3, param3:Number) : void
@@ -203,9 +203,9 @@ package alternativa.physics
          var _loc5_:Number = (param1.y * param2.z - param1.z * param2.y) * param3;
          _loc6_ = (param1.z * param2.x - param1.x * param2.z) * param3;
          _loc7_ = (param1.x * param2.y - param1.y * param2.x) * param3;
-         this.bupu.x += this.cobugihyh.gusat * _loc5_ + this.cobugihyh.cydop * _loc6_ + this.cobugihyh.sivy * _loc7_;
-         this.bupu.y += this.cobugihyh.sig * _loc5_ + this.cobugihyh.qanezycap * _loc6_ + this.cobugihyh.wyvukog * _loc7_;
-         this.bupu.z += this.cobugihyh.vug * _loc5_ + this.cobugihyh.luwym * _loc6_ + this.cobugihyh.tari * _loc7_;
+         this.bupu.x += this.cobugihyh.ma * _loc5_ + this.cobugihyh.mb * _loc6_ + this.cobugihyh.mc * _loc7_;
+         this.bupu.y += this.cobugihyh.me * _loc5_ + this.cobugihyh.mf * _loc6_ + this.cobugihyh.mg * _loc7_;
+         this.bupu.z += this.cobugihyh.mi * _loc5_ + this.cobugihyh.mj * _loc6_ + this.cobugihyh.mk * _loc7_;
       }
       
       public function applyImpulse(param1:Vector3, param2:Number) : void
@@ -299,9 +299,9 @@ package alternativa.physics
          this.cozo.x = this.res.x * this.jutelycu;
          this.cozo.y = this.res.y * this.jutelycu;
          this.cozo.z = this.res.z * this.jutelycu;
-         this.tetizid.x = this.cobugihyh.gusat * this.wapab.x + this.cobugihyh.cydop * this.wapab.y + this.cobugihyh.sivy * this.wapab.z;
-         this.tetizid.y = this.cobugihyh.sig * this.wapab.x + this.cobugihyh.qanezycap * this.wapab.y + this.cobugihyh.wyvukog * this.wapab.z;
-         this.tetizid.z = this.cobugihyh.vug * this.wapab.x + this.cobugihyh.luwym * this.wapab.y + this.cobugihyh.tari * this.wapab.z;
+         this.tetizid.x = this.cobugihyh.ma * this.wapab.x + this.cobugihyh.mb * this.wapab.y + this.cobugihyh.mc * this.wapab.z;
+         this.tetizid.y = this.cobugihyh.me * this.wapab.x + this.cobugihyh.mf * this.wapab.y + this.cobugihyh.mg * this.wapab.z;
+         this.tetizid.z = this.cobugihyh.mi * this.wapab.x + this.cobugihyh.mj * this.wapab.y + this.cobugihyh.mk * this.wapab.z;
       }
       
       public function calcDerivedData() : void

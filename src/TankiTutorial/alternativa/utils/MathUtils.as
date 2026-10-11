@@ -3,135 +3,135 @@ package alternativa.utils
    public class MathUtils
    {
       
-      public static const qubabyby:Number = 2 * Math.PI;
+      public static const PI2:Number = 2 * Math.PI;
       
       public function MathUtils()
       {
          super();
       }
       
-      public static function clamp(param1:Number, param2:Number, param3:Number) : Number
+      public static function clamp(value:Number, min:Number, max:Number) : Number
       {
-         if(param1 < param2)
+         if(value < min)
          {
-            return param2;
+            return min;
          }
-         if(param1 > param3)
+         if(value > max)
          {
-            return param3;
+            return max;
          }
-         return param1;
+         return value;
       }
       
-      public static function clampAngle(param1:Number) : Number
+      public static function clampAngle(angle:Number) : Number
       {
-         param1 %= qubabyby;
-         if(param1 < -Math.PI)
+         angle %= PI2;
+         if(angle < -Math.PI)
          {
-            return qubabyby + param1;
+            return PI2 + angle;
          }
-         if(param1 > Math.PI)
+         if(angle > Math.PI)
          {
-            return param1 - qubabyby;
+            return angle - PI2;
          }
-         return param1;
+         return angle;
       }
       
-      public static function clampAngleFast(param1:Number) : Number
+      public static function clampAngleFast(angle:Number) : Number
       {
-         if(param1 < -Math.PI)
+         if(angle < -Math.PI)
          {
-            return qubabyby + param1;
+            return PI2 + angle;
          }
-         if(param1 > Math.PI)
+         if(angle > Math.PI)
          {
-            return param1 - qubabyby;
+            return angle - PI2;
          }
-         return param1;
+         return angle;
       }
       
-      public static function toDegrees(param1:Number) : Number
+      public static function toDegrees(radians:Number) : Number
       {
-         return param1 * 180 / Math.PI;
+         return radians * 180 / Math.PI;
       }
       
-      public static function toRadians(param1:Number) : Number
+      public static function toRadians(degrees:Number) : Number
       {
-         return param1 * Math.PI / 180;
+         return degrees * Math.PI / 180;
       }
       
-      public static function getBitValue(param1:int, param2:int) : int
+      public static function getBitValue(value:int, bit:int) : int
       {
-         return param1 >> param2 & 1;
+         return value >> bit & 1;
       }
       
-      public static function changeBitValue(param1:int, param2:int, param3:Boolean) : int
+      public static function changeBitValue(value:int, bit:int, enabled:Boolean) : int
       {
-         if(param3)
+         if(enabled)
          {
-            return param1 | 1 << param2;
+            return value | 1 << bit;
          }
-         return param1 & ~(1 << param2);
+         return value & ~(1 << bit);
       }
       
-      public static function moveValueTowards(param1:Number, param2:Number, param3:Number) : Number
+      public static function moveValueTowards(value:Number, target:Number, delta:Number) : Number
       {
-         if(param1 < param2)
+         if(value < target)
          {
-            param1 += param3;
-            return param1 > param2 ? param2 : param1;
+            value += delta;
+            return value > target ? target : value;
          }
-         if(param1 > param2)
+         if(value > target)
          {
-            param1 -= param3;
-            return param1 < param2 ? param2 : param1;
+            value -= delta;
+            return value < target ? target : value;
          }
-         return param1;
+         return value;
       }
       
-      public static function snap(param1:Number, param2:Number, param3:Number) : Number
+      public static function snap(value:Number, target:Number, epsilon:Number) : Number
       {
-         if(param1 > param2 - param3 && param1 < param2 + param3)
+         if(value > target - epsilon && value < target + epsilon)
          {
-            return param2;
+            return target;
          }
-         return param1;
+         return value;
       }
       
-      public static function sign(param1:Number) : Number
+      public static function sign(value:Number) : Number
       {
-         if(param1 < 0)
+         if(value < 0)
          {
             return -1;
          }
-         if(param1 > 0)
+         if(value > 0)
          {
             return 1;
          }
          return 0;
       }
       
-      public static function numberSign(param1:Number, param2:Number) : Number
+      public static function numberSign(value:Number, threshold:Number) : Number
       {
-         if(param1 < 0)
+         if(value < 0)
          {
-            return param1 < -param2 ? -1 : 0;
+            return value < -threshold ? -1 : 0;
          }
-         if(param1 > 0)
+         if(value > 0)
          {
-            return param1 > param2 ? 1 : 0;
+            return value > threshold ? 1 : 0;
          }
          return 0;
       }
       
-      public static function numbersEqual(param1:Number, param2:Number, param3:Number) : Boolean
+      public static function numbersEqual(a:Number, b:Number, epsilon:Number) : Boolean
       {
-         var _loc4_:Number = param1 - param2;
-         if(_loc4_ < 0)
+         var diff:Number = a - b;
+         if(diff < 0)
          {
-            return _loc4_ > -param3;
+            return diff > -epsilon;
          }
-         return _loc4_ < param3;
+         return diff < epsilon;
       }
    }
 }

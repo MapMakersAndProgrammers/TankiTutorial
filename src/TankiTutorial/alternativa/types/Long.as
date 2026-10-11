@@ -5,48 +5,48 @@ package alternativa.types
    public class Long
    {
       
-      private static var wyhynif:int = 0;
+      private static var next:int = 0;
       
-      private static const ryparyg:Dictionary = new Dictionary();
+      private static const longs:Dictionary = new Dictionary();
       
-      private var gojiwi:int;
+      private var _low:int;
       
-      public function Long(param1:int)
+      public function Long(low:int)
       {
          super();
-         this.gojiwi = param1;
+         this._low = low;
       }
       
       public static function getNext() : Long
       {
-         var _loc1_:Long = null;
-         if(Boolean(ryparyg[wyhynif]))
+         var res:Long = null;
+         if(Boolean(longs[next]))
          {
-            _loc1_ = ryparyg[wyhynif];
+            res = longs[next];
          }
          else
          {
-            _loc1_ = new Long(wyhynif);
-            ryparyg[wyhynif] = _loc1_;
+            res = new Long(next);
+            longs[next] = res;
          }
-         ++wyhynif;
-         return _loc1_;
+         ++next;
+         return res;
       }
       
-      public static function getLong(param1:int) : Long
+      public static function getLong(value:int) : Long
       {
-         if(Boolean(ryparyg[param1]))
+         if(Boolean(longs[value]))
          {
-            return ryparyg[param1];
+            return longs[value];
          }
-         var _loc2_:Long = new Long(param1);
-         ryparyg[param1] = _loc2_;
-         return _loc2_;
+         var res:Long = new Long(value);
+         longs[value] = res;
+         return res;
       }
       
       public function get low() : int
       {
-         return this.gojiwi;
+         return this._low;
       }
       
       public function get high() : int

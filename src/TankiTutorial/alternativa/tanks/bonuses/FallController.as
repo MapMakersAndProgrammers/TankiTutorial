@@ -85,7 +85,7 @@ package alternativa.tanks.bonuses
       private function updateTrigger() : void
       {
          run.setRotationMatrix(this.hezataw.peze,0,this.hezataw.zywojehu);
-         run.transformVector(Vector3.lasis,qefof);
+         run.transformVector(Vector3.down,qefof);
          qefof.scale(BonusConst.wucaruw);
          this.karury.getTrigger().update(this.x + qefof.x,this.y + qefof.y,this.hezataw.fitepil + qefof.z,this.hezataw.peze,0,this.hezataw.zywojehu);
       }
@@ -94,7 +94,7 @@ package alternativa.tanks.bonuses
       {
          this.sitozov.interpolate(this.nusipysav,this.hezataw,param1);
          this.mowiluhi.setRotationMatrix(this.sitozov.peze,0,this.sitozov.zywojehu);
-         this.mowiluhi.transformVector(Vector3.lasis,this.dugidyvu);
+         this.mowiluhi.transformVector(Vector3.down,this.dugidyvu);
       }
       
       public function render() : void

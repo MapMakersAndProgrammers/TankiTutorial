@@ -44,12 +44,12 @@ package alternativa.tanks.vehicles.tank.weapons
          sikomowar.x = this.toqumyc.x;
          sikomowar.z = this.toqumyc.z;
          bul.transformVector(sikomowar,this.fybumu);
-         this.zequsir.x = bul.gusat;
-         this.zequsir.y = bul.sig;
-         this.zequsir.z = bul.vug;
-         this.direction.x = bul.cydop;
-         this.direction.y = bul.qanezycap;
-         this.direction.z = bul.luwym;
+         this.zequsir.x = bul.ma;
+         this.zequsir.y = bul.me;
+         this.zequsir.z = bul.mi;
+         this.direction.x = bul.mb;
+         this.direction.y = bul.mf;
+         this.direction.z = bul.mj;
       }
    }
 }

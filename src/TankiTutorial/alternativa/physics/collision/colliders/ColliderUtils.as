@@ -38,15 +38,15 @@ package alternativa.physics.collision.colliders
          _loc6_.x = param1.y * _loc5_.z - param1.z * _loc5_.y;
          _loc6_.y = param1.z * _loc5_.x - param1.x * _loc5_.z;
          _loc6_.z = param1.x * _loc5_.y - param1.y * _loc5_.x;
-         param4.gusat = _loc5_.x;
-         param4.sig = _loc5_.y;
-         param4.vug = _loc5_.z;
-         param4.cydop = _loc6_.x;
-         param4.qanezycap = _loc6_.y;
-         param4.luwym = _loc6_.z;
-         param4.sivy = param1.x;
-         param4.wyvukog = param1.y;
-         param4.tari = param1.z;
+         param4.ma = _loc5_.x;
+         param4.me = _loc5_.y;
+         param4.mi = _loc5_.z;
+         param4.mb = _loc6_.x;
+         param4.mf = _loc6_.y;
+         param4.mj = _loc6_.z;
+         param4.mc = param1.x;
+         param4.mg = param1.y;
+         param4.mk = param1.z;
       }
       
       public static function transformFaceToReferenceSpace(param1:Matrix4, param2:Matrix4, param3:Vector.<Vertex>, param4:int) : void
@@ -77,14 +77,14 @@ package alternativa.physics.collision.colliders
          var _loc17_:Vertex = null;
          var _loc5_:Matrix4 = param1.wet;
          var _loc6_:int = 0;
-         _loc11_ = _loc5_.gusat;
-         _loc12_ = _loc5_.sig;
-         _loc13_ = _loc5_.vug;
+         _loc11_ = _loc5_.ma;
+         _loc12_ = _loc5_.me;
+         _loc13_ = _loc5_.mi;
          _loc7_ = _loc11_ * param2.x + _loc12_ * param2.y + _loc13_ * param2.z;
          _loc8_ = Math.abs(_loc7_);
-         _loc11_ = _loc5_.cydop;
-         _loc12_ = _loc5_.qanezycap;
-         _loc13_ = _loc5_.luwym;
+         _loc11_ = _loc5_.mb;
+         _loc12_ = _loc5_.mf;
+         _loc13_ = _loc5_.mj;
          _loc10_ = _loc11_ * param2.x + _loc12_ * param2.y + _loc13_ * param2.z;
          _loc9_ = Math.abs(_loc10_);
          if(_loc9_ > _loc8_)
@@ -93,9 +93,9 @@ package alternativa.physics.collision.colliders
             _loc7_ = _loc10_;
             _loc6_ = 1;
          }
-         _loc11_ = _loc5_.sivy;
-         _loc12_ = _loc5_.wyvukog;
-         _loc13_ = _loc5_.tari;
+         _loc11_ = _loc5_.mc;
+         _loc12_ = _loc5_.mg;
+         _loc13_ = _loc5_.mk;
          _loc10_ = _loc11_ * param2.x + _loc12_ * param2.y + _loc13_ * param2.z;
          _loc9_ = Math.abs(_loc10_);
          if(_loc9_ > _loc8_)
@@ -200,7 +200,7 @@ package alternativa.physics.collision.colliders
          _loc5_.vam.y = -_loc4_.y;
          _loc5_.vam.z = 0;
          var _loc6_:Matrix4 = param1.wet;
-         var _loc7_:Number = param2.x * _loc6_.sivy + param2.y * _loc6_.wyvukog + param2.z * _loc6_.tari;
+         var _loc7_:Number = param2.x * _loc6_.mc + param2.y * _loc6_.mg + param2.z * _loc6_.mk;
          if(_loc7_ < 0)
          {
             _loc5_ = param3[0];
@@ -228,7 +228,7 @@ package alternativa.physics.collision.colliders
          _loc4_.vam.y = param1.bykecy.y;
          _loc4_.vam.z = 0;
          var _loc5_:Matrix4 = param1.wet;
-         var _loc6_:Number = param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.z * _loc5_.tari;
+         var _loc6_:Number = param2.x * _loc5_.mc + param2.y * _loc5_.mg + param2.z * _loc5_.mk;
          if(_loc6_ < 0)
          {
             _loc4_ = param3[0];

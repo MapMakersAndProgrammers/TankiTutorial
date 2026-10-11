@@ -5,44 +5,44 @@ package alternativa.object
    public class Wall
    {
       
-      private var woninynyn:Number;
+      private var _x1:Number;
       
-      private var cuqa:Number;
+      private var _x2:Number;
       
-      private var pewetifa:Number;
+      private var _y1:Number;
       
-      private var pipohe:Number;
+      private var _y2:Number;
       
-      public var kiw:Vector3 = new Vector3();
+      public var indicator:Vector3 = new Vector3();
       
-      private var gar:Number;
+      private var a:Number;
       
-      private var nityt:Number;
+      private var b:Number;
       
-      private var fysu:Number;
+      private var c:Number;
       
       private var ciguz:Number;
       
-      public function Wall(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number, param7:Number)
+      public function Wall(x1:Number, y1:Number, x2:Number, y2:Number, indicatorX:Number, indicatorY:Number, indicatorZ:Number)
       {
          super();
-         this.woninynyn = param1;
-         this.cuqa = param3;
-         this.pewetifa = param2;
-         this.pipohe = param4;
+         this._x1 = x1;
+         this._x2 = x2;
+         this._y1 = y1;
+         this._y2 = y2;
          this.calculateABC();
-         this.kiw.x = param5;
-         this.kiw.y = param6;
-         this.kiw.z = param7;
+         this.indicator.x = indicatorX;
+         this.indicator.y = indicatorY;
+         this.indicator.z = indicatorZ;
       }
       
-      public function isPointInEnvironmentOfWall(param1:Vector3, param2:Number) : Boolean
+      public function isPointInEnvironmentOfWall(point:Vector3, range:Number) : Boolean
       {
-         var _loc3_:Number = param1.x;
-         var _loc4_:Number = param1.y;
-         var _loc5_:Number = param1.z;
-         var _loc6_:Number = Math.abs(this.gar * _loc3_ + this.nityt * _loc4_ + this.fysu) / this.ciguz;
-         if(_loc6_ <= param2)
+         var x:Number = point.x;
+         var y:Number = point.y;
+         var z:Number = point.z;
+         var distance:Number = Math.abs(this.a * x + this.b * y + this.c) / this.ciguz;
+         if(distance <= range)
          {
             return true;
          }
@@ -51,53 +51,53 @@ package alternativa.object
       
       private function calculateABC() : void
       {
-         this.gar = this.pipohe - this.pewetifa;
-         this.nityt = this.woninynyn - this.cuqa;
-         this.fysu = this.pewetifa * this.cuqa - this.woninynyn * this.pipohe;
-         this.ciguz = Math.sqrt(this.gar * this.gar + this.nityt * this.nityt);
+         this.a = this._y2 - this._y1;
+         this.b = this._x1 - this._x2;
+         this.c = this._y1 * this._x2 - this._x1 * this._y2;
+         this.ciguz = Math.sqrt(this.a * this.a + this.b * this.b);
       }
       
       public function get x1() : Number
       {
-         return this.woninynyn;
+         return this._x1;
       }
       
-      public function set x1(param1:Number) : void
+      public function set x1(value:Number) : void
       {
-         this.woninynyn = param1;
+         this._x1 = value;
          this.calculateABC();
       }
       
       public function get x2() : Number
       {
-         return this.cuqa;
+         return this._x2;
       }
       
-      public function set x2(param1:Number) : void
+      public function set x2(value:Number) : void
       {
-         this.cuqa = param1;
+         this._x2 = value;
          this.calculateABC();
       }
       
       public function get y1() : Number
       {
-         return this.pewetifa;
+         return this._y1;
       }
       
-      public function set y1(param1:Number) : void
+      public function set y1(value:Number) : void
       {
-         this.pewetifa = param1;
+         this._y1 = value;
          this.calculateABC();
       }
       
       public function get y2() : Number
       {
-         return this.pipohe;
+         return this._y2;
       }
       
-      public function set y2(param1:Number) : void
+      public function set y2(value:Number) : void
       {
-         this.pipohe = param1;
+         this._y2 = value;
          this.calculateABC();
       }
    }

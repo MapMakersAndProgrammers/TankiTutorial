@@ -47,7 +47,7 @@ package alternativa.tanks.bonuses
          var _loc1_:BonusMesh = this.nasybugo.getBonusMesh();
          this.cozude.reset(_loc1_.x,_loc1_.y,_loc1_.z);
          this.cozude.subtract(this.vale);
-         this.zekos.copy(Vector3.nesicuryn);
+         this.zekos.copy(Vector3.zAxis);
          this.zekos.cross(this.lefugefo);
          this.zekos.normalize();
          this.angle = Math.acos(this.lefugefo.z);

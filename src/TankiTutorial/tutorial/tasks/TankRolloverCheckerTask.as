@@ -47,7 +47,7 @@ package tutorial.tasks
          {
             return false;
          }
-         return tank.hogys.body.jefe.tari < threshold;
+         return tank.hogys.body.jefe.mk < threshold;
       }
       
       private function showSuicideHelp() : void

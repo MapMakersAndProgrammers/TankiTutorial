@@ -78,9 +78,9 @@ package alternativa.tanks.bonuses
          while(_loc2_ < this.mavibiroh)
          {
             _loc1_ = this.sibymu[_loc2_];
-            _loc3_ = _loc1_.x * map.gusat + _loc1_.y * map.cydop + _loc1_.z * map.sivy + map.kyvuru;
-            _loc4_ = _loc1_.x * map.sig + _loc1_.y * map.qanezycap + _loc1_.z * map.wyvukog + map.zumidynip;
-            _loc5_ = _loc1_.x * map.vug + _loc1_.y * map.luwym + _loc1_.z * map.tari + map.sunafepo;
+            _loc3_ = _loc1_.x * map.ma + _loc1_.y * map.mb + _loc1_.z * map.mc + map.md;
+            _loc4_ = _loc1_.x * map.me + _loc1_.y * map.mf + _loc1_.z * map.mg + map.mh;
+            _loc5_ = _loc1_.x * map.mi + _loc1_.y * map.mj + _loc1_.z * map.mk + map.ml;
             _loc6_ = this.rowamize[2 * _loc2_];
             _loc6_.x = _loc3_;
             _loc6_.y = _loc4_;
@@ -93,9 +93,9 @@ package alternativa.tanks.bonuses
          }
          map.setMatrix(this.giqo.x,this.giqo.y,this.giqo.z,this.giqo.rotationX,this.giqo.rotationY,this.giqo.rotationZ);
          _loc1_ = this.gili;
-         this.fyto.x = _loc1_.x * map.gusat + _loc1_.y * map.cydop + _loc1_.z * map.sivy + map.kyvuru;
-         this.fyto.y = _loc1_.x * map.sig + _loc1_.y * map.qanezycap + _loc1_.z * map.wyvukog + map.zumidynip;
-         this.fyto.z = _loc1_.x * map.vug + _loc1_.y * map.luwym + _loc1_.z * map.tari + map.sunafepo;
+         this.fyto.x = _loc1_.x * map.ma + _loc1_.y * map.mb + _loc1_.z * map.mc + map.md;
+         this.fyto.y = _loc1_.x * map.me + _loc1_.y * map.mf + _loc1_.z * map.mg + map.mh;
+         this.fyto.z = _loc1_.x * map.mi + _loc1_.y * map.mj + _loc1_.z * map.mk + map.ml;
          calculateBounds();
          calculateFacesNormals();
       }
