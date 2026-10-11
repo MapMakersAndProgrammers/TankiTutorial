@@ -9,25 +9,25 @@ package alternativa.gfx.core
    public class VertexBufferResource extends Resource
    {
       
-      alternativagfx var putiwyfa:Vector.<VertexBuffer3D> = new Vector.<VertexBuffer3D>(4);
+      alternativagfx var buffers:Vector.<VertexBuffer3D> = new Vector.<VertexBuffer3D>(4);
       
-      private var tob:Vector.<Number>;
+      private var _vertices:Vector.<Number>;
       
-      private var fyz:int;
+      private var data32PerVertex:int;
       
-      private var synafek:int;
+      private var numVertices:int;
       
       public function VertexBufferResource(vertices:Vector.<Number>, data32PerVertex:int)
       {
          super();
-         this.tob = vertices;
-         this.fyz = data32PerVertex;
-         this.synafek = this.tob.length / this.fyz;
+         this._vertices = vertices;
+         this.data32PerVertex = data32PerVertex;
+         this.numVertices = this._vertices.length / this.data32PerVertex;
       }
       
       public function get vertices() : Vector.<Number>
       {
-         return this.tob;
+         return this._vertices;
       }
       
       override public function dispose() : void
@@ -35,13 +35,13 @@ package alternativa.gfx.core
          super.dispose();
          for(var i:int = 0; i < 4; i++)
          {
-            if(this.putiwyfa[i] != null)
+            if(this.buffers[i] != null)
             {
-               this.putiwyfa[i].dispose();
-               this.putiwyfa[i] = null;
+               this.buffers[i].dispose();
+               this.buffers[i] = null;
             }
          }
-         this.tob = null;
+         this._vertices = null;
       }
       
       override public function reset() : void
@@ -49,29 +49,29 @@ package alternativa.gfx.core
          super.reset();
          for(var i:int = 0; i < 4; i++)
          {
-            if(this.putiwyfa[i] != null)
+            if(this.buffers[i] != null)
             {
-               this.putiwyfa[i].dispose();
-               this.putiwyfa[i] = null;
+               this.buffers[i].dispose();
+               this.buffers[i] = null;
             }
          }
       }
       
       override public function get available() : Boolean
       {
-         return this.tob != null;
+         return this._vertices != null;
       }
       
       override alternativagfx function create(context:Context3D, stage3DIndex:int) : void
       {
          super.create(context,stage3DIndex);
-         this.putiwyfa[stage3DIndex] = context.createVertexBuffer(this.synafek,this.fyz);
+         this.buffers[stage3DIndex] = context.createVertexBuffer(this.numVertices,this.data32PerVertex);
       }
       
       override alternativagfx function upload(stage3DIndex:int) : void
       {
          super.upload(stage3DIndex);
-         VertexBuffer3D(this.putiwyfa[stage3DIndex]).uploadFromVector(this.tob,0,this.synafek);
+         VertexBuffer3D(this.buffers[stage3DIndex]).uploadFromVector(this._vertices,0,this.numVertices);
       }
    }
 }

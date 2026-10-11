@@ -8,7 +8,7 @@ package alternativa.gfx.core
    public class Resource
    {
       
-      alternativagfx var jewu:Vector.<int> = Vector.<int>([-1,-1,-1,-1]);
+      alternativagfx var context3DIds:Vector.<int> = Vector.<int>([-1,-1,-1,-1]);
       
       public function Resource()
       {
@@ -19,7 +19,7 @@ package alternativa.gfx.core
       {
          for(var i:int = 0; i < 4; i++)
          {
-            this.jewu[i] = -1;
+            this.context3DIds[i] = -1;
          }
       }
       
@@ -27,7 +27,7 @@ package alternativa.gfx.core
       {
          for(var i:int = 0; i < 4; i++)
          {
-            this.jewu[i] = -1;
+            this.context3DIds[i] = -1;
          }
       }
       

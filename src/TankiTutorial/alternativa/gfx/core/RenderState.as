@@ -5,65 +5,65 @@ package alternativa.gfx.core
    public class RenderState
    {
       
-      public var wipiby:String = "one";
+      public var sourceFactor:String = "one";
       
-      public var koj:String = "zero";
+      public var destinationFactor:String = "zero";
       
-      public var jyjogo:Boolean = true;
+      public var red:Boolean = true;
       
-      public var qebubo:Boolean = true;
+      public var green:Boolean = true;
       
-      public var cevib:Boolean = true;
+      public var blue:Boolean = true;
       
-      public var bolilequ:Boolean = true;
+      public var alpha:Boolean = true;
       
-      public var qihe:String = "none";
+      public var triangleFaceToCull:String = "none";
       
-      public var tukoweti:Boolean = true;
+      public var depthMask:Boolean = true;
       
-      public var cuki:String = "less";
+      public var passCompareMode:String = "less";
       
-      public var topodizok:ProgramResource = null;
+      public var program:ProgramResource = null;
       
-      public var wucukyj:TextureResource = null;
+      public var texture:TextureResource = null;
       
-      public var gewoz:Boolean = false;
+      public var enableDepthAndStencil:Boolean = false;
       
-      public var tefug:int = 0;
+      public var antiAlias:int = 0;
       
-      public var qapi:int = 0;
+      public var surfaceSelector:int = 0;
       
-      public var ficobavam:Boolean = false;
+      public var scissorEnabled:Boolean = false;
       
-      public var rugakyr:Rectangle = new Rectangle();
+      public var scissorRectangle:Rectangle = new Rectangle();
       
-      public var woq:String = "frontAndBack";
+      public var triangleFace:String = "frontAndBack";
       
-      public var gugi:String = "always";
+      public var compareMode:String = "always";
       
-      public var qegop:String = "keep";
+      public var actionOnBothPass:String = "keep";
       
-      public var kerepiluh:String = "keep";
+      public var actionOnDepthFail:String = "keep";
       
-      public var mokufyr:String = "keep";
+      public var actionOnDepthPassStencilFail:String = "keep";
       
-      public var bavavove:uint = 0;
+      public var referenceValue:uint = 0;
       
-      public var bohyha:uint = 255;
+      public var readMask:uint = 255;
       
-      public var libywarer:uint = 255;
+      public var writeMask:uint = 255;
       
-      public var tylu:Vector.<TextureResource> = new Vector.<TextureResource>(8,true);
+      public var textures:Vector.<TextureResource> = new Vector.<TextureResource>(8,true);
       
-      public var kewyv:Vector.<VertexBufferResource> = new Vector.<VertexBufferResource>(8,true);
+      public var vertexBuffers:Vector.<VertexBufferResource> = new Vector.<VertexBufferResource>(8,true);
       
-      public var qumovi:Vector.<int> = new Vector.<int>(8,true);
+      public var bufferOffsets:Vector.<int> = new Vector.<int>(8,true);
       
-      public var totuqo:Vector.<String> = new Vector.<String>(8,true);
+      public var formats:Vector.<String> = new Vector.<String>(8,true);
       
-      public var badoh:Vector.<Number> = new Vector.<Number>(128 * 4,true);
+      public var vertexConstants:Vector.<Number> = new Vector.<Number>(128 * 4,true);
       
-      public var befyjut:Vector.<Number> = new Vector.<Number>(28 * 4,true);
+      public var fragmentConstants:Vector.<Number> = new Vector.<Number>(28 * 4,true);
       
       public function RenderState()
       {
