@@ -3,29 +3,29 @@ package alternativa.tanks.bonuses
    public class BattleBonusState
    {
       
-      public var fitepil:Number = 0;
+      public var z:Number = 0;
       
-      public var peze:Number = 0;
+      public var rotationX:Number = 0;
       
-      public var zywojehu:Number = 0;
+      public var rotationZ:Number = 0;
       
       public function BattleBonusState()
       {
          super();
       }
       
-      public function interpolate(param1:BattleBonusState, param2:BattleBonusState, param3:Number) : void
+      public function interpolate(a:BattleBonusState, b:BattleBonusState, t:Number) : void
       {
-         this.fitepil = param1.fitepil + param3 * (param2.fitepil - param1.fitepil);
-         this.peze = param1.peze + param3 * (param2.peze - param1.peze);
-         this.zywojehu = param1.zywojehu + param3 * (param2.zywojehu - param1.zywojehu);
+         this.z = a.z + t * (b.z - a.z);
+         this.rotationX = a.rotationX + t * (b.rotationX - a.rotationX);
+         this.rotationZ = a.rotationZ + t * (b.rotationZ - a.rotationZ);
       }
       
-      public function copy(param1:BattleBonusState) : void
+      public function copy(state:BattleBonusState) : void
       {
-         this.fitepil = param1.fitepil;
-         this.peze = param1.peze;
-         this.zywojehu = param1.zywojehu;
+         this.z = state.z;
+         this.rotationX = state.rotationX;
+         this.rotationZ = state.rotationZ;
       }
    }
 }

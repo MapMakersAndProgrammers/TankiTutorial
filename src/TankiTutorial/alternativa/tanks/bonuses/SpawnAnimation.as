@@ -8,13 +8,13 @@ package alternativa.tanks.bonuses
    public class SpawnAnimation extends PooledObject implements Renderer
    {
       
-      private static const hacevul:Number = 0.001;
+      private static const ALPHA_SPEED:Number = 0.001;
       
-      private var nasybugo:BattleBonus;
+      private var bonus:BattleBonus;
       
       private var battleScene:BattleScene3D;
       
-      private var wedebuga:Number = 0;
+      private var alpha:Number = 0;
       
       public function SpawnAnimation(param1:Pool)
       {
@@ -23,22 +23,22 @@ package alternativa.tanks.bonuses
       
       public function start(param1:BattleBonus, param2:BattleScene3D) : void
       {
-         this.nasybugo = param1;
+         this.bonus = param1;
          this.battleScene = param2;
-         this.wedebuga = 0;
+         this.alpha = 0;
          param1.gave.add(this.destroy);
          param2.addRenderer(this,0);
       }
       
-      public function render(param1:int, param2:int) : void
+      public function render(time:int, deltaTime:int) : void
       {
-         this.wedebuga += hacevul * param2;
-         if(this.wedebuga > 1)
+         this.alpha += ALPHA_SPEED * deltaTime;
+         if(this.alpha > 1)
          {
-            this.wedebuga = 1;
+            this.alpha = 1;
          }
-         this.nasybugo.setAlpha(this.wedebuga);
-         if(this.wedebuga >= 1)
+         this.bonus.setAlpha(this.alpha);
+         if(this.alpha >= 1)
          {
             this.destroy();
          }
@@ -48,8 +48,8 @@ package alternativa.tanks.bonuses
       {
          this.battleScene.removeRenderer(this,0);
          this.battleScene = null;
-         this.nasybugo.gave.remove(this.destroy);
-         this.nasybugo = null;
+         this.bonus.gave.remove(this.destroy);
+         this.bonus = null;
          recycle();
       }
    }

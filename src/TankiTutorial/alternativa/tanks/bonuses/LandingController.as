@@ -6,103 +6,103 @@ package alternativa.tanks.bonuses
    public class LandingController implements BonusController
    {
       
-      private static const fyqynyfy:Vector3 = new Vector3();
+      private static const eulerAngles:Vector3 = new Vector3();
       
-      private static const run:Matrix3 = new Matrix3();
+      private static const matrix:Matrix3 = new Matrix3();
       
-      private static const pih:Number = 2.5;
+      private static const ANGULAR_SPEED:Number = 2.5;
       
-      private var nasybugo:BattleBonus;
+      private var bonus:BattleBonus;
       
-      private var lefugefo:Vector3 = new Vector3();
+      private var normal:Vector3 = new Vector3();
       
-      private var vale:Vector3 = new Vector3();
+      private var pivot:Vector3 = new Vector3();
       
-      private var cozude:Vector3 = new Vector3();
+      private var offset:Vector3 = new Vector3();
       
       private var angle:Number;
       
-      private var zekos:Vector3 = new Vector3();
+      private var axis:Vector3 = new Vector3();
       
-      private var nusipysav:LandingState = new LandingState();
+      private var prevState:LandingState = new LandingState();
       
-      private var hezataw:LandingState = new LandingState();
+      private var state:LandingState = new LandingState();
       
-      private var sitozov:LandingState = new LandingState();
+      private var interpolatedState:LandingState = new LandingState();
       
-      public function LandingController(param1:BattleBonus)
+      public function LandingController(bonus:BattleBonus)
       {
          super();
-         this.nasybugo = param1;
+         this.bonus = bonus;
       }
       
       public function init(param1:Vector3, param2:Vector3) : void
       {
-         this.vale.copy(param1);
-         this.lefugefo.copy(param2);
+         this.pivot.copy(param1);
+         this.normal.copy(param2);
       }
       
       public function start() : void
       {
-         var _loc1_:BonusMesh = this.nasybugo.getBonusMesh();
-         this.cozude.reset(_loc1_.x,_loc1_.y,_loc1_.z);
-         this.cozude.subtract(this.vale);
-         this.zekos.copy(Vector3.zAxis);
-         this.zekos.cross(this.lefugefo);
-         this.zekos.normalize();
-         this.angle = Math.acos(this.lefugefo.z);
-         this.hezataw.position.reset(_loc1_.x,_loc1_.y,_loc1_.z);
-         this.hezataw.orientation.setFromEulerAnglesXYZ(_loc1_.rotationX,_loc1_.rotationY,_loc1_.rotationZ);
-         this.nusipysav.copy(this.hezataw);
+         var bonusMesh:BonusMesh = this.bonus.getBonusMesh();
+         this.offset.reset(bonusMesh.x,bonusMesh.y,bonusMesh.z);
+         this.offset.subtract(this.pivot);
+         this.axis.copy(Vector3.zAxis);
+         this.axis.cross(this.normal);
+         this.axis.normalize();
+         this.angle = Math.acos(this.normal.z);
+         this.state.position.reset(bonusMesh.x,bonusMesh.y,bonusMesh.z);
+         this.state.orientation.setFromEulerAnglesXYZ(bonusMesh.rotationX,bonusMesh.rotationY,bonusMesh.rotationZ);
+         this.prevState.copy(this.state);
       }
       
-      public function runBeforePhysicsUpdate(param1:Number) : void
+      public function runBeforePhysicsUpdate(dt:Number) : void
       {
-         this.nusipysav.copy(this.hezataw);
-         var _loc2_:Number = pih * param1;
-         if(_loc2_ > this.angle)
+         this.prevState.copy(this.state);
+         var deltaAngle:Number = ANGULAR_SPEED * dt;
+         if(deltaAngle > this.angle)
          {
-            _loc2_ = this.angle;
+            deltaAngle = this.angle;
             this.angle = 0;
          }
          else
          {
-            this.angle -= _loc2_;
+            this.angle -= deltaAngle;
          }
-         run.fromAxisAngle(this.zekos,_loc2_);
-         this.cozude.transform3(run);
-         this.hezataw.position.copy(this.vale).add(this.cozude);
-         this.hezataw.orientation.addScaledVector(this.zekos,_loc2_);
+         matrix.fromAxisAngle(this.axis,deltaAngle);
+         this.offset.transform3(matrix);
+         this.state.position.copy(this.pivot).add(this.offset);
+         this.state.orientation.addScaledVector(this.axis,deltaAngle);
          this.updateTrigger();
          if(this.angle == 0)
          {
             this.interpolatePhysicsState(1);
             this.render();
-            this.nasybugo.onLandingComplete();
+            this.bonus.onLandingComplete();
          }
       }
       
       private function updateTrigger() : void
       {
-         this.hezataw.orientation.toMatrix3(run);
-         this.nasybugo.getTrigger().setTransform(this.hezataw.position,run);
+         this.state.orientation.toMatrix3(matrix);
+         this.bonus.getTrigger().setTransform(this.state.position,matrix);
       }
       
-      public function interpolatePhysicsState(param1:Number) : void
+      public function interpolatePhysicsState(t:Number) : void
       {
-         this.sitozov.interpolate(this.nusipysav,this.hezataw,param1);
+         this.interpolatedState.interpolate(this.prevState,this.state,t);
       }
       
       public function render() : void
       {
-         var _loc1_:BonusMesh = this.nasybugo.getBonusMesh();
-         _loc1_.x = this.sitozov.position.x;
-         _loc1_.y = this.sitozov.position.y;
-         _loc1_.z = this.sitozov.position.z;
-         this.sitozov.orientation.getEulerAngles(fyqynyfy);
-         _loc1_.rotationX = fyqynyfy.x;
-         _loc1_.rotationY = fyqynyfy.y;
-         _loc1_.rotationZ = fyqynyfy.z;
+         var bonusMesh:BonusMesh = this.bonus.getBonusMesh();
+         bonusMesh.x = this.interpolatedState.position.x;
+         bonusMesh.y = this.interpolatedState.position.y;
+         bonusMesh.z = this.interpolatedState.position.z;
+         this.interpolatedState.orientation.getEulerAngles(eulerAngles);
+         bonusMesh.rotationX = eulerAngles.x;
+         bonusMesh.rotationY = eulerAngles.y;
+         bonusMesh.rotationZ = eulerAngles.z;
       }
    }
 }

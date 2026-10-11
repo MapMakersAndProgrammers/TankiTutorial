@@ -7,17 +7,17 @@ package alternativa.tanks.bonuses
    public class BattleBonusData
    {
       
-      public var tipi:Mesh;
+      public var bonusMesh:Mesh;
       
-      public var vukuzub:Mesh;
+      public var parachuteMesh:Mesh;
       
-      public var berav:Mesh;
+      public var parachuteInnerMesh:Mesh;
       
-      public var zerow:TextureMaterial;
+      public var cordsMaterial:TextureMaterial;
       
-      public var ruzy:Sound;
+      public var pickupSound:Sound;
       
-      public var wym:int;
+      public var lifeTime:int;
       
       public function BattleBonusData()
       {

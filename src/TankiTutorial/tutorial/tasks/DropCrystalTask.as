@@ -34,11 +34,11 @@ package tutorial.tasks
       private function createBattleBonusData() : BattleBonusData
       {
          var bonusData:BattleBonusData = new BattleBonusData();
-         bonusData.tipi = Assets.getData("crystal",Mesh);
-         bonusData.vukuzub = Assets.getData("parachute",Mesh);
-         bonusData.berav = Assets.getData("parachute_inner",Mesh);
-         bonusData.zerow = new TextureMaterial(Assets.getData("cords",BitmapData));
-         bonusData.wym = 100000;
+         bonusData.bonusMesh = Assets.getData("crystal",Mesh);
+         bonusData.parachuteMesh = Assets.getData("parachute",Mesh);
+         bonusData.parachuteInnerMesh = Assets.getData("parachute_inner",Mesh);
+         bonusData.cordsMaterial = new TextureMaterial(Assets.getData("cords",BitmapData));
+         bonusData.lifeTime = 100000;
          return bonusData;
       }
       

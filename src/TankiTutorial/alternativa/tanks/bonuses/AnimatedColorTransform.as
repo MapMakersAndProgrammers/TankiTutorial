@@ -13,11 +13,11 @@ package alternativa.tanks.bonuses
          super();
       }
       
-      public function setAnimatedValue(param1:Number) : void
+      public function setAnimatedValue(value:Number) : void
       {
-         this.colorTransform.redOffset = param1;
-         this.colorTransform.greenOffset = param1;
-         this.colorTransform.blueOffset = param1;
+         this.colorTransform.redOffset = value;
+         this.colorTransform.greenOffset = value;
+         this.colorTransform.blueOffset = value;
       }
    }
 }

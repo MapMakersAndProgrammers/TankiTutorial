@@ -15,16 +15,16 @@ package alternativa.tanks.bonuses
          super();
       }
       
-      public function interpolate(param1:LandingState, param2:LandingState, param3:Number) : void
+      public function interpolate(a:LandingState, b:LandingState, t:Number) : void
       {
-         this.position.interpolate(param3,param1.position,param2.position);
-         this.orientation.slerp(param1.orientation,param2.orientation,param3);
+         this.position.interpolate(t,a.position,b.position);
+         this.orientation.slerp(a.orientation,b.orientation,t);
       }
       
-      public function copy(param1:LandingState) : void
+      public function copy(state:LandingState) : void
       {
-         this.position.copy(param1.position);
-         this.orientation.copy(param1.orientation);
+         this.position.copy(state.position);
+         this.orientation.copy(state.orientation);
       }
    }
 }

@@ -5,9 +5,9 @@ package alternativa.tanks.bonuses
       
       function start() : void;
       
-      function runBeforePhysicsUpdate(param1:Number) : void;
+      function runBeforePhysicsUpdate(dt:Number) : void;
       
-      function interpolatePhysicsState(param1:Number) : void;
+      function interpolatePhysicsState(t:Number) : void;
       
       function render() : void;
    }

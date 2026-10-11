@@ -10,19 +10,19 @@ package alternativa.tanks.bonuses
    public class BonusMesh extends Mesh implements HidableGraphicObject
    {
       
-      private var fyhum:Long;
+      private var objectId:Long;
       
       private var supy:Number = 1;
       
-      private var fidemujil:Number = 1;
+      private var alphaMultiplier:Number = 1;
       
-      public function BonusMesh(param1:Long, param2:Mesh)
+      public function BonusMesh(objectId:Long, mesh:Mesh)
       {
          super();
-         this.fyhum = param1;
-         clonePropertiesFrom(param2);
-         var _loc3_:Face = param2.faces[0];
-         setMaterialToAllFaces(_loc3_.material);
+         this.objectId = objectId;
+         clonePropertiesFrom(mesh);
+         var face:Face = mesh.faces[0];
+         setMaterialToAllFaces(face.material);
          sorting = Sorting.DYNAMIC_BSP;
       }
       
@@ -35,13 +35,13 @@ package alternativa.tanks.bonuses
          scaleY = 1;
          scaleZ = 1;
          this.supy = 1;
-         this.fidemujil = 1;
+         this.alphaMultiplier = 1;
          this.updateAlpha();
       }
       
       public function getObjectId() : Long
       {
-         return this.fyhum;
+         return this.objectId;
       }
       
       public function getAlpha() : Number
@@ -49,34 +49,34 @@ package alternativa.tanks.bonuses
          return this.supy;
       }
       
-      public function setAlpha(param1:Number) : void
+      public function setAlpha(value:Number) : void
       {
-         this.supy = param1;
+         this.supy = value;
          this.updateAlpha();
       }
       
-      public function readPosition(param1:Vector3) : void
+      public function readPosition(result:Vector3) : void
       {
-         param1.x = x;
-         param1.y = y;
-         param1.z = z;
+         result.x = x;
+         result.y = y;
+         result.z = z;
       }
       
-      public function setAlphaMultiplier(param1:Number) : void
+      public function setAlphaMultiplier(value:Number) : void
       {
-         this.fidemujil = param1;
+         this.alphaMultiplier = value;
          this.updateAlpha();
       }
       
       private function updateAlpha() : void
       {
-         alpha = this.fidemujil * this.supy;
+         alpha = this.alphaMultiplier * this.supy;
       }
       
       public function recycle() : void
       {
          this.supy = 1;
-         this.fidemujil = 1;
+         this.alphaMultiplier = 1;
          BonusCache.putBonusMesh(this);
       }
    }

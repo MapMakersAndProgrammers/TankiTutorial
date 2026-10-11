@@ -18,40 +18,40 @@ package alternativa.tanks.bonuses
       
       private static const map:Matrix4 = new Matrix4();
       
-      private var rowamize:Vector.<Vertex>;
+      private var parachuteVertices:Vector.<Vertex>;
       
-      private var sibymu:Vector.<Vector3>;
+      private var parachutePoints:Vector.<Vector3>;
       
-      private var fyto:Vertex;
+      private var bonusVertex:Vertex;
       
-      private var gili:Vector3;
+      private var bonusPoint:Vector3;
       
-      private var mavibiroh:int;
+      private var numCords:int;
       
-      private var giqo:BonusMesh;
+      private var bonusMesh:BonusMesh;
       
-      private var kyvedu:Parachute;
+      private var parachute:Parachute;
       
       private var supy:Number = 1;
       
-      private var fidemujil:Number = 1;
+      private var alphaMultiplier:Number = 1;
       
-      public function Cords(param1:Number, param2:Number, param3:int, param4:Material)
+      public function Cords(radius:Number, param2:Number, numCords:int, material:Material)
       {
          super();
-         this.mavibiroh = param3;
-         this.rowamize = new Vector.<Vertex>(2 * param3);
-         this.sibymu = new Vector.<Vector3>(param3);
-         this.createGeometry(param1,param2);
-         setMaterialToAllFaces(param4);
+         this.numCords = numCords;
+         this.parachuteVertices = new Vector.<Vertex>(2 * numCords);
+         this.parachutePoints = new Vector.<Vector3>(numCords);
+         this.createGeometry(radius,param2);
+         setMaterialToAllFaces(material);
          shadowMapAlphaThreshold = 2;
          depthMapAlphaThreshold = 2;
       }
       
       public function init(param1:BonusMesh, param2:Parachute) : void
       {
-         this.giqo = param1;
-         this.kyvedu = param2;
+         this.bonusMesh = param1;
+         this.parachute = param2;
          scaleX = 1;
          scaleY = 1;
          scaleZ = 1;
@@ -61,127 +61,127 @@ package alternativa.tanks.bonuses
       
       public function recycle() : void
       {
-         this.giqo = null;
-         this.kyvedu = null;
+         this.bonusMesh = null;
+         this.parachute = null;
          BonusCache.putCords(this);
       }
       
       public function updateVertices() : void
       {
-         var _loc1_:Vector3 = null;
+         var point:Vector3 = null;
          var _loc3_:Number = NaN;
          var _loc4_:Number = NaN;
          var _loc5_:Number = NaN;
-         var _loc6_:Vertex = null;
-         map.setMatrix(this.kyvedu.x,this.kyvedu.y,this.kyvedu.z,this.kyvedu.rotationX,this.kyvedu.rotationY,this.kyvedu.rotationZ);
-         var _loc2_:int = 0;
-         while(_loc2_ < this.mavibiroh)
+         var vertex:Vertex = null;
+         map.setMatrix(this.parachute.x,this.parachute.y,this.parachute.z,this.parachute.rotationX,this.parachute.rotationY,this.parachute.rotationZ);
+         var i:int = 0;
+         while(i < this.numCords)
          {
-            _loc1_ = this.sibymu[_loc2_];
-            _loc3_ = _loc1_.x * map.ma + _loc1_.y * map.mb + _loc1_.z * map.mc + map.md;
-            _loc4_ = _loc1_.x * map.me + _loc1_.y * map.mf + _loc1_.z * map.mg + map.mh;
-            _loc5_ = _loc1_.x * map.mi + _loc1_.y * map.mj + _loc1_.z * map.mk + map.ml;
-            _loc6_ = this.rowamize[2 * _loc2_];
-            _loc6_.x = _loc3_;
-            _loc6_.y = _loc4_;
-            _loc6_.z = _loc5_;
-            _loc6_ = this.rowamize[2 * _loc2_ + 1];
-            _loc6_.x = _loc3_;
-            _loc6_.y = _loc4_;
-            _loc6_.z = _loc5_;
-            _loc2_++;
+            point = this.parachutePoints[i];
+            _loc3_ = point.x * map.ma + point.y * map.mb + point.z * map.mc + map.md;
+            _loc4_ = point.x * map.me + point.y * map.mf + point.z * map.mg + map.mh;
+            _loc5_ = point.x * map.mi + point.y * map.mj + point.z * map.mk + map.ml;
+            vertex = this.parachuteVertices[2 * i];
+            vertex.x = _loc3_;
+            vertex.y = _loc4_;
+            vertex.z = _loc5_;
+            vertex = this.parachuteVertices[2 * i + 1];
+            vertex.x = _loc3_;
+            vertex.y = _loc4_;
+            vertex.z = _loc5_;
+            i++;
          }
-         map.setMatrix(this.giqo.x,this.giqo.y,this.giqo.z,this.giqo.rotationX,this.giqo.rotationY,this.giqo.rotationZ);
-         _loc1_ = this.gili;
-         this.fyto.x = _loc1_.x * map.ma + _loc1_.y * map.mb + _loc1_.z * map.mc + map.md;
-         this.fyto.y = _loc1_.x * map.me + _loc1_.y * map.mf + _loc1_.z * map.mg + map.mh;
-         this.fyto.z = _loc1_.x * map.mi + _loc1_.y * map.mj + _loc1_.z * map.mk + map.ml;
+         map.setMatrix(this.bonusMesh.x,this.bonusMesh.y,this.bonusMesh.z,this.bonusMesh.rotationX,this.bonusMesh.rotationY,this.bonusMesh.rotationZ);
+         point = this.bonusPoint;
+         this.bonusVertex.x = point.x * map.ma + point.y * map.mb + point.z * map.mc + map.md;
+         this.bonusVertex.y = point.x * map.me + point.y * map.mf + point.z * map.mg + map.mh;
+         this.bonusVertex.z = point.x * map.mi + point.y * map.mj + point.z * map.mk + map.ml;
          calculateBounds();
          calculateFacesNormals();
       }
       
-      private function createGeometry(param1:Number, param2:Number) : void
+      private function createGeometry(radius:Number, param2:Number) : void
       {
-         var _loc6_:Number = NaN;
-         var _loc7_:Vector3 = null;
+         var angle:Number = NaN;
+         var point:Vector3 = null;
          var _loc8_:int = 0;
          var _loc9_:int = 0;
-         this.gili = new Vector3(0,0,param2);
-         this.fyto = this.createVertex(0,0,param2,0,1);
-         var _loc3_:Number = 2 * Math.PI / this.mavibiroh;
-         var _loc4_:int = 0;
-         while(_loc4_ < this.mavibiroh)
+         this.bonusPoint = new Vector3(0,0,param2);
+         this.bonusVertex = this.createVertex(0,0,param2,0,1);
+         var angleStep:Number = 2 * Math.PI / this.numCords;
+         var i:int = 0;
+         while(i < this.numCords)
          {
-            _loc6_ = _loc4_ * _loc3_;
-            _loc7_ = new Vector3(param1 * Math.cos(_loc6_),param1 * Math.sin(_loc6_),0);
-            this.sibymu[_loc4_] = _loc7_;
-            this.rowamize[2 * _loc4_] = this.createVertex(_loc7_.x,_loc7_.y,_loc7_.z,0,0);
-            this.rowamize[2 * _loc4_ + 1] = this.createVertex(_loc7_.x,_loc7_.y,_loc7_.z,1,1);
-            _loc4_++;
+            angle = i * angleStep;
+            point = new Vector3(radius * Math.cos(angle),radius * Math.sin(angle),0);
+            this.parachutePoints[i] = point;
+            this.parachuteVertices[2 * i] = this.createVertex(point.x,point.y,point.z,0,0);
+            this.parachuteVertices[2 * i + 1] = this.createVertex(point.x,point.y,point.z,1,1);
+            i++;
          }
-         var _loc5_:int = 0;
-         while(_loc5_ < this.mavibiroh)
+         var j:int = 0;
+         while(j < this.numCords)
          {
-            _loc8_ = 2 * _loc5_;
+            _loc8_ = 2 * j;
             _loc9_ = _loc8_ + 3;
-            if(_loc9_ >= 2 * this.mavibiroh)
+            if(_loc9_ >= 2 * this.numCords)
             {
-               _loc9_ -= 2 * this.mavibiroh;
+               _loc9_ -= 2 * this.numCords;
             }
-            this.createTriFace(this.fyto,this.rowamize[_loc8_],this.rowamize[_loc9_]);
-            this.createTriFace(this.fyto,this.rowamize[_loc9_],this.rowamize[_loc8_]);
-            _loc5_++;
+            this.createTriFace(this.bonusVertex,this.parachuteVertices[_loc8_],this.parachuteVertices[_loc9_]);
+            this.createTriFace(this.bonusVertex,this.parachuteVertices[_loc9_],this.parachuteVertices[_loc8_]);
+            j++;
          }
       }
       
       private function createVertex(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number) : Vertex
       {
-         var _loc6_:Vertex = new Vertex();
-         _loc6_.next = vertexList;
-         vertexList = _loc6_;
-         _loc6_.x = param1;
-         _loc6_.y = param2;
-         _loc6_.z = param3;
-         _loc6_.u = param4;
-         _loc6_.v = param5;
-         return _loc6_;
+         var vertex:Vertex = new Vertex();
+         vertex.next = vertexList;
+         vertexList = vertex;
+         vertex.x = param1;
+         vertex.y = param2;
+         vertex.z = param3;
+         vertex.u = param4;
+         vertex.v = param5;
+         return vertex;
       }
       
-      private function createTriFace(param1:Vertex, param2:Vertex, param3:Vertex) : Face
+      private function createTriFace(a:Vertex, b:Vertex, c:Vertex) : Face
       {
-         var _loc4_:Face = new Face();
-         _loc4_.next = faceList;
-         faceList = _loc4_;
-         _loc4_.wrapper = new Wrapper();
-         _loc4_.wrapper.vertex = param1;
-         _loc4_.wrapper.next = new Wrapper();
-         _loc4_.wrapper.next.vertex = param2;
-         _loc4_.wrapper.next.next = new Wrapper();
-         _loc4_.wrapper.next.next.vertex = param3;
-         return _loc4_;
+         var face:Face = new Face();
+         face.next = faceList;
+         faceList = face;
+         face.wrapper = new Wrapper();
+         face.wrapper.vertex = a;
+         face.wrapper.next = new Wrapper();
+         face.wrapper.next.vertex = b;
+         face.wrapper.next.next = new Wrapper();
+         face.wrapper.next.next.vertex = c;
+         return face;
       }
       
-      public function setAlpha(param1:Number) : void
+      public function setAlpha(value:Number) : void
       {
-         this.supy = param1;
+         this.supy = value;
          this.updateAlpha();
       }
       
       private function updateAlpha() : void
       {
-         alpha = this.fidemujil * this.supy;
+         alpha = this.alphaMultiplier * this.supy;
       }
       
-      public function readPosition(param1:Vector3) : void
+      public function readPosition(result:Vector3) : void
       {
-         param1.x = x;
-         param1.y = y;
-         param1.z = z;
+         result.x = x;
+         result.y = y;
+         result.z = z;
       }
       
-      public function setAlphaMultiplier(param1:Number) : void
+      public function setAlphaMultiplier(value:Number) : void
       {
-         this.fidemujil = param1;
+         this.alphaMultiplier = value;
          this.updateAlpha();
       }
    }
