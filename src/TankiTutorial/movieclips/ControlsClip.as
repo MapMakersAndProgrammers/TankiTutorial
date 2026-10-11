@@ -70,7 +70,7 @@ package movieclips
          _loc7_ = new BitmapData(_loc2_.width,_loc2_.height,true,0);
          _loc7_.draw(_loc2_);
          _loc7_.draw(_loc3_);
-         if(GameData.vucofena)
+         if(GameData.mouseEnabled)
          {
             this.mouseBitmap = new Bitmap(_loc7_);
             addChild(this.text);

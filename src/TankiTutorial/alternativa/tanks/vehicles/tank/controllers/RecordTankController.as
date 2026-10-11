@@ -75,7 +75,7 @@ package alternativa.tanks.vehicles.tank.controllers
       
       override public function update(param1:int, param2:int, param3:Number) : void
       {
-         if(!(GameData.butefu.controller is SpectatorCameraController))
+         if(!(GameData.camera.controller is SpectatorCameraController))
          {
             super.update(param1,param2,param3);
          }

@@ -76,7 +76,7 @@ package alternativa.tanks.vehicles.tank
       
       private const guzinizub:KDContainer = GameData.guzinizub;
       
-      private const butefu:GameCamera = GameData.butefu;
+      private const camera:GameCamera = GameData.camera;
       
       private const gov:TanksPhysicsScene = GameData.gov;
       
@@ -424,7 +424,7 @@ package alternativa.tanks.vehicles.tank
          this.gov.addPhysicsInterpolator(this);
          this.kat = true;
          this.jypadif.addRenderer(this);
-         this.kuca.addToContainer(this.guzinizub,this.butefu);
+         this.kuca.addToContainer(this.guzinizub,this.camera);
          GameData.gido.addTank(this);
          this.wom = true;
          this.lysecof = new TankSounds();

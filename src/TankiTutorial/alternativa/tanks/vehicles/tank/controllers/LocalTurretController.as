@@ -59,7 +59,7 @@ package alternativa.tanks.vehicles.tank.controllers
          this.setDefaultKeyMap();
          param3.addEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
          param3.addEventListener(KeyboardEvent.KEY_UP,this.onKey);
-         if(GameData.vucofena)
+         if(GameData.mouseEnabled)
          {
             param3.addEventListener(MouseEvent.MOUSE_DOWN,this.onMouseDown);
             param3.addEventListener(MouseEvent.MOUSE_MOVE,this.onMouseMove);
@@ -188,7 +188,7 @@ package alternativa.tanks.vehicles.tank.controllers
       
       private function doEnableBouseMode() : *
       {
-         if(GameData.vucofena && !finished && this.isFullScreen())
+         if(GameData.mouseEnabled && !finished && this.isFullScreen())
          {
             GameData.stage[cud] = true;
             GameData.kumiteva = true;
@@ -204,7 +204,7 @@ package alternativa.tanks.vehicles.tank.controllers
       
       private function disableMouseMode() : void
       {
-         if(GameData.vucofena && this.isFullScreen())
+         if(GameData.mouseEnabled && this.isFullScreen())
          {
             GameData.stage[cud] = false;
          }
@@ -341,7 +341,7 @@ package alternativa.tanks.vehicles.tank.controllers
          this.disableMouseMode();
          this.selijy.removeEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
          this.selijy.removeEventListener(KeyboardEvent.KEY_UP,this.onKey);
-         if(GameData.vucofena)
+         if(GameData.mouseEnabled)
          {
             this.selijy.removeEventListener(MouseEvent.MOUSE_DOWN,this.onMouseDown);
             this.selijy.removeEventListener(MouseEvent.MOUSE_MOVE,this.onMouseMove);

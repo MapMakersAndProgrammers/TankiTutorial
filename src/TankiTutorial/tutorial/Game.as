@@ -39,7 +39,7 @@ package tutorial
       
       private var stage:Stage = GameData.stage;
       
-      private var butefu:GameCamera = GameData.butefu;
+      private var camera:GameCamera = GameData.camera;
       
       private var root:Object3DContainer = GameData.root;
       
@@ -93,7 +93,7 @@ package tutorial
       
       private function setupDust() : void
       {
-         this.gido = new Dust(this.butefu);
+         this.gido = new Dust(this.camera);
          var _loc1_:BitmapData = Assets.getData("dust",BitmapData);
          var _loc2_:TextureAnimation = new TextureAnimation(new TextureMaterial(_loc1_),GraphicsUtils.getUVFramesFromTexture(_loc1_,32,32,17),30);
          this.gido.init(_loc2_,9000,7000,200,0.75,0.1);
@@ -182,15 +182,15 @@ package tutorial
          _loc4_ = this.suvubufi.lecopojen;
          _loc5_ = this.suvubufi.rud;
          this.updatePhysics(_loc4_);
-         this.butefu.startTimer();
-         this.butefu.calculateAdditionalData();
-         this.butefu.controller.update(_loc4_,_loc5_);
-         GameData.bijatil.updateSoundEffects(_loc5_,this.butefu);
+         this.camera.startTimer();
+         this.camera.calculateAdditionalData();
+         this.camera.controller.update(_loc4_,_loc5_);
+         GameData.bijatil.updateSoundEffects(_loc5_,this.camera);
          this.gido.update();
          GameData.jypadif.render(_loc4_,_loc5_);
-         GameData.hobuna.update(_loc5_,this.butefu);
-         this.butefu.render();
-         this.butefu.stopTimer();
+         GameData.hobuna.update(_loc5_,this.camera);
+         this.camera.render();
+         this.camera.stopTimer();
       }
       
       private function updateCurrentTutorial() : void
@@ -242,7 +242,7 @@ package tutorial
       {
          Shared.tracker.trackEvent(Shared.TUTORIAL,Shared.TUTORIAL + ":finish","");
          GameData.qemikoq.enabled = false;
-         GameData.butefu.controller = DummyCameraController.degakeh;
+         GameData.camera.controller = DummyCameraController.degakeh;
          GameData.jifom.turretController.lock(1);
          GameData.jifom.turretController.finish();
          GameData.jifom.kakow.hide();
@@ -275,8 +275,8 @@ package tutorial
       
       public function onResize(param1:Event = null) : void
       {
-         this.butefu.view.width = this.stage.stageWidth;
-         this.butefu.view.height = this.stage.stageHeight;
+         this.camera.view.width = this.stage.stageWidth;
+         this.camera.view.height = this.stage.stageHeight;
          this.correctCameraFOV();
       }
       
@@ -289,13 +289,13 @@ package tutorial
          var _loc2_:Number = 16;
          var _loc3_:Number = 9;
          var _loc4_:Number = Math.PI / 2;
-         var _loc5_:Number = Number(this.butefu.view.width);
-         var _loc6_:Number = Number(this.butefu.view.height);
+         var _loc5_:Number = Number(this.camera.view.width);
+         var _loc6_:Number = Number(this.camera.view.height);
          var _loc7_:Number = _loc6_ / _loc3_;
          var _loc8_:Number = _loc5_ / _loc7_;
          if(_loc8_ <= _loc1_)
          {
-            this.butefu.fov = _loc4_;
+            this.camera.fov = _loc4_;
          }
          else
          {
@@ -306,7 +306,7 @@ package tutorial
             }
             _loc10_ = _loc9_ * _loc7_;
             _loc11_ = Math.sqrt(_loc10_ * _loc10_ + _loc6_ * _loc6_) * 0.5 / Math.tan(_loc4_ * 0.5);
-            this.butefu.fov = Math.atan(Math.sqrt(_loc5_ * _loc5_ + _loc6_ * _loc6_) * 0.5 / _loc11_) * 2;
+            this.camera.fov = Math.atan(Math.sqrt(_loc5_ * _loc5_ + _loc6_ * _loc6_) * 0.5 / _loc11_) * 2;
          }
       }
       
@@ -362,24 +362,24 @@ package tutorial
       {
          if(this.myzumywi == null)
          {
-            this.myzumywi = new SpectatorCameraController(this.stage,this.butefu);
+            this.myzumywi = new SpectatorCameraController(this.stage,this.camera);
          }
-         if(this.butefu.controller != null)
+         if(this.camera.controller != null)
          {
-            this.butefu.controller.deactivate();
+            this.camera.controller.deactivate();
          }
-         if(this.butefu.controller == this.myzumywi)
+         if(this.camera.controller == this.myzumywi)
          {
-            this.butefu.controller = this.motorafo;
+            this.camera.controller = this.motorafo;
          }
          else
          {
-            this.motorafo = this.butefu.controller;
-            this.butefu.controller = this.myzumywi;
+            this.motorafo = this.camera.controller;
+            this.camera.controller = this.myzumywi;
          }
-         if(this.butefu.controller != null)
+         if(this.camera.controller != null)
          {
-            this.butefu.controller.activate();
+            this.camera.controller.activate();
          }
       }
       

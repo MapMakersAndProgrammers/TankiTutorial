@@ -42,7 +42,7 @@ package tutorial.tasks
       {
          if(Alternativa3D.version == "7.11.0")
          {
-            return GameData.butefu.view.constrained ? "GPU_constrained" : "GPU";
+            return GameData.camera.view.constrained ? "GPU_constrained" : "GPU";
          }
          return "CPU";
       }

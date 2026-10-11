@@ -397,16 +397,16 @@ package tutorial.script
       
       private function cameraController() : void
       {
-         var _loc1_:FollowCameraController = new FollowCameraController(GameData.stage,GameData.butefu);
+         var _loc1_:FollowCameraController = new FollowCameraController(GameData.stage,GameData.camera);
          _loc1_.setCollisionParameters(GameData.guzinizub);
          _loc1_.setTarget(this.jifom);
          _loc1_.activate();
-         GameData.butefu.controller = _loc1_;
+         GameData.camera.controller = _loc1_;
       }
       
       private function cameraMatrix(param1:Matrix3D) : void
       {
-         GameData.butefu.matrix = param1;
+         GameData.camera.matrix = param1;
       }
       
       private function playerSpawn(param1:TankFunctionParams) : void

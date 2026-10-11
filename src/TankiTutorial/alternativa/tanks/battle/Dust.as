@@ -30,7 +30,7 @@ package alternativa.tanks.battle
       
       private var bim:Dictionary = new Dictionary();
       
-      private var butefu:GameCamera;
+      private var camera:GameCamera;
       
       private var kyfyjyril:Number;
       
@@ -45,7 +45,7 @@ package alternativa.tanks.battle
       public function Dust(param1:GameCamera)
       {
          super();
-         this.butefu = param1;
+         this.camera = param1;
       }
       
       private static function addJitter(param1:Vector3, param2:Number) : void
@@ -79,7 +79,7 @@ package alternativa.tanks.battle
       {
          var _loc1_:* = undefined;
          var _loc2_:Tank = null;
-         if(this.enabled && Boolean(this.butefu.softTransparency) && this.butefu.softTransparencyStrength > 0.01)
+         if(this.enabled && Boolean(this.camera.softTransparency) && this.camera.softTransparencyStrength > 0.01)
          {
             for(_loc1_ in this.bim)
             {
@@ -140,8 +140,8 @@ package alternativa.tanks.battle
          var _loc6_:ScalingObject3DPositionProvider = null;
          var _loc7_:LimitedDistanceAnimatedSpriteEffect = null;
          var _loc8_:Number = NaN;
-         var _loc5_:Number = this.tywad * param4 * this.butefu.softTransparencyStrength;
-         if(this.enabled && Boolean(this.butefu.softTransparency) && _loc5_ > 0)
+         var _loc5_:Number = this.tywad * param4 * this.camera.softTransparencyStrength;
+         if(this.enabled && Boolean(this.camera.softTransparency) && _loc5_ > 0)
          {
             _loc6_ = ScalingObject3DPositionProvider(GameData.murow.getObject(ScalingObject3DPositionProvider));
             _loc6_.init(param2,param3,0.01);

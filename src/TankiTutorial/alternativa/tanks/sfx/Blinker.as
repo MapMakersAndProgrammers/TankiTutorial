@@ -15,7 +15,7 @@ package alternativa.tanks.sfx
       
       private var gahehake:Number;
       
-      private var duz:Number;
+      private var value:Number;
       
       private var supoly:Number;
       
@@ -44,7 +44,7 @@ package alternativa.tanks.sfx
       
       public function init(param1:int) : void
       {
-         this.duz = this.zabiso;
+         this.value = this.zabiso;
          this.viwohykyr = this.kebesyqug;
          this.supoly = this.getSpeed(-1);
          this.lafujot = param1 + this.viwohykyr;
@@ -75,14 +75,14 @@ package alternativa.tanks.sfx
       
       public function updateValue(param1:int, param2:int) : Number
       {
-         this.duz += this.supoly * param2;
-         if(this.duz > this.zabiso)
+         this.value += this.supoly * param2;
+         if(this.value > this.zabiso)
          {
-            this.duz = this.zabiso;
+            this.value = this.zabiso;
          }
-         if(this.duz < this.lozusezyr)
+         if(this.value < this.lozusezyr)
          {
-            this.duz = this.lozusezyr;
+            this.value = this.lozusezyr;
          }
          if(param1 >= this.lafujot)
          {
@@ -104,7 +104,7 @@ package alternativa.tanks.sfx
                this.supoly = this.getSpeed(-1);
             }
          }
-         return this.duz;
+         return this.value;
       }
       
       private function getSpeed(param1:Number) : Number

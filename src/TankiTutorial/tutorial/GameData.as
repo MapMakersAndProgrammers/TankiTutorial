@@ -45,7 +45,7 @@ package tutorial
       
       public static var root:Object3DContainer;
       
-      public static var butefu:GameCamera;
+      public static var camera:GameCamera;
       
       public static var guzinizub:KDContainer;
       
@@ -117,7 +117,7 @@ package tutorial
       
       public static const bisoga:Boolean = true;
       
-      public static var vucofena:Boolean = false;
+      public static var mouseEnabled:Boolean = false;
       
       public static var kumiteva:Boolean = false;
       
@@ -139,19 +139,19 @@ package tutorial
             Shared.preloader = new LoaderWindow(param1);
          }
          root = new Object3DContainer();
-         butefu = new GameCamera();
-         butefu.matrix = new Matrix3D(Vector.<Number>([-0.8589262962341309,-0.5120992064476013,0,0,-0.056438345462083817,0.09466209262609482,-0.9939083456993103,0,0.5089796781539917,-0.8536940217018127,-0.11020979285240173,0,1734.8155517578125,-4618.1220703125,121.45249938964844,1]));
-         butefu.nearClipping = 100;
-         butefu.farClipping = 40000;
-         butefu.view = new View(param1.stageWidth,param1.stageHeight,Shared.constrained);
-         butefu.view.hideLogo();
-         butefu.view.antiAliasEnabled = false;
-         butefu.addToDebug(Debug.EDGES,Object3D);
-         butefu.addToDebug(Debug.LIGHTS,Object3D);
-         butefu.timerUpdatePeriod = 30;
-         butefu.softTransparency = false;
-         root.addChild(butefu);
-         param1.addChildAt(butefu.view,0);
+         camera = new GameCamera();
+         camera.matrix = new Matrix3D(Vector.<Number>([-0.8589262962341309,-0.5120992064476013,0,0,-0.056438345462083817,0.09466209262609482,-0.9939083456993103,0,0.5089796781539917,-0.8536940217018127,-0.11020979285240173,0,1734.8155517578125,-4618.1220703125,121.45249938964844,1]));
+         camera.nearClipping = 100;
+         camera.farClipping = 40000;
+         camera.view = new View(param1.stageWidth,param1.stageHeight,Shared.constrained);
+         camera.view.hideLogo();
+         camera.view.antiAliasEnabled = false;
+         camera.addToDebug(Debug.EDGES,Object3D);
+         camera.addToDebug(Debug.LIGHTS,Object3D);
+         camera.timerUpdatePeriod = 30;
+         camera.softTransparency = false;
+         root.addChild(camera);
+         param1.addChildAt(camera.view,0);
          guzinizub = new KDContainer();
          guzinizub.ignoreChildrenInCollider = true;
          root.addChild(guzinizub);
@@ -187,20 +187,20 @@ package tutorial
          var _loc13_:int = color(_loc7_,_loc8_,_loc9_);
          if(Boolean(Shared.gpu) && version >= 11 && !Shared.constrained && (Shared.navigator != "Chrome" || int(Shared.navigatorVersion.split(".")[0]) > 23))
          {
-            butefu.fogNear = 0;
-            butefu.fogFar = 10000;
-            butefu.fogAlpha = 0;
-            butefu.directionalLight = new DirectionalLight(_loc12_);
-            butefu.directionalLight.lookAt(ruda.x,ruda.y,ruda.z);
-            butefu.ambientColor = _loc13_;
-            butefu.shadowMap = new ShadowMap(2048,5000,8000,0.5,4000);
-            butefu.deferredLighting = false;
-            butefu.softTransparency = false;
-            butefu.ssao = false;
-            butefu.ssaoRadius = 400;
-            butefu.ssaoRange = 1200;
-            butefu.ssaoColor = 2636880;
-            butefu.ssaoAlpha = 1.4;
+            camera.fogNear = 0;
+            camera.fogFar = 10000;
+            camera.fogAlpha = 0;
+            camera.directionalLight = new DirectionalLight(_loc12_);
+            camera.directionalLight.lookAt(ruda.x,ruda.y,ruda.z);
+            camera.ambientColor = _loc13_;
+            camera.shadowMap = new ShadowMap(2048,5000,8000,0.5,4000);
+            camera.deferredLighting = false;
+            camera.softTransparency = false;
+            camera.ssao = false;
+            camera.ssaoRadius = 400;
+            camera.ssaoRange = 1200;
+            camera.ssaoColor = 2636880;
+            camera.ssaoAlpha = 1.4;
          }
          else
          {
@@ -211,14 +211,14 @@ package tutorial
          mij = new BattleServiceImpl();
          zepymy = new BattleRunnerImpl();
          hyfecypi = new BattleScene3DImpl();
-         vucofena = !BrowserBlackList.checkIfMouseDisabled();
+         mouseEnabled = !BrowserBlackList.checkIfMouseDisabled();
       }
       
       public static function initMarking() : void
       {
          if(jyqoqogy == null)
          {
-            jyqoqogy = new MarkingManager(stage,butefu,guzinizub,jifom,false);
+            jyqoqogy = new MarkingManager(stage,camera,guzinizub,jifom,false);
          }
       }
       
@@ -247,29 +247,29 @@ package tutorial
                ruda.y += 0.1;
                break;
             case Keyboard.TAB:
-               butefu.debug = !butefu.debug;
+               camera.debug = !camera.debug;
                break;
             case Keyboard.F2:
                if(myzumywi == null)
                {
-                  myzumywi = new SpectatorCameraController(stage,butefu);
+                  myzumywi = new SpectatorCameraController(stage,camera);
                }
-               if(butefu.controller != null)
+               if(camera.controller != null)
                {
-                  butefu.controller.deactivate();
+                  camera.controller.deactivate();
                }
-               if(butefu.controller == myzumywi)
+               if(camera.controller == myzumywi)
                {
-                  butefu.controller = motorafo;
+                  camera.controller = motorafo;
                }
                else
                {
-                  motorafo = butefu.controller;
-                  butefu.controller = myzumywi;
+                  motorafo = camera.controller;
+                  camera.controller = myzumywi;
                }
-               if(butefu.controller != null)
+               if(camera.controller != null)
                {
-                  butefu.controller.activate();
+                  camera.controller.activate();
                }
          }
       }

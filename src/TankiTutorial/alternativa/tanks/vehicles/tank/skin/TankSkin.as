@@ -53,7 +53,7 @@ package alternativa.tanks.vehicles.tank.skin
       
       private var niheji:Dictionary;
       
-      public var butefu:Camera3D;
+      public var camera:Camera3D;
       
       public var shadow:Shadow;
       
@@ -105,7 +105,7 @@ package alternativa.tanks.vehicles.tank.skin
          {
             param1.addChild(this.kimiwacun);
          }
-         this.butefu = param2;
+         this.camera = param2;
          this.shadow = new Shadow(128,8,100,5000,10000,516,0.95);
          this.shadow.offset = 100;
          this.shadow.backFadeRange = 100;
@@ -134,12 +134,12 @@ package alternativa.tanks.vehicles.tank.skin
                this.danewazam.removeChild(this.kimiwacun);
             }
          }
-         if(this.butefu != null)
+         if(this.camera != null)
          {
             this.shadow.removeAllCasters();
-            this.butefu.removeShadow(this.shadow);
+            this.camera.removeShadow(this.shadow);
             this.shadow = null;
-            this.butefu = null;
+            this.camera = null;
          }
       }
       

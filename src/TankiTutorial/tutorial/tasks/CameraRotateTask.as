@@ -16,14 +16,14 @@ package tutorial.tasks
       {
          super();
          this.dodycoli = 0;
-         this.cipa = (GameData.butefu.controller as FollowCameraController).getCameraT();
+         this.cipa = (GameData.camera.controller as FollowCameraController).getCameraT();
       }
       
       override public function process() : Boolean
       {
          var _loc2_:TimeData = null;
          var _loc3_:Number = NaN;
-         var _loc1_:FollowCameraController = GameData.butefu.controller as FollowCameraController;
+         var _loc1_:FollowCameraController = GameData.camera.controller as FollowCameraController;
          if(this.dodycoli == 0)
          {
             GameData.jifom.kakow.hide();
@@ -45,13 +45,13 @@ package tutorial.tasks
             }
             _loc3_ /= Math.PI;
             _loc1_.setCameraT(this.cipa * (_loc3_ * (1 - mipid) + mipid));
-            _loc1_.bifejizi = -150 * (1 - _loc3_);
+            _loc1_.heightOffset = -150 * (1 - _loc3_);
             if(this.dodycoli > Math.PI * 2)
             {
                _loc1_.qusejov = 0;
                _loc1_.setCameraT(this.cipa);
                GameData.jifom.unlockMovement();
-               _loc1_.bifejizi = 0;
+               _loc1_.heightOffset = 0;
                GameData.jifom.turretController.unlock(1);
                GameData.jifom.kakow.show();
                return true;

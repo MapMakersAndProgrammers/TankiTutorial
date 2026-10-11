@@ -47,7 +47,7 @@ package tutorial
       
       private var stage:Stage;
       
-      private var butefu:Camera3D;
+      private var camera:Camera3D;
       
       private var danewazam:KDContainer;
       
@@ -85,7 +85,7 @@ package tutorial
          this.qiqegoken = new Dictionary();
          super();
          this.stage = param1;
-         this.butefu = param2;
+         this.camera = param2;
          this.danewazam = param3;
          this.citacir = param4;
          this.kaweq = param5;
@@ -354,21 +354,21 @@ package tutorial
       {
          var _loc3_:SpectatorCameraController = null;
          var _loc4_:Vector3D = null;
-         this.butefu.calculateRay(this.vyhomopog,this.ruda,this.butefu.view.mouseX,this.butefu.view.mouseY);
+         this.camera.calculateRay(this.vyhomopog,this.ruda,this.camera.view.mouseX,this.camera.view.mouseY);
          var _loc2_:RayIntersectionData = this.danewazam.intersectRay(this.vyhomopog,this.ruda,this.mitysosu);
          if(_loc2_ != null)
          {
             if(_loc2_.object is Sphere)
             {
-               _loc3_ = (this.butefu as GameCamera).controller as SpectatorCameraController;
+               _loc3_ = (this.camera as GameCamera).controller as SpectatorCameraController;
                if(_loc3_ != null)
                {
-                  _loc3_.vucofena = false;
+                  _loc3_.mouseEnabled = false;
                }
                this.kes = _loc2_.object;
-               _loc4_ = this.butefu.projectGlobal(new Vector3D(this.kes.x,this.kes.y,this.kes.z));
-               this.fyryvujut = this.butefu.view.mouseX - _loc4_.x;
-               this.qywavage = this.butefu.view.mouseY - _loc4_.y;
+               _loc4_ = this.camera.projectGlobal(new Vector3D(this.kes.x,this.kes.y,this.kes.z));
+               this.fyryvujut = this.camera.view.mouseX - _loc4_.x;
+               this.qywavage = this.camera.view.mouseY - _loc4_.y;
                this.zulynuwy = false;
             }
          }
@@ -380,7 +380,7 @@ package tutorial
          var _loc3_:Vector3D = null;
          if(this.kes != null)
          {
-            this.butefu.calculateRay(this.vyhomopog,this.ruda,this.butefu.view.mouseX - this.fyryvujut,this.butefu.view.mouseY - this.qywavage);
+            this.camera.calculateRay(this.vyhomopog,this.ruda,this.camera.view.mouseX - this.fyryvujut,this.camera.view.mouseY - this.qywavage);
             _loc2_ = this.danewazam.intersectRay(this.vyhomopog,this.ruda,this.jowidycuw);
             if(_loc2_ != null)
             {
@@ -396,10 +396,10 @@ package tutorial
       private function onMouseUp(param1:MouseEvent) : void
       {
          var _loc3_:Vector3D = null;
-         var _loc2_:SpectatorCameraController = (this.butefu as GameCamera).controller as SpectatorCameraController;
+         var _loc2_:SpectatorCameraController = (this.camera as GameCamera).controller as SpectatorCameraController;
          if(_loc2_ != null)
          {
-            _loc2_.vucofena = true;
+            _loc2_.mouseEnabled = true;
          }
          if(this.zulynuwy)
          {
@@ -432,7 +432,7 @@ package tutorial
          var _loc16_:Number = NaN;
          var _loc17_:Number = NaN;
          var _loc18_:Number = NaN;
-         this.butefu.calculateRay(this.vyhomopog,this.ruda,this.butefu.view.mouseX,this.butefu.view.mouseY);
+         this.camera.calculateRay(this.vyhomopog,this.ruda,this.camera.view.mouseX,this.camera.view.mouseY);
          var _loc2_:RayIntersectionData = this.danewazam.intersectRay(this.vyhomopog,this.ruda,this.mitysosu);
          if(_loc2_ != null)
          {

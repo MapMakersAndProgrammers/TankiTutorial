@@ -8,7 +8,7 @@ package tutorial.tasks
       
       private static const nav:Number = 0.05;
       
-      private var controller:FollowCameraController = GameData.butefu.controller as FollowCameraController;
+      private var controller:FollowCameraController = GameData.camera.controller as FollowCameraController;
       
       private var cejufi:Number;
       
