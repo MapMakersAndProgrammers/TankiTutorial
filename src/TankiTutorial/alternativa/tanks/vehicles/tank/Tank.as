@@ -265,7 +265,7 @@ package alternativa.tanks.vehicles.tank
       private function setBoundSphereRadius(param1:Vector3, param2:Number) : void
       {
          var _loc3_:Vector3 = new Vector3(param1.x,param1.y,param2 / 2);
-         var _loc4_:Matrix4 = this.hogys.kyripama.localTransform;
+         var _loc4_:Matrix4 = this.hogys.tankCollisionBox.localTransform;
          this.fysa = _loc3_.length() + Math.abs(_loc4_.ml);
       }
       
@@ -602,7 +602,7 @@ package alternativa.tanks.vehicles.tank
       
       public function setBodyCollisionGroup(param1:int) : void
       {
-         this.hogys.kyripama.collisionGroup = param1;
+         this.hogys.tankCollisionBox.collisionGroup = param1;
       }
       
       public function get turretController() : TurretController

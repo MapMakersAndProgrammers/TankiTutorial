@@ -3,14 +3,14 @@ package alternativa.tanks.shared.camera
    public class DummyCameraController implements CameraController
    {
       
-      public static const degakeh:DummyCameraController = new DummyCameraController();
+      public static const instance:DummyCameraController = new DummyCameraController();
       
       public function DummyCameraController()
       {
          super();
       }
       
-      public function setCamera(param1:GameCamera) : void
+      public function setCamera(camera:GameCamera) : void
       {
       }
       
@@ -22,7 +22,7 @@ package alternativa.tanks.shared.camera
       {
       }
       
-      public function update(param1:int, param2:int) : void
+      public function update(time:int, deltaTime:int) : void
       {
       }
    }

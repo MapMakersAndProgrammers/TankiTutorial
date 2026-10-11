@@ -180,11 +180,11 @@ package alternativa.tanks.sfx
             position.copy(this.tank.hogys.body.state.position);
             if(this.engineSoundsLoaded)
             {
-               this.engineSounds.update(deltaTime,camera.position,position,camera.memyjenut);
+               this.engineSounds.update(deltaTime,camera.position,position,camera.xAxis);
             }
             if(this.turretSoundLoaded)
             {
-               this.turretSound.checkVolume(camera.position,position,camera.memyjenut);
+               this.turretSound.checkVolume(camera.position,position,camera.xAxis);
             }
          }
       }

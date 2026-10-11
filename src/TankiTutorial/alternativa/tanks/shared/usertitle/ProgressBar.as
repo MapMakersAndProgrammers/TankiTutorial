@@ -81,7 +81,7 @@ package alternativa.tanks.shared.usertitle
       
       public function draw(texture:BitmapData) : void
       {
-         var _loc4_:int = 0;
+         var filledWidth:int = 0;
          var graphics:Graphics = this.shape.graphics;
          graphics.clear();
          graphics.beginBitmapFill(this.skin.shadowLeft);
@@ -91,14 +91,14 @@ package alternativa.tanks.shared.usertitle
          graphics.beginBitmapFill(this.skin.shadowRight);
          graphics.drawRect(this.shadowLeftWidth + this.width - 2 * this.leftBgWidth,0,this.shadowLeftWidth,this.shadowHeight);
          graphics.endFill();
-         var _loc3_:int = this.width * this._progress / this.maxValue;
-         var _loc5_:int = this.width - this.leftBgWidth;
-         if(_loc3_ >= this.leftBgWidth)
+         var progressWidth:int = this.width * this._progress / this.maxValue;
+         var rightBgX:int = this.width - this.leftBgWidth;
+         if(progressWidth >= this.leftBgWidth)
          {
-            if(_loc3_ == this.width)
+            if(progressWidth == this.width)
             {
                this.drawFullBar(graphics,this.skin.color,this.skin.left,this.skin.right);
-               _loc4_ = _loc3_;
+               filledWidth = progressWidth;
             }
             else
             {
@@ -106,34 +106,34 @@ package alternativa.tanks.shared.usertitle
                matrix.ty = this.offsetY;
                graphics.beginBitmapFill(this.skin.left,matrix,false);
                graphics.drawRect(this.offsetX,this.offsetY,this.leftBgWidth,this.leftBgHeight);
-               if(_loc3_ > this.leftBgWidth)
+               if(progressWidth > this.leftBgWidth)
                {
-                  if(_loc3_ > _loc5_)
+                  if(progressWidth > rightBgX)
                   {
-                     _loc3_ = _loc5_;
+                     progressWidth = rightBgX;
                   }
-                  _loc4_ = _loc3_;
+                  filledWidth = progressWidth;
                   graphics.beginFill(this.skin.color);
-                  graphics.drawRect(this.offsetX + this.leftBgWidth,this.offsetY,_loc3_ - this.leftBgWidth,this.leftBgHeight);
+                  graphics.drawRect(this.offsetX + this.leftBgWidth,this.offsetY,progressWidth - this.leftBgWidth,this.leftBgHeight);
                }
                else
                {
-                  _loc4_ = this.leftBgWidth;
+                  filledWidth = this.leftBgWidth;
                }
             }
          }
-         if(_loc4_ == 0)
+         if(filledWidth == 0)
          {
             this.drawFullBar(graphics,this.skin.bgColor,this.skin.leftBg,this.skin.rightBg);
          }
-         else if(_loc4_ < this.width)
+         else if(filledWidth < this.width)
          {
             graphics.beginFill(this.skin.bgColor);
-            graphics.drawRect(this.offsetX + _loc4_,this.offsetY,_loc5_ - _loc4_,this.leftBgHeight);
-            matrix.tx = this.offsetX + _loc5_;
+            graphics.drawRect(this.offsetX + filledWidth,this.offsetY,rightBgX - filledWidth,this.leftBgHeight);
+            matrix.tx = this.offsetX + rightBgX;
             matrix.ty = this.offsetY;
             graphics.beginBitmapFill(this.skin.rightBg,matrix,false);
-            graphics.drawRect(this.offsetX + _loc5_,this.offsetY,this.leftBgWidth,this.leftBgHeight);
+            graphics.drawRect(this.offsetX + rightBgX,this.offsetY,this.leftBgWidth,this.leftBgHeight);
          }
          graphics.endFill();
          texture.fillRect(this.rect,0);
@@ -144,16 +144,16 @@ package alternativa.tanks.shared.usertitle
       
       private function drawFullBar(graphics:Graphics, color:uint, left:BitmapData, right:BitmapData) : void
       {
-         var _loc5_:int = this.width - this.leftBgWidth;
+         var rightBgX:int = this.width - this.leftBgWidth;
          matrix.tx = this.offsetX;
          matrix.ty = this.offsetY;
          graphics.beginBitmapFill(left,matrix,false);
          graphics.drawRect(this.offsetX,this.offsetY,this.leftBgWidth,this.leftBgHeight);
          graphics.beginFill(color);
-         graphics.drawRect(this.offsetX + this.leftBgWidth,this.offsetY,_loc5_ - this.leftBgWidth,this.leftBgHeight);
-         matrix.tx = this.offsetX + _loc5_;
+         graphics.drawRect(this.offsetX + this.leftBgWidth,this.offsetY,rightBgX - this.leftBgWidth,this.leftBgHeight);
+         matrix.tx = this.offsetX + rightBgX;
          graphics.beginBitmapFill(right,matrix,false);
-         graphics.drawRect(this.offsetX + _loc5_,this.offsetY,this.leftBgWidth,this.leftBgHeight);
+         graphics.drawRect(this.offsetX + rightBgX,this.offsetY,this.leftBgWidth,this.leftBgHeight);
       }
    }
 }

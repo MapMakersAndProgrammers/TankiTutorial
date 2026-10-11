@@ -11,9 +11,9 @@ package alternativa.tanks.shared.physics
       
       public var body:Body;
       
-      public var kyripama:CollisionBox;
+      public var tankCollisionBox:CollisionBox;
       
-      public const kodasy:Vector.<CollisionShape> = new Vector.<CollisionShape>();
+      public const staticCollisionBoxes:Vector.<CollisionShape> = new Vector.<CollisionShape>();
       
       public var vahuzys:Boolean;
       
@@ -28,8 +28,8 @@ package alternativa.tanks.shared.physics
       public function clearCollisionShapes() : void
       {
          this.body.clearCollisionShapes();
-         this.kodasy.length = 0;
-         this.kyripama = null;
+         this.staticCollisionBoxes.length = 0;
+         this.tankCollisionBox = null;
       }
    }
 }

@@ -54,7 +54,7 @@ package alternativa.tanks.shared.usertitle
       
       private var blinking:Boolean;
       
-      public function EffectIndicator(effectId:int, blinkingTime:int, userTitle:UserTitle, initialInterval:int, param5:int)
+      public function EffectIndicator(effectId:int, blinkingTime:int, userTitle:UserTitle, initialInterval:int, intervalDecrement:int)
       {
          super();
          if(icons == null)
@@ -65,7 +65,7 @@ package alternativa.tanks.shared.usertitle
          this.icon = icons[effectId];
          this.blinkingTime = blinkingTime;
          this.userTitle = userTitle;
-         this.blinker = new Blinker(initialInterval,20,param5,MIN_ALPHA,1,10);
+         this.blinker = new Blinker(initialInterval,20,intervalDecrement,MIN_ALPHA,1,10);
          this.state = STATE_HIDDEN;
       }
       

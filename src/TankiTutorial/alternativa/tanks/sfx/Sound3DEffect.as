@@ -74,7 +74,7 @@ package alternativa.tanks.sfx
             }
             this.channel.addEventListener(Event.SOUND_COMPLETE,this.onSoundComplete);
          }
-         this.sound.checkVolume(camera.position,this.position,camera.memyjenut);
+         this.sound.checkVolume(camera.position,this.position,camera.xAxis);
       }
       
       public function destroy() : void

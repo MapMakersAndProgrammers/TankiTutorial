@@ -242,7 +242,7 @@ package tutorial
       {
          Shared.tracker.trackEvent(Shared.TUTORIAL,Shared.TUTORIAL + ":finish","");
          GameData.recordTankController.enabled = false;
-         GameData.camera.controller = DummyCameraController.degakeh;
+         GameData.camera.controller = DummyCameraController.instance;
          GameData.playerTank.turretController.lock(1);
          GameData.playerTank.turretController.finish();
          GameData.playerTank.kakow.hide();
