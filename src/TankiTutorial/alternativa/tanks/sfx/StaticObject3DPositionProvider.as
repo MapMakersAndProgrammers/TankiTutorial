@@ -9,43 +9,43 @@ package alternativa.tanks.sfx
    public class StaticObject3DPositionProvider extends PooledObject implements Object3DPositionProvider
    {
       
-      private static const pipoj:Vector3 = new Vector3();
+      private static const direction:Vector3 = new Vector3();
       
       private var position:Vector3 = new Vector3();
       
-      private var lume:Number;
+      private var distance:Number;
       
-      public function StaticObject3DPositionProvider(param1:Pool)
+      public function StaticObject3DPositionProvider(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function init(param1:Vector3, param2:Number) : void
+      public function init(position:Vector3, distance:Number) : void
       {
-         this.position.copy(param1);
-         this.lume = param2;
+         this.position.copy(position);
+         this.distance = distance;
       }
       
       public function setPosition(param1:Vector3) : void
       {
       }
       
-      public function initPosition(param1:Object3D) : void
+      public function initPosition(object:Object3D) : void
       {
-         param1.x = this.position.x;
-         param1.y = this.position.y;
-         param1.z = this.position.z;
+         object.x = this.position.x;
+         object.y = this.position.y;
+         object.z = this.position.z;
       }
       
-      public function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void
+      public function updateObjectPosition(object:Object3D, camera:GameCamera, deltaTime:int) : void
       {
-         pipoj.x = param2.x - this.position.x;
-         pipoj.y = param2.y - this.position.y;
-         pipoj.z = param2.z - this.position.z;
-         pipoj.normalize();
-         param1.x = this.position.x + this.lume * pipoj.x;
-         param1.y = this.position.y + this.lume * pipoj.y;
-         param1.z = this.position.z + this.lume * pipoj.z;
+         direction.x = camera.x - this.position.x;
+         direction.y = camera.y - this.position.y;
+         direction.z = camera.z - this.position.z;
+         direction.normalize();
+         object.x = this.position.x + this.distance * direction.x;
+         object.y = this.position.y + this.distance * direction.y;
+         object.z = this.position.z + this.distance * direction.z;
       }
       
       public function destroy() : void

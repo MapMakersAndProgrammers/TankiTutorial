@@ -13,96 +13,96 @@ package alternativa.tanks.sfx
    public class CollisionObject3DPositionProvider extends PooledObject implements Object3DPositionProvider
    {
       
-      private static const bul:Matrix4 = new Matrix4();
+      private static const matrix:Matrix4 = new Matrix4();
       
-      private static const fybumu:Vector3 = new Vector3();
+      private static const barrelOrigin:Vector3 = new Vector3();
       
-      private static const ruda:Vector3 = new Vector3();
+      private static const direction:Vector3 = new Vector3();
       
-      private static const rygapyv:Vector3 = new Vector3();
+      private static const xAxis:Vector3 = new Vector3();
       
-      private static const rinego:Vector3 = new Vector3();
+      private static const muzzlePosition:Vector3 = new Vector3();
       
-      private static const tefydiw:RayHit = new RayHit();
+      private static const rayHit:RayHit = new RayHit();
       
       private static const rucuha:Number = 20;
       
       private static const kab:Number = 0.2;
       
-      private var gog:Number;
+      private var maxDistance:Number;
       
-      private var kymaqos:CollisionDetector;
+      private var collisionDetector:CollisionDetector;
       
-      private var toqumyc:Vector3 = new Vector3();
+      private var localMuzzlePosition:Vector3 = new Vector3();
       
-      private var firaqe:Object3D;
+      private var turret:Object3D;
       
       private var cyrare:Number;
       
-      private var dypudecoz:Number = 0;
+      private var distance:Number = 0;
       
-      public function CollisionObject3DPositionProvider(param1:Pool)
+      public function CollisionObject3DPositionProvider(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
       private function calculateParameters() : void
       {
-         bul.setMatrix(this.firaqe.x,this.firaqe.y,this.firaqe.z,this.firaqe.rotationX,this.firaqe.rotationY,this.firaqe.rotationZ);
-         rygapyv.x = bul.gusat;
-         rygapyv.y = bul.sig;
-         rygapyv.z = bul.vug;
-         ruda.x = bul.cydop;
-         ruda.y = bul.qanezycap;
-         ruda.z = bul.luwym;
-         bul.transformVector(this.toqumyc,rinego);
-         var _loc1_:Number = Number(this.toqumyc.y);
-         fybumu.x = rinego.x - _loc1_ * ruda.x;
-         fybumu.y = rinego.y - _loc1_ * ruda.y;
-         fybumu.z = rinego.z - _loc1_ * ruda.z;
+         matrix.setMatrix(this.turret.x,this.turret.y,this.turret.z,this.turret.rotationX,this.turret.rotationY,this.turret.rotationZ);
+         xAxis.x = matrix.ma;
+         xAxis.y = matrix.me;
+         xAxis.z = matrix.mi;
+         direction.x = matrix.mb;
+         direction.y = matrix.mf;
+         direction.z = matrix.mj;
+         matrix.transformVector(this.localMuzzlePosition,muzzlePosition);
+         var _loc1_:Number = Number(this.localMuzzlePosition.y);
+         barrelOrigin.x = muzzlePosition.x - _loc1_ * direction.x;
+         barrelOrigin.y = muzzlePosition.y - _loc1_ * direction.y;
+         barrelOrigin.z = muzzlePosition.z - _loc1_ * direction.z;
       }
       
-      public function init(param1:Object3D, param2:Vector3, param3:CollisionDetector, param4:Number, param5:Number = 0.5) : void
+      public function init(turret:Object3D, localMuzzlePosition:Vector3, collisionDetector:CollisionDetector, maxDistance:Number, param5:Number = 0.5) : void
       {
-         this.firaqe = param1;
-         this.toqumyc = param2;
-         this.kymaqos = param3;
-         this.gog = param4;
+         this.turret = turret;
+         this.localMuzzlePosition = localMuzzlePosition;
+         this.collisionDetector = collisionDetector;
+         this.maxDistance = maxDistance;
          this.cyrare = param5;
-         this.dypudecoz = 0;
+         this.distance = 0;
       }
       
-      public function initPosition(param1:Object3D) : void
+      public function initPosition(object:Object3D) : void
       {
          this.calculateParameters();
-         var _loc2_:Number = this.gog * this.cyrare;
-         if(this.kymaqos.raycastStatic(fybumu,ruda,CollisionGroup.neli,this.gog,null,tefydiw))
+         var targetDistance:Number = this.maxDistance * this.cyrare;
+         if(this.collisionDetector.raycastStatic(barrelOrigin,direction,CollisionGroup.STATIC,this.maxDistance,null,rayHit))
          {
-            _loc2_ = Vector3.distanceBetween(fybumu,tefydiw.position) * this.cyrare;
+            targetDistance = Vector3.distanceBetween(barrelOrigin,rayHit.position) * this.cyrare;
          }
-         var _loc3_:Number = _loc2_ - this.dypudecoz;
-         if(Math.abs(_loc3_) <= rucuha)
+         var delta:Number = targetDistance - this.distance;
+         if(Math.abs(delta) <= rucuha)
          {
-            this.dypudecoz = _loc2_;
+            this.distance = targetDistance;
          }
          else
          {
-            this.dypudecoz += _loc3_ * kab;
+            this.distance += delta * kab;
          }
-         param1.x = fybumu.x + ruda.x * this.dypudecoz;
-         param1.y = fybumu.y + ruda.y * this.dypudecoz;
-         param1.z = fybumu.z + ruda.z * this.dypudecoz;
+         object.x = barrelOrigin.x + direction.x * this.distance;
+         object.y = barrelOrigin.y + direction.y * this.distance;
+         object.z = barrelOrigin.z + direction.z * this.distance;
       }
       
-      public function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void
+      public function updateObjectPosition(object:Object3D, camera:GameCamera, deltaTime:int) : void
       {
-         this.initPosition(param1);
+         this.initPosition(object);
       }
       
       public function destroy() : void
       {
-         this.firaqe = null;
-         this.kymaqos = null;
+         this.turret = null;
+         this.collisionDetector = null;
          recycle();
       }
    }

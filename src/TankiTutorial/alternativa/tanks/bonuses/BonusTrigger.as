@@ -14,65 +14,65 @@ package alternativa.tanks.bonuses
    public class BonusTrigger implements Trigger
    {
       
-      private var nasybugo:BattleBonus;
+      private var bonus:BattleBonus;
       
-      private var pyp:CollisionBox;
+      private var collisionBox:CollisionBox;
       
-      private var zepymy:BattleRunner;
+      private var battleRunner:BattleRunner;
       
-      public function BonusTrigger(param1:BattleBonus)
+      public function BonusTrigger(bonus:BattleBonus)
       {
          super();
-         this.nasybugo = param1;
-         var _loc2_:Number = BonusConst.numij;
-         this.pyp = new CollisionBox(new Vector3(_loc2_,_loc2_,_loc2_),CollisionGroup.nuqa,PhysicsMaterial.gec);
+         this.bonus = bonus;
+         var halfSize:Number = BonusConst.BONUS_HALF_SIZE;
+         this.collisionBox = new CollisionBox(new Vector3(halfSize,halfSize,halfSize),CollisionGroup.BONUS,PhysicsMaterial.defaultMaterial);
       }
       
-      public function enable(param1:BattleRunner) : void
+      public function enable(battleRunner:BattleRunner) : void
       {
-         if(this.zepymy == null)
+         if(this.battleRunner == null)
          {
-            this.zepymy = param1;
-            param1.addTrigger(this);
+            this.battleRunner = battleRunner;
+            battleRunner.addTrigger(this);
          }
       }
       
       public function disable() : void
       {
-         if(this.zepymy != null)
+         if(this.battleRunner != null)
          {
-            this.zepymy.removeTrigger(this);
-            this.zepymy = null;
+            this.battleRunner.removeTrigger(this);
+            this.battleRunner = null;
          }
       }
       
-      public function update(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number) : void
+      public function update(x:Number, y:Number, z:Number, rotationX:Number, rotationY:Number, rotationZ:Number) : void
       {
-         var _loc7_:Matrix4 = this.pyp.wet;
-         _loc7_.setMatrix(param1,param2,param3,param4,param5,param6);
-         this.pyp.calculateAABB();
+         var transform:Matrix4 = this.collisionBox.transform;
+         transform.setMatrix(x,y,z,rotationX,rotationY,rotationZ);
+         this.collisionBox.calculateAABB();
       }
       
-      public function setTransform(param1:Vector3, param2:Matrix3) : void
+      public function setTransform(position:Vector3, matrix:Matrix3) : void
       {
-         var _loc3_:Matrix4 = this.pyp.wet;
-         _loc3_.setFromMatrix3(param2,param1);
-         this.pyp.calculateAABB();
+         var transform:Matrix4 = this.collisionBox.transform;
+         transform.setFromMatrix3(matrix,position);
+         this.collisionBox.calculateAABB();
       }
       
-      public function checkTrigger(param1:Body) : void
+      public function checkTrigger(body:Body) : void
       {
-         var _loc3_:CollisionShape = null;
-         var _loc2_:int = 0;
-         while(_loc2_ < param1.kizuvam)
+         var shape:CollisionShape = null;
+         var i:int = 0;
+         while(i < body.numCollisionShapes)
          {
-            _loc3_ = param1.hebevy[_loc2_];
-            if(this.zepymy.getCollisionDetector().testCollision(_loc3_,this.pyp))
+            shape = body.collisionShapes[i];
+            if(this.battleRunner.getCollisionDetector().testCollision(shape,this.collisionBox))
             {
-               this.nasybugo.onTriggerActivated();
+               this.bonus.onTriggerActivated();
                return;
             }
-            _loc2_++;
+            i++;
          }
       }
    }

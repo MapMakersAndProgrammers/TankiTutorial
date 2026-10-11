@@ -9,78 +9,78 @@ package tutorial.script
    public class ScriptedTutorial extends Tutorial
    {
       
-      private var cofatuzog:Vector.<ScriptStep>;
+      private var steps:Vector.<ScriptStep>;
       
-      private var pomagu:XML;
+      private var xml:XML;
       
-      private var zewucadiz:int;
+      private var current:int;
       
-      public function ScriptedTutorial(param1:XML)
+      public function ScriptedTutorial(xml:XML)
       {
          super();
-         this.pomagu = param1;
-         gepocivaj = param1.@name.toString();
+         this.xml = xml;
+         name = xml.@name.toString();
       }
       
       override public function getDependencies() : Array
       {
-         return this.pomagu.@dependencies.toString().split(",");
+         return this.xml.@dependencies.toString().split(",");
       }
       
       override public function start() : void
       {
-         var _loc1_:XML = null;
-         var _loc2_:ScriptStep = null;
-         Shared.tracker.trackEvent(Shared.TUTORIAL,gepocivaj + "_start","");
+         var stepXML:XML = null;
+         var step:ScriptStep = null;
+         Shared.tracker.trackEvent(Shared.TUTORIAL,name + "_start","");
          super.start();
-         this.zewucadiz = 0;
-         this.cofatuzog = new Vector.<ScriptStep>();
-         for each(_loc1_ in this.pomagu.elements("step"))
+         this.current = 0;
+         this.steps = new Vector.<ScriptStep>();
+         for each(stepXML in this.xml.elements("step"))
          {
-            _loc2_ = new ScriptStep(_loc1_);
-            if(_loc2_.gepocivaj != "")
+            step = new ScriptStep(stepXML);
+            if(step.name != "")
             {
-               _loc2_.medyq = gepocivaj + ":" + _loc2_.gepocivaj;
+               step.fullName = name + ":" + step.name;
             }
-            this.cofatuzog.push(_loc2_);
+            this.steps.push(step);
          }
-         if(this.cofatuzog.length > 0)
+         if(this.steps.length > 0)
          {
-            this.startStep(this.zewucadiz);
+            this.startStep(this.current);
          }
          else
          {
-            vegetis = true;
+            _finished = true;
          }
       }
       
       override public function moveToNextStep() : void
       {
-         ++this.zewucadiz;
-         tezivasaf = false;
-         if(this.zewucadiz < this.cofatuzog.length)
+         ++this.current;
+         _stepFinished = false;
+         if(this.current < this.steps.length)
          {
-            this.startStep(this.zewucadiz);
+            this.startStep(this.current);
          }
          else
          {
-            Shared.tracker.trackEvent(Shared.TUTORIAL,gepocivaj + "_finish",GameData.lecopojen.fps.toFixed(0));
-            vegetis = true;
+            Shared.tracker.trackEvent(Shared.TUTORIAL,name + "_finish",GameData.time.fps.toFixed(0));
+            _finished = true;
          }
       }
       
       override public function skipStep() : void
       {
-         var _loc1_:ScriptStep = null;
-         var _loc2_:Vector3 = null;
+         var step:ScriptStep = null;
+         var position:Vector3 = null;
          this.moveToNextStep();
-         if(this.zewucadiz < this.cofatuzog.length)
+         if(this.current < this.steps.length)
          {
-            _loc1_ = this.cofatuzog[this.zewucadiz];
-            _loc2_ = _loc1_.bip;
-            if(_loc2_.lengthSqr() > 0)
+            step = this.steps[this.current];
+            position = step.position;
+            if(position.lengthSqr() > 0)
             {
-               GameData.jifom.setPosition(_loc2_);
+               GameData.playerTank.setPosition(position);
             }
             else
             {
@@ -89,22 +89,22 @@ package tutorial.script
          }
       }
       
-      private function startStep(param1:int) : void
+      private function startStep(index:int) : void
       {
-         var _loc2_:ScriptStep = this.cofatuzog[param1];
-         if(_loc2_.medyq != "")
+         var step:ScriptStep = this.steps[index];
+         if(step.fullName != "")
          {
-            Shared.tracker.trackEvent(Shared.TUTORIAL,_loc2_.medyq,"");
-            Shared.tracker.trackEvent(Shared.TUTORIAL_STAT,_loc2_.medyq + "_fps" + FrameRateTask.getMode(),GameData.lecopojen.fps.toFixed(0));
-            Shared.tracker.trackEvent(Shared.TUTORIAL_STAT,"fps" + FrameRateTask.getMode(),GameData.lecopojen.fps.toFixed(0));
-            Shared.currentStep = _loc2_.medyq;
+            Shared.tracker.trackEvent(Shared.TUTORIAL,step.fullName,"");
+            Shared.tracker.trackEvent(Shared.TUTORIAL_STAT,step.fullName + "_fps" + FrameRateTask.getMode(),GameData.time.fps.toFixed(0));
+            Shared.tracker.trackEvent(Shared.TUTORIAL_STAT,"fps" + FrameRateTask.getMode(),GameData.time.fps.toFixed(0));
+            Shared.currentStep = step.fullName;
          }
-         _loc2_.start(this.onFinishStep);
+         step.start(this.onFinishStep);
       }
       
       private function onFinishStep() : void
       {
-         tezivasaf = true;
+         _stepFinished = true;
       }
    }
 }

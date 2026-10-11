@@ -17,79 +17,79 @@ package alternativa.tanks.sfx
    public class SmokyMuzzleFlashEffect extends PooledObject implements GraphicEffect
    {
       
-      public static const qezizyj:Number = 60;
+      public static const PLANE_WIDTH:Number = 60;
       
-      private static const kykihyf:Number = 210;
+      private static const PLANE_LENGTH:Number = 210;
       
-      private static const nywysi:Vector3 = new Vector3();
+      private static const direction:Vector3 = new Vector3();
       
-      private static const rinego:Vector3 = new Vector3();
+      private static const muzzlePosition:Vector3 = new Vector3();
       
-      private static const bul:Matrix4 = new Matrix4();
+      private static const matrix:Matrix4 = new Matrix4();
       
-      private static const wuzyrodu:Vector3 = new Vector3();
+      private static const cameraPosition:Vector3 = new Vector3();
       
-      private var cysam:SimplePlane;
+      private var plane:SimplePlane;
       
-      private var myhal:int;
+      private var timeLeft:int;
       
-      private var firaqe:Object3D;
+      private var turret:Object3D;
       
-      private var toqumyc:Vector3 = new Vector3();
+      private var localMuzzlePosition:Vector3 = new Vector3();
       
-      public function SmokyMuzzleFlashEffect(param1:Pool)
+      public function SmokyMuzzleFlashEffect(pool:Pool)
       {
-         super(param1);
-         this.cysam = new SimplePlane(qezizyj,kykihyf,0.5,0);
-         this.cysam.setUVs(0,0,0,1,1,1,1,0);
-         this.cysam.useShadowMap = false;
-         this.cysam.useLight = false;
-         this.cysam.shadowMapAlphaThreshold = 2;
-         this.cysam.depthMapAlphaThreshold = 2;
+         super(pool);
+         this.plane = new SimplePlane(PLANE_WIDTH,PLANE_LENGTH,0.5,0);
+         this.plane.setUVs(0,0,0,1,1,1,1,0);
+         this.plane.useShadowMap = false;
+         this.plane.useLight = false;
+         this.plane.shadowMapAlphaThreshold = 2;
+         this.plane.depthMapAlphaThreshold = 2;
       }
       
-      public function init(param1:Vector3, param2:Object3D, param3:TextureMaterial, param4:int) : void
+      public function init(localMuzzlePosition:Vector3, turret:Object3D, material:TextureMaterial, timeLeft:int) : void
       {
-         this.toqumyc.copy(param1);
-         this.firaqe = param2;
-         this.myhal = param4;
-         this.cysam.setMaterialToAllFaces(param3);
-         var _loc5_:BitmapData = param3.texture;
-         param3.resolution = this.cysam.calculateResolution(_loc5_.width,_loc5_.height);
+         this.localMuzzlePosition.copy(localMuzzlePosition);
+         this.turret = turret;
+         this.timeLeft = timeLeft;
+         this.plane.setMaterialToAllFaces(material);
+         var texture:BitmapData = material.texture;
+         material.resolution = this.plane.calculateResolution(texture.width,texture.height);
       }
       
-      public function play(param1:int, param2:GameCamera) : Boolean
+      public function play(deltaTime:int, camera:GameCamera) : Boolean
       {
-         if(this.myhal < 0)
+         if(this.timeLeft < 0)
          {
             return false;
          }
-         this.myhal -= param1;
-         bul.setMatrix(this.firaqe.x,this.firaqe.y,this.firaqe.z,this.firaqe.rotationX,this.firaqe.rotationY,this.firaqe.rotationZ);
-         bul.transformVector(this.toqumyc,rinego);
-         bul.getAxis(1,nywysi);
-         wuzyrodu.x = param2.x;
-         wuzyrodu.y = param2.y;
-         wuzyrodu.z = param2.z;
-         SFXUtils.alignObjectPlaneToView(this.cysam,rinego,nywysi,wuzyrodu);
+         this.timeLeft -= deltaTime;
+         matrix.setMatrix(this.turret.x,this.turret.y,this.turret.z,this.turret.rotationX,this.turret.rotationY,this.turret.rotationZ);
+         matrix.transformVector(this.localMuzzlePosition,muzzlePosition);
+         matrix.getAxis(1,direction);
+         cameraPosition.x = camera.x;
+         cameraPosition.y = camera.y;
+         cameraPosition.z = camera.z;
+         SFXUtils.alignObjectPlaneToView(this.plane,muzzlePosition,direction,cameraPosition);
          return true;
       }
       
       public function destroy() : void
       {
-         this.cysam.removeFromParent();
-         this.firaqe = null;
+         this.plane.removeFromParent();
+         this.turret = null;
          recycle();
       }
       
       public function kill() : void
       {
-         this.myhal = -1;
+         this.timeLeft = -1;
       }
       
-      public function addedToScene(param1:Object3DContainer) : void
+      public function addedToScene(container:Object3DContainer) : void
       {
-         param1.addChild(this.cysam);
+         container.addChild(this.plane);
       }
    }
 }

@@ -3,7 +3,7 @@ package alternativa.tanks.battle
    public interface PhysicsController
    {
       
-      function runBeforePhysicsUpdate(param1:Number) : void;
+      function runBeforePhysicsUpdate(dt:Number) : void;
    }
 }
 

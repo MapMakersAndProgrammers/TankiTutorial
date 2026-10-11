@@ -6,145 +6,145 @@ package alternativa.tanks.vehicles.tank.controllers
    public class CommonTankController
    {
       
-      public static const cyjeruqa:int = 2;
+      public static const FORWARD:int = 2;
       
-      public static const pycyje:int = 3;
+      public static const BACKWARD:int = 3;
       
-      public static const dudazodol:int = 4;
+      public static const LEFT:int = 4;
       
-      public static const qij:int = 5;
+      public static const RIGHT:int = 5;
       
-      public static const syfysu:int = 6;
+      public static const FIRE:int = 6;
       
-      public var cogutirym:int = 0;
+      public var lockMask:int = 0;
       
-      public var ses:int;
+      public var controlState:int;
       
-      public var dalipaz:Boolean = true;
+      public var _enabled:Boolean = true;
       
-      public var citacir:Tank;
+      public var tank:Tank;
       
-      public function CommonTankController(param1:Tank)
+      public function CommonTankController(tank:Tank)
       {
          super();
-         this.citacir = param1;
+         this.tank = tank;
       }
       
       public function get enabled() : Boolean
       {
-         return this.dalipaz;
+         return this._enabled;
       }
       
-      public function set enabled(param1:Boolean) : void
+      public function set enabled(value:Boolean) : void
       {
-         this.dalipaz = param1;
+         this._enabled = value;
          this.setAction(0);
       }
       
-      public function lock(param1:int) : void
+      public function lock(mask:int) : void
       {
-         this.ses &= ~param1;
-         this.cogutirym |= param1;
+         this.controlState &= ~mask;
+         this.lockMask |= mask;
       }
       
-      public function unlock(param1:int) : void
+      public function unlock(mask:int) : void
       {
-         this.cogutirym &= ~param1;
+         this.lockMask &= ~mask;
       }
       
       public function startMoveForward() : void
       {
-         this.ses |= 1 << cyjeruqa & ~this.cogutirym;
+         this.controlState |= 1 << FORWARD & ~this.lockMask;
       }
       
       public function stopMoveForward() : void
       {
-         this.ses &= ~(1 << cyjeruqa);
+         this.controlState &= ~(1 << FORWARD);
       }
       
       public function startMoveBackward() : void
       {
-         this.ses |= 1 << pycyje & ~this.cogutirym;
+         this.controlState |= 1 << BACKWARD & ~this.lockMask;
       }
       
       public function stopMoveBackward() : void
       {
-         this.ses &= ~(1 << pycyje);
+         this.controlState &= ~(1 << BACKWARD);
       }
       
       public function startTurnLeft() : void
       {
-         this.ses |= 1 << dudazodol & ~this.cogutirym;
+         this.controlState |= 1 << LEFT & ~this.lockMask;
       }
       
       public function stopTurnLeft() : void
       {
-         this.ses &= ~(1 << dudazodol);
+         this.controlState &= ~(1 << LEFT);
       }
       
       public function startTurnRight() : void
       {
-         this.ses |= 1 << qij & ~this.cogutirym;
+         this.controlState |= 1 << RIGHT & ~this.lockMask;
       }
       
       public function stopTurnRight() : void
       {
-         this.ses &= ~(1 << qij);
+         this.controlState &= ~(1 << RIGHT);
       }
       
-      public function startAction(param1:int) : void
+      public function startAction(action:int) : void
       {
-         this.ses |= 1 << param1 & ~this.cogutirym;
+         this.controlState |= 1 << action & ~this.lockMask;
       }
       
-      public function stopAction(param1:int) : void
+      public function stopAction(action:int) : void
       {
-         this.ses &= ~(1 << param1);
+         this.controlState &= ~(1 << action);
       }
       
-      public function setAction(param1:int) : void
+      public function setAction(controlState:int) : void
       {
-         this.ses = param1;
+         this.controlState = controlState;
       }
       
-      public function update(param1:int, param2:int, param3:Number) : void
+      public function update(time:int, deltaTime:int, dt:Number) : void
       {
-         var _loc5_:int = 0;
-         var _loc6_:int = 0;
-         var _loc4_:Weapon = this.citacir.getWeapon();
-         if(this.citacir.kat)
+         var movementDirection:int = 0;
+         var turnDirection:int = 0;
+         var weapon:Weapon = this.tank.getWeapon();
+         if(this.tank.alive)
          {
-            _loc5_ = this.getInput(cyjeruqa,pycyje);
-            _loc6_ = this.getInput(dudazodol,qij);
-            if(_loc5_ < 0)
+            movementDirection = this.getInput(FORWARD,BACKWARD);
+            turnDirection = this.getInput(LEFT,RIGHT);
+            if(movementDirection < 0)
             {
             }
-            this.citacir.setMovementParams(_loc5_,_loc6_,false);
-            if(_loc4_ != null)
+            this.tank.setMovementParams(movementDirection,turnDirection,false);
+            if(weapon != null)
             {
-               if((this.ses & 1 << syfysu) == 0)
+               if((this.controlState & 1 << FIRE) == 0)
                {
-                  _loc4_.stop();
+                  weapon.stop();
                }
                else
                {
-                  _loc4_.start();
+                  weapon.start();
                }
             }
          }
          else
          {
-            this.citacir.setMovementParams(0,0,false);
-            if(_loc4_ != null)
+            this.tank.setMovementParams(0,0,false);
+            if(weapon != null)
             {
-               _loc4_.stop();
+               weapon.stop();
             }
          }
       }
       
-      private function getInput(param1:int, param2:int) : int
+      private function getInput(positiveAction:int, negativeAction:int) : int
       {
-         return ((this.ses & 1 << param1) >> param1) - ((this.ses & 1 << param2) >> param2);
+         return ((this.controlState & 1 << positiveAction) >> positiveAction) - ((this.controlState & 1 << negativeAction) >> negativeAction);
       }
    }
 }

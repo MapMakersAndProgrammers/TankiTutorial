@@ -5,27 +5,27 @@ package alternativa.tanks.vehicles.tank
    public class TankHull extends TankPart
    {
       
-      public var sih:Vector3 = new Vector3();
+      public var mountPoint:Vector3 = new Vector3();
       
-      public var tuwykus:Number;
+      public var mass:Number;
       
-      public var sasi:Number;
+      public var damping:Number;
       
-      public var wiciqy:Number;
+      public var speed:Number;
       
-      public var cozo:Number;
+      public var acceleration:Number;
       
-      public var qezuw:Number;
+      public var reverseAcceleration:Number;
       
-      public var wito:Number;
+      public var sideAcceleration:Number;
       
-      public var pyfika:Number;
+      public var turnSpeed:Number;
       
-      public var qupi:Number;
+      public var turnAcceleration:Number;
       
-      public var beg:Number;
+      public var reverseTurnAcceleration:Number;
       
-      public var quj:Number;
+      public var health:Number;
       
       public function TankHull()
       {

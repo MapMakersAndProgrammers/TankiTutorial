@@ -21,12 +21,12 @@ package tutorial.commons
       
       private var debug:Boolean;
       
-      public function TrackerService(param1:Boolean = false)
+      public function TrackerService(debug:Boolean = false)
       {
          super();
          this.gaAvailable = ExternalInterface.available && Boolean(ExternalInterface.call("checkGALoaded"));
          this.ymAvailable = ExternalInterface.available && Boolean(ExternalInterface.call("checkYMLoaded"));
-         this.debug = param1;
+         this.debug = debug;
          if(this.isAnyTrackingServiceAvailable())
          {
             this.commands = new Vector.<TrackerCommand>();
@@ -36,93 +36,93 @@ package tutorial.commons
          }
       }
       
-      public function trackPageView(param1:String) : void
+      public function trackPageView(page:String) : void
       {
-         var _loc2_:int = 0;
+         var time:int = 0;
          if(this.gaAvailable)
          {
-            _loc2_ = getTimer() / 100;
-            actions[param1] = _loc2_;
-            this.commands.push(new TrackerCommand("GATrackPageView","/" + param1));
+            time = getTimer() / 100;
+            actions[page] = time;
+            this.commands.push(new TrackerCommand("GATrackPageView","/" + page));
             this.timer.start();
          }
          if(this.debug)
          {
-            Shared.clientLog.addLine("trackPageView(" + param1 + ")");
+            Shared.clientLog.addLine("trackPageView(" + page + ")");
          }
       }
       
-      public function trackEvent(param1:String, param2:String, param3:String) : void
+      public function trackEvent(category:String, action:String, label:String) : void
       {
-         var _loc4_:int = 0;
+         var time:int = 0;
          if(this.debug)
          {
-            Shared.clientLog.addLine("trackEvent(" + param1 + ", " + param2 + ", " + param3 + ")");
+            Shared.clientLog.addLine("trackEvent(" + category + ", " + action + ", " + label + ")");
          }
          if(this.isAnyTrackingServiceAvailable())
          {
-            _loc4_ = getTimer() / 100;
-            actions[param2] = _loc4_;
+            time = getTimer() / 100;
+            actions[action] = time;
             if(this.gaAvailable)
             {
-               this.commands.push(new TrackerCommand("GATrackEvent",param1,param2,param3));
+               this.commands.push(new TrackerCommand("GATrackEvent",category,action,label));
             }
             if(this.ymAvailable)
             {
-               this.commands.push(new TrackerCommand("YMReachGoal",param2));
+               this.commands.push(new TrackerCommand("YMReachGoal",action));
             }
             this.timer.start();
          }
       }
       
-      public function trackEventValue(param1:String, param2:String, param3:String, param4:Number) : void
+      public function trackEventValue(category:String, action:String, label:String, value:Number) : void
       {
-         var _loc5_:int = 0;
+         var time:int = 0;
          if(this.gaAvailable)
          {
-            _loc5_ = getTimer() / 100;
-            actions[param2] = _loc5_;
-            this.commands.push(new TrackerCommand("GATrackEvent",param1,param2,param4.toFixed(2)));
+            time = getTimer() / 100;
+            actions[action] = time;
+            this.commands.push(new TrackerCommand("GATrackEvent",category,action,value.toFixed(2)));
             this.timer.start();
          }
       }
       
-      public function trackEventAfter(param1:String, param2:String, param3:String) : void
+      public function trackEventAfter(category:String, action:String, previousAction:String) : void
       {
-         var _loc4_:int = 0;
+         var time:int = 0;
          if(this.gaAvailable)
          {
-            _loc4_ = getTimer() / 100;
-            if(actions[param3] != null)
+            time = getTimer() / 100;
+            if(actions[previousAction] != null)
             {
-               this.trackEventValue(param1,param2,null,int((_loc4_ - actions[param3]) / 10));
+               this.trackEventValue(category,action,null,int((time - actions[previousAction]) / 10));
             }
             else
             {
-               this.trackEvent(param1,param2,param3 + " action not logged");
+               this.trackEvent(category,action,previousAction + " action not logged");
             }
          }
       }
       
-      private function timer_timerHandler(param1:TimerEvent) : void
+      private function timer_timerHandler(timerEvent:TimerEvent) : void
       {
-         var _loc3_:TrackerCommand = null;
-         var _loc4_:Boolean = false;
+         var command:TrackerCommand = null;
+         var result:Boolean = false;
          if(this.commands.length > 0)
          {
             if(this.isAnyTrackingServiceAvailable())
             {
-               _loc3_ = this.commands.shift();
-               switch(_loc3_.arguments.length)
+               command = this.commands.shift();
+               switch(command.arguments.length)
                {
                   case 4:
-                     _loc4_ = ExternalInterface.call(_loc3_.command,_loc3_.arguments[0],_loc3_.arguments[1],_loc3_.arguments[2],_loc3_.arguments[3]);
+                     result = ExternalInterface.call(command.command,command.arguments[0],command.arguments[1],command.arguments[2],command.arguments[3]);
                      break;
                   case 3:
-                     _loc4_ = ExternalInterface.call(_loc3_.command,_loc3_.arguments[0],_loc3_.arguments[1],_loc3_.arguments[2]);
+                     result = ExternalInterface.call(command.command,command.arguments[0],command.arguments[1],command.arguments[2]);
                      break;
                   default:
-                     _loc4_ = ExternalInterface.call(_loc3_.command,_loc3_.arguments[0]);
+                     result = ExternalInterface.call(command.command,command.arguments[0]);
                }
             }
          }
@@ -146,10 +146,10 @@ class TrackerCommand
    
    private var _arguments:Array;
    
-   public function TrackerCommand(param1:String, ... rest)
+   public function TrackerCommand(command:String, ... rest)
    {
       super();
-      this._command = param1;
+      this._command = command;
       this._arguments = rest;
    }
    
@@ -158,9 +158,9 @@ class TrackerCommand
       return this._command;
    }
    
-   public function set command(param1:String) : void
+   public function set command(value:String) : void
    {
-      this._command = param1;
+      this._command = value;
    }
    
    public function get arguments() : Array
@@ -168,8 +168,8 @@ class TrackerCommand
       return this._arguments;
    }
    
-   public function set arguments(param1:Array) : void
+   public function set arguments(value:Array) : void
    {
-      this._arguments = param1;
+      this._arguments = value;
    }
 }

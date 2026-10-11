@@ -8,30 +8,30 @@ package tutorial.tasks
       
       private static const nav:Number = 0.05;
       
-      private var controller:FollowCameraController = GameData.butefu.controller as FollowCameraController;
+      private var controller:FollowCameraController = GameData.camera.controller as FollowCameraController;
       
-      private var cejufi:Number;
+      private var targetCameraT:Number;
       
-      private var wiciqy:Number;
+      private var speed:Number;
       
-      public function ChangeCameraAngleTask(param1:Number, param2:Number)
+      public function ChangeCameraAngleTask(targetCameraT:Number, speed:Number)
       {
          super();
-         this.cejufi = param1;
-         this.wiciqy = param2;
+         this.targetCameraT = targetCameraT;
+         this.speed = speed;
       }
       
       override public function process() : Boolean
       {
-         var _loc1_:FollowCameraController = this.controller;
-         var _loc2_:Number = _loc1_.getCameraT() - this.cejufi;
-         if(_loc2_ < nav && _loc2_ > -nav)
+         var cameraController:FollowCameraController = this.controller;
+         var delta:Number = cameraController.getCameraT() - this.targetCameraT;
+         if(delta < nav && delta > -nav)
          {
-            _loc1_.setCameraT(this.cejufi);
+            cameraController.setCameraT(this.targetCameraT);
             return true;
          }
-         var _loc3_:TimeData = GameData.lecopojen;
-         _loc1_.setCameraT(_loc1_.getCameraT() - _loc2_ * this.wiciqy * _loc3_.ziqod);
+         var timeData:TimeData = GameData.time;
+         cameraController.setCameraT(cameraController.getCameraT() - delta * this.speed * timeData.deltaTime);
          return false;
       }
    }

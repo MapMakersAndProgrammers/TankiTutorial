@@ -8,23 +8,23 @@ package alternativa.tanks.sfx.flamethrower
    public class StreamWeaponSFXData
    {
       
-      public var qywyr:TextureAnimation;
+      public var particleAnimation:TextureAnimation;
       
-      public var tazequd:TextureAnimation;
+      public var muzzleAnimation:TextureAnimation;
       
-      public var mutovudi:Sound;
+      public var flameSound:Sound;
       
-      public var qob:Vector.<ColorTransformEntry> = getColorTransforms();
+      public var particleColorTransforms:Vector.<ColorTransformEntry> = getColorTransforms();
       
-      public var jowufeq:Vector.<ColorTransformEntry> = getColorTransforms();
+      public var muzzleColorTransforms:Vector.<ColorTransformEntry> = getColorTransforms();
       
-      public var puvulo:LightAnimation = LightData.kozuk;
+      public var muzzleStartLight:LightAnimation = LightData.flameMuzzleStartLight;
       
-      public var div:LightAnimation = LightData.suho;
+      public var muzzleLoopLight:LightAnimation = LightData.flameMuzzleLoopLight;
       
-      public var jebiq:LightAnimation = LightData.qekar;
+      public var streamStartLight:LightAnimation = LightData.flameStreamStartLight;
       
-      public var defuhusyq:LightAnimation = LightData.wykalu;
+      public var streamLoopLight:LightAnimation = LightData.flameStreamLoopLight;
       
       public function StreamWeaponSFXData()
       {
@@ -33,14 +33,14 @@ package alternativa.tanks.sfx.flamethrower
       
       private static function getColorTransforms() : Vector.<ColorTransformEntry>
       {
-         var _loc1_:Vector.<ColorTransformEntry> = new Vector.<ColorTransformEntry>();
-         _loc1_.push(new ColorTransformEntry(1,1,1,1,100,150,100,0,0));
-         _loc1_.push(new ColorTransformEntry(1,1,1,1,50,100,60,0,0.05));
-         _loc1_.push(new ColorTransformEntry(1,1,1,1,100,100,40,0,0.1));
-         _loc1_.push(new ColorTransformEntry(0.5,0.3,0.3,1,50,80,50,0,0.65));
-         _loc1_.push(new ColorTransformEntry(0,0,0,1,50,50,50,0,0.75));
-         _loc1_.push(new ColorTransformEntry(0,0,0,0,20,20,20,0,1));
-         return _loc1_;
+         var colorTransforms:Vector.<ColorTransformEntry> = new Vector.<ColorTransformEntry>();
+         colorTransforms.push(new ColorTransformEntry(1,1,1,1,100,150,100,0,0));
+         colorTransforms.push(new ColorTransformEntry(1,1,1,1,50,100,60,0,0.05));
+         colorTransforms.push(new ColorTransformEntry(1,1,1,1,100,100,40,0,0.1));
+         colorTransforms.push(new ColorTransformEntry(0.5,0.3,0.3,1,50,80,50,0,0.65));
+         colorTransforms.push(new ColorTransformEntry(0,0,0,1,50,50,50,0,0.75));
+         colorTransforms.push(new ColorTransformEntry(0,0,0,0,20,20,20,0,1));
+         return colorTransforms;
       }
    }
 }

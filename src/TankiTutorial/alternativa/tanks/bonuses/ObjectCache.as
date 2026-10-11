@@ -3,18 +3,18 @@ package alternativa.tanks.bonuses
    public class ObjectCache
    {
       
-      private var jiso:int;
+      private var numObjects:int;
       
-      private var leqib:Vector.<Object> = new Vector.<Object>();
+      private var objects:Vector.<Object> = new Vector.<Object>();
       
       public function ObjectCache()
       {
          super();
       }
       
-      public function put(param1:Object) : void
+      public function put(object:Object) : void
       {
-         this.leqib[this.jiso++] = param1;
+         this.objects[this.numObjects++] = object;
       }
       
       public function get() : Object
@@ -23,21 +23,21 @@ package alternativa.tanks.bonuses
          {
             throw new Error();
          }
-         --this.jiso;
-         var _loc1_:Object = this.leqib[this.jiso];
-         this.leqib[this.jiso] = null;
-         return _loc1_;
+         --this.numObjects;
+         var object:Object = this.objects[this.numObjects];
+         this.objects[this.numObjects] = null;
+         return object;
       }
       
       public function isEmpty() : Boolean
       {
-         return this.jiso == 0;
+         return this.numObjects == 0;
       }
       
       public function clear() : void
       {
-         this.leqib.length = 0;
-         this.jiso = 0;
+         this.objects.length = 0;
+         this.numObjects = 0;
       }
    }
 }

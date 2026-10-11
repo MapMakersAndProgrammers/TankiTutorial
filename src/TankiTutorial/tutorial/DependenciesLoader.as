@@ -6,74 +6,74 @@ package tutorial
    public class DependenciesLoader
    {
       
-      private static const feseju:Object = {};
+      private static const loaded:Object = {};
       
-      private var potakubu:Array;
+      private var dependencies:Array;
       
-      private var dodycoli:int;
+      private var index:int;
       
-      private var hon:Function;
+      private var callback:Function;
       
-      private var rilabito:String;
+      private var currentDependency:String;
       
       public function DependenciesLoader()
       {
          super();
       }
       
-      public function load(param1:Array, param2:Function) : void
+      public function load(dependencies:Array, callback:Function) : void
       {
-         var _loc5_:String = null;
-         var _loc6_:XML = null;
-         var _loc7_:String = null;
-         this.potakubu = param1;
-         this.hon = param2;
-         var _loc3_:XML = Assets.config;
-         this.dodycoli = 0;
-         var _loc4_:Object = {};
-         for each(_loc5_ in param1)
+         var name:String = null;
+         var sceneXML:XML = null;
+         var sceneName:String = null;
+         this.dependencies = dependencies;
+         this.callback = callback;
+         var config:XML = Assets.config;
+         this.index = 0;
+         var notLoaded:Object = {};
+         for each(name in dependencies)
          {
-            if(!feseju[_loc5_])
+            if(!loaded[name])
             {
-               _loc4_[_loc5_] = true;
+               notLoaded[name] = true;
             }
          }
-         for each(_loc6_ in _loc3_.scene)
+         for each(sceneXML in config.scene)
          {
-            _loc7_ = _loc6_.@name.toString();
-            if(Boolean(_loc4_[_loc7_]))
+            sceneName = sceneXML.@name.toString();
+            if(Boolean(notLoaded[sceneName]))
             {
-               delete _loc4_[_loc7_];
+               delete notLoaded[sceneName];
             }
          }
          this.loadDependency();
       }
       
-      private function loadDependency(param1:SceneLoader = null) : void
+      private function loadDependency(loader:SceneLoader = null) : void
       {
-         var _loc2_:SceneLoader = null;
-         if(param1 != null)
+         var sceneLoader:SceneLoader = null;
+         if(loader != null)
          {
-            ++this.dodycoli;
-            feseju[this.rilabito] = true;
+            ++this.index;
+            loaded[this.currentDependency] = true;
          }
-         if(this.dodycoli < this.potakubu.length)
+         if(this.index < this.dependencies.length)
          {
-            this.rilabito = this.potakubu[this.dodycoli];
-            if(Boolean(feseju[this.rilabito]))
+            this.currentDependency = this.dependencies[this.index];
+            if(Boolean(loaded[this.currentDependency]))
             {
-               ++this.dodycoli;
+               ++this.index;
                this.loadDependency();
             }
             else
             {
-               _loc2_ = new SceneLoader();
-               _loc2_.load(this.rilabito,this.loadDependency);
+               sceneLoader = new SceneLoader();
+               sceneLoader.load(this.currentDependency,this.loadDependency);
             }
          }
          else
          {
-            this.hon();
+            this.callback();
          }
       }
    }

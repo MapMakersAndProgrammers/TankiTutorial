@@ -19,143 +19,143 @@ package tutorial.loader
    public class HullsLoader extends TanksLoader
    {
       
-      private var vobav:Vector.<XML>;
+      private var hulls:Vector.<XML>;
       
-      private var wucejydy:String;
+      private var id:String;
       
-      private var luwuqap:String;
+      private var baseURL:String;
       
-      private var dodycoli:int;
+      private var index:int;
       
-      private var zewucadiz:TankHull;
+      private var current:TankHull;
       
       public function HullsLoader()
       {
          super();
       }
       
-      override public function check(param1:XML) : Boolean
+      override public function check(sceneXML:XML) : Boolean
       {
-         return param1.hulls.length() > 0;
+         return sceneXML.hulls.length() > 0;
       }
       
-      override public function load(param1:String, param2:XML, param3:Function) : void
+      override public function load(sceneURL:String, sceneXML:XML, completeListener:Function) : void
       {
-         var _loc5_:XML = null;
-         this.pomagu = param2.hulls[0];
-         this.hon = param3;
-         this.vobav = new Vector.<XML>();
-         this.dodycoli = 0;
-         this.luwuqap = param1 + pomagu.@baseURL;
-         var _loc4_:int = 0;
-         for each(_loc5_ in pomagu.elements("hull"))
+         var hullXML:XML = null;
+         this.xml = sceneXML.hulls[0];
+         this.callback = completeListener;
+         this.hulls = new Vector.<XML>();
+         this.index = 0;
+         this.baseURL = sceneURL + xml.@baseURL;
+         var i:int = 0;
+         for each(hullXML in xml.elements("hull"))
          {
-            this.vobav[_loc4_] = _loc5_;
-            _loc4_++;
+            this.hulls[i] = hullXML;
+            i++;
          }
          this.loadHulls();
       }
       
-      private function loadHulls(param1:BitmapData = null) : void
+      private function loadHulls(details:BitmapData = null) : void
       {
-         var _loc2_:XML = null;
-         var _loc3_:URLLoader = null;
-         if(param1 != null)
+         var hullXML:XML = null;
+         var urlLoader:URLLoader = null;
+         if(details != null)
          {
-            this.zewucadiz.vypupital = param1;
-            this.zewucadiz = null;
-            ++this.dodycoli;
+            this.current.detailsTexture = details;
+            this.current = null;
+            ++this.index;
          }
-         if(this.dodycoli < this.vobav.length)
+         if(this.index < this.hulls.length)
          {
-            _loc2_ = this.vobav[this.dodycoli];
-            this.wucejydy = _loc2_.@id.toString();
-            julicoj = this.luwuqap + _loc2_.@url.toString();
-            if(!Assets.hasData(julicoj,ByteArray))
+            hullXML = this.hulls[this.index];
+            this.id = hullXML.@id.toString();
+            currentURL = this.baseURL + hullXML.@url.toString();
+            if(!Assets.hasData(currentURL,ByteArray))
             {
-               _loc3_ = new URLLoader();
-               _loc3_.addEventListener(Event.COMPLETE,this.loadLightmap);
-               _loc3_.addEventListener(ProgressEvent.PROGRESS,onProgress);
-               _loc3_.dataFormat = URLLoaderDataFormat.BINARY;
-               _loc3_.load(new URLRequest(julicoj));
+               urlLoader = new URLLoader();
+               urlLoader.addEventListener(Event.COMPLETE,this.loadLightmap);
+               urlLoader.addEventListener(ProgressEvent.PROGRESS,onProgress);
+               urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+               urlLoader.load(new URLRequest(currentURL));
             }
             else
             {
-               this.parse(Assets.getData(julicoj,ByteArray));
-               this.zewucadiz.sut = Assets.getData(this.luwuqap + _loc2_.@lightmap.toString(),BitmapData);
-               this.zewucadiz.vypupital = Assets.getData(this.luwuqap + _loc2_.@details.toString(),BitmapData);
-               this.zewucadiz = null;
-               ++this.dodycoli;
+               this.parse(Assets.getData(currentURL,ByteArray));
+               this.current.lightmapTexture = Assets.getData(this.baseURL + hullXML.@lightmap.toString(),BitmapData);
+               this.current.detailsTexture = Assets.getData(this.baseURL + hullXML.@details.toString(),BitmapData);
+               this.current = null;
+               ++this.index;
                this.loadHulls();
             }
          }
-         else if(hon != null)
+         else if(callback != null)
          {
-            hon();
+            callback();
          }
       }
       
-      private function loadLightmap(param1:Event) : void
+      private function loadLightmap(e:Event) : void
       {
-         var _loc2_:URLLoader = URLLoader(param1.target);
-         _loc2_.removeEventListener(Event.COMPLETE,this.loadLightmap);
-         _loc2_.removeEventListener(ProgressEvent.PROGRESS,onProgress);
-         var _loc3_:XML = this.parse(_loc2_.data);
-         var _loc4_:String = this.luwuqap + _loc3_.@lightmap.toString();
-         bita.load(_loc4_,this.loadDetails);
+         var urlLoader:URLLoader = URLLoader(e.target);
+         urlLoader.removeEventListener(Event.COMPLETE,this.loadLightmap);
+         urlLoader.removeEventListener(ProgressEvent.PROGRESS,onProgress);
+         var hullXML:XML = this.parse(urlLoader.data);
+         var lightmapURL:String = this.baseURL + hullXML.@lightmap.toString();
+         imageLoader.load(lightmapURL,this.loadDetails);
       }
       
-      private function parse(param1:ByteArray) : XML
+      private function parse(data:ByteArray) : XML
       {
-         this.zewucadiz = this.parseHull(param1);
-         Hulls.leqib[this.wucejydy] = this.zewucadiz;
-         var _loc2_:XML = this.vobav[this.dodycoli];
-         Hulls.applyProfile(_loc2_,this.zewucadiz);
-         return _loc2_;
+         this.current = this.parseHull(data);
+         Hulls.objects[this.id] = this.current;
+         var hullXML:XML = this.hulls[this.index];
+         Hulls.applyProfile(hullXML,this.current);
+         return hullXML;
       }
       
-      private function loadDetails(param1:BitmapData) : void
+      private function loadDetails(lightmap:BitmapData) : void
       {
-         this.zewucadiz.sut = param1;
-         var _loc2_:XML = this.vobav[this.dodycoli];
-         var _loc3_:String = this.luwuqap + _loc2_.@details.toString();
-         bita.load(_loc3_,this.loadHulls);
+         this.current.lightmapTexture = lightmap;
+         var hullXML:XML = this.hulls[this.index];
+         var detailsURL:String = this.baseURL + hullXML.@details.toString();
+         imageLoader.load(detailsURL,this.loadHulls);
       }
       
-      private function parseHull(param1:ByteArray) : TankHull
+      private function parseHull(data:ByteArray) : TankHull
       {
-         var _loc6_:Mesh = null;
-         var _loc7_:String = null;
-         var _loc8_:Vector3D = null;
-         var _loc2_:Parser3DS = new Parser3DS();
-         if(julicoj.indexOf(".3dz") > 0)
+         var mesh:Mesh = null;
+         var objectName:String = null;
+         var position:Vector3D = null;
+         var parser:Parser3DS = new Parser3DS();
+         if(currentURL.indexOf(".3dz") > 0)
          {
-            param1.uncompress();
+            data.uncompress();
          }
-         _loc2_.parse(param1);
-         var _loc3_:TankHull = new TankHull();
-         var _loc4_:int = int(_loc2_.objects.length);
-         _loc3_.gepocivaj = this.wucejydy;
-         var _loc5_:int = 0;
-         while(_loc5_ < _loc4_)
+         parser.parse(data);
+         var hull:TankHull = new TankHull();
+         var len:int = int(parser.objects.length);
+         hull.name = this.id;
+         var i:int = 0;
+         while(i < len)
          {
-            _loc6_ = _loc2_.objects[_loc5_] as Mesh;
-            _loc7_ = _loc6_.name.toLowerCase();
-            if(_loc7_.indexOf("hull") == 0)
+            mesh = parser.objects[i] as Mesh;
+            objectName = mesh.name.toLowerCase();
+            if(objectName.indexOf("hull") == 0)
             {
-               _loc3_.kuca = _loc6_;
-               _loc6_.sorting = Sorting.DYNAMIC_BSP;
-               _loc6_.optimizeForDynamicBSP();
-               _loc6_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
+               hull.skin = mesh;
+               mesh.sorting = Sorting.DYNAMIC_BSP;
+               mesh.optimizeForDynamicBSP();
+               mesh.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
             }
-            else if(_loc7_.indexOf("mount") == 0)
+            else if(objectName.indexOf("mount") == 0)
             {
-               _loc8_ = Mesh(_loc6_).matrix.position;
-               _loc3_.sih.reset(_loc8_.x,_loc8_.y,_loc8_.z);
+               position = Mesh(mesh).matrix.position;
+               hull.mountPoint.reset(position.x,position.y,position.z);
             }
-            _loc5_++;
+            i++;
          }
-         return _loc3_;
+         return hull;
       }
    }
 }

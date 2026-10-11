@@ -6,33 +6,33 @@ package alternativa.tanks.sfx
    public class SimplePlane extends Mesh
    {
       
-      protected var gar:Vertex;
+      protected var a:Vertex;
       
-      protected var nityt:Vertex;
+      protected var b:Vertex;
       
-      protected var fysu:Vertex;
+      protected var c:Vertex;
       
-      protected var rok:Vertex;
+      protected var d:Vertex;
       
-      private var lezebyk:Number;
+      private var originX:Number;
       
-      private var cofydyz:Number;
+      private var originY:Number;
       
-      public function SimplePlane(param1:Number, param2:Number, param3:Number, param4:Number)
+      public function SimplePlane(param1:Number, param2:Number, originX:Number, originY:Number)
       {
          super();
-         this.lezebyk = param3;
-         this.cofydyz = param4;
-         boundMinX = -param3 * param1;
+         this.originX = originX;
+         this.originY = originY;
+         boundMinX = -originX * param1;
          boundMaxX = boundMinX + param1;
-         boundMinY = -param4 * param2;
+         boundMinY = -originY * param2;
          boundMaxY = boundMinY + param2;
          boundMinZ = 0;
          boundMaxZ = 0;
          var _loc5_:Vector.<Number> = Vector.<Number>([boundMinX,boundMinY,0,boundMaxX,boundMinY,0,boundMaxX,boundMaxY,0,boundMinX,boundMaxY,0]);
-         var _loc6_:Vector.<Number> = Vector.<Number>([0,1,1,1,1,0,0,0]);
-         var _loc7_:Vector.<int> = Vector.<int>([4,0,1,2,3]);
-         addVerticesAndFaces(_loc5_,_loc6_,_loc7_,true);
+         var uvs:Vector.<Number> = Vector.<Number>([0,1,1,1,1,0,0,0]);
+         var indices:Vector.<int> = Vector.<int>([4,0,1,2,3]);
+         addVerticesAndFaces(_loc5_,uvs,indices,true);
          calculateFacesNormals();
          this.writeVertices();
          useShadowMap = false;
@@ -44,28 +44,28 @@ package alternativa.tanks.sfx
       private function writeVertices() : void
       {
          var _loc1_:Vector.<Vertex> = this.vertices;
-         this.gar = _loc1_[0];
-         this.nityt = _loc1_[1];
-         this.fysu = _loc1_[2];
-         this.rok = _loc1_[3];
+         this.a = _loc1_[0];
+         this.b = _loc1_[1];
+         this.c = _loc1_[2];
+         this.d = _loc1_[3];
       }
       
-      public function setUVs(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number, param7:Number, param8:Number) : void
+      public function setUVs(u0:Number, v0:Number, u1:Number, v1:Number, u2:Number, v2:Number, u3:Number, v3:Number) : void
       {
-         this.gar.u = param1;
-         this.gar.v = param2;
-         this.nityt.u = param3;
-         this.nityt.v = param4;
-         this.fysu.u = param5;
-         this.fysu.v = param6;
-         this.rok.u = param7;
-         this.rok.v = param8;
+         this.a.u = u0;
+         this.a.v = v0;
+         this.b.u = u1;
+         this.b.v = v1;
+         this.c.u = u2;
+         this.c.v = v2;
+         this.d.u = u3;
+         this.d.v = v3;
       }
       
-      public function set width(param1:Number) : void
+      public function set width(value:Number) : void
       {
-         boundMinX = this.gar.x = this.rok.x = -this.lezebyk * param1;
-         boundMaxX = this.nityt.x = this.fysu.x = boundMinX + param1;
+         boundMinX = this.a.x = this.d.x = -this.originX * value;
+         boundMaxX = this.b.x = this.c.x = boundMinX + value;
       }
       
       public function get length() : Number
@@ -73,16 +73,16 @@ package alternativa.tanks.sfx
          return boundMaxY - boundMinY;
       }
       
-      public function set length(param1:Number) : void
+      public function set length(value:Number) : void
       {
-         boundMinY = this.gar.y = this.nityt.y = -this.cofydyz * param1;
-         boundMaxY = this.rok.y = this.fysu.y = boundMinY + param1;
+         boundMinY = this.a.y = this.b.y = -this.originY * value;
+         boundMaxY = this.d.y = this.c.y = boundMinY + value;
       }
       
-      public function resize(param1:Number, param2:Number) : void
+      public function resize(width:Number, length:Number) : void
       {
-         this.width = param1;
-         this.length = param2;
+         this.width = width;
+         this.length = length;
       }
    }
 }

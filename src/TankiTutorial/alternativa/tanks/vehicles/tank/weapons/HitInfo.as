@@ -6,13 +6,13 @@ package alternativa.tanks.vehicles.tank.weapons
    public class HitInfo
    {
       
-      public var jomuc:Number;
+      public var time:Number;
       
       public var body:Body;
       
-      public var wimybu:Vector3 = new Vector3();
+      public var position:Vector3 = new Vector3();
       
-      public var bec:Vector3 = new Vector3();
+      public var direction:Vector3 = new Vector3();
       
       public function HitInfo()
       {

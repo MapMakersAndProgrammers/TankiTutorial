@@ -17,9 +17,9 @@ package
    public class TankiTutorial extends Sprite
    {
       
-      private static const ceqykepa:Class = TankiTutorial_ttfFont;
+      private static const ttfFont:Class = TankiTutorial_ttfFont;
       
-      private var vutofom:Game;
+      private var game:Game;
       
       public function TankiTutorial()
       {
@@ -27,7 +27,7 @@ package
          addEventListener(Event.ADDED_TO_STAGE,this.onAddedToStage);
       }
       
-      private function onAddedToStage(param1:Event) : void
+      private function onAddedToStage(e:Event) : void
       {
          trace("added to stage");
          removeEventListener(Event.ADDED_TO_STAGE,this.onAddedToStage);
@@ -54,15 +54,15 @@ package
       
       private function start() : void
       {
-         var _loc1_:* = undefined;
-         for(_loc1_ in InitialDataLoader.textures)
+         var bitmapData:* = undefined;
+         for(bitmapData in InitialDataLoader.textures)
          {
-            GameData.colorize(_loc1_);
-            delete InitialDataLoader.textures[_loc1_];
+            GameData.colorize(bitmapData);
+            delete InitialDataLoader.textures[bitmapData];
          }
          InitialDataLoader.onAfterComplete();
-         this.vutofom = new Game();
-         this.vutofom.start();
+         this.game = new Game();
+         this.game.start();
       }
    }
 }

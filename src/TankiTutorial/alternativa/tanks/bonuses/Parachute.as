@@ -8,31 +8,31 @@ package alternativa.tanks.bonuses
    public class Parachute extends Object3DContainer implements HidableGraphicObject
    {
       
-      public static const jonoga:Number = 266;
+      public static const RADIUS:Number = 266;
       
-      public static const lapocar:int = 12;
+      public static const NUM_CORDS:int = 12;
       
       private var supy:Number = 1;
       
-      private var fidemujil:Number = 1;
+      private var alphaMultiplier:Number = 1;
       
-      public function Parachute(param1:Mesh, param2:Mesh)
+      public function Parachute(parachuteMesh:Mesh, parachuteInnerMesh:Mesh)
       {
          super();
-         this.addMesh(Mesh(param1.clone()));
-         this.addMesh(Mesh(param2.clone()));
+         this.addMesh(Mesh(parachuteMesh.clone()));
+         this.addMesh(Mesh(parachuteInnerMesh.clone()));
       }
       
-      private function addMesh(param1:Mesh) : void
+      private function addMesh(mesh:Mesh) : void
       {
-         param1.shadowMapAlphaThreshold = 2;
-         addChild(param1);
+         mesh.shadowMapAlphaThreshold = 2;
+         addChild(mesh);
       }
       
       public function recycle() : void
       {
          this.supy = 1;
-         this.fidemujil = 1;
+         this.alphaMultiplier = 1;
          scaleX = 1;
          scaleY = 1;
          scaleZ = 1;
@@ -44,27 +44,27 @@ package alternativa.tanks.bonuses
          return this.supy;
       }
       
-      public function setAlpha(param1:Number) : void
+      public function setAlpha(value:Number) : void
       {
-         this.supy = param1;
+         this.supy = value;
          this.updateAlpha();
       }
       
       private function updateAlpha() : void
       {
-         alpha = this.fidemujil * this.supy;
+         alpha = this.alphaMultiplier * this.supy;
       }
       
-      public function readPosition(param1:Vector3) : void
+      public function readPosition(result:Vector3) : void
       {
-         param1.x = x;
-         param1.y = y;
-         param1.z = z;
+         result.x = x;
+         result.y = y;
+         result.z = z;
       }
       
-      public function setAlphaMultiplier(param1:Number) : void
+      public function setAlphaMultiplier(value:Number) : void
       {
-         this.fidemujil = param1;
+         this.alphaMultiplier = value;
          this.updateAlpha();
       }
    }

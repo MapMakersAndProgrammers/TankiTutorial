@@ -11,23 +11,23 @@ package alternativa.tanks.sfx
    public class TankSounds implements ISound3DEffect
    {
       
-      private static const neza:Vector3 = new Vector3();
+      private static const position:Vector3 = new Vector3();
       
-      private var reva:Tank;
+      private var tank:Tank;
       
-      private var fezi:EngineSounds;
+      private var engineSounds:EngineSounds;
       
-      private var bywyson:Sound3D;
+      private var turretSound:Sound3D;
       
-      private var qylugugo:int = 1;
+      private var engineMode:int = 1;
       
-      private var dalipaz:Boolean = false;
+      private var _enabled:Boolean = false;
       
-      private var nizo:Boolean;
+      private var _turretSoundEnabled:Boolean;
       
-      private var lusik:Boolean = false;
+      private var engineSoundsLoaded:Boolean = false;
       
-      private var pywuvisa:Boolean = false;
+      private var turretSoundLoaded:Boolean = false;
       
       public function TankSounds()
       {
@@ -36,32 +36,32 @@ package alternativa.tanks.sfx
       
       private function initEngineSound() : void
       {
-         var _loc1_:Sound = null;
-         var _loc2_:Sound = null;
-         var _loc3_:Sound = null;
-         if(!this.lusik)
+         var idleSound:Sound = null;
+         var startSound:Sound = null;
+         var movingSound:Sound = null;
+         if(!this.engineSoundsLoaded)
          {
-            _loc1_ = Assets.getData("engine_idle",Sound);
-            _loc2_ = Assets.getData("engine_start",Sound);
-            _loc3_ = Assets.getData("engine_moving",Sound);
-            if(_loc1_ != null && _loc2_ != null && _loc3_ != null)
+            idleSound = Assets.getData("engine_idle",Sound);
+            startSound = Assets.getData("engine_start",Sound);
+            movingSound = Assets.getData("engine_moving",Sound);
+            if(idleSound != null && startSound != null && movingSound != null)
             {
-               this.fezi = new EngineSounds(_loc1_,_loc2_,_loc3_);
-               this.lusik = true;
+               this.engineSounds = new EngineSounds(idleSound,startSound,movingSound);
+               this.engineSoundsLoaded = true;
             }
          }
       }
       
       private function initTurretSound() : void
       {
-         var _loc1_:Sound = null;
-         if(!this.pywuvisa)
+         var sound:Sound = null;
+         if(!this.turretSoundLoaded)
          {
-            _loc1_ = Assets.getData("engine_turret",Sound);
-            if(_loc1_ != null)
+            sound = Assets.getData("engine_turret",Sound);
+            if(sound != null)
             {
-               this.bywyson = Sound3D.create(_loc1_,500,2000,5,0.5);
-               this.pywuvisa = true;
+               this.turretSound = Sound3D.create(sound,500,2000,5,0.5);
+               this.turretSoundLoaded = true;
             }
          }
       }
@@ -69,12 +69,12 @@ package alternativa.tanks.sfx
       public function setIdleMode() : void
       {
          this.initEngineSound();
-         if(this.lusik)
+         if(this.engineSoundsLoaded)
          {
-            this.qylugugo = EngineSounds.qanigak;
-            if(this.dalipaz)
+            this.engineMode = EngineSounds.IDLE_MODE;
+            if(this._enabled)
             {
-               this.fezi.setIdleMode();
+               this.engineSounds.setIdleMode();
             }
          }
       }
@@ -82,12 +82,12 @@ package alternativa.tanks.sfx
       public function setSilentMode() : void
       {
          this.initEngineSound();
-         if(this.lusik)
+         if(this.engineSoundsLoaded)
          {
-            this.qylugugo = EngineSounds.pubevih;
-            if(this.dalipaz)
+            this.engineMode = EngineSounds.SILENT_MODE;
+            if(this._enabled)
             {
-               this.fezi.setSilentMode();
+               this.engineSounds.setSilentMode();
             }
          }
       }
@@ -95,12 +95,12 @@ package alternativa.tanks.sfx
       public function setAccelerationMode() : void
       {
          this.initEngineSound();
-         if(this.lusik)
+         if(this.engineSoundsLoaded)
          {
-            this.qylugugo = EngineSounds.docic;
-            if(this.dalipaz)
+            this.engineMode = EngineSounds.ACCELERATION_MODE;
+            if(this._enabled)
             {
-               this.fezi.setAccelerationMode();
+               this.engineSounds.setAccelerationMode();
             }
          }
       }
@@ -108,96 +108,96 @@ package alternativa.tanks.sfx
       public function setTurningMode() : void
       {
          this.initEngineSound();
-         if(this.lusik)
+         if(this.engineSoundsLoaded)
          {
-            this.qylugugo = EngineSounds.daqizinan;
-            if(this.dalipaz)
+            this.engineMode = EngineSounds.TURNING_MODE;
+            if(this._enabled)
             {
-               this.fezi.setTurningMode();
+               this.engineSounds.setTurningMode();
             }
          }
       }
       
-      public function setTank(param1:Tank) : void
+      public function setTank(tank:Tank) : void
       {
-         this.reva = param1;
+         this.tank = tank;
       }
       
-      public function playTurretSound(param1:Boolean) : void
+      public function playTurretSound(rotating:Boolean) : void
       {
-         var _loc2_:SoundChannel = null;
+         var channel:SoundChannel = null;
          this.initTurretSound();
-         if(this.pywuvisa)
+         if(this.turretSoundLoaded)
          {
-            if(this.dalipaz)
+            if(this._enabled)
             {
-               if(param1 && this.nizo)
+               if(rotating && this._turretSoundEnabled)
                {
-                  if(!this.bywyson.isPlaying())
+                  if(!this.turretSound.isPlaying())
                   {
-                     _loc2_ = this.bywyson.play(100,0);
-                     if(_loc2_ != null)
+                     channel = this.turretSound.play(100,0);
+                     if(channel != null)
                      {
-                        _loc2_.addEventListener(Event.SOUND_COMPLETE,this.onTurretSoundComplete);
+                        channel.addEventListener(Event.SOUND_COMPLETE,this.onTurretSoundComplete);
                      }
                   }
                }
-               else if(this.bywyson.isPlaying())
+               else if(this.turretSound.isPlaying())
                {
-                  this.bywyson.stop();
+                  this.turretSound.stop();
                }
             }
          }
       }
       
-      private function onTurretSoundComplete(param1:Event) : void
+      private function onTurretSoundComplete(e:Event) : void
       {
-         if(this.nizo)
+         if(this._turretSoundEnabled)
          {
-            this.bywyson.play(3000,9999);
+            this.turretSound.play(3000,9999);
          }
       }
       
-      public function set turretSoundEnabled(param1:Boolean) : void
+      public function set turretSoundEnabled(value:Boolean) : void
       {
-         if(this.nizo != param1)
+         if(this._turretSoundEnabled != value)
          {
-            this.nizo = param1;
-            if(!this.nizo)
+            this._turretSoundEnabled = value;
+            if(!this._turretSoundEnabled)
             {
-               if(this.pywuvisa)
+               if(this.turretSoundLoaded)
                {
-                  this.bywyson.stop();
+                  this.turretSound.stop();
                }
             }
          }
       }
       
-      public function play(param1:int, param2:GameCamera) : void
+      public function play(deltaTime:int, camera:GameCamera) : void
       {
-         if(this.reva != null && this.dalipaz)
+         if(this.tank != null && this._enabled)
          {
-            neza.copy(this.reva.hogys.body.kejo.position);
-            if(this.lusik)
+            position.copy(this.tank.tankBody.body.state.position);
+            if(this.engineSoundsLoaded)
             {
-               this.fezi.update(param1,param2.position,neza,param2.memyjenut);
+               this.engineSounds.update(deltaTime,camera.position,position,camera.xAxis);
             }
-            if(this.pywuvisa)
+            if(this.turretSoundLoaded)
             {
-               this.bywyson.checkVolume(param2.position,neza,param2.memyjenut);
+               this.turretSound.checkVolume(camera.position,position,camera.xAxis);
             }
          }
       }
       
       public function destroy() : void
       {
-         if(this.lusik)
+         if(this.engineSoundsLoaded)
          {
-            this.fezi.stop();
+            this.engineSounds.stop();
          }
-         if(this.pywuvisa)
+         if(this.turretSoundLoaded)
          {
-            this.bywyson.stop();
+            this.turretSound.stop();
          }
       }
       
@@ -210,48 +210,48 @@ package alternativa.tanks.sfx
          return 2;
       }
       
-      public function readPosition(param1:Vector3) : void
+      public function readPosition(result:Vector3) : void
       {
-         param1.copy(this.reva.hogys.body.kejo.position);
+         result.copy(this.tank.tankBody.body.state.position);
       }
       
-      public function set enabled(param1:Boolean) : void
+      public function set enabled(value:Boolean) : void
       {
-         if(this.dalipaz != param1)
+         if(this._enabled != value)
          {
-            this.dalipaz = param1;
+            this._enabled = value;
             this.updateSounds();
          }
       }
       
       private function updateSounds() : void
       {
-         if(this.dalipaz)
+         if(this._enabled)
          {
-            if(this.lusik)
+            if(this.engineSoundsLoaded)
             {
-               switch(this.qylugugo)
+               switch(this.engineMode)
                {
-                  case EngineSounds.qanigak:
-                     this.fezi.setIdleMode();
+                  case EngineSounds.IDLE_MODE:
+                     this.engineSounds.setIdleMode();
                      break;
-                  case EngineSounds.docic:
-                     this.fezi.setAccelerationMode();
+                  case EngineSounds.ACCELERATION_MODE:
+                     this.engineSounds.setAccelerationMode();
                      break;
-                  case EngineSounds.daqizinan:
-                     this.fezi.setTurningMode();
+                  case EngineSounds.TURNING_MODE:
+                     this.engineSounds.setTurningMode();
                }
             }
          }
          else
          {
-            if(this.pywuvisa)
+            if(this.turretSoundLoaded)
             {
-               this.bywyson.stop();
+               this.turretSound.stop();
             }
-            if(this.lusik)
+            if(this.engineSoundsLoaded)
             {
-               this.fezi.setSilentMode();
+               this.engineSounds.setSilentMode();
             }
          }
       }

@@ -3,58 +3,58 @@ package alternativa.tanks.vehicles.tank
    public class SimpleValueSmoother implements ValueSmoother
    {
       
-      private var soluwirac:Number;
+      private var currentValue:Number;
       
-      private var cejufi:Number;
+      private var targetValue:Number;
       
-      private var lisecaze:Number;
+      private var increaseSpeed:Number;
       
-      private var bybidohun:Number;
+      private var decreaseSpeed:Number;
       
-      public function SimpleValueSmoother(param1:Number, param2:Number, param3:Number, param4:Number)
+      public function SimpleValueSmoother(increaseSpeed:Number, decreaseSpeed:Number, targetValue:Number, currentValue:Number)
       {
          super();
-         this.lisecaze = param1;
-         this.bybidohun = param2;
-         this.cejufi = param3;
-         this.soluwirac = param4;
+         this.increaseSpeed = increaseSpeed;
+         this.decreaseSpeed = decreaseSpeed;
+         this.targetValue = targetValue;
+         this.currentValue = currentValue;
       }
       
-      public function reset(param1:Number) : void
+      public function reset(value:Number) : void
       {
-         this.soluwirac = param1;
-         this.cejufi = param1;
+         this.currentValue = value;
+         this.targetValue = value;
       }
       
-      public function update(param1:Number) : Number
+      public function update(dt:Number) : Number
       {
-         if(this.soluwirac < this.cejufi)
+         if(this.currentValue < this.targetValue)
          {
-            this.soluwirac += this.lisecaze * param1;
-            if(this.soluwirac > this.cejufi)
+            this.currentValue += this.increaseSpeed * dt;
+            if(this.currentValue > this.targetValue)
             {
-               this.soluwirac = this.cejufi;
+               this.currentValue = this.targetValue;
             }
          }
-         else if(this.soluwirac > this.cejufi)
+         else if(this.currentValue > this.targetValue)
          {
-            this.soluwirac -= this.bybidohun * param1;
-            if(this.soluwirac < this.cejufi)
+            this.currentValue -= this.decreaseSpeed * dt;
+            if(this.currentValue < this.targetValue)
             {
-               this.soluwirac = this.cejufi;
+               this.currentValue = this.targetValue;
             }
          }
-         return this.soluwirac;
+         return this.currentValue;
       }
       
-      public function setTargetValue(param1:Number) : void
+      public function setTargetValue(value:Number) : void
       {
-         this.cejufi = param1;
+         this.targetValue = value;
       }
       
       public function getTargetValue() : Number
       {
-         return this.cejufi;
+         return this.targetValue;
       }
    }
 }

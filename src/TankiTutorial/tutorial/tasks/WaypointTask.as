@@ -15,103 +15,103 @@ package tutorial.tasks
    public class WaypointTask extends Task
    {
       
-      private static var domihyv:TextureMaterial;
+      private static var arrowMaterial:TextureMaterial;
       
-      private static var boqa:TextureMaterial;
+      private static var shadowMaterial:TextureMaterial;
       
-      private var gomys:Sprite3D;
+      private var arrow:Sprite3D;
       
-      private var nuvyma:Plane;
+      private var shadow:Plane;
       
-      private var hon:Function;
+      private var callback:Function;
       
-      private var magizegyc:KDContainer = GameData.guzinizub;
+      private var kdContainer:KDContainer = GameData.kdContainer;
       
-      private var citacir:Tank;
+      private var tank:Tank;
       
       private var range:Number = 800;
       
       public var position:Vector3;
       
-      private var dodycoli:Number;
+      private var phase:Number;
       
-      private var dusy:Boolean = false;
+      private var reached:Boolean = false;
       
-      public function WaypointTask(param1:Vector3, param2:Tank, param3:Function)
+      public function WaypointTask(position:Vector3, tank:Tank, callback:Function)
       {
          super();
-         if(domihyv == null)
+         if(arrowMaterial == null)
          {
-            domihyv = new TextureMaterial(Assets.getData("arrow",BitmapData),false,true,MipMapping.PER_PIXEL,2.5);
-            boqa = new TextureMaterial(Assets.getData("shadow",BitmapData),false,true,MipMapping.PER_PIXEL,2.5);
+            arrowMaterial = new TextureMaterial(Assets.getData("arrow",BitmapData),false,true,MipMapping.PER_PIXEL,2.5);
+            shadowMaterial = new TextureMaterial(Assets.getData("shadow",BitmapData),false,true,MipMapping.PER_PIXEL,2.5);
          }
-         this.citacir = param2;
-         this.hon = param3;
-         this.position = param1;
+         this.tank = tank;
+         this.callback = callback;
+         this.position = position;
          this.position.z += 200;
-         this.dodycoli = 0;
+         this.phase = 0;
       }
       
       override public function process() : Boolean
       {
-         var _loc2_:Number = NaN;
-         var _loc3_:Number = NaN;
-         var _loc4_:Number = NaN;
-         var _loc5_:Number = NaN;
-         if(this.gomys == null)
+         var offset:Number = NaN;
+         var x:Number = NaN;
+         var y:Number = NaN;
+         var distanceSqr:Number = NaN;
+         if(this.arrow == null)
          {
-            this.gomys = new Sprite3D(200,400,domihyv);
-            this.gomys.x = this.position.x;
-            this.gomys.y = this.position.y;
-            this.gomys.z = this.position.z;
-            this.gomys.originY = 1;
-            this.gomys.useShadowMap = false;
-            this.gomys.useLight = false;
-            this.gomys.visible = false;
-            this.nuvyma = new Plane(300,300,1,1,true,false,false,boqa,boqa);
-            this.nuvyma.x = this.position.x;
-            this.nuvyma.y = this.position.y;
-            this.nuvyma.z = this.position.z - 190;
-            this.nuvyma.useShadowMap = false;
-            this.nuvyma.useLight = false;
-            this.nuvyma.visible = false;
-            this.nuvyma.shadowMapAlphaThreshold = 2;
-            this.nuvyma.depthMapAlphaThreshold = 2;
-            this.magizegyc.addChild(this.gomys);
-            this.magizegyc.addChild(this.nuvyma);
+            this.arrow = new Sprite3D(200,400,arrowMaterial);
+            this.arrow.x = this.position.x;
+            this.arrow.y = this.position.y;
+            this.arrow.z = this.position.z;
+            this.arrow.originY = 1;
+            this.arrow.useShadowMap = false;
+            this.arrow.useLight = false;
+            this.arrow.visible = false;
+            this.shadow = new Plane(300,300,1,1,true,false,false,shadowMaterial,shadowMaterial);
+            this.shadow.x = this.position.x;
+            this.shadow.y = this.position.y;
+            this.shadow.z = this.position.z - 190;
+            this.shadow.useShadowMap = false;
+            this.shadow.useLight = false;
+            this.shadow.visible = false;
+            this.shadow.shadowMapAlphaThreshold = 2;
+            this.shadow.depthMapAlphaThreshold = 2;
+            this.kdContainer.addChild(this.arrow);
+            this.kdContainer.addChild(this.shadow);
          }
-         var _loc1_:TimeData = GameData.lecopojen;
-         if(this.dusy)
+         var timeData:TimeData = GameData.time;
+         if(this.reached)
          {
-            this.gomys.z += 300 * _loc1_.ziqod;
-            this.gomys.alpha -= _loc1_.ziqod;
-            this.nuvyma.alpha -= _loc1_.ziqod;
-            if(this.gomys.alpha <= 0)
+            this.arrow.z += 300 * timeData.deltaTime;
+            this.arrow.alpha -= timeData.deltaTime;
+            this.shadow.alpha -= timeData.deltaTime;
+            if(this.arrow.alpha <= 0)
             {
-               this.magizegyc.removeChild(this.gomys);
-               this.magizegyc.removeChild(this.nuvyma);
-               this.gomys = null;
-               this.nuvyma = null;
+               this.kdContainer.removeChild(this.arrow);
+               this.kdContainer.removeChild(this.shadow);
+               this.arrow = null;
+               this.shadow = null;
                return true;
             }
          }
          else
          {
-            this.dodycoli += 5 * _loc1_.ziqod;
-            _loc2_ = Math.sin(this.dodycoli);
-            this.gomys.z = this.position.z + _loc2_ * 100;
-            if(Boolean(this.citacir.inGame) && Boolean(this.citacir.kat))
+            this.phase += 5 * timeData.deltaTime;
+            offset = Math.sin(this.phase);
+            this.arrow.z = this.position.z + offset * 100;
+            if(Boolean(this.tank.inGame) && Boolean(this.tank.alive))
             {
-               _loc3_ = Number(this.citacir.kuca.hullMesh.x);
-               _loc4_ = Number(this.citacir.kuca.hullMesh.y);
-               _loc5_ = (_loc3_ - this.position.x) * (_loc3_ - this.position.x) + (_loc4_ - this.position.y) * (_loc4_ - this.position.y);
-               if(_loc5_ < this.range * this.range)
+               x = Number(this.tank.skin.hullMesh.x);
+               y = Number(this.tank.skin.hullMesh.y);
+               distanceSqr = (x - this.position.x) * (x - this.position.x) + (y - this.position.y) * (y - this.position.y);
+               if(distanceSqr < this.range * this.range)
                {
-                  this.dusy = true;
-                  if(this.hon != null)
+                  this.reached = true;
+                  if(this.callback != null)
                   {
-                     this.citacir.setCheckpoint();
-                     this.hon();
+                     this.tank.setCheckpoint();
+                     this.callback();
                   }
                }
             }

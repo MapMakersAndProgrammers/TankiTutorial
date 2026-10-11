@@ -6,16 +6,16 @@ package alternativa.tanks.vehicles.tank.weapons
    public class CommonRayCollisionFilter implements IRayCollisionFilter
    {
       
-      public var bowe:Body;
+      public var excludedBody:Body;
       
       public function CommonRayCollisionFilter()
       {
          super();
       }
       
-      public function considerBody(param1:Body) : Boolean
+      public function considerBody(body:Body) : Boolean
       {
-         return this.bowe != param1;
+         return this.excludedBody != body;
       }
    }
 }

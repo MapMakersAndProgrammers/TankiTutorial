@@ -19,154 +19,154 @@ package tutorial.tasks
    public class CommonEnemyTask extends Task
    {
       
-      private static const nitimalu:uint = 1000;
+      private static const CHECK_INTERVAL:uint = 1000;
       
-      private static const necykaquda:Number = 0.9;
+      private static const SHOOT_PROBABILITY:Number = 0.9;
       
-      protected static const socu:BitmapData = Assets.getData("target_pointer",BitmapData);
+      protected static const targetPointer:BitmapData = Assets.getData("target_pointer",BitmapData);
       
-      protected static const caba:uint = 400;
+      protected static const POINTER_HEIGHT:uint = 400;
       
-      protected static const nipol:int = 0;
+      protected static const STATE_INIT:int = 0;
       
-      protected static const kyzijawo:int = 1;
+      protected static const STATE_EXECUTE:int = 1;
       
-      protected static const cenebah:int = 2;
+      protected static const STATE_IDLE:int = 2;
       
-      protected static const hukozi:int = 3;
+      protected static const STATE_DEAD:int = 3;
       
-      protected static const jym:int = 4;
+      protected static const STATE_DECOY:int = 4;
       
-      protected static const zawyzowa:int = 5;
+      protected static const STATE_FINISHED:int = 5;
       
-      protected var citacir:Tank;
+      protected var tank:Tank;
       
       protected var controller:CommonTankController;
       
-      protected var racefom:uint;
+      protected var startTime:uint;
       
-      protected var kejo:int = 0;
+      protected var state:int = 0;
       
-      protected var hon:Function;
+      protected var callback:Function;
       
-      protected var pifyg:Sprite3D;
+      protected var pointer:Sprite3D;
       
-      protected var jifom:Tank = GameData.jifom;
+      protected var playerTank:Tank = GameData.playerTank;
       
-      protected var guzinizub:KDContainer = GameData.guzinizub;
+      protected var kdContainer:KDContainer = GameData.kdContainer;
       
-      protected var zule:Number = 1;
+      protected var alpha:Number = 1;
       
-      protected var hefine:Boolean;
+      protected var loop:Boolean;
       
-      private var nyqiwopy:uint = 3000;
+      private var shootDelay:uint = 3000;
       
-      private var sequqiz:uint;
+      private var lastCheckTime:uint;
       
-      private var zulonyhul:uint;
+      private var initTime:uint;
       
-      private var dodycoli:Number;
+      private var phase:Number;
       
       private var inGame:Boolean;
       
-      private var babek:int;
+      private var shootAction:int;
       
-      public function CommonEnemyTask(param1:String, param2:String, param3:String, param4:Vector3, param5:Quaternion, param6:Number = 0, param7:Number = 1, param8:Function = null, param9:uint = 3000, param10:Boolean = false)
+      public function CommonEnemyTask(hull:String, turret:String, color:String, position:Vector3, orientation:Quaternion, health:Number = 0, damageMultiplier:Number = 1, callback:Function = null, shootDelay:uint = 3000, loop:Boolean = false)
       {
          super();
-         this.hon = param8;
-         this.nyqiwopy = param9;
-         this.hefine = param10;
-         this.citacir = new Tank();
-         this.citacir.init(param1,param2,param3,param6);
-         this.citacir.setWeaponDamageMultiplier(param7);
-         this.citacir.setPosition(param4);
-         this.citacir.setOrientation(param5);
-         this.citacir.turretController = new AutoAimTurretController(this.citacir,this.jifom);
-         this.pifyg = new Sprite3D(200,400,new TextureMaterial(socu,false,true,MipMapping.PER_PIXEL,2.5));
-         this.zulonyhul = getTimer();
+         this.callback = callback;
+         this.shootDelay = shootDelay;
+         this.loop = loop;
+         this.tank = new Tank();
+         this.tank.init(hull,turret,color,health);
+         this.tank.setWeaponDamageMultiplier(damageMultiplier);
+         this.tank.setPosition(position);
+         this.tank.setOrientation(orientation);
+         this.tank.turretController = new AutoAimTurretController(this.tank,this.playerTank);
+         this.pointer = new Sprite3D(200,400,new TextureMaterial(targetPointer,false,true,MipMapping.PER_PIXEL,2.5));
+         this.initTime = getTimer();
          this.inGame = false;
-         this.dodycoli = 0;
-         this.pifyg.useShadowMap = false;
-         this.pifyg.useLight = false;
-         this.pifyg.visible = false;
+         this.phase = 0;
+         this.pointer.useShadowMap = false;
+         this.pointer.useLight = false;
+         this.pointer.visible = false;
       }
       
-      protected function tryShoot(param1:uint) : int
+      protected function tryShoot(time:uint) : int
       {
-         var _loc2_:Tank = null;
-         if(param1 - this.racefom < this.nyqiwopy)
+         var target:Tank = null;
+         if(time - this.startTime < this.shootDelay)
          {
             return 0;
          }
-         if(param1 - this.sequqiz >= nitimalu)
+         if(time - this.lastCheckTime >= CHECK_INTERVAL)
          {
-            this.sequqiz = param1;
-            _loc2_ = this.citacir.getWeapon().getTarget();
-            if(_loc2_ == this.jifom && Boolean(this.jifom.kat) && Math.random() < necykaquda)
+            this.lastCheckTime = time;
+            target = this.tank.getWeapon().getTarget();
+            if(target == this.playerTank && Boolean(this.playerTank.alive) && Math.random() < SHOOT_PROBABILITY)
             {
-               this.babek = 1 << CommonTankController.syfysu;
+               this.shootAction = 1 << CommonTankController.FIRE;
             }
             else
             {
-               this.babek = 0;
+               this.shootAction = 0;
             }
          }
-         return this.babek;
+         return this.shootAction;
       }
       
       override public function process() : Boolean
       {
-         var _loc2_:Vector3 = null;
+         var position:Vector3 = null;
          if(!this.inGame)
          {
             this.inGame = true;
-            GameData.gaz.push(this.citacir);
-            this.guzinizub.addChild(this.pifyg);
-            this.controller = new CommonTankController(this.citacir);
-            GameData.namab.addTask(new TankControlTask(this.citacir,this.controller));
-            this.citacir.kuca.setAlpha(0);
+            GameData.tanks.push(this.tank);
+            this.kdContainer.addChild(this.pointer);
+            this.controller = new CommonTankController(this.tank);
+            GameData.taskGroup.addTask(new TankControlTask(this.tank,this.controller));
+            this.tank.skin.setAlpha(0);
          }
-         var _loc1_:TimeData = GameData.lecopojen;
-         if(this.kejo < hukozi)
+         var timeData:TimeData = GameData.time;
+         if(this.state < STATE_DEAD)
          {
-            if(this.pifyg != null)
+            if(this.pointer != null)
             {
-               _loc2_ = this.citacir.hogys.body.kejo.position;
-               this.pifyg.x = _loc2_.x;
-               this.pifyg.y = _loc2_.y;
-               this.pifyg.z = _loc2_.z;
-               this.dodycoli += _loc1_.ziqod * 5;
-               this.pifyg.z = _loc2_.z + caba + Math.sin(this.dodycoli) * 100;
+               position = this.tank.tankBody.body.state.position;
+               this.pointer.x = position.x;
+               this.pointer.y = position.y;
+               this.pointer.z = position.z;
+               this.phase += timeData.deltaTime * 5;
+               this.pointer.z = position.z + POINTER_HEIGHT + Math.sin(this.phase) * 100;
             }
-            if(this.citacir.currentHealth <= 0 && Boolean(this.citacir.kat))
+            if(this.tank.currentHealth <= 0 && Boolean(this.tank.alive))
             {
-               this.kejo = hukozi;
-               GameData.gido.removeTank(this.citacir);
-               this.citacir.kill();
+               this.state = STATE_DEAD;
+               GameData.dust.removeTank(this.tank);
+               this.tank.kill();
                this.controller.setAction(0);
-               this.guzinizub.removeChild(this.pifyg);
+               this.kdContainer.removeChild(this.pointer);
                setTimeout(this.finish,2000);
             }
          }
-         switch(this.kejo)
+         switch(this.state)
          {
-            case nipol:
+            case STATE_INIT:
                this.onInit();
                break;
-            case kyzijawo:
+            case STATE_EXECUTE:
                this.onExecute();
                break;
-            case cenebah:
+            case STATE_IDLE:
                this.onIdle();
                break;
-            case hukozi:
+            case STATE_DEAD:
                this.onDead();
                break;
-            case jym:
+            case STATE_DECOY:
                this.onDecoy();
                break;
-            case zawyzowa:
+            case STATE_FINISHED:
                return true;
          }
          return false;
@@ -174,12 +174,12 @@ package tutorial.tasks
       
       protected function onInit() : void
       {
-         var _loc1_:TimeData = GameData.lecopojen;
-         if(_loc1_.lecopojen - this.zulonyhul > 1000)
+         var timeData:TimeData = GameData.time;
+         if(timeData.time - this.initTime > 1000)
          {
-            this.racefom = getTimer();
-            this.kejo = kyzijawo;
-            this.citacir.kuca.setAlpha(1);
+            this.startTime = getTimer();
+            this.state = STATE_EXECUTE;
+            this.tank.skin.setAlpha(1);
          }
       }
       
@@ -189,8 +189,8 @@ package tutorial.tasks
       
       protected function onIdle() : void
       {
-         var _loc1_:TimeData = GameData.lecopojen;
-         this.controller.setAction(this.tryShoot(_loc1_.lecopojen));
+         var timeData:TimeData = GameData.time;
+         this.controller.setAction(this.tryShoot(timeData.time));
       }
       
       protected function onDead() : void
@@ -199,23 +199,23 @@ package tutorial.tasks
       
       protected function onDecoy() : void
       {
-         var _loc1_:TimeData = GameData.lecopojen;
-         this.zule -= 2 * _loc1_.ziqod;
-         this.citacir.kuca.setAlpha(this.zule);
-         if(this.zule < 0)
+         var timeData:TimeData = GameData.time;
+         this.alpha -= 2 * timeData.deltaTime;
+         this.tank.skin.setAlpha(this.alpha);
+         if(this.alpha < 0)
          {
-            this.citacir.removeFromGame();
-            this.kejo = zawyzowa;
+            this.tank.removeFromGame();
+            this.state = STATE_FINISHED;
          }
       }
       
       private function finish() : void
       {
-         if(this.hon != null)
+         if(this.callback != null)
          {
-            this.hon();
+            this.callback();
          }
-         this.kejo = jym;
+         this.state = STATE_DECOY;
       }
    }
 }

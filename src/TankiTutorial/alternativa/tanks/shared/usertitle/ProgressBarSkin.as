@@ -6,92 +6,92 @@ package alternativa.tanks.shared.usertitle
    public class ProgressBarSkin
    {
       
-      private static var winowuge:Class = ProgressBarSkin_hpLeftDmCls;
+      private static var hpLeftDmCls:Class = ProgressBarSkin_hpLeftDmCls;
       
-      private static var dibidebas:BitmapData = Bitmap(new winowuge()).bitmapData;
+      private static var hpLeftDm:BitmapData = Bitmap(new hpLeftDmCls()).bitmapData;
       
-      private static var fohohirah:Class = ProgressBarSkin_hpRightDmCls;
+      private static var hpRightDmCls:Class = ProgressBarSkin_hpRightDmCls;
       
-      private static var lyrimaqu:BitmapData = Bitmap(new fohohirah()).bitmapData;
+      private static var hpRightDm:BitmapData = Bitmap(new hpRightDmCls()).bitmapData;
       
-      private static var ziqa:Class = ProgressBarSkin_hpLeftBgDmCls;
+      private static var hpLeftBgDmCls:Class = ProgressBarSkin_hpLeftBgDmCls;
       
-      private static var kivyv:BitmapData = Bitmap(new ziqa()).bitmapData;
+      private static var hpLeftBgDm:BitmapData = Bitmap(new hpLeftBgDmCls()).bitmapData;
       
-      private static var vejof:Class = ProgressBarSkin_hpRightBgDmCls;
+      private static var hpRightBgDmCls:Class = ProgressBarSkin_hpRightBgDmCls;
       
-      private static var qebo:BitmapData = Bitmap(new vejof()).bitmapData;
+      private static var hpRightBgDm:BitmapData = Bitmap(new hpRightBgDmCls()).bitmapData;
       
-      private static var hoze:Class = ProgressBarSkin_weaponLeftCls;
+      private static var weaponLeftCls:Class = ProgressBarSkin_weaponLeftCls;
       
-      private static var mopode:BitmapData = Bitmap(new hoze()).bitmapData;
+      private static var weaponLeft:BitmapData = Bitmap(new weaponLeftCls()).bitmapData;
       
-      private static var pyfyzahit:Class = ProgressBarSkin_weaponRightCls;
+      private static var weaponRightCls:Class = ProgressBarSkin_weaponRightCls;
       
-      private static var repygyr:BitmapData = Bitmap(new pyfyzahit()).bitmapData;
+      private static var weaponRight:BitmapData = Bitmap(new weaponRightCls()).bitmapData;
       
-      private static var tylydi:Class = ProgressBarSkin_weaponLeftBgCls;
+      private static var weaponLeftBgCls:Class = ProgressBarSkin_weaponLeftBgCls;
       
-      private static var qapupo:BitmapData = Bitmap(new tylydi()).bitmapData;
+      private static var weaponLeftBg:BitmapData = Bitmap(new weaponLeftBgCls()).bitmapData;
       
-      private static var hudipuce:Class = ProgressBarSkin_weaponRightBgCls;
+      private static var weaponRightBgCls:Class = ProgressBarSkin_weaponRightBgCls;
       
-      private static var nujotafi:BitmapData = Bitmap(new hudipuce()).bitmapData;
+      private static var weaponRightBg:BitmapData = Bitmap(new weaponRightBgCls()).bitmapData;
       
-      private static var bepezysyt:Class = ProgressBarSkin_barShadowCls;
+      private static var barShadowCls:Class = ProgressBarSkin_barShadowCls;
       
-      private static var zawor:BitmapData = Bitmap(new bepezysyt()).bitmapData;
+      private static var barShadow:BitmapData = Bitmap(new barShadowCls()).bitmapData;
       
-      private static var hupygofi:Class = ProgressBarSkin_barShadowLeftCls;
+      private static var barShadowLeftCls:Class = ProgressBarSkin_barShadowLeftCls;
       
-      private static var qequgow:BitmapData = Bitmap(new hupygofi()).bitmapData;
+      private static var barShadowLeft:BitmapData = Bitmap(new barShadowLeftCls()).bitmapData;
       
-      private static var zecodiqy:Class = ProgressBarSkin_barShadowRightCls;
+      private static var barShadowRightCls:Class = ProgressBarSkin_barShadowRightCls;
       
-      private static var gaminyqeb:BitmapData = Bitmap(new zecodiqy()).bitmapData;
+      private static var barShadowRight:BitmapData = Bitmap(new barShadowRightCls()).bitmapData;
       
-      private static const rali:uint = 4964125;
+      private static const HP_DM_COLOR:uint = 4964125;
       
-      private static const nini:uint = 2448911;
+      private static const HP_DM_BG_COLOR:uint = 2448911;
       
-      private static const nebekaja:uint = 14207247;
+      private static const WEAPON_COLOR:uint = 14207247;
       
-      private static const gafujyp:uint = 7758340;
+      private static const WEAPON_BG_COLOR:uint = 7758340;
       
-      public static const gify:ProgressBarSkin = new ProgressBarSkin(rali,nini,dibidebas,kivyv,lyrimaqu,qebo,zawor,qequgow,gaminyqeb);
+      public static const hpDm:ProgressBarSkin = new ProgressBarSkin(HP_DM_COLOR,HP_DM_BG_COLOR,hpLeftDm,hpLeftBgDm,hpRightDm,hpRightBgDm,barShadow,barShadowLeft,barShadowRight);
       
-      public static const mub:ProgressBarSkin = new ProgressBarSkin(nebekaja,gafujyp,mopode,qapupo,repygyr,nujotafi,zawor,qequgow,gaminyqeb);
+      public static const weapon:ProgressBarSkin = new ProgressBarSkin(WEAPON_COLOR,WEAPON_BG_COLOR,weaponLeft,weaponLeftBg,weaponRight,weaponRightBg,barShadow,barShadowLeft,barShadowRight);
       
       public var color:uint;
       
-      public var furoveb:uint;
+      public var bgColor:uint;
       
-      public var bypot:BitmapData;
+      public var left:BitmapData;
       
-      public var row:BitmapData;
+      public var leftBg:BitmapData;
       
-      public var cyv:BitmapData;
+      public var right:BitmapData;
       
-      public var sikaq:BitmapData;
+      public var rightBg:BitmapData;
       
-      public var roga:BitmapData;
+      public var shadowLeft:BitmapData;
       
-      public var bavofyhe:BitmapData;
+      public var shadowRight:BitmapData;
       
-      public var nuvyma:BitmapData;
+      public var shadow:BitmapData;
       
-      public function ProgressBarSkin(param1:uint, param2:uint, param3:BitmapData, param4:BitmapData, param5:BitmapData, param6:BitmapData, param7:BitmapData, param8:BitmapData, param9:BitmapData)
+      public function ProgressBarSkin(color:uint, bgColor:uint, left:BitmapData, leftBg:BitmapData, right:BitmapData, rightBg:BitmapData, shadow:BitmapData, shadowLeft:BitmapData, shadowRight:BitmapData)
       {
          super();
-         this.color = param1;
-         this.furoveb = param2;
-         this.bypot = param3;
-         this.row = param4;
-         this.cyv = param5;
-         this.sikaq = param6;
-         this.nuvyma = param7;
-         this.roga = param8;
-         this.bavofyhe = param9;
+         this.color = color;
+         this.bgColor = bgColor;
+         this.left = left;
+         this.leftBg = leftBg;
+         this.right = right;
+         this.rightBg = rightBg;
+         this.shadow = shadow;
+         this.shadowLeft = shadowLeft;
+         this.shadowRight = shadowRight;
       }
    }
 }

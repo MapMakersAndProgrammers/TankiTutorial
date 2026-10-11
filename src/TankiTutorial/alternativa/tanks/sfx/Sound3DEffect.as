@@ -15,117 +15,117 @@ package alternativa.tanks.sfx
       
       private var position:Vector3 = new Vector3();
       
-      private var zib:Sound3D;
+      private var sound:Sound3D;
       
-      private var visadawa:int;
+      private var delay:int;
       
-      private var racefom:int;
+      private var startTime:int;
       
       private var channel:SoundChannel;
       
-      private var dalipaz:Boolean = false;
+      private var _enabled:Boolean = false;
       
-      private var sefoqar:Boolean = false;
+      private var started:Boolean = false;
       
-      private var bepin:ISoundEffectDestructionListener;
+      private var destructionListener:ISoundEffectDestructionListener;
       
-      public function Sound3DEffect(param1:Pool)
+      public function Sound3DEffect(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public static function create(param1:ObjectPool, param2:Vector3, param3:Sound3D, param4:int = 0, param5:int = 0, param6:ISoundEffectDestructionListener = null) : Sound3DEffect
+      public static function create(objectPool:ObjectPool, position:Vector3, sound:Sound3D, delay:int = 0, startTime:int = 0, destructionListener:ISoundEffectDestructionListener = null) : Sound3DEffect
       {
-         var _loc7_:Sound3DEffect = null;
-         if(param3 != null)
+         var effect:Sound3DEffect = null;
+         if(sound != null)
          {
-            _loc7_ = Sound3DEffect(param1.getObject(Sound3DEffect));
-            _loc7_.init(param2,param3,param4,param5,param6);
-            return _loc7_;
+            effect = Sound3DEffect(objectPool.getObject(Sound3DEffect));
+            effect.init(position,sound,delay,startTime,destructionListener);
+            return effect;
          }
          return null;
       }
       
-      public function init(param1:Vector3, param2:Sound3D, param3:int = 0, param4:int = 0, param5:ISoundEffectDestructionListener = null) : void
+      public function init(position:Vector3, sound:Sound3D, delay:int = 0, startTime:int = 0, destructionListener:ISoundEffectDestructionListener = null) : void
       {
-         this.position.copy(param1);
-         this.zib = param2;
-         this.visadawa = param3;
-         this.racefom = param4;
-         this.bepin = param5;
-         this.dalipaz = false;
-         this.sefoqar = false;
+         this.position.copy(position);
+         this.sound = sound;
+         this.delay = delay;
+         this.startTime = startTime;
+         this.destructionListener = destructionListener;
+         this._enabled = false;
+         this.started = false;
       }
       
-      public function play(param1:int, param2:GameCamera) : void
+      public function play(deltaTime:int, camera:GameCamera) : void
       {
-         this.visadawa -= param1;
-         if(this.visadawa > 0)
+         this.delay -= deltaTime;
+         if(this.delay > 0)
          {
             return;
          }
-         if(!this.sefoqar)
+         if(!this.started)
          {
-            this.sefoqar = true;
-            this.channel = this.zib.play(this.racefom,1);
+            this.started = true;
+            this.channel = this.sound.play(this.startTime,1);
             if(this.channel == null)
             {
                return;
             }
             this.channel.addEventListener(Event.SOUND_COMPLETE,this.onSoundComplete);
          }
-         this.zib.checkVolume(param2.position,this.position,param2.memyjenut);
+         this.sound.checkVolume(camera.position,this.position,camera.xAxis);
       }
       
       public function destroy() : void
       {
-         Sound3D.destroy(this.zib);
-         this.zib = null;
+         Sound3D.destroy(this.sound);
+         this.sound = null;
          this.onSoundComplete(null);
-         if(this.bepin != null)
+         if(this.destructionListener != null)
          {
-            this.bepin.onSoundEffectDestroyed(this);
-            this.bepin = null;
+            this.destructionListener.onSoundEffectDestroyed(this);
+            this.destructionListener = null;
          }
          recycle();
       }
       
       public function kill() : void
       {
-         this.dalipaz = false;
+         this._enabled = false;
       }
       
-      public function set enabled(param1:Boolean) : void
+      public function set enabled(value:Boolean) : void
       {
-         if(this.dalipaz == param1)
+         if(this._enabled == value)
          {
             return;
          }
-         if(!(this.dalipaz = param1))
+         if(!(this._enabled = value))
          {
             this.onSoundComplete(null);
          }
       }
       
-      public function readPosition(param1:Vector3) : void
+      public function readPosition(result:Vector3) : void
       {
-         param1.x = this.position.x;
-         param1.y = this.position.y;
-         param1.z = this.position.z;
+         result.x = this.position.x;
+         result.y = this.position.y;
+         result.z = this.position.z;
       }
       
       public function get numSounds() : int
       {
-         return this.dalipaz ? 1 : 0;
+         return this._enabled ? 1 : 0;
       }
       
-      private function onSoundComplete(param1:Event) : void
+      private function onSoundComplete(e:Event) : void
       {
          if(this.channel != null)
          {
             this.channel.removeEventListener(Event.SOUND_COMPLETE,this.onSoundComplete);
          }
-         this.dalipaz = false;
+         this._enabled = false;
          this.channel = null;
       }
    }

@@ -5,26 +5,26 @@ package alternativa.tanks.vehicles.tank.weapons
       
       public static const bogahyten:Number = 5000000;
       
-      public var pocobyr:Number;
+      public var recoilForce:Number;
       
-      public var myd:Number;
+      public var impactForce:Number;
       
-      public var beryfitu:Number;
+      public var damage:Number;
       
-      public var qyvynefi:uint;
+      public var reloadTime:uint;
       
-      public function WeaponSettings(param1:Number, param2:Number, param3:Number, param4:int)
+      public function WeaponSettings(param1:Number, param2:Number, damage:Number, reloadTime:int)
       {
          super();
-         this.myd = param1 * bogahyten;
-         this.pocobyr = param2 * bogahyten;
-         this.beryfitu = param3;
-         this.qyvynefi = param4;
+         this.impactForce = param1 * bogahyten;
+         this.recoilForce = param2 * bogahyten;
+         this.damage = damage;
+         this.reloadTime = reloadTime;
       }
       
-      public static function getNumRays(param1:Number) : int
+      public static function getNumRays(angle:Number) : int
       {
-         return 2 * 180 * param1 / Math.PI;
+         return 2 * 180 * angle / Math.PI;
       }
    }
 }

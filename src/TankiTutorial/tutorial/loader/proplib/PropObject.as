@@ -15,173 +15,173 @@ package tutorial.loader.proplib
    public class PropObject
    {
       
-      private static const biby:PhysicsMaterial = new PhysicsMaterial(0,1);
+      private static const physicsMaterial:PhysicsMaterial = new PhysicsMaterial(0,1);
       
-      public var leqib:Vector.<Object3D>;
+      public var objects:Vector.<Object3D>;
       
-      public var lucubegul:Vector.<Occluder>;
+      public var occluders:Vector.<Occluder>;
       
-      public var jehi:Vector.<CollisionShape>;
+      public var collisionShapes:Vector.<CollisionShape>;
       
-      private var tylu:Vector.<String>;
+      private var textureNames:Vector.<String>;
       
-      private var dodycoli:int;
+      private var textureIndex:int;
       
-      private var gulot:PropLibrary;
+      private var library:PropLibrary;
       
-      private var caqiqata:String;
+      private var groupName:String;
       
-      public var gepocivaj:String;
+      public var name:String;
       
-      private var hon:Function;
+      private var callback:Function;
       
-      public var gohigewam:int;
+      public var priority:int;
       
       public function PropObject()
       {
          super();
       }
       
-      public function load(param1:XML, param2:Function) : void
+      public function load(xml:XML, callback:Function) : void
       {
-         var _loc4_:XML = null;
-         this.hon = param2;
-         this.leqib = new Vector.<Object3D>();
-         this.lucubegul = new Vector.<Occluder>();
-         this.jehi = new Vector.<CollisionShape>();
-         this.tylu = new Vector.<String>();
-         this.dodycoli = -1;
-         var _loc3_:String = XMLUtils.getAttributeAsString(param1,"library-name","");
-         this.caqiqata = XMLUtils.getAttributeAsString(param1,"group-name","");
-         this.gepocivaj = XMLUtils.getAttributeAsString(param1,"name","");
-         this.gulot = Assets.getData(_loc3_,PropLibrary);
-         this.gohigewam = this.gulot.gohigewam;
-         this.tylu.push(null);
-         for each(_loc4_ in param1.elements("texture-name"))
+         var textureName:XML = null;
+         this.callback = callback;
+         this.objects = new Vector.<Object3D>();
+         this.occluders = new Vector.<Occluder>();
+         this.collisionShapes = new Vector.<CollisionShape>();
+         this.textureNames = new Vector.<String>();
+         this.textureIndex = -1;
+         var libraryName:String = XMLUtils.getAttributeAsString(xml,"library-name","");
+         this.groupName = XMLUtils.getAttributeAsString(xml,"group-name","");
+         this.name = XMLUtils.getAttributeAsString(xml,"name","");
+         this.library = Assets.getData(libraryName,PropLibrary);
+         this.priority = this.library.priority;
+         this.textureNames.push(null);
+         for each(textureName in xml.elements("texture-name"))
          {
-            this.tylu.push(_loc4_.toString());
+            this.textureNames.push(textureName.toString());
          }
-         this.parsePhysics(param1);
+         this.parsePhysics(xml);
          this.loadObject();
       }
       
-      private function parsePhysics(param1:XML) : void
+      private function parsePhysics(xml:XML) : void
       {
-         var _loc2_:XMLList = null;
-         var _loc3_:int = 0;
-         var _loc4_:int = 0;
-         var _loc6_:int = 0;
-         var _loc7_:CollisionShape = null;
-         var _loc8_:Vector3 = null;
-         var _loc9_:Vector3 = null;
-         var _loc11_:Vector3 = null;
-         var _loc12_:Vector3 = null;
-         var _loc13_:Vector3 = null;
-         var _loc14_:Vector3 = null;
-         var _loc5_:Boolean = GameData.bisoga && param1.attribute("name") == "Billboard";
-         _loc6_ = 255;
-         _loc8_ = new Vector3();
-         _loc9_ = new Vector3();
-         var _loc10_:Matrix3 = new Matrix3();
-         _loc2_ = param1.elements("collision-triangle");
-         _loc3_ = _loc2_.length();
-         _loc11_ = new Vector3();
-         _loc12_ = new Vector3();
-         _loc13_ = new Vector3();
-         _loc4_ = 0;
-         while(_loc4_ < _loc3_)
+         var elements:XMLList = null;
+         var len:int = 0;
+         var i:int = 0;
+         var collisionGroup:int = 0;
+         var shape:CollisionShape = null;
+         var position:Vector3 = null;
+         var angles:Vector3 = null;
+         var v0:Vector3 = null;
+         var v1:Vector3 = null;
+         var v2:Vector3 = null;
+         var halfSize:Vector3 = null;
+         var billboard:Boolean = GameData.bisoga && xml.attribute("name") == "Billboard";
+         collisionGroup = 255;
+         position = new Vector3();
+         angles = new Vector3();
+         var matrix:Matrix3 = new Matrix3();
+         elements = xml.elements("collision-triangle");
+         len = elements.length();
+         v0 = new Vector3();
+         v1 = new Vector3();
+         v2 = new Vector3();
+         i = 0;
+         while(i < len)
          {
-            if(!_loc5_)
+            if(!billboard)
             {
-               _loc11_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("v0")[0],"x",0);
-               _loc11_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("v0")[0],"y",0);
-               _loc12_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("v1")[0],"x",0);
-               _loc12_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("v1")[0],"y",0);
-               _loc13_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("v2")[0],"x",0);
-               _loc13_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("v2")[0],"y",0);
-               _loc8_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"x",0);
-               _loc8_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"y",0);
-               _loc8_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"z",0);
-               _loc9_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"x",0);
-               _loc9_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"y",0);
-               _loc9_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"z",0);
-               _loc7_ = new CollisionTriangle(_loc11_,_loc12_,_loc13_,_loc6_,biby);
-               _loc10_.setRotationMatrix(_loc9_.x,_loc9_.y,_loc9_.z);
-               _loc7_.wet.setFromMatrix3(_loc10_,_loc8_);
-               this.jehi.push(_loc7_);
+               v0.x = XMLUtils.getAttributeAsNumber(elements[i].elements("v0")[0],"x",0);
+               v0.y = XMLUtils.getAttributeAsNumber(elements[i].elements("v0")[0],"y",0);
+               v1.x = XMLUtils.getAttributeAsNumber(elements[i].elements("v1")[0],"x",0);
+               v1.y = XMLUtils.getAttributeAsNumber(elements[i].elements("v1")[0],"y",0);
+               v2.x = XMLUtils.getAttributeAsNumber(elements[i].elements("v2")[0],"x",0);
+               v2.y = XMLUtils.getAttributeAsNumber(elements[i].elements("v2")[0],"y",0);
+               position.x = XMLUtils.getAttributeAsNumber(elements[i].elements("position")[0],"x",0);
+               position.y = XMLUtils.getAttributeAsNumber(elements[i].elements("position")[0],"y",0);
+               position.z = XMLUtils.getAttributeAsNumber(elements[i].elements("position")[0],"z",0);
+               angles.x = XMLUtils.getAttributeAsNumber(elements[i].elements("angles")[0],"x",0);
+               angles.y = XMLUtils.getAttributeAsNumber(elements[i].elements("angles")[0],"y",0);
+               angles.z = XMLUtils.getAttributeAsNumber(elements[i].elements("angles")[0],"z",0);
+               shape = new CollisionTriangle(v0,v1,v2,collisionGroup,physicsMaterial);
+               matrix.setRotationMatrix(angles.x,angles.y,angles.z);
+               shape.transform.setFromMatrix3(matrix,position);
+               this.collisionShapes.push(shape);
             }
-            _loc4_++;
+            i++;
          }
-         _loc2_ = param1.elements("collision-rect");
-         _loc3_ = _loc2_.length();
-         _loc14_ = new Vector3();
-         _loc4_ = 0;
-         while(_loc4_ < _loc3_)
+         elements = xml.elements("collision-rect");
+         len = elements.length();
+         halfSize = new Vector3();
+         i = 0;
+         while(i < len)
          {
-            _loc14_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("size")[0],"x",0) * 0.5;
-            _loc14_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("size")[0],"y",0) * 0.5;
-            _loc14_.z = 0;
-            _loc8_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"x",0);
-            _loc8_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"y",0);
-            _loc8_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"z",0);
-            _loc9_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"x",0);
-            _loc9_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"y",0);
-            _loc9_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"z",0);
-            _loc7_ = new CollisionRect(_loc14_,_loc6_,biby);
-            _loc10_.setRotationMatrix(_loc9_.x,_loc9_.y,_loc9_.z);
-            _loc7_.wet.setFromMatrix3(_loc10_,_loc8_);
-            this.jehi.push(_loc7_);
-            _loc4_++;
+            halfSize.x = XMLUtils.getAttributeAsNumber(elements[i].elements("size")[0],"x",0) * 0.5;
+            halfSize.y = XMLUtils.getAttributeAsNumber(elements[i].elements("size")[0],"y",0) * 0.5;
+            halfSize.z = 0;
+            position.x = XMLUtils.getAttributeAsNumber(elements[i].elements("position")[0],"x",0);
+            position.y = XMLUtils.getAttributeAsNumber(elements[i].elements("position")[0],"y",0);
+            position.z = XMLUtils.getAttributeAsNumber(elements[i].elements("position")[0],"z",0);
+            angles.x = XMLUtils.getAttributeAsNumber(elements[i].elements("angles")[0],"x",0);
+            angles.y = XMLUtils.getAttributeAsNumber(elements[i].elements("angles")[0],"y",0);
+            angles.z = XMLUtils.getAttributeAsNumber(elements[i].elements("angles")[0],"z",0);
+            shape = new CollisionRect(halfSize,collisionGroup,physicsMaterial);
+            matrix.setRotationMatrix(angles.x,angles.y,angles.z);
+            shape.transform.setFromMatrix3(matrix,position);
+            this.collisionShapes.push(shape);
+            i++;
          }
-         _loc2_ = param1.elements("collision-box");
-         _loc3_ = _loc2_.length();
-         _loc4_ = 0;
-         while(_loc4_ < _loc3_)
+         elements = xml.elements("collision-box");
+         len = elements.length();
+         i = 0;
+         while(i < len)
          {
-            if(!_loc5_)
+            if(!billboard)
             {
-               _loc14_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("size")[0],"x",0) * 0.5;
-               _loc14_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("size")[0],"y",0) * 0.5;
-               _loc14_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("size")[0],"z",0) * 0.5;
-               _loc8_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"x",0);
-               _loc8_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"y",0);
-               _loc8_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("position")[0],"z",0);
-               _loc9_.x = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"x",0);
-               _loc9_.y = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"y",0);
-               _loc9_.z = XMLUtils.getAttributeAsNumber(_loc2_[_loc4_].elements("angles")[0],"z",0);
-               _loc7_ = new CollisionBox(_loc14_,_loc6_,biby);
-               _loc10_.setRotationMatrix(_loc9_.x,_loc9_.y,_loc9_.z);
-               _loc7_.wet.setFromMatrix3(_loc10_,_loc8_);
-               this.jehi.push(_loc7_);
+               halfSize.x = XMLUtils.getAttributeAsNumber(elements[i].elements("size")[0],"x",0) * 0.5;
+               halfSize.y = XMLUtils.getAttributeAsNumber(elements[i].elements("size")[0],"y",0) * 0.5;
+               halfSize.z = XMLUtils.getAttributeAsNumber(elements[i].elements("size")[0],"z",0) * 0.5;
+               position.x = XMLUtils.getAttributeAsNumber(elements[i].elements("position")[0],"x",0);
+               position.y = XMLUtils.getAttributeAsNumber(elements[i].elements("position")[0],"y",0);
+               position.z = XMLUtils.getAttributeAsNumber(elements[i].elements("position")[0],"z",0);
+               angles.x = XMLUtils.getAttributeAsNumber(elements[i].elements("angles")[0],"x",0);
+               angles.y = XMLUtils.getAttributeAsNumber(elements[i].elements("angles")[0],"y",0);
+               angles.z = XMLUtils.getAttributeAsNumber(elements[i].elements("angles")[0],"z",0);
+               shape = new CollisionBox(halfSize,collisionGroup,physicsMaterial);
+               matrix.setRotationMatrix(angles.x,angles.y,angles.z);
+               shape.transform.setFromMatrix3(matrix,position);
+               this.collisionShapes.push(shape);
             }
-            _loc4_++;
+            i++;
          }
       }
       
-      private function loadObject(param1:Object3D = null, param2:Vector.<Occluder> = null) : void
+      private function loadObject(object:Object3D = null, meshOccluders:Vector.<Occluder> = null) : void
       {
-         var _loc3_:int = 0;
-         if(param1 != null)
+         var i:int = 0;
+         if(object != null)
          {
-            this.leqib.push(param1);
-            if(this.lucubegul.length == 0 && param2 != null)
+            this.objects.push(object);
+            if(this.occluders.length == 0 && meshOccluders != null)
             {
-               _loc3_ = 0;
-               while(_loc3_ < param2.length)
+               i = 0;
+               while(i < meshOccluders.length)
                {
-                  this.lucubegul[_loc3_] = param2[_loc3_];
-                  _loc3_++;
+                  this.occluders[i] = meshOccluders[i];
+                  i++;
                }
             }
          }
-         ++this.dodycoli;
-         if(this.dodycoli < this.tylu.length)
+         ++this.textureIndex;
+         if(this.textureIndex < this.textureNames.length)
          {
-            this.gulot.loadObject(this.caqiqata,this.gepocivaj,this.tylu[this.dodycoli],this.loadObject);
+            this.library.loadObject(this.groupName,this.name,this.textureNames[this.textureIndex],this.loadObject);
          }
          else
          {
-            this.hon(this);
+            this.callback(this);
          }
       }
    }

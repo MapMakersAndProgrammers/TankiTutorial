@@ -11,38 +11,38 @@ package alternativa.physics
          super();
       }
       
-      public static function setBoxInvInertia(param1:Number, param2:Vector3, param3:Matrix3) : void
+      public static function setBoxInvInertia(mass:Number, halfSize:Vector3, result:Matrix3) : void
       {
-         if(param1 <= 0)
+         if(mass <= 0)
          {
             throw new ArgumentError();
          }
-         param3.copy(Matrix3.hylivoqug);
-         if(param1 == Infinity)
+         result.copy(Matrix3.zero);
+         if(mass == Infinity)
          {
             return;
          }
-         var _loc4_:Number = param2.x * param2.x;
-         var _loc5_:Number = param2.y * param2.y;
-         var _loc6_:Number = param2.z * param2.z;
-         param3.gusat = 3 / (param1 * (_loc5_ + _loc6_));
-         param3.qanezycap = 3 / (param1 * (_loc6_ + _loc4_));
-         param3.tari = 3 / (param1 * (_loc4_ + _loc5_));
+         var xx:Number = halfSize.x * halfSize.x;
+         var yy:Number = halfSize.y * halfSize.y;
+         var zz:Number = halfSize.z * halfSize.z;
+         result.ma = 3 / (mass * (yy + zz));
+         result.mf = 3 / (mass * (zz + xx));
+         result.mk = 3 / (mass * (xx + yy));
       }
       
-      public static function getCylinderInvInertia(param1:Number, param2:Number, param3:Number, param4:Matrix3) : void
+      public static function getCylinderInvInertia(mass:Number, radius:Number, height:Number, result:Matrix3) : void
       {
-         if(param1 <= 0)
+         if(mass <= 0)
          {
             throw new ArgumentError();
          }
-         param4.copy(Matrix3.hylivoqug);
-         if(param1 == Infinity)
+         result.copy(Matrix3.zero);
+         if(mass == Infinity)
          {
             return;
          }
-         param4.gusat = param4.qanezycap = 1 / (param1 * (param3 * param3 / 12 + param2 * param2 / 4));
-         param4.tari = 2 / (param1 * param2 * param2);
+         result.ma = result.mf = 1 / (mass * (height * height / 12 + radius * radius / 4));
+         result.mk = 2 / (mass * radius * radius);
       }
    }
 }

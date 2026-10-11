@@ -5,15 +5,15 @@ package alternativa.tanks.vehicles.tank
    public class TankTurret extends TankPart
    {
       
-      public var jun:Vector.<Vector3> = new Vector.<Vector3>();
+      public var muzzles:Vector.<Vector3> = new Vector.<Vector3>();
       
-      public var luru:Vector3 = new Vector3();
+      public var flagMountPoint:Vector3 = new Vector3();
       
-      public var qupi:Number;
+      public var turnAcceleration:Number;
       
-      public var gejebuke:Number;
+      public var maxTurnSpeed:Number;
       
-      public var beryfitu:Number;
+      public var damage:Number;
       
       public function TankTurret()
       {

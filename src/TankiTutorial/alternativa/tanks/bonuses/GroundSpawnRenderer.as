@@ -8,43 +8,43 @@ package alternativa.tanks.bonuses
    public class GroundSpawnRenderer extends PooledObject implements Renderer
    {
       
-      private static const walokocej:Number = 0.005;
+      private static const SCALE_SPEED:Number = 0.005;
       
-      private var nasybugo:BattleBonus;
+      private var bonus:BattleBonus;
       
-      private var mij:BattleService;
+      private var battleService:BattleService;
       
-      private var lyvoz:Number;
+      private var scale:Number;
       
-      public function GroundSpawnRenderer(param1:Pool)
+      public function GroundSpawnRenderer(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function start(param1:BattleBonus, param2:BattleService) : void
+      public function start(bonus:BattleBonus, battleService:BattleService) : void
       {
-         this.nasybugo = param1;
-         this.mij = param2;
-         this.lyvoz = 0;
-         param1.lybaluh.add(this.destroy);
-         param1.nuziged.add(this.destroy);
-         param1.gave.add(this.destroy);
-         param2.getBattleScene3D().addRenderer(this,0);
+         this.bonus = bonus;
+         this.battleService = battleService;
+         this.scale = 0;
+         bonus.lybaluh.add(this.destroy);
+         bonus.nuziged.add(this.destroy);
+         bonus.gave.add(this.destroy);
+         battleService.getBattleScene3D().addRenderer(this,0);
       }
       
-      public function render(param1:int, param2:int) : void
+      public function render(time:int, deltaTime:int) : void
       {
-         this.lyvoz += walokocej * param2;
-         if(this.lyvoz > 1)
+         this.scale += SCALE_SPEED * deltaTime;
+         if(this.scale > 1)
          {
-            this.lyvoz = 1;
+            this.scale = 1;
          }
-         var _loc3_:BonusMesh = this.nasybugo.getBonusMesh();
-         _loc3_.scaleX = this.lyvoz;
-         _loc3_.scaleY = this.lyvoz;
-         _loc3_.scaleZ = this.lyvoz;
-         _loc3_.setAlpha(this.lyvoz);
-         if(this.lyvoz == 1)
+         var bonusMesh:BonusMesh = this.bonus.getBonusMesh();
+         bonusMesh.scaleX = this.scale;
+         bonusMesh.scaleY = this.scale;
+         bonusMesh.scaleZ = this.scale;
+         bonusMesh.setAlpha(this.scale);
+         if(this.scale == 1)
          {
             this.startFlashAnimation();
             this.destroy();
@@ -53,18 +53,18 @@ package alternativa.tanks.bonuses
       
       private function startFlashAnimation() : void
       {
-         var _loc1_:SpawnFlashRenderer = SpawnFlashRenderer(this.mij.getObjectPool().getObject(SpawnFlashRenderer));
-         _loc1_.start(this.nasybugo,this.mij.getBattleScene3D());
+         var spawnFlashRenderer:SpawnFlashRenderer = SpawnFlashRenderer(this.battleService.getObjectPool().getObject(SpawnFlashRenderer));
+         spawnFlashRenderer.start(this.bonus,this.battleService.getBattleScene3D());
       }
       
       private function destroy() : void
       {
-         this.mij.getBattleScene3D().removeRenderer(this,0);
-         this.mij = null;
-         this.nasybugo.lybaluh.remove(this.destroy);
-         this.nasybugo.nuziged.remove(this.destroy);
-         this.nasybugo.gave.remove(this.destroy);
-         this.nasybugo = null;
+         this.battleService.getBattleScene3D().removeRenderer(this,0);
+         this.battleService = null;
+         this.bonus.lybaluh.remove(this.destroy);
+         this.bonus.nuziged.remove(this.destroy);
+         this.bonus.gave.remove(this.destroy);
+         this.bonus = null;
          recycle();
       }
    }

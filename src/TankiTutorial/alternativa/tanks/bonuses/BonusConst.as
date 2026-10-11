@@ -3,7 +3,7 @@ package alternativa.tanks.bonuses
    public class BonusConst
    {
       
-      public static const numij:Number = 75;
+      public static const BONUS_HALF_SIZE:Number = 75;
       
       public static const bepy:Number = Math.cos(Math.PI / 180);
       
@@ -11,9 +11,9 @@ package alternativa.tanks.bonuses
       
       public static const wucaruw:Number = 450;
       
-      public static const myr:Number = 0.1;
+      public static const ROTATION_SPEED:Number = 0.1;
       
-      public static const tariwytav:Number = Math.sqrt(2) * numij * 1.6;
+      public static const tariwytav:Number = Math.sqrt(2) * BONUS_HALF_SIZE * 1.6;
       
       public function BonusConst()
       {

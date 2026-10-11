@@ -10,127 +10,127 @@ package alternativa.tanks.bonuses
    public class RemovalAnimation extends PooledObject implements Renderer
    {
       
-      private static const vysil:int = 500;
+      private static const INITIAL_INTERVAL:int = 500;
       
-      private static const cygybup:int = 22;
+      private static const MIN_INTERVAL:int = 22;
       
-      private static const cavogu:int = 12;
+      private static const INTERVAL_DECREMENT:int = 12;
       
       private static const zuwujedo:Number = 10;
       
       private static const rihuda:Number = 0.5;
       
-      private static const myz:Number = 1 - rihuda;
+      private static const MIN_ALPHA:Number = 1 - rihuda;
       
-      private static const lako:Number = 0.001;
+      private static const ALPHA_SPEED:Number = 0.001;
       
-      private static const vac:int = 10400;
+      private static const BLINK_DURATION:int = 10400;
       
-      private const duleruve:Blinker = new Blinker(vysil,cygybup,cavogu,myz,1,zuwujedo);
+      private const blinker:Blinker = new Blinker(INITIAL_INTERVAL,MIN_INTERVAL,INTERVAL_DECREMENT,MIN_ALPHA,1,zuwujedo);
       
-      private var hyfecypi:BattleScene3D;
+      private var battleScene:BattleScene3D;
       
-      private var giqo:BonusMesh;
+      private var bonusMesh:BonusMesh;
       
-      private var racefom:int;
+      private var blinkStartTime:int;
       
-      private var vyno:Boolean;
+      private var removed:Boolean;
       
-      private var jemusyvin:Boolean;
+      private var blinking:Boolean;
       
-      private var mirocy:Boolean;
+      private var blinkStarted:Boolean;
       
-      public function RemovalAnimation(param1:Pool)
+      public function RemovalAnimation(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function init(param1:BattleScene3D, param2:BattleBonus, param3:int) : void
+      public function init(battleScene:BattleScene3D, bonus:BattleBonus, lifeTime:int) : void
       {
-         var _loc4_:int = getTimer();
-         this.hyfecypi = param1;
-         this.giqo = param2.getBonusMesh();
-         this.racefom = _loc4_ + param3 - vac;
-         this.mirocy = false;
-         this.jemusyvin = true;
-         this.vyno = false;
-         if(param3 < vac)
+         var time:int = getTimer();
+         this.battleScene = battleScene;
+         this.bonusMesh = bonus.getBonusMesh();
+         this.blinkStartTime = time + lifeTime - BLINK_DURATION;
+         this.blinkStarted = false;
+         this.blinking = true;
+         this.removed = false;
+         if(lifeTime < BLINK_DURATION)
          {
-            this.duleruve.setInitialInterval(cygybup + (vysil - cygybup) * param3 / vac);
+            this.blinker.setInitialInterval(MIN_INTERVAL + (INITIAL_INTERVAL - MIN_INTERVAL) * lifeTime / BLINK_DURATION);
          }
          else
          {
-            this.duleruve.setInitialInterval(vysil);
+            this.blinker.setInitialInterval(INITIAL_INTERVAL);
          }
-         param1.addRenderer(this,0);
-         param2.nuziged.addOnce(this.onBonusPickup);
-         param2.lybaluh.addOnce(this.onBonusRemove);
+         battleScene.addRenderer(this,0);
+         bonus.nuziged.addOnce(this.onBonusPickup);
+         bonus.lybaluh.addOnce(this.onBonusRemove);
       }
       
       private function onBonusPickup() : void
       {
-         this.giqo = null;
+         this.bonusMesh = null;
          this.destroy();
       }
       
       private function onBonusRemove() : void
       {
-         this.vyno = true;
-         var _loc1_:int = getTimer() - vac;
-         if(this.racefom > _loc1_)
+         this.removed = true;
+         var _loc1_:int = getTimer() - BLINK_DURATION;
+         if(this.blinkStartTime > _loc1_)
          {
-            this.racefom = _loc1_;
+            this.blinkStartTime = _loc1_;
          }
       }
       
-      public function render(param1:int, param2:int) : void
+      public function render(time:int, deltaTime:int) : void
       {
-         if(param1 >= this.racefom)
+         if(time >= this.blinkStartTime)
          {
-            if(this.jemusyvin)
+            if(this.blinking)
             {
-               if(!this.mirocy)
+               if(!this.blinkStarted)
                {
-                  this.mirocy = true;
-                  this.duleruve.init(param1);
+                  this.blinkStarted = true;
+                  this.blinker.init(time);
                }
-               this.blink(param1,param2);
+               this.blink(time,deltaTime);
             }
             else
             {
-               this.fadeOut(param2);
+               this.fadeOut(deltaTime);
             }
          }
       }
       
-      private function blink(param1:int, param2:int) : void
+      private function blink(time:int, deltaTime:int) : void
       {
-         var _loc3_:Number = this.duleruve.updateValue(param1,param2);
-         this.giqo.setAlpha(_loc3_);
-         if(this.vyno && param1 >= this.racefom + vac && _loc3_ == myz)
+         var alpha:Number = this.blinker.updateValue(time,deltaTime);
+         this.bonusMesh.setAlpha(alpha);
+         if(this.removed && time >= this.blinkStartTime + BLINK_DURATION && alpha == MIN_ALPHA)
          {
-            this.jemusyvin = false;
+            this.blinking = false;
          }
       }
       
-      private function fadeOut(param1:int) : void
+      private function fadeOut(deltaTime:int) : void
       {
-         var _loc3_:Number = NaN;
-         var _loc2_:Number = this.giqo.getAlpha();
-         _loc2_ -= lako * param1;
-         if(_loc2_ > 0)
+         var scale:Number = NaN;
+         var alpha:Number = this.bonusMesh.getAlpha();
+         alpha -= ALPHA_SPEED * deltaTime;
+         if(alpha > 0)
          {
-            this.giqo.setAlpha(_loc2_);
-            if(this.giqo.scaleX > 0)
+            this.bonusMesh.setAlpha(alpha);
+            if(this.bonusMesh.scaleX > 0)
             {
-               _loc3_ = this.giqo.scaleX - 0.002 * param1;
-               if(_loc3_ < 0)
+               scale = this.bonusMesh.scaleX - 0.002 * deltaTime;
+               if(scale < 0)
                {
-                  _loc3_ = 0;
+                  scale = 0;
                }
-               this.giqo.scaleX = _loc3_;
-               this.giqo.scaleY = _loc3_;
-               this.giqo.scaleZ = _loc3_;
+               this.bonusMesh.scaleX = scale;
+               this.bonusMesh.scaleY = scale;
+               this.bonusMesh.scaleZ = scale;
             }
          }
          else
@@ -141,14 +141,14 @@ package alternativa.tanks.bonuses
       
       private function destroy() : void
       {
-         this.hyfecypi.removeRenderer(this,0);
-         if(this.giqo != null)
+         this.battleScene.removeRenderer(this,0);
+         if(this.bonusMesh != null)
          {
-            this.hyfecypi.removeObject(this.giqo);
-            this.giqo.recycle();
-            this.giqo = null;
+            this.battleScene.removeObject(this.bonusMesh);
+            this.bonusMesh.recycle();
+            this.bonusMesh = null;
          }
-         this.hyfecypi = null;
+         this.battleScene = null;
          recycle();
       }
    }

@@ -10,75 +10,75 @@ package tutorial.loader
    public class EffectsLoader extends TanksLoader
    {
       
-      private var hobuna:Vector.<XML>;
+      private var effects:Vector.<XML>;
       
-      private var luwuqap:String;
+      private var baseURL:String;
       
-      private var dodycoli:int;
+      private var index:int;
       
       public function EffectsLoader()
       {
          super();
       }
       
-      override public function check(param1:XML) : Boolean
+      override public function check(sceneXML:XML) : Boolean
       {
-         return param1.effects.length() > 0;
+         return sceneXML.effects.length() > 0;
       }
       
-      override public function load(param1:String, param2:XML, param3:Function) : void
+      override public function load(sceneURL:String, sceneXML:XML, completeListener:Function) : void
       {
-         var _loc5_:XML = null;
-         this.pomagu = param2.effects[0];
-         this.hon = param3;
-         this.hobuna = new Vector.<XML>();
-         this.dodycoli = 0;
-         this.luwuqap = param1 + pomagu.@baseURL;
-         var _loc4_:int = 0;
-         for each(_loc5_ in pomagu.elements("effect"))
+         var effectXML:XML = null;
+         this.xml = sceneXML.effects[0];
+         this.callback = completeListener;
+         this.effects = new Vector.<XML>();
+         this.index = 0;
+         this.baseURL = sceneURL + xml.@baseURL;
+         var i:int = 0;
+         for each(effectXML in xml.elements("effect"))
          {
-            this.hobuna[_loc4_] = _loc5_;
-            _loc4_++;
+            this.effects[i] = effectXML;
+            i++;
          }
          this.loadEffect();
       }
       
       private function loadEffect() : void
       {
-         if(this.dodycoli < this.hobuna.length)
+         if(this.index < this.effects.length)
          {
-            if(Assets.hasData(this.hobuna[this.dodycoli].@id.toString(),TextureAnimation))
+            if(Assets.hasData(this.effects[this.index].@id.toString(),TextureAnimation))
             {
-               ++this.dodycoli;
+               ++this.index;
                this.loadEffect();
             }
             else
             {
-               julicoj = this.luwuqap + this.hobuna[this.dodycoli].@url.toString();
-               bita.load(this.luwuqap + this.hobuna[this.dodycoli].@url.toString(),this.saveBitmap);
+               currentURL = this.baseURL + this.effects[this.index].@url.toString();
+               imageLoader.load(this.baseURL + this.effects[this.index].@url.toString(),this.saveBitmap);
             }
          }
-         else if(hon != null)
+         else if(callback != null)
          {
-            hon();
+            callback();
          }
       }
       
-      private function saveBitmap(param1:BitmapData) : void
+      private function saveBitmap(bitmapData:BitmapData) : void
       {
-         var _loc2_:XML = null;
-         var _loc3_:TextureMaterial = null;
-         var _loc4_:Number = NaN;
-         var _loc5_:Number = NaN;
-         if(param1 != null)
+         var effect:XML = null;
+         var material:TextureMaterial = null;
+         var frameWidth:Number = NaN;
+         var frameHeight:Number = NaN;
+         if(bitmapData != null)
          {
-            _loc2_ = this.hobuna[this.dodycoli];
-            _loc3_ = new TextureMaterial(param1,false,true,MipMapping.NONE,2.5);
-            _loc4_ = _loc2_.@frameWidth > 0 ? Number(_loc2_.@frameWidth) : param1.height;
-            _loc5_ = _loc2_.@frameHeight > 0 ? Number(_loc2_.@frameHeight) : param1.height;
-            Assets.saveData(_loc2_.@id.toString(),new TextureAnimation(_loc3_,GraphicsUtils.getUVFramesFromTexture(param1,_loc4_,_loc5_,_loc2_.@numFrames),_loc2_.@fps > 0 ? Number(_loc2_.@fps) : 30),TextureAnimation);
+            effect = this.effects[this.index];
+            material = new TextureMaterial(bitmapData,false,true,MipMapping.NONE,2.5);
+            frameWidth = effect.@frameWidth > 0 ? Number(effect.@frameWidth) : bitmapData.height;
+            frameHeight = effect.@frameHeight > 0 ? Number(effect.@frameHeight) : bitmapData.height;
+            Assets.saveData(effect.@id.toString(),new TextureAnimation(material,GraphicsUtils.getUVFramesFromTexture(bitmapData,frameWidth,frameHeight,effect.@numFrames),effect.@fps > 0 ? Number(effect.@fps) : 30),TextureAnimation);
          }
-         ++this.dodycoli;
+         ++this.index;
          this.loadEffect();
       }
    }

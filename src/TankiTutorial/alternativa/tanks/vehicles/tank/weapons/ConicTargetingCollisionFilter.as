@@ -7,47 +7,47 @@ package alternativa.tanks.vehicles.tank.weapons
    public class ConicTargetingCollisionFilter implements IRayCollisionFilter
    {
       
-      public var wyd:Body;
+      public var excludedBody:Body;
       
-      private var diza:Dictionary = new Dictionary();
+      private var targets:Dictionary = new Dictionary();
       
-      private var vibulir:Dictionary = new Dictionary();
+      private var invalidTargets:Dictionary = new Dictionary();
       
       public function ConicTargetingCollisionFilter()
       {
          super();
       }
       
-      public function considerBody(param1:Body) : Boolean
+      public function considerBody(body:Body) : Boolean
       {
-         return this.wyd != param1 && this.diza[param1] == null && this.vibulir[param1] == null;
+         return this.excludedBody != body && this.targets[body] == null && this.invalidTargets[body] == null;
       }
       
-      public function addTarget(param1:Body) : void
+      public function addTarget(body:Body) : void
       {
-         this.diza[param1] = true;
+         this.targets[body] = true;
       }
       
-      public function addInvalidTarget(param1:Body) : void
+      public function addInvalidTarget(body:Body) : void
       {
-         this.vibulir[param1] = true;
+         this.invalidTargets[body] = true;
       }
       
       public function clearTargets() : void
       {
-         var _loc1_:* = undefined;
-         for(_loc1_ in this.diza)
+         var key:* = undefined;
+         for(key in this.targets)
          {
-            delete this.diza[_loc1_];
+            delete this.targets[key];
          }
       }
       
       public function clearInvalidTargets() : void
       {
-         var _loc1_:* = undefined;
-         for(_loc1_ in this.vibulir)
+         var key:* = undefined;
+         for(key in this.invalidTargets)
          {
-            delete this.vibulir[_loc1_];
+            delete this.invalidTargets[key];
          }
       }
    }

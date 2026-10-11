@@ -5,9 +5,9 @@ package alternativa.tanks.battle.hidablegraphicobjects
    public interface HidableGraphicObject
    {
       
-      function readPosition(param1:Vector3) : void;
+      function readPosition(result:Vector3) : void;
       
-      function setAlphaMultiplier(param1:Number) : void;
+      function setAlphaMultiplier(value:Number) : void;
    }
 }
 

@@ -12,11 +12,11 @@ package tutorial.tasks
    public class PlayerRespawnTask extends Task
    {
       
-      private static var begyzev:int = 0;
+      private static var numSuicides:int = 0;
       
-      private static var fer:int = 0;
+      private static var numJumps:int = 0;
       
-      private const jifom:Tank = GameData.jifom;
+      private const playerTank:Tank = GameData.playerTank;
       
       private var stage:Stage = GameData.stage;
       
@@ -34,32 +34,32 @@ package tutorial.tasks
             this.stage.addEventListener(KeyboardEvent.KEY_DOWN,this.onKeyDown);
             this.init = true;
          }
-         if(Boolean(this.jifom.kat) && this.jifom.hogys.body.kejo.position.z < -2000)
+         if(Boolean(this.playerTank.alive) && this.playerTank.tankBody.body.state.position.z < -2000)
          {
-            this.jifom.kill();
-            this.jifom.hogys.kyripama.nute &= ~CollisionGroup.nuqa;
-            ++fer;
-            Shared.tracker.trackEvent(Shared.TUTORIAL_STAT,"jump_" + fer,Shared.currentStep);
+            this.playerTank.kill();
+            this.playerTank.tankBody.tankCollisionBox.collisionGroup &= ~CollisionGroup.BONUS;
+            ++numJumps;
+            Shared.tracker.trackEvent(Shared.TUTORIAL_STAT,"jump_" + numJumps,Shared.currentStep);
             setTimeout(this.respawn,1500);
          }
          return false;
       }
       
-      private function onKeyDown(param1:KeyboardEvent) : void
+      private function onKeyDown(keyboardEvent:KeyboardEvent) : void
       {
-         if(param1.keyCode == Keyboard.DELETE && Boolean(this.jifom.kat))
+         if(keyboardEvent.keyCode == Keyboard.DELETE && Boolean(this.playerTank.alive))
          {
-            this.jifom.kill();
-            ++begyzev;
-            Shared.tracker.trackEvent(Shared.TUTORIAL_STAT,"suicide_" + begyzev,Shared.currentStep);
+            this.playerTank.kill();
+            ++numSuicides;
+            Shared.tracker.trackEvent(Shared.TUTORIAL_STAT,"suicide_" + numSuicides,Shared.currentStep);
             setTimeout(this.respawn,1500);
          }
       }
       
       private function respawn() : void
       {
-         this.jifom.respawn();
-         this.jifom.hogys.kyripama.nute |= CollisionGroup.nuqa;
+         this.playerTank.respawn();
+         this.playerTank.tankBody.tankCollisionBox.collisionGroup |= CollisionGroup.BONUS;
       }
    }
 }

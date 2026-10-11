@@ -5,7 +5,7 @@ package
    public interface CameraTarget
    {
       
-      function getCameraParams(param1:Vector3, param2:Vector3) : void;
+      function getCameraParams(position:Vector3, direction:Vector3) : void;
    }
 }
 

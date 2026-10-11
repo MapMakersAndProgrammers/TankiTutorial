@@ -6,9 +6,9 @@ package alternativa.math
    public class Quaternion
    {
       
-      private static var fyqyrysal:Quaternion = new Quaternion();
+      private static var quaternion:Quaternion = new Quaternion();
       
-      public var dige:Number;
+      public var w:Number;
       
       public var x:Number;
       
@@ -16,308 +16,308 @@ package alternativa.math
       
       public var z:Number;
       
-      public function Quaternion(param1:Number = 1, param2:Number = 0, param3:Number = 0, param4:Number = 0)
+      public function Quaternion(w:Number = 1, x:Number = 0, y:Number = 0, z:Number = 0)
       {
          super();
-         this.dige = param1;
-         this.x = param2;
-         this.y = param3;
-         this.z = param4;
+         this.w = w;
+         this.x = x;
+         this.y = y;
+         this.z = z;
       }
       
-      public static function multiply(param1:Quaternion, param2:Quaternion, param3:Quaternion) : void
+      public static function multiply(a:Quaternion, b:Quaternion, res:Quaternion) : void
       {
-         param3.dige = param1.dige * param2.dige - param1.x * param2.x - param1.y * param2.y - param1.z * param2.z;
-         param3.x = param1.dige * param2.x + param1.x * param2.dige + param1.y * param2.z - param1.z * param2.y;
-         param3.y = param1.dige * param2.y + param1.y * param2.dige + param1.z * param2.x - param1.x * param2.z;
-         param3.z = param1.dige * param2.z + param1.z * param2.dige + param1.x * param2.y - param1.y * param2.x;
+         res.w = a.w * b.w - a.x * b.x - a.y * b.y - a.z * b.z;
+         res.x = a.w * b.x + a.x * b.w + a.y * b.z - a.z * b.y;
+         res.y = a.w * b.y + a.y * b.w + a.z * b.x - a.x * b.z;
+         res.z = a.w * b.z + a.z * b.w + a.x * b.y - a.y * b.x;
       }
       
-      public static function createFromAxisAngle(param1:Vector3, param2:Number) : Quaternion
+      public static function createFromAxisAngle(axis:Vector3, angle:Number) : Quaternion
       {
-         var _loc3_:Quaternion = new Quaternion();
-         _loc3_.setFromAxisAngle(param1,param2);
-         return _loc3_;
+         var res:Quaternion = new Quaternion();
+         res.setFromAxisAngle(axis,angle);
+         return res;
       }
       
-      public static function createFromAxisAngleComponents(param1:Number, param2:Number, param3:Number, param4:Number) : Quaternion
+      public static function createFromAxisAngleComponents(axisX:Number, axisY:Number, axisZ:Number, angle:Number) : Quaternion
       {
-         var _loc5_:Quaternion = new Quaternion();
-         _loc5_.setFromAxisAngleComponents(param1,param2,param3,param4);
-         return _loc5_;
+         var res:Quaternion = new Quaternion();
+         res.setFromAxisAngleComponents(axisX,axisY,axisZ,angle);
+         return res;
       }
       
-      public function reset(param1:Number = 1, param2:Number = 0, param3:Number = 0, param4:Number = 0) : Quaternion
+      public function reset(w:Number = 1, x:Number = 0, y:Number = 0, z:Number = 0) : Quaternion
       {
-         this.dige = param1;
-         this.x = param2;
-         this.y = param3;
-         this.z = param4;
+         this.w = w;
+         this.x = x;
+         this.y = y;
+         this.z = z;
          return this;
       }
       
       public function normalize() : Quaternion
       {
-         var _loc1_:Number = this.dige * this.dige + this.x * this.x + this.y * this.y + this.z * this.z;
-         if(_loc1_ == 0)
+         var len:Number = this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
+         if(len == 0)
          {
-            this.dige = 1;
+            this.w = 1;
          }
          else
          {
-            _loc1_ = 1 / Math.sqrt(_loc1_);
-            this.dige *= _loc1_;
-            this.x *= _loc1_;
-            this.y *= _loc1_;
-            this.z *= _loc1_;
+            len = 1 / Math.sqrt(len);
+            this.w *= len;
+            this.x *= len;
+            this.y *= len;
+            this.z *= len;
          }
          return this;
       }
       
-      public function prepend(param1:Quaternion) : Quaternion
+      public function prepend(q:Quaternion) : Quaternion
       {
-         var _loc2_:Number = this.dige * param1.dige - this.x * param1.x - this.y * param1.y - this.z * param1.z;
-         var _loc3_:Number = this.dige * param1.x + this.x * param1.dige + this.y * param1.z - this.z * param1.y;
-         var _loc4_:Number = this.dige * param1.y + this.y * param1.dige + this.z * param1.x - this.x * param1.z;
-         var _loc5_:Number = this.dige * param1.z + this.z * param1.dige + this.x * param1.y - this.y * param1.x;
-         this.dige = _loc2_;
-         this.x = _loc3_;
-         this.y = _loc4_;
-         this.z = _loc5_;
+         var newW:Number = this.w * q.w - this.x * q.x - this.y * q.y - this.z * q.z;
+         var newX:Number = this.w * q.x + this.x * q.w + this.y * q.z - this.z * q.y;
+         var newY:Number = this.w * q.y + this.y * q.w + this.z * q.x - this.x * q.z;
+         var newZ:Number = this.w * q.z + this.z * q.w + this.x * q.y - this.y * q.x;
+         this.w = newW;
+         this.x = newX;
+         this.y = newY;
+         this.z = newZ;
          return this;
       }
       
-      public function append(param1:Quaternion) : Quaternion
+      public function append(q:Quaternion) : Quaternion
       {
-         var _loc2_:Number = param1.dige * this.dige - param1.x * this.x - param1.y * this.y - param1.z * this.z;
-         var _loc3_:Number = param1.dige * this.x + param1.x * this.dige + param1.y * this.z - param1.z * this.y;
-         var _loc4_:Number = param1.dige * this.y + param1.y * this.dige + param1.z * this.x - param1.x * this.z;
-         var _loc5_:Number = param1.dige * this.z + param1.z * this.dige + param1.x * this.y - param1.y * this.x;
-         this.dige = _loc2_;
-         this.x = _loc3_;
-         this.y = _loc4_;
-         this.z = _loc5_;
+         var newW:Number = q.w * this.w - q.x * this.x - q.y * this.y - q.z * this.z;
+         var newX:Number = q.w * this.x + q.x * this.w + q.y * this.z - q.z * this.y;
+         var newY:Number = q.w * this.y + q.y * this.w + q.z * this.x - q.x * this.z;
+         var newZ:Number = q.w * this.z + q.z * this.w + q.x * this.y - q.y * this.x;
+         this.w = newW;
+         this.x = newX;
+         this.y = newY;
+         this.z = newZ;
          return this;
       }
       
-      public function rotateByVector(param1:Vector3) : Quaternion
+      public function rotateByVector(v:Vector3) : Quaternion
       {
-         var _loc2_:Number = -param1.x * this.x - param1.y * this.y - param1.z * this.z;
-         var _loc3_:Number = param1.x * this.dige + param1.y * this.z - param1.z * this.y;
-         var _loc4_:Number = param1.y * this.dige + param1.z * this.x - param1.x * this.z;
-         var _loc5_:Number = param1.z * this.dige + param1.x * this.y - param1.y * this.x;
-         this.dige = _loc2_;
-         this.x = _loc3_;
-         this.y = _loc4_;
-         this.z = _loc5_;
+         var newW:Number = -v.x * this.x - v.y * this.y - v.z * this.z;
+         var newX:Number = v.x * this.w + v.y * this.z - v.z * this.y;
+         var newY:Number = v.y * this.w + v.z * this.x - v.x * this.z;
+         var newZ:Number = v.z * this.w + v.x * this.y - v.y * this.x;
+         this.w = newW;
+         this.x = newX;
+         this.y = newY;
+         this.z = newZ;
          return this;
       }
       
-      public function addScaledVector(param1:Vector3, param2:Number) : Quaternion
+      public function addScaledVector(v:Vector3, scale:Number) : Quaternion
       {
-         var _loc3_:Number = param1.x * param2;
-         var _loc4_:Number = param1.y * param2;
-         var _loc5_:Number = param1.z * param2;
-         var _loc6_:Number = -this.x * _loc3_ - this.y * _loc4_ - this.z * _loc5_;
-         var _loc7_:Number = _loc3_ * this.dige + _loc4_ * this.z - _loc5_ * this.y;
-         var _loc8_:Number = _loc4_ * this.dige + _loc5_ * this.x - _loc3_ * this.z;
-         var _loc9_:Number = _loc5_ * this.dige + _loc3_ * this.y - _loc4_ * this.x;
-         this.dige += 0.5 * _loc6_;
-         this.x += 0.5 * _loc7_;
-         this.y += 0.5 * _loc8_;
-         this.z += 0.5 * _loc9_;
-         var _loc10_:Number = this.dige * this.dige + this.x * this.x + this.y * this.y + this.z * this.z;
-         if(_loc10_ == 0)
+         var vx:Number = v.x * scale;
+         var vy:Number = v.y * scale;
+         var vz:Number = v.z * scale;
+         var dw:Number = -this.x * vx - this.y * vy - this.z * vz;
+         var dx:Number = vx * this.w + vy * this.z - vz * this.y;
+         var dy:Number = vy * this.w + vz * this.x - vx * this.z;
+         var dz:Number = vz * this.w + vx * this.y - vy * this.x;
+         this.w += 0.5 * dw;
+         this.x += 0.5 * dx;
+         this.y += 0.5 * dy;
+         this.z += 0.5 * dz;
+         var len:Number = this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
+         if(len == 0)
          {
-            this.dige = 1;
+            this.w = 1;
          }
          else
          {
-            _loc10_ = 1 / Math.sqrt(_loc10_);
-            this.dige *= _loc10_;
-            this.x *= _loc10_;
-            this.y *= _loc10_;
-            this.z *= _loc10_;
+            len = 1 / Math.sqrt(len);
+            this.w *= len;
+            this.x *= len;
+            this.y *= len;
+            this.z *= len;
          }
          return this;
       }
       
-      public function toMatrix3(param1:Matrix3) : Quaternion
+      public function toMatrix3(matrix:Matrix3) : Quaternion
       {
-         var _loc4_:Number = NaN;
-         var _loc5_:Number = NaN;
-         var _loc6_:Number = NaN;
-         var _loc7_:Number = NaN;
-         var _loc8_:Number = NaN;
-         var _loc9_:Number = NaN;
-         var _loc2_:Number = 2 * this.x * this.x;
-         var _loc3_:Number = 2 * this.y * this.y;
-         _loc4_ = 2 * this.z * this.z;
-         _loc5_ = 2 * this.x * this.y;
-         _loc6_ = 2 * this.y * this.z;
-         _loc7_ = 2 * this.z * this.x;
-         _loc8_ = 2 * this.dige * this.x;
-         _loc9_ = 2 * this.dige * this.y;
-         var _loc10_:Number = 2 * this.dige * this.z;
-         param1.gusat = 1 - _loc3_ - _loc4_;
-         param1.cydop = _loc5_ - _loc10_;
-         param1.sivy = _loc7_ + _loc9_;
-         param1.sig = _loc5_ + _loc10_;
-         param1.qanezycap = 1 - _loc2_ - _loc4_;
-         param1.wyvukog = _loc6_ - _loc8_;
-         param1.vug = _loc7_ - _loc9_;
-         param1.luwym = _loc6_ + _loc8_;
-         param1.tari = 1 - _loc2_ - _loc3_;
+         var zz:Number = NaN;
+         var xy:Number = NaN;
+         var yz:Number = NaN;
+         var zx:Number = NaN;
+         var wx:Number = NaN;
+         var wy:Number = NaN;
+         var xx:Number = 2 * this.x * this.x;
+         var yy:Number = 2 * this.y * this.y;
+         zz = 2 * this.z * this.z;
+         xy = 2 * this.x * this.y;
+         yz = 2 * this.y * this.z;
+         zx = 2 * this.z * this.x;
+         wx = 2 * this.w * this.x;
+         wy = 2 * this.w * this.y;
+         var wz:Number = 2 * this.w * this.z;
+         matrix.ma = 1 - yy - zz;
+         matrix.mb = xy - wz;
+         matrix.mc = zx + wy;
+         matrix.me = xy + wz;
+         matrix.mf = 1 - xx - zz;
+         matrix.mg = yz - wx;
+         matrix.mi = zx - wy;
+         matrix.mj = yz + wx;
+         matrix.mk = 1 - xx - yy;
          return this;
       }
       
-      public function toMatrix4(param1:Matrix4) : Quaternion
+      public function toMatrix4(matrix:Matrix4) : Quaternion
       {
-         var _loc6_:Number = NaN;
-         var _loc7_:Number = NaN;
-         var _loc8_:Number = NaN;
-         var _loc2_:Number = 2 * this.x * this.x;
-         var _loc3_:Number = 2 * this.y * this.y;
-         var _loc4_:Number = 2 * this.z * this.z;
-         var _loc5_:Number = 2 * this.x * this.y;
-         _loc6_ = 2 * this.y * this.z;
-         _loc7_ = 2 * this.z * this.x;
-         _loc8_ = 2 * this.dige * this.x;
-         var _loc9_:Number = 2 * this.dige * this.y;
-         var _loc10_:Number = 2 * this.dige * this.z;
-         param1.gusat = 1 - _loc3_ - _loc4_;
-         param1.cydop = _loc5_ - _loc10_;
-         param1.sivy = _loc7_ + _loc9_;
-         param1.sig = _loc5_ + _loc10_;
-         param1.qanezycap = 1 - _loc2_ - _loc4_;
-         param1.wyvukog = _loc6_ - _loc8_;
-         param1.vug = _loc7_ - _loc9_;
-         param1.luwym = _loc6_ + _loc8_;
-         param1.tari = 1 - _loc2_ - _loc3_;
+         var yz:Number = NaN;
+         var zx:Number = NaN;
+         var wx:Number = NaN;
+         var xx:Number = 2 * this.x * this.x;
+         var yy:Number = 2 * this.y * this.y;
+         var zz:Number = 2 * this.z * this.z;
+         var xy:Number = 2 * this.x * this.y;
+         yz = 2 * this.y * this.z;
+         zx = 2 * this.z * this.x;
+         wx = 2 * this.w * this.x;
+         var wy:Number = 2 * this.w * this.y;
+         var wz:Number = 2 * this.w * this.z;
+         matrix.ma = 1 - yy - zz;
+         matrix.mb = xy - wz;
+         matrix.mc = zx + wy;
+         matrix.me = xy + wz;
+         matrix.mf = 1 - xx - zz;
+         matrix.mg = yz - wx;
+         matrix.mi = zx - wy;
+         matrix.mj = yz + wx;
+         matrix.mk = 1 - xx - yy;
          return this;
       }
       
       public function length() : Number
       {
-         return Math.sqrt(this.dige * this.dige + this.x * this.x + this.y * this.y + this.z * this.z);
+         return Math.sqrt(this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z);
       }
       
       public function lengthSqr() : Number
       {
-         return this.dige * this.dige + this.x * this.x + this.y * this.y + this.z * this.z;
+         return this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
       }
       
-      public function setFromAxisAngle(param1:Vector3, param2:Number) : Quaternion
+      public function setFromAxisAngle(axis:Vector3, angle:Number) : Quaternion
       {
-         this.dige = Math.cos(0.5 * param2);
-         var _loc3_:Number = Math.sin(0.5 * param2) / Math.sqrt(param1.x * param1.x + param1.y * param1.y + param1.z * param1.z);
-         this.x = param1.x * _loc3_;
-         this.y = param1.y * _loc3_;
-         this.z = param1.z * _loc3_;
+         this.w = Math.cos(0.5 * angle);
+         var factor:Number = Math.sin(0.5 * angle) / Math.sqrt(axis.x * axis.x + axis.y * axis.y + axis.z * axis.z);
+         this.x = axis.x * factor;
+         this.y = axis.y * factor;
+         this.z = axis.z * factor;
          return this;
       }
       
-      public function setFromAxisAngleComponents(param1:Number, param2:Number, param3:Number, param4:Number) : Quaternion
+      public function setFromAxisAngleComponents(axisX:Number, axisY:Number, axisZ:Number, angle:Number) : Quaternion
       {
-         this.dige = Math.cos(0.5 * param4);
-         var _loc5_:Number = Math.sin(0.5 * param4) / Math.sqrt(param1 * param1 + param2 * param2 + param3 * param3);
-         this.x = param1 * _loc5_;
-         this.y = param2 * _loc5_;
-         this.z = param3 * _loc5_;
+         this.w = Math.cos(0.5 * angle);
+         var factor:Number = Math.sin(0.5 * angle) / Math.sqrt(axisX * axisX + axisY * axisY + axisZ * axisZ);
+         this.x = axisX * factor;
+         this.y = axisY * factor;
+         this.z = axisZ * factor;
          return this;
       }
       
-      public function toAxisVector(param1:Vector3 = null) : Vector3
+      public function toAxisVector(axis:Vector3 = null) : Vector3
       {
-         var _loc2_:Number = NaN;
-         var _loc3_:Number = NaN;
-         if(this.dige < -1 || this.dige > 1)
+         var angle:Number = NaN;
+         var factor:Number = NaN;
+         if(this.w < -1 || this.w > 1)
          {
             this.normalize();
          }
-         if(param1 == null)
+         if(axis == null)
          {
-            param1 = new Vector3();
+            axis = new Vector3();
          }
-         if(this.dige > -1 && this.dige < 1)
+         if(this.w > -1 && this.w < 1)
          {
-            if(this.dige == 0)
+            if(this.w == 0)
             {
-               param1.x = this.x;
-               param1.y = this.y;
-               param1.z = this.z;
+               axis.x = this.x;
+               axis.y = this.y;
+               axis.z = this.z;
             }
             else
             {
-               _loc2_ = 2 * Math.acos(this.dige);
-               _loc3_ = 1 / Math.sqrt(1 - this.dige * this.dige);
-               param1.x = this.x * _loc3_ * _loc2_;
-               param1.y = this.y * _loc3_ * _loc2_;
-               param1.z = this.z * _loc3_ * _loc2_;
+               angle = 2 * Math.acos(this.w);
+               factor = 1 / Math.sqrt(1 - this.w * this.w);
+               axis.x = this.x * factor * angle;
+               axis.y = this.y * factor * angle;
+               axis.z = this.z * factor * angle;
             }
          }
          else
          {
-            param1.x = 0;
-            param1.y = 0;
-            param1.z = 0;
+            axis.x = 0;
+            axis.y = 0;
+            axis.z = 0;
          }
-         return param1;
+         return axis;
       }
       
-      public function getEulerAngles(param1:Vector3) : Vector3
+      public function getEulerAngles(angles:Vector3) : Vector3
       {
-         var _loc2_:Number = 2 * this.x * this.x;
-         var _loc3_:Number = 2 * this.y * this.y;
-         var _loc4_:Number = 2 * this.z * this.z;
-         var _loc5_:Number = 2 * this.x * this.y;
-         var _loc6_:Number = 2 * this.y * this.z;
-         var _loc7_:Number = 2 * this.z * this.x;
-         var _loc8_:Number = 2 * this.dige * this.x;
-         var _loc9_:Number = 2 * this.dige * this.y;
-         var _loc10_:Number = 2 * this.dige * this.z;
-         var _loc11_:Number = 1 - _loc3_ - _loc4_;
-         var _loc12_:Number = _loc5_ - _loc10_;
-         var _loc13_:Number = _loc5_ + _loc10_;
-         var _loc14_:Number = 1 - _loc2_ - _loc4_;
-         var _loc15_:Number = _loc7_ - _loc9_;
-         var _loc16_:Number = _loc6_ + _loc8_;
-         var _loc17_:Number = 1 - _loc2_ - _loc3_;
-         if(-1 < _loc15_ && _loc15_ < 1)
+         var xx:Number = 2 * this.x * this.x;
+         var yy:Number = 2 * this.y * this.y;
+         var zz:Number = 2 * this.z * this.z;
+         var xy:Number = 2 * this.x * this.y;
+         var yz:Number = 2 * this.y * this.z;
+         var zx:Number = 2 * this.z * this.x;
+         var wx:Number = 2 * this.w * this.x;
+         var wy:Number = 2 * this.w * this.y;
+         var wz:Number = 2 * this.w * this.z;
+         var a:Number = 1 - yy - zz;
+         var b:Number = xy - wz;
+         var e:Number = xy + wz;
+         var f:Number = 1 - xx - zz;
+         var i:Number = zx - wy;
+         var j:Number = yz + wx;
+         var k:Number = 1 - xx - yy;
+         if(-1 < i && i < 1)
          {
-            if(param1 == null)
+            if(angles == null)
             {
-               param1 = new Vector3(Math.atan2(_loc16_,_loc17_),-Math.asin(_loc15_),Math.atan2(_loc13_,_loc11_));
+               angles = new Vector3(Math.atan2(j,k),-Math.asin(i),Math.atan2(e,a));
             }
             else
             {
-               param1.x = Math.atan2(_loc16_,_loc17_);
-               param1.y = -Math.asin(_loc15_);
-               param1.z = Math.atan2(_loc13_,_loc11_);
+               angles.x = Math.atan2(j,k);
+               angles.y = -Math.asin(i);
+               angles.z = Math.atan2(e,a);
             }
          }
-         else if(param1 == null)
+         else if(angles == null)
          {
-            param1 = new Vector3(0,0.5 * (_loc15_ <= -1 ? Math.PI : -Math.PI),Math.atan2(-_loc12_,_loc14_));
+            angles = new Vector3(0,0.5 * (i <= -1 ? Math.PI : -Math.PI),Math.atan2(-b,f));
          }
          else
          {
-            param1.x = 0;
-            param1.y = _loc15_ <= -1 ? Math.PI : -Math.PI;
-            param1.y *= 0.5;
-            param1.z = Math.atan2(-_loc12_,_loc14_);
+            angles.x = 0;
+            angles.y = i <= -1 ? Math.PI : -Math.PI;
+            angles.y *= 0.5;
+            angles.z = Math.atan2(-b,f);
          }
-         return param1;
+         return angles;
       }
       
-      public function setFromEulerAnglesXYZ(param1:Number, param2:Number, param3:Number) : void
+      public function setFromEulerAnglesXYZ(rotationX:Number, rotationY:Number, rotationZ:Number) : void
       {
-         this.setFromAxisAngleComponents(1,0,0,param1);
-         fyqyrysal.setFromAxisAngleComponents(0,1,0,param2);
-         this.append(fyqyrysal);
+         this.setFromAxisAngleComponents(1,0,0,rotationX);
+         quaternion.setFromAxisAngleComponents(0,1,0,rotationY);
+         this.append(quaternion);
          this.normalize();
-         fyqyrysal.setFromAxisAngleComponents(0,0,1,param3);
-         this.append(fyqyrysal);
+         quaternion.setFromAxisAngleComponents(0,0,1,rotationZ);
+         this.append(quaternion);
          this.normalize();
       }
       
@@ -328,22 +328,22 @@ package alternativa.math
          this.z = -this.z;
       }
       
-      public function nlerp(param1:Quaternion, param2:Quaternion, param3:Number) : Quaternion
+      public function nlerp(a:Quaternion, b:Quaternion, t:Number) : Quaternion
       {
-         var _loc4_:Number = 1 - param3;
-         this.dige = param1.dige * _loc4_ + param2.dige * param3;
-         this.x = param1.x * _loc4_ + param2.x * param3;
-         this.y = param1.y * _loc4_ + param2.y * param3;
-         this.z = param1.z * _loc4_ + param2.z * param3;
-         _loc4_ = this.dige * this.dige + this.x * this.x + this.y * this.y + this.z * this.z;
+         var _loc4_:Number = 1 - t;
+         this.w = a.w * _loc4_ + b.w * t;
+         this.x = a.x * _loc4_ + b.x * t;
+         this.y = a.y * _loc4_ + b.y * t;
+         this.z = a.z * _loc4_ + b.z * t;
+         _loc4_ = this.w * this.w + this.x * this.x + this.y * this.y + this.z * this.z;
          if(_loc4_ == 0)
          {
-            this.dige = 1;
+            this.w = 1;
          }
          else
          {
             _loc4_ = 1 / Math.sqrt(_loc4_);
-            this.dige *= _loc4_;
+            this.w *= _loc4_;
             this.x *= _loc4_;
             this.y *= _loc4_;
             this.z *= _loc4_;
@@ -351,94 +351,94 @@ package alternativa.math
          return this;
       }
       
-      public function subtract(param1:Quaternion) : Quaternion
+      public function subtract(q:Quaternion) : Quaternion
       {
-         this.dige -= param1.dige;
-         this.x -= param1.x;
-         this.y -= param1.y;
-         this.z -= param1.z;
+         this.w -= q.w;
+         this.x -= q.x;
+         this.y -= q.y;
+         this.z -= q.z;
          return this;
       }
       
-      public function diff(param1:Quaternion, param2:Quaternion) : Quaternion
+      public function diff(a:Quaternion, b:Quaternion) : Quaternion
       {
-         this.dige = param2.dige - param1.dige;
-         this.x = param2.x - param1.x;
-         this.y = param2.y - param1.y;
-         this.z = param2.z - param1.z;
+         this.w = b.w - a.w;
+         this.x = b.x - a.x;
+         this.y = b.y - a.y;
+         this.z = b.z - a.z;
          return this;
       }
       
-      public function copy(param1:Quaternion) : Quaternion
+      public function copy(q:Quaternion) : Quaternion
       {
-         this.dige = param1.dige;
-         this.x = param1.x;
-         this.y = param1.y;
-         this.z = param1.z;
+         this.w = q.w;
+         this.x = q.x;
+         this.y = q.y;
+         this.z = q.z;
          return this;
       }
       
-      public function toVector3D(param1:Vector3D) : Vector3D
+      public function toVector3D(res:Vector3D) : Vector3D
       {
-         param1.x = this.x;
-         param1.y = this.y;
-         param1.z = this.z;
-         param1.w = this.dige;
-         return param1;
+         res.x = this.x;
+         res.y = this.y;
+         res.z = this.z;
+         res.w = this.w;
+         return res;
       }
       
       public function clone() : Quaternion
       {
-         return new Quaternion(this.dige,this.x,this.y,this.z);
+         return new Quaternion(this.w,this.x,this.y,this.z);
       }
       
       public function toString() : String
       {
-         return getQualifiedClassName(this) + "(" + this.dige + ", " + this.x + ", " + this.y + ", " + this.z + ")";
+         return getQualifiedClassName(this) + "(" + this.w + ", " + this.x + ", " + this.y + ", " + this.z + ")";
       }
       
-      public function slerp(param1:Quaternion, param2:Quaternion, param3:Number) : Quaternion
+      public function slerp(a:Quaternion, b:Quaternion, t:Number) : Quaternion
       {
          var _loc6_:Number = NaN;
          var _loc7_:Number = NaN;
-         var _loc8_:Number = NaN;
-         var _loc9_:Number = NaN;
+         var angle:Number = NaN;
+         var sinAngle:Number = NaN;
          var _loc10_:Number = NaN;
          var _loc11_:Number = NaN;
-         var _loc4_:Number = 1;
-         var _loc5_:Number = param1.dige * param2.dige + param1.x * param2.x + param1.y * param2.y + param1.z * param2.z;
-         if(_loc5_ < 0)
+         var sign:Number = 1;
+         var dot:Number = a.w * b.w + a.x * b.x + a.y * b.y + a.z * b.z;
+         if(dot < 0)
          {
-            _loc5_ = -_loc5_;
-            _loc4_ = -1;
+            dot = -dot;
+            sign = -1;
          }
-         if(1 - _loc5_ < 0.001)
+         if(1 - dot < 0.001)
          {
-            _loc6_ = 1 - param3;
-            _loc7_ = param3 * _loc4_;
-            this.dige = param1.dige * _loc6_ + param2.dige * _loc7_;
-            this.x = param1.x * _loc6_ + param2.x * _loc7_;
-            this.y = param1.y * _loc6_ + param2.y * _loc7_;
-            this.z = param1.z * _loc6_ + param2.z * _loc7_;
+            _loc6_ = 1 - t;
+            _loc7_ = t * sign;
+            this.w = a.w * _loc6_ + b.w * _loc7_;
+            this.x = a.x * _loc6_ + b.x * _loc7_;
+            this.y = a.y * _loc6_ + b.y * _loc7_;
+            this.z = a.z * _loc6_ + b.z * _loc7_;
             this.normalize();
          }
          else
          {
-            _loc8_ = Math.acos(_loc5_);
-            _loc9_ = Math.sin(_loc8_);
-            _loc10_ = Math.sin((1 - param3) * _loc8_) / _loc9_;
-            _loc11_ = Math.sin(param3 * _loc8_) / _loc9_ * _loc4_;
-            this.dige = param1.dige * _loc10_ + param2.dige * _loc11_;
-            this.x = param1.x * _loc10_ + param2.x * _loc11_;
-            this.y = param1.y * _loc10_ + param2.y * _loc11_;
-            this.z = param1.z * _loc10_ + param2.z * _loc11_;
+            angle = Math.acos(dot);
+            sinAngle = Math.sin(angle);
+            _loc10_ = Math.sin((1 - t) * angle) / sinAngle;
+            _loc11_ = Math.sin(t * angle) / sinAngle * sign;
+            this.w = a.w * _loc10_ + b.w * _loc11_;
+            this.x = a.x * _loc10_ + b.x * _loc11_;
+            this.y = a.y * _loc10_ + b.y * _loc11_;
+            this.z = a.z * _loc10_ + b.z * _loc11_;
          }
          return this;
       }
       
       public function isFiniteQuaternion() : Boolean
       {
-         return isFinite(this.dige) && isFinite(this.x) && isFinite(this.y) && isFinite(this.z);
+         return isFinite(this.w) && isFinite(this.x) && isFinite(this.y) && isFinite(this.z);
       }
    }
 }

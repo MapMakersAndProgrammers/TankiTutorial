@@ -8,109 +8,109 @@ package alternativa.tanks.vehicles.tank.physics
       
       public var body:Body;
       
-      public var mofovoti:Vector.<SuspensionRay>;
+      public var rays:Vector.<SuspensionRay>;
       
-      public var wavi:int;
+      public var numRays:int;
       
-      public var jim:int;
+      public var numContacts:int;
       
-      public var gobo:SuspensionParams;
+      public var suspensionParams:SuspensionParams;
       
-      public var zigebota:Number = 0;
+      public var animationSpeed:Number = 0;
       
-      public var lolojela:int;
+      public var side:int;
       
-      public const hetofefu:Vector3 = new Vector3();
+      public const averageContactVelocity:Vector3 = new Vector3();
       
-      public function Track(param1:Body, param2:int, param3:Vector3, param4:Number, param5:SuspensionParams, param6:int)
+      public function Track(body:Body, numRays:int, center:Vector3, trackLength:Number, suspensionParams:SuspensionParams, side:int)
       {
          super();
-         this.body = param1;
-         this.lolojela = param6;
-         this.setTrackParams(param2,param3,param4,param5);
+         this.body = body;
+         this.side = side;
+         this.setTrackParams(numRays,center,trackLength,suspensionParams);
       }
       
-      public function setTrackParams(param1:int, param2:Vector3, param3:Number, param4:SuspensionParams) : void
+      public function setTrackParams(numRays:int, center:Vector3, trackLength:Number, suspensionParams:SuspensionParams) : void
       {
-         var _loc7_:Vector3 = null;
-         this.wavi = param1;
-         this.gobo = param4;
-         this.mofovoti = new Vector.<SuspensionRay>(param1);
-         var _loc5_:Number = param3 / (param1 - 1);
-         var _loc6_:int = 0;
-         while(_loc6_ < param1)
+         var rayOrigin:Vector3 = null;
+         this.numRays = numRays;
+         this.suspensionParams = suspensionParams;
+         this.rays = new Vector.<SuspensionRay>(numRays);
+         var raySpacing:Number = trackLength / (numRays - 1);
+         var i:int = 0;
+         while(i < numRays)
          {
-            _loc7_ = new Vector3(param2.x,param2.y + 0.5 * param3 - _loc6_ * _loc5_,param2.z);
-            this.mofovoti[_loc6_] = new SuspensionRay(this.body,_loc7_,Vector3.lasis,param4);
-            _loc6_++;
+            rayOrigin = new Vector3(center.x,center.y + 0.5 * trackLength - i * raySpacing,center.z);
+            this.rays[i] = new SuspensionRay(this.body,rayOrigin,Vector3.down,suspensionParams);
+            i++;
          }
       }
       
-      public function setCollisionGroup(param1:int) : void
+      public function setCollisionGroup(collisionGroup:int) : void
       {
-         var _loc2_:int = 0;
-         while(_loc2_ < this.wavi)
+         var i:int = 0;
+         while(i < this.numRays)
          {
-            SuspensionRay(this.mofovoti[_loc2_]).nute = param1;
-            _loc2_++;
+            SuspensionRay(this.rays[i]).collisionGroup = collisionGroup;
+            i++;
          }
       }
       
-      public function calculateSuspensionContacts(param1:Number) : void
+      public function calculateSuspensionContacts(dt:Number) : void
       {
-         var _loc2_:Vector3 = null;
-         var _loc4_:SuspensionRay = null;
-         var _loc5_:Number = NaN;
-         var _loc6_:Number = NaN;
-         var _loc7_:Number = NaN;
-         this.jim = 0;
-         this.hetofefu.x = 0;
-         this.hetofefu.y = 0;
-         this.hetofefu.z = 0;
-         _loc2_ = this.body.kejo.zerus;
-         var _loc3_:int = 0;
-         while(_loc3_ < this.wavi)
+         var velocity:Vector3 = null;
+         var ray:SuspensionRay = null;
+         var dx:Number = NaN;
+         var dy:Number = NaN;
+         var dz:Number = NaN;
+         this.numContacts = 0;
+         this.averageContactVelocity.x = 0;
+         this.averageContactVelocity.y = 0;
+         this.averageContactVelocity.z = 0;
+         velocity = this.body.state.velocity;
+         var i:int = 0;
+         while(i < this.numRays)
          {
-            _loc4_ = this.mofovoti[_loc3_];
-            _loc4_.update(param1);
-            if(_loc4_.vivi)
+            ray = this.rays[i];
+            ray.update(dt);
+            if(ray.colliding)
             {
-               ++this.jim;
-               this.body.addWorldForceScaled(_loc4_.getGlobalOrigin(),_loc4_.getGlobalDirection(),-_loc4_.vys);
-               this.hetofefu.x += _loc4_.poseze.x;
-               this.hetofefu.y += _loc4_.poseze.y;
-               this.hetofefu.z += _loc4_.poseze.z;
-               _loc5_ = _loc2_.x - _loc4_.poseze.x;
-               _loc6_ = _loc2_.y - _loc4_.poseze.y;
-               _loc7_ = _loc2_.z - _loc4_.poseze.z;
-               _loc4_.wiciqy = Math.sqrt(_loc5_ * _loc5_ + _loc6_ * _loc6_ + _loc7_ * _loc7_);
+               ++this.numContacts;
+               this.body.addWorldForceScaled(ray.getGlobalOrigin(),ray.getGlobalDirection(),-ray.springForce);
+               this.averageContactVelocity.x += ray.contactVelocity.x;
+               this.averageContactVelocity.y += ray.contactVelocity.y;
+               this.averageContactVelocity.z += ray.contactVelocity.z;
+               dx = velocity.x - ray.contactVelocity.x;
+               dy = velocity.y - ray.contactVelocity.y;
+               dz = velocity.z - ray.contactVelocity.z;
+               ray.speed = Math.sqrt(dx * dx + dy * dy + dz * dz);
             }
             else
             {
-               _loc4_.wiciqy = 0;
+               ray.speed = 0;
             }
-            _loc3_++;
+            i++;
          }
-         if(this.jim > 1)
+         if(this.numContacts > 1)
          {
-            this.hetofefu.x /= this.jim;
-            this.hetofefu.y /= this.jim;
-            this.hetofefu.z /= this.jim;
+            this.averageContactVelocity.x /= this.numContacts;
+            this.averageContactVelocity.y /= this.numContacts;
+            this.averageContactVelocity.z /= this.numContacts;
          }
       }
       
-      public function setAnimationSpeed(param1:Number, param2:Number) : void
+      public function setAnimationSpeed(targetSpeed:Number, maxDelta:Number) : void
       {
-         var _loc3_:Number = NaN;
-         if(this.zigebota < param1)
+         var speed:Number = NaN;
+         if(this.animationSpeed < targetSpeed)
          {
-            _loc3_ = this.zigebota + param2;
-            this.zigebota = _loc3_ > param1 ? param1 : _loc3_;
+            speed = this.animationSpeed + maxDelta;
+            this.animationSpeed = speed > targetSpeed ? targetSpeed : speed;
          }
-         else if(this.zigebota > param1)
+         else if(this.animationSpeed > targetSpeed)
          {
-            _loc3_ = this.zigebota - param2;
-            this.zigebota = _loc3_ < param1 ? param1 : _loc3_;
+            speed = this.animationSpeed - maxDelta;
+            this.animationSpeed = speed < targetSpeed ? targetSpeed : speed;
          }
       }
    }

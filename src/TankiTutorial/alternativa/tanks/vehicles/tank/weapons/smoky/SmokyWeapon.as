@@ -11,48 +11,48 @@ package alternativa.tanks.vehicles.tank.weapons.smoky
    public class SmokyWeapon extends Weapon
    {
       
-      private var hur:uint;
+      private var nextShotTime:uint;
       
-      private const vimub:HitInfo = new HitInfo();
+      private const hitInfo:HitInfo = new HitInfo();
       
-      private var namekazaf:CommonTargetingSystem;
+      private var targetingSystem:CommonTargetingSystem;
       
-      private var syli:WeaponSettings;
+      private var settings:WeaponSettings;
       
-      private var hobuna:SmokyEffects;
+      private var effects:SmokyEffects;
       
-      public function SmokyWeapon(param1:WeaponSettings, param2:CommonTargetingSystem, param3:SmokyEffects)
+      public function SmokyWeapon(settings:WeaponSettings, targetingSystem:CommonTargetingSystem, effects:SmokyEffects)
       {
          super("Smoky Gun");
-         this.syli = param1;
-         this.namekazaf = param2;
-         this.hobuna = param3;
+         this.settings = settings;
+         this.targetingSystem = targetingSystem;
+         this.effects = effects;
       }
       
-      override public function update(param1:int, param2:int) : void
+      override public function update(time:int, deltaTime:int) : void
       {
-         if(zadawe && param1 >= this.hur)
+         if(active && time >= this.nextShotTime)
          {
-            this.hur = param1 + this.syli.qyvynefi;
+            this.nextShotTime = time + this.settings.reloadTime;
             this.fire();
          }
-         mamifoma = 1 - (this.hur - param1) / this.syli.qyvynefi;
-         if(mamifoma > 1)
+         _status = 1 - (this.nextShotTime - time) / this.settings.reloadTime;
+         if(_status > 1)
          {
-            mamifoma = 1;
+            _status = 1;
          }
       }
       
       override public function getTarget() : Tank
       {
-         var _loc1_:TurretData = getData();
-         var _loc2_:Tank = getTank();
-         _loc1_.update(_loc2_,0);
-         if(this.namekazaf.getTarget(_loc1_.fybumu,_loc1_.ruda,_loc1_.zequsir,_loc2_.body,10000000000,this.vimub))
+         var turretData:TurretData = getData();
+         var tank:Tank = getTank();
+         turretData.update(tank,0);
+         if(this.targetingSystem.getTarget(turretData.barrelOrigin,turretData.direction,turretData.xAxis,tank.body,10000000000,this.hitInfo))
          {
-            if(this.vimub.body != null)
+            if(this.hitInfo.body != null)
             {
-               return this.vimub.body.katuf as Tank;
+               return this.hitInfo.body.data as Tank;
             }
          }
          return null;
@@ -60,25 +60,25 @@ package alternativa.tanks.vehicles.tank.weapons.smoky
       
       private function fire() : void
       {
-         var _loc3_:Tank = null;
-         var _loc1_:TurretData = getData();
-         var _loc2_:Tank = getTank();
-         _loc1_.update(_loc2_,0);
-         this.hobuna.createShotEffects(_loc1_.toqumyc,_loc1_.turretMesh);
-         if(this.namekazaf.getTarget(_loc1_.fybumu,_loc1_.ruda,_loc1_.zequsir,_loc2_.body,10000000000,this.vimub))
+         var target:Tank = null;
+         var turretData:TurretData = getData();
+         var tank:Tank = getTank();
+         turretData.update(tank,0);
+         this.effects.createShotEffects(turretData.localMuzzlePosition,turretData.turretMesh);
+         if(this.targetingSystem.getTarget(turretData.barrelOrigin,turretData.direction,turretData.xAxis,tank.body,10000000000,this.hitInfo))
          {
-            this.hobuna.createExplosionEffects(this.vimub.wimybu,1);
-            if(this.vimub.body != null)
+            this.effects.createExplosionEffects(this.hitInfo.position,1);
+            if(this.hitInfo.body != null)
             {
-               _loc3_ = this.vimub.body.katuf as Tank;
-               if(_loc3_ != null)
+               target = this.hitInfo.body.data as Tank;
+               if(target != null)
                {
-                  this.vimub.body.addWorldForceScaled(this.vimub.wimybu,this.vimub.bec,this.syli.myd);
-                  _loc3_.substructHealth(this.syli.beryfitu * kuqy);
+                  this.hitInfo.body.addWorldForceScaled(this.hitInfo.position,this.hitInfo.direction,this.settings.impactForce);
+                  target.substructHealth(this.settings.damage * damageMultiplier);
                }
             }
          }
-         _loc2_.body.addWorldForceScaled(_loc1_.fybumu,_loc1_.ruda,-this.syli.pocobyr);
+         tank.body.addWorldForceScaled(turretData.barrelOrigin,turretData.direction,-this.settings.recoilForce);
       }
    }
 }

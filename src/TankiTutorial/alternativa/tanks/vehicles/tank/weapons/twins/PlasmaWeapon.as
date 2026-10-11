@@ -16,46 +16,46 @@ package alternativa.tanks.vehicles.tank.weapons.twins
    public class PlasmaWeapon extends Weapon
    {
       
-      private static const qumuvup:Vector3 = new Vector3();
+      private static const shotDirection:Vector3 = new Vector3();
       
-      private static const vimub:HitInfo = new HitInfo();
+      private static const hitInfo:HitInfo = new HitInfo();
       
-      private static const wonuhig:RayHit = new RayHit();
+      private static const rayHit:RayHit = new RayHit();
       
-      private var goc:int;
+      private var nextShotTime:int;
       
-      private var namekazaf:CommonTargetingSystem;
+      private var targetingSystem:CommonTargetingSystem;
       
-      private var kafe:int;
+      private var numMuzzles:int;
       
-      private var nubedut:int;
+      private var muzzleIndex:int;
       
-      private var kymaqos:CollisionDetector = GameData.kymaqos;
+      private var collisionDetector:CollisionDetector = GameData.collisionDetector;
       
-      private var murow:ObjectPool = GameData.murow;
+      private var objectPool:ObjectPool = GameData.objectPool;
       
-      private var syli:WeaponSettings;
+      private var settings:WeaponSettings;
       
-      private var hobuna:PlasmaEffects;
+      private var effects:PlasmaEffects;
       
-      public function PlasmaWeapon(param1:WeaponSettings, param2:CommonTargetingSystem, param3:PlasmaEffects, param4:int)
+      public function PlasmaWeapon(settings:WeaponSettings, targetingSystem:CommonTargetingSystem, effects:PlasmaEffects, numMuzzles:int)
       {
          super("Plasma");
-         this.syli = param1;
-         this.namekazaf = param2;
-         this.hobuna = param3;
-         this.kafe = param4;
+         this.settings = settings;
+         this.targetingSystem = targetingSystem;
+         this.effects = effects;
+         this.numMuzzles = numMuzzles;
       }
       
       override public function get status() : Number
       {
-         var _loc1_:Number = 1 - (this.goc - getTimer()) / this.syli.qyvynefi;
-         return _loc1_ > 1 ? 1 : _loc1_;
+         var value:Number = 1 - (this.nextShotTime - getTimer()) / this.settings.reloadTime;
+         return value > 1 ? 1 : value;
       }
       
-      override public function update(param1:int, param2:int) : void
+      override public function update(time:int, deltaTime:int) : void
       {
-         if(zadawe && param1 >= this.goc)
+         if(active && time >= this.nextShotTime)
          {
             this.shoot();
          }
@@ -63,14 +63,14 @@ package alternativa.tanks.vehicles.tank.weapons.twins
       
       override public function getTarget() : Tank
       {
-         var _loc1_:TurretData = getData();
-         var _loc2_:Tank = getTank();
-         _loc1_.update(_loc2_,0);
-         if(this.namekazaf.getTarget(_loc1_.fybumu,_loc1_.ruda,_loc1_.zequsir,_loc2_.hogys.body,10000000000,vimub))
+         var turretData:TurretData = getData();
+         var tank:Tank = getTank();
+         turretData.update(tank,0);
+         if(this.targetingSystem.getTarget(turretData.barrelOrigin,turretData.direction,turretData.xAxis,tank.tankBody.body,10000000000,hitInfo))
          {
-            if(vimub.body != null)
+            if(hitInfo.body != null)
             {
-               return vimub.body.katuf as Tank;
+               return hitInfo.body.data as Tank;
             }
          }
          return null;
@@ -78,35 +78,35 @@ package alternativa.tanks.vehicles.tank.weapons.twins
       
       private function shoot() : void
       {
-         this.goc = getTimer() + this.syli.qyvynefi;
-         var _loc1_:Tank = getTank();
-         var _loc2_:Mesh = _loc1_.kuca.turretMesh;
-         var _loc3_:Vector3 = _loc1_.firaqe.jun[this.nubedut];
-         var _loc4_:TurretData = getData();
-         _loc4_.update(_loc1_,this.nubedut);
-         _loc1_.hogys.body.addWorldForceScaled(_loc4_.symamume,_loc4_.ruda,-this.syli.pocobyr);
-         this.hobuna.createShotEffects(_loc2_,_loc1_.firaqe.jun[this.nubedut]);
-         if(this.barrelCollidesWithStatic(_loc4_.fybumu,_loc4_.ruda,_loc3_.y))
+         this.nextShotTime = getTimer() + this.settings.reloadTime;
+         var tank:Tank = getTank();
+         var turretMesh:Mesh = tank.skin.turretMesh;
+         var muzzle:Vector3 = tank.turret.muzzles[this.muzzleIndex];
+         var turretData:TurretData = getData();
+         turretData.update(tank,this.muzzleIndex);
+         tank.tankBody.body.addWorldForceScaled(turretData.muzzlePosition,turretData.direction,-this.settings.recoilForce);
+         this.effects.createShotEffects(turretMesh,tank.turret.muzzles[this.muzzleIndex]);
+         if(this.barrelCollidesWithStatic(turretData.barrelOrigin,turretData.direction,muzzle.y))
          {
-            qumuvup.copy(_loc4_.ruda);
+            shotDirection.copy(turretData.direction);
          }
-         else if(this.namekazaf.getTarget(_loc4_.fybumu,_loc4_.ruda,_loc4_.zequsir,_loc1_.hogys.body,10000000000,vimub))
+         else if(this.targetingSystem.getTarget(turretData.barrelOrigin,turretData.direction,turretData.xAxis,tank.tankBody.body,10000000000,hitInfo))
          {
-            qumuvup.diff(vimub.wimybu,_loc4_.symamume).normalize();
+            shotDirection.diff(hitInfo.position,turretData.muzzlePosition).normalize();
          }
          else
          {
-            qumuvup.copy(_loc4_.ruda);
+            shotDirection.copy(turretData.direction);
          }
-         var _loc5_:PlasmaShot = PlasmaShot(this.murow.getObject(PlasmaShot));
-         _loc5_.init(this.syli.myd,this.syli.beryfitu * kuqy);
-         _loc5_.addToGame(_loc4_.fybumu,_loc4_.symamume,qumuvup,_loc1_.hogys.body);
-         this.nubedut = (this.nubedut + 1) % this.kafe;
+         var shot:PlasmaShot = PlasmaShot(this.objectPool.getObject(PlasmaShot));
+         shot.init(this.settings.impactForce,this.settings.damage * damageMultiplier);
+         shot.addToGame(turretData.barrelOrigin,turretData.muzzlePosition,shotDirection,tank.tankBody.body);
+         this.muzzleIndex = (this.muzzleIndex + 1) % this.numMuzzles;
       }
       
-      private function barrelCollidesWithStatic(param1:Vector3, param2:Vector3, param3:Number) : Boolean
+      private function barrelCollidesWithStatic(origin:Vector3, direction:Vector3, length:Number) : Boolean
       {
-         return this.kymaqos.raycastStatic(param1,param2,CollisionGroup.neli,param3,null,wonuhig);
+         return this.collisionDetector.raycastStatic(origin,direction,CollisionGroup.STATIC,length,null,rayHit);
       }
    }
 }

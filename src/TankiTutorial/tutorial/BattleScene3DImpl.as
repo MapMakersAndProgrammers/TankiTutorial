@@ -12,24 +12,24 @@ package tutorial
          super();
       }
       
-      public function addObject(param1:Object3D) : void
+      public function addObject(object:Object3D) : void
       {
-         GameData.guzinizub.addChild(param1);
+         GameData.kdContainer.addChild(object);
       }
       
-      public function removeObject(param1:Object3D) : void
+      public function removeObject(object:Object3D) : void
       {
-         GameData.guzinizub.removeChild(param1);
+         GameData.kdContainer.removeChild(object);
       }
       
-      public function addRenderer(param1:Renderer, param2:int) : void
+      public function addRenderer(renderer:Renderer, param2:int) : void
       {
-         GameData.jypadif.addRenderer(param1);
+         GameData.renderers.addRenderer(renderer);
       }
       
-      public function removeRenderer(param1:Renderer, param2:int) : void
+      public function removeRenderer(renderer:Renderer, param2:int) : void
       {
-         GameData.jypadif.removeRenderer(param1);
+         GameData.renderers.removeRenderer(renderer);
       }
    }
 }

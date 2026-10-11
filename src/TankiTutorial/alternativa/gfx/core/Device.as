@@ -17,53 +17,53 @@ package alternativa.gfx.core
    public class Device extends EventDispatcher
    {
       
-      private static const dapymat:String = "Resource is not available.";
+      private static const RESOURCE_NOT_AVAILABLE:String = "Resource is not available.";
       
-      private static const horec:Vector.<Boolean> = Vector.<Boolean>([false,false,false,false]);
+      private static const usedStage3Ds:Vector.<Boolean> = Vector.<Boolean>([false,false,false,false]);
       
-      private static const jewu:Vector.<int> = Vector.<int>([-1,-1,-1,-1]);
+      private static const context3DIds:Vector.<int> = Vector.<int>([-1,-1,-1,-1]);
       
-      private var tejijezaq:Stage;
+      private var _stage:Stage;
       
-      private var vivu:int;
+      private var _stage3DIndex:int;
       
-      private var pyjic:String;
+      private var _renderMode:String;
       
-      private var qyvaququ:String;
+      private var _profile:String;
       
-      private var zyzafyg:int;
+      private var _x:int;
       
-      private var rogu:int;
+      private var _y:int;
       
-      private var cof:int;
+      private var _width:int;
       
-      private var gugap:int;
+      private var _height:int;
       
-      private var pucel:int;
+      private var _antiAlias:int;
       
-      private var cowativi:Boolean;
+      private var _enableDepthAndStencil:Boolean;
       
-      private var pypop:Boolean;
+      private var _enableErrorChecking:Boolean;
       
-      private var habyvem:Stage3D;
+      private var stage3D:Stage3D;
       
-      private var ruw:int = -1;
+      private var _context3DId:int = -1;
       
-      private var rubajam:Boolean = true;
+      private var _available:Boolean = true;
       
-      private var dasybi:RenderState = new RenderState();
+      private var renderState:RenderState = new RenderState();
       
-      private var wofew:Boolean = false;
+      private var configured:Boolean = false;
       
-      private var pepitoso:int = -1;
+      private var backBufferWidth:int = -1;
       
-      private var jegicakof:int = -1;
+      private var backBufferHeight:int = -1;
       
-      private var fide:int = -1;
+      private var backBufferAntiAlias:int = -1;
       
-      private var zoje:Boolean = false;
+      private var backBufferEnableDepthAndStencil:Boolean = false;
       
-      private var legyj:Dictionary = new Dictionary();
+      private var resourcesToUpload:Dictionary = new Dictionary();
       
       public function Device(stage:Stage, stage3DIndex:int = 0, renderMode:String = "auto", profile:String = "baseline")
       {
@@ -72,31 +72,31 @@ package alternativa.gfx.core
          {
             throw new Error("Invalid index.");
          }
-         if(horec[stage3DIndex])
+         if(usedStage3Ds[stage3DIndex])
          {
             throw new Error("Index already used.");
          }
-         this.tejijezaq = stage;
-         this.vivu = stage3DIndex;
-         this.pyjic = renderMode;
-         this.qyvaququ = profile;
-         horec[this.vivu] = true;
-         this.habyvem = this.tejijezaq.stage3Ds[this.vivu];
-         this.zyzafyg = this.habyvem.x;
-         this.rogu = this.habyvem.y;
-         this.cof = stage.stageWidth;
-         this.gugap = stage.stageHeight;
-         this.pucel = 0;
-         this.cowativi = true;
-         this.pypop = false;
-         this.habyvem.addEventListener(Event.CONTEXT3D_CREATE,this.onContext3DCreate);
-         if(this.habyvem.requestContext3D.length > 1)
+         this._stage = stage;
+         this._stage3DIndex = stage3DIndex;
+         this._renderMode = renderMode;
+         this._profile = profile;
+         usedStage3Ds[this._stage3DIndex] = true;
+         this.stage3D = this._stage.stage3Ds[this._stage3DIndex];
+         this._x = this.stage3D.x;
+         this._y = this.stage3D.y;
+         this._width = stage.stageWidth;
+         this._height = stage.stageHeight;
+         this._antiAlias = 0;
+         this._enableDepthAndStencil = true;
+         this._enableErrorChecking = false;
+         this.stage3D.addEventListener(Event.CONTEXT3D_CREATE,this.onContext3DCreate);
+         if(this.stage3D.requestContext3D.length > 1)
          {
-            this.habyvem.requestContext3D(renderMode,profile);
+            this.stage3D.requestContext3D(renderMode,profile);
          }
          else
          {
-            this.habyvem.requestContext3D(renderMode);
+            this.stage3D.requestContext3D(renderMode);
          }
       }
       
@@ -105,192 +105,192 @@ package alternativa.gfx.core
          var key:* = undefined;
          var texture:TextureResource = null;
          var vertexBuffer:VertexBufferResource = null;
-         ++jewu[this.vivu];
-         this.ruw = jewu[this.vivu];
-         this.wofew = false;
-         this.pepitoso = -1;
-         this.jegicakof = -1;
-         this.fide = -1;
-         this.zoje = false;
-         var context:Context3D = this.habyvem.context3D;
-         context.enableErrorChecking = this.pypop;
-         for(key in this.legyj)
+         ++context3DIds[this._stage3DIndex];
+         this._context3DId = context3DIds[this._stage3DIndex];
+         this.configured = false;
+         this.backBufferWidth = -1;
+         this.backBufferHeight = -1;
+         this.backBufferAntiAlias = -1;
+         this.backBufferEnableDepthAndStencil = false;
+         var context:Context3D = this.stage3D.context3D;
+         context.enableErrorChecking = this._enableErrorChecking;
+         for(key in this.resourcesToUpload)
          {
             this.uploadResource(key);
-            delete this.legyj[key];
+            delete this.resourcesToUpload[key];
          }
-         context.setBlendFactors(this.dasybi.wipiby,this.dasybi.koj);
-         context.setColorMask(this.dasybi.jyjogo,this.dasybi.qebubo,this.dasybi.cevib,this.dasybi.bolilequ);
-         context.setCulling(this.dasybi.qihe);
-         context.setDepthTest(this.dasybi.tukoweti,this.dasybi.cuki);
-         if(this.dasybi.topodizok != null)
+         context.setBlendFactors(this.renderState.sourceFactor,this.renderState.destinationFactor);
+         context.setColorMask(this.renderState.red,this.renderState.green,this.renderState.blue,this.renderState.alpha);
+         context.setCulling(this.renderState.triangleFaceToCull);
+         context.setDepthTest(this.renderState.depthMask,this.renderState.passCompareMode);
+         if(this.renderState.program != null)
          {
-            if(!this.dasybi.topodizok.available)
+            if(!this.renderState.program.available)
             {
-               throw new Error(dapymat);
+               throw new Error(RESOURCE_NOT_AVAILABLE);
             }
-            this.prepareResource(context,this.dasybi.topodizok);
-            context.setProgram(this.dasybi.topodizok.tecemyl[this.vivu]);
+            this.prepareResource(context,this.renderState.program);
+            context.setProgram(this.renderState.program.programs[this._stage3DIndex]);
          }
-         if(this.dasybi.wucukyj != null)
+         if(this.renderState.texture != null)
          {
-            if(!this.dasybi.wucukyj.available)
+            if(!this.renderState.texture.available)
             {
-               throw new Error(dapymat);
+               throw new Error(RESOURCE_NOT_AVAILABLE);
             }
-            this.prepareResource(context,this.dasybi.wucukyj);
-            context.setRenderToTexture(this.dasybi.wucukyj.tylu[this.vivu],this.dasybi.gewoz,this.dasybi.tefug,this.dasybi.qapi);
+            this.prepareResource(context,this.renderState.texture);
+            context.setRenderToTexture(this.renderState.texture.textures[this._stage3DIndex],this.renderState.enableDepthAndStencil,this.renderState.antiAlias,this.renderState.surfaceSelector);
          }
-         if(this.dasybi.ficobavam)
+         if(this.renderState.scissorEnabled)
          {
-            context.setScissorRectangle(this.dasybi.rugakyr);
+            context.setScissorRectangle(this.renderState.scissorRectangle);
          }
          else
          {
             context.setScissorRectangle(null);
          }
-         context.setStencilActions(this.dasybi.woq,this.dasybi.gugi,this.dasybi.qegop,this.dasybi.kerepiluh,this.dasybi.mokufyr);
-         context.setStencilReferenceValue(this.dasybi.bavavove,this.dasybi.bohyha,this.dasybi.libywarer);
+         context.setStencilActions(this.renderState.triangleFace,this.renderState.compareMode,this.renderState.actionOnBothPass,this.renderState.actionOnDepthFail,this.renderState.actionOnDepthPassStencilFail);
+         context.setStencilReferenceValue(this.renderState.referenceValue,this.renderState.readMask,this.renderState.writeMask);
          for(var i:int = 0; i < 8; i++)
          {
-            texture = this.dasybi.tylu[i];
+            texture = this.renderState.textures[i];
             if(texture != null)
             {
                if(!texture.available)
                {
-                  throw new Error(dapymat);
+                  throw new Error(RESOURCE_NOT_AVAILABLE);
                }
                this.prepareResource(context,texture);
-               context.setTextureAt(i,texture.tylu[this.vivu]);
+               context.setTextureAt(i,texture.textures[this._stage3DIndex]);
             }
-            vertexBuffer = this.dasybi.kewyv[i];
+            vertexBuffer = this.renderState.vertexBuffers[i];
             if(vertexBuffer != null)
             {
                if(!vertexBuffer.available)
                {
-                  throw new Error(dapymat);
+                  throw new Error(RESOURCE_NOT_AVAILABLE);
                }
                this.prepareResource(context,vertexBuffer);
-               context.setVertexBufferAt(i,vertexBuffer.putiwyfa[this.vivu],this.dasybi.qumovi[i],this.dasybi.totuqo[i]);
+               context.setVertexBufferAt(i,vertexBuffer.buffers[this._stage3DIndex],this.renderState.bufferOffsets[i],this.renderState.formats[i]);
             }
          }
-         context.setProgramConstantsFromVector(Context3DProgramType.VERTEX,0,this.dasybi.badoh,128);
-         context.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,0,this.dasybi.befyjut,28);
+         context.setProgramConstantsFromVector(Context3DProgramType.VERTEX,0,this.renderState.vertexConstants,128);
+         context.setProgramConstantsFromVector(Context3DProgramType.FRAGMENT,0,this.renderState.fragmentConstants,28);
          dispatchEvent(new Event(Event.CONTEXT3D_CREATE));
       }
       
       public function dispose() : void
       {
          var key:* = undefined;
-         this.habyvem.removeEventListener(Event.CONTEXT3D_CREATE,this.onContext3DCreate);
-         if(this.habyvem.context3D != null)
+         this.stage3D.removeEventListener(Event.CONTEXT3D_CREATE,this.onContext3DCreate);
+         if(this.stage3D.context3D != null)
          {
-            this.habyvem.context3D.dispose();
+            this.stage3D.context3D.dispose();
          }
-         horec[this.vivu] = false;
-         for(key in this.legyj)
+         usedStage3Ds[this._stage3DIndex] = false;
+         for(key in this.resourcesToUpload)
          {
-            delete this.legyj[key];
+            delete this.resourcesToUpload[key];
          }
-         this.dasybi = new RenderState();
-         this.rubajam = false;
+         this.renderState = new RenderState();
+         this._available = false;
       }
       
       public function reset() : void
       {
-         var _loc1_:* = undefined;
-         if(this.habyvem.context3D != null)
+         var key:* = undefined;
+         if(this.stage3D.context3D != null)
          {
-            this.habyvem.context3D.dispose();
+            this.stage3D.context3D.dispose();
          }
          else
          {
-            for(_loc1_ in this.legyj)
+            for(key in this.resourcesToUpload)
             {
-               delete this.legyj[_loc1_];
+               delete this.resourcesToUpload[key];
             }
          }
-         this.dasybi = new RenderState();
+         this.renderState = new RenderState();
       }
       
       public function get available() : Boolean
       {
-         return this.rubajam;
+         return this._available;
       }
       
       public function get ready() : Boolean
       {
-         return this.habyvem.context3D != null;
+         return this.stage3D.context3D != null;
       }
       
       public function get stage() : Stage
       {
-         return this.tejijezaq;
+         return this._stage;
       }
       
       public function get stage3DIndex() : int
       {
-         return this.vivu;
+         return this._stage3DIndex;
       }
       
       public function get context3DId() : int
       {
-         return this.ruw;
+         return this._context3DId;
       }
       
       public function get renderMode() : String
       {
-         return this.pyjic;
+         return this._renderMode;
       }
       
       public function get profile() : String
       {
-         return this.qyvaququ;
+         return this._profile;
       }
       
       public function get x() : int
       {
-         return this.zyzafyg;
+         return this._x;
       }
       
       public function set x(value:int) : void
       {
-         this.zyzafyg = value;
+         this._x = value;
       }
       
       public function get y() : int
       {
-         return this.rogu;
+         return this._y;
       }
       
       public function set y(value:int) : void
       {
-         this.rogu = value;
+         this._y = value;
       }
       
       public function get width() : int
       {
-         return this.cof;
+         return this._width;
       }
       
       public function set width(value:int) : void
       {
-         this.cof = value;
+         this._width = value;
       }
       
       public function get height() : int
       {
-         return this.gugap;
+         return this._height;
       }
       
       public function set height(value:int) : void
       {
-         this.gugap = value;
+         this._height = value;
       }
       
       public function get antiAlias() : int
       {
-         return this.pucel;
+         return this._antiAlias;
       }
       
       public function set antiAlias(value:int) : void
@@ -299,31 +299,31 @@ package alternativa.gfx.core
          {
             throw new Error("Invalid antialiasing value.");
          }
-         this.pucel = value;
+         this._antiAlias = value;
       }
       
       public function get enableDepthAndStencil() : Boolean
       {
-         return this.cowativi;
+         return this._enableDepthAndStencil;
       }
       
       public function set enableDepthAndStencil(value:Boolean) : void
       {
-         this.cowativi = value;
+         this._enableDepthAndStencil = value;
       }
       
       public function get enableErrorChecking() : Boolean
       {
-         return this.pypop;
+         return this._enableErrorChecking;
       }
       
       public function set enableErrorChecking(value:Boolean) : void
       {
-         this.pypop = value;
-         var context:Context3D = this.habyvem.context3D;
-         if(context != null && context.enableErrorChecking != this.pypop)
+         this._enableErrorChecking = value;
+         var context:Context3D = this.stage3D.context3D;
+         if(context != null && context.enableErrorChecking != this._enableErrorChecking)
          {
-            context.enableErrorChecking = this.pypop;
+            context.enableErrorChecking = this._enableErrorChecking;
          }
       }
       
@@ -331,42 +331,42 @@ package alternativa.gfx.core
       {
          if(!resource.available)
          {
-            throw new Error(dapymat);
+            throw new Error(RESOURCE_NOT_AVAILABLE);
          }
-         var context:Context3D = this.habyvem.context3D;
+         var context:Context3D = this.stage3D.context3D;
          if(context != null)
          {
-            if(resource.jewu[this.vivu] != this.ruw)
+            if(resource.context3DIds[this._stage3DIndex] != this._context3DId)
             {
-               resource.jewu[this.vivu] = this.ruw;
-               resource.create(context,this.vivu);
+               resource.context3DIds[this._stage3DIndex] = this._context3DId;
+               resource.create(context,this._stage3DIndex);
             }
-            resource.upload(this.vivu);
+            resource.upload(this._stage3DIndex);
          }
          else
          {
-            this.legyj[resource] = true;
+            this.resourcesToUpload[resource] = true;
          }
       }
       
       private function prepareResource(context:Context3D, resource:Resource) : void
       {
-         if(resource.jewu[this.vivu] != this.ruw)
+         if(resource.context3DIds[this._stage3DIndex] != this._context3DId)
          {
-            resource.jewu[this.vivu] = this.ruw;
-            resource.create(context,this.vivu);
-            resource.upload(this.vivu);
+            resource.context3DIds[this._stage3DIndex] = this._context3DId;
+            resource.create(context,this._stage3DIndex);
+            resource.upload(this._stage3DIndex);
          }
       }
       
       public function setBlendFactors(sourceFactor:String, destinationFactor:String) : void
       {
          var context:Context3D = null;
-         if(sourceFactor != this.dasybi.wipiby || destinationFactor != this.dasybi.koj)
+         if(sourceFactor != this.renderState.sourceFactor || destinationFactor != this.renderState.destinationFactor)
          {
-            this.dasybi.wipiby = sourceFactor;
-            this.dasybi.koj = destinationFactor;
-            context = this.habyvem.context3D;
+            this.renderState.sourceFactor = sourceFactor;
+            this.renderState.destinationFactor = destinationFactor;
+            context = this.stage3D.context3D;
             if(context != null)
             {
                context.setBlendFactors(sourceFactor,destinationFactor);
@@ -377,13 +377,13 @@ package alternativa.gfx.core
       public function setColorMask(red:Boolean, green:Boolean, blue:Boolean, alpha:Boolean) : void
       {
          var context:Context3D = null;
-         if(red != this.dasybi.jyjogo || green != this.dasybi.qebubo || blue != this.dasybi.cevib || alpha != this.dasybi.bolilequ)
+         if(red != this.renderState.red || green != this.renderState.green || blue != this.renderState.blue || alpha != this.renderState.alpha)
          {
-            this.dasybi.jyjogo = red;
-            this.dasybi.qebubo = green;
-            this.dasybi.cevib = blue;
-            this.dasybi.bolilequ = alpha;
-            context = this.habyvem.context3D;
+            this.renderState.red = red;
+            this.renderState.green = green;
+            this.renderState.blue = blue;
+            this.renderState.alpha = alpha;
+            context = this.stage3D.context3D;
             if(context != null)
             {
                context.setColorMask(red,green,blue,alpha);
@@ -394,10 +394,10 @@ package alternativa.gfx.core
       public function setCulling(triangleFaceToCull:String) : void
       {
          var context:Context3D = null;
-         if(triangleFaceToCull != this.dasybi.qihe)
+         if(triangleFaceToCull != this.renderState.triangleFaceToCull)
          {
-            this.dasybi.qihe = triangleFaceToCull;
-            context = this.habyvem.context3D;
+            this.renderState.triangleFaceToCull = triangleFaceToCull;
+            context = this.stage3D.context3D;
             if(context != null)
             {
                context.setCulling(triangleFaceToCull);
@@ -408,11 +408,11 @@ package alternativa.gfx.core
       public function setDepthTest(depthMask:Boolean, passCompareMode:String) : void
       {
          var context:Context3D = null;
-         if(depthMask != this.dasybi.tukoweti || passCompareMode != this.dasybi.cuki)
+         if(depthMask != this.renderState.depthMask || passCompareMode != this.renderState.passCompareMode)
          {
-            this.dasybi.tukoweti = depthMask;
-            this.dasybi.cuki = passCompareMode;
-            context = this.habyvem.context3D;
+            this.renderState.depthMask = depthMask;
+            this.renderState.passCompareMode = passCompareMode;
+            context = this.stage3D.context3D;
             if(context != null)
             {
                context.setDepthTest(depthMask,passCompareMode);
@@ -423,18 +423,18 @@ package alternativa.gfx.core
       public function setProgram(program:ProgramResource) : void
       {
          var context:Context3D = null;
-         if(program != this.dasybi.topodizok)
+         if(program != this.renderState.program)
          {
             if(!program.available)
             {
-               throw new Error(dapymat);
+               throw new Error(RESOURCE_NOT_AVAILABLE);
             }
-            this.dasybi.topodizok = program;
-            context = this.habyvem.context3D;
+            this.renderState.program = program;
+            context = this.stage3D.context3D;
             if(context != null)
             {
                this.prepareResource(context,program);
-               context.setProgram(program.tecemyl[this.vivu]);
+               context.setProgram(program.programs[this._stage3DIndex]);
             }
          }
       }
@@ -442,10 +442,10 @@ package alternativa.gfx.core
       public function setRenderToBackBuffer() : void
       {
          var context:Context3D = null;
-         if(this.dasybi.wucukyj != null)
+         if(this.renderState.texture != null)
          {
-            this.dasybi.wucukyj = null;
-            context = this.habyvem.context3D;
+            this.renderState.texture = null;
+            context = this.stage3D.context3D;
             if(context != null)
             {
                context.setRenderToBackBuffer();
@@ -456,23 +456,23 @@ package alternativa.gfx.core
       public function setRenderToTexture(texture:TextureResource, enableDepthAndStencil:Boolean = false, antiAlias:int = 0, surfaceSelector:int = 0) : void
       {
          var context:Context3D = null;
-         if(texture != this.dasybi.wucukyj || enableDepthAndStencil != this.dasybi.gewoz || antiAlias != this.dasybi.tefug || surfaceSelector != this.dasybi.qapi)
+         if(texture != this.renderState.texture || enableDepthAndStencil != this.renderState.enableDepthAndStencil || antiAlias != this.renderState.antiAlias || surfaceSelector != this.renderState.surfaceSelector)
          {
             if(texture != null && !texture.available)
             {
-               throw new Error(dapymat);
+               throw new Error(RESOURCE_NOT_AVAILABLE);
             }
-            this.dasybi.wucukyj = texture;
-            this.dasybi.gewoz = enableDepthAndStencil;
-            this.dasybi.tefug = antiAlias;
-            this.dasybi.qapi = surfaceSelector;
-            context = this.habyvem.context3D;
+            this.renderState.texture = texture;
+            this.renderState.enableDepthAndStencil = enableDepthAndStencil;
+            this.renderState.antiAlias = antiAlias;
+            this.renderState.surfaceSelector = surfaceSelector;
+            context = this.stage3D.context3D;
             if(context != null)
             {
                if(texture != null)
                {
                   this.prepareResource(context,texture);
-                  context.setRenderToTexture(texture.tylu[this.vivu],enableDepthAndStencil,antiAlias,surfaceSelector);
+                  context.setRenderToTexture(texture.textures[this._stage3DIndex],enableDepthAndStencil,antiAlias,surfaceSelector);
                }
                else
                {
@@ -484,17 +484,17 @@ package alternativa.gfx.core
       
       public function setScissorRectangle(rectangle:Rectangle) : void
       {
-         var context:Context3D = this.habyvem.context3D;
+         var context:Context3D = this.stage3D.context3D;
          if(rectangle != null)
          {
-            if(this.dasybi.ficobavam)
+            if(this.renderState.scissorEnabled)
             {
-               if(rectangle.x != this.dasybi.rugakyr.x || rectangle.y != this.dasybi.rugakyr.y || rectangle.width != this.dasybi.rugakyr.width || rectangle.height != this.dasybi.rugakyr.height)
+               if(rectangle.x != this.renderState.scissorRectangle.x || rectangle.y != this.renderState.scissorRectangle.y || rectangle.width != this.renderState.scissorRectangle.width || rectangle.height != this.renderState.scissorRectangle.height)
                {
-                  this.dasybi.rugakyr.x = rectangle.x;
-                  this.dasybi.rugakyr.y = rectangle.y;
-                  this.dasybi.rugakyr.width = rectangle.width;
-                  this.dasybi.rugakyr.height = rectangle.height;
+                  this.renderState.scissorRectangle.x = rectangle.x;
+                  this.renderState.scissorRectangle.y = rectangle.y;
+                  this.renderState.scissorRectangle.width = rectangle.width;
+                  this.renderState.scissorRectangle.height = rectangle.height;
                   if(context != null)
                   {
                      context.setScissorRectangle(rectangle);
@@ -503,11 +503,11 @@ package alternativa.gfx.core
             }
             else
             {
-               this.dasybi.ficobavam = true;
-               this.dasybi.rugakyr.x = rectangle.x;
-               this.dasybi.rugakyr.y = rectangle.y;
-               this.dasybi.rugakyr.width = rectangle.width;
-               this.dasybi.rugakyr.height = rectangle.height;
+               this.renderState.scissorEnabled = true;
+               this.renderState.scissorRectangle.x = rectangle.x;
+               this.renderState.scissorRectangle.y = rectangle.y;
+               this.renderState.scissorRectangle.width = rectangle.width;
+               this.renderState.scissorRectangle.height = rectangle.height;
                if(context != null)
                {
                   context.setScissorRectangle(rectangle);
@@ -516,7 +516,7 @@ package alternativa.gfx.core
          }
          else
          {
-            this.dasybi.ficobavam = false;
+            this.renderState.scissorEnabled = false;
             if(context != null)
             {
                context.setScissorRectangle(null);
@@ -527,14 +527,14 @@ package alternativa.gfx.core
       public function setStencilActions(triangleFace:String = "frontAndBack", compareMode:String = "always", actionOnBothPass:String = "keep", actionOnDepthFail:String = "keep", actionOnDepthPassStencilFail:String = "keep") : void
       {
          var context:Context3D = null;
-         if(triangleFace != this.dasybi.woq || compareMode != this.dasybi.gugi || actionOnBothPass != this.dasybi.qegop || actionOnDepthFail != this.dasybi.kerepiluh || actionOnDepthPassStencilFail != this.dasybi.mokufyr)
+         if(triangleFace != this.renderState.triangleFace || compareMode != this.renderState.compareMode || actionOnBothPass != this.renderState.actionOnBothPass || actionOnDepthFail != this.renderState.actionOnDepthFail || actionOnDepthPassStencilFail != this.renderState.actionOnDepthPassStencilFail)
          {
-            this.dasybi.woq = triangleFace;
-            this.dasybi.gugi = compareMode;
-            this.dasybi.qegop = actionOnBothPass;
-            this.dasybi.kerepiluh = actionOnDepthFail;
-            this.dasybi.mokufyr = actionOnDepthPassStencilFail;
-            context = this.habyvem.context3D;
+            this.renderState.triangleFace = triangleFace;
+            this.renderState.compareMode = compareMode;
+            this.renderState.actionOnBothPass = actionOnBothPass;
+            this.renderState.actionOnDepthFail = actionOnDepthFail;
+            this.renderState.actionOnDepthPassStencilFail = actionOnDepthPassStencilFail;
+            context = this.stage3D.context3D;
             if(context != null)
             {
                context.setStencilActions(triangleFace,compareMode,actionOnBothPass,actionOnDepthFail,actionOnDepthPassStencilFail);
@@ -545,12 +545,12 @@ package alternativa.gfx.core
       public function setStencilReferenceValue(referenceValue:uint, readMask:uint = 255, writeMask:uint = 255) : void
       {
          var context:Context3D = null;
-         if(referenceValue != this.dasybi.bavavove || readMask != this.dasybi.bohyha || writeMask != this.dasybi.libywarer)
+         if(referenceValue != this.renderState.referenceValue || readMask != this.renderState.readMask || writeMask != this.renderState.writeMask)
          {
-            this.dasybi.bavavove = referenceValue;
-            this.dasybi.bohyha = readMask;
-            this.dasybi.libywarer = writeMask;
-            context = this.habyvem.context3D;
+            this.renderState.referenceValue = referenceValue;
+            this.renderState.readMask = readMask;
+            this.renderState.writeMask = writeMask;
+            context = this.stage3D.context3D;
             if(context != null)
             {
                context.setStencilReferenceValue(referenceValue,readMask,writeMask);
@@ -561,20 +561,20 @@ package alternativa.gfx.core
       public function setTextureAt(sampler:int, texture:TextureResource) : void
       {
          var context:Context3D = null;
-         if(texture != this.dasybi.tylu[sampler])
+         if(texture != this.renderState.textures[sampler])
          {
             if(texture != null && !texture.available)
             {
-               throw new Error(dapymat);
+               throw new Error(RESOURCE_NOT_AVAILABLE);
             }
-            this.dasybi.tylu[sampler] = texture;
-            context = this.habyvem.context3D;
+            this.renderState.textures[sampler] = texture;
+            context = this.stage3D.context3D;
             if(context != null)
             {
                if(texture != null)
                {
                   this.prepareResource(context,texture);
-                  context.setTextureAt(sampler,texture.tylu[this.vivu]);
+                  context.setTextureAt(sampler,texture.textures[this._stage3DIndex]);
                }
                else
                {
@@ -587,22 +587,22 @@ package alternativa.gfx.core
       public function setVertexBufferAt(index:int, buffer:VertexBufferResource, bufferOffset:int = 0, format:String = "float4") : void
       {
          var context:Context3D = null;
-         if(buffer != this.dasybi.kewyv[index] || bufferOffset != this.dasybi.qumovi[index] || format != this.dasybi.totuqo[index])
+         if(buffer != this.renderState.vertexBuffers[index] || bufferOffset != this.renderState.bufferOffsets[index] || format != this.renderState.formats[index])
          {
             if(buffer != null && !buffer.available)
             {
-               throw new Error(dapymat);
+               throw new Error(RESOURCE_NOT_AVAILABLE);
             }
-            this.dasybi.kewyv[index] = buffer;
-            this.dasybi.qumovi[index] = bufferOffset;
-            this.dasybi.totuqo[index] = format;
-            context = this.habyvem.context3D;
+            this.renderState.vertexBuffers[index] = buffer;
+            this.renderState.bufferOffsets[index] = bufferOffset;
+            this.renderState.formats[index] = format;
+            context = this.stage3D.context3D;
             if(context != null)
             {
                if(buffer != null)
                {
                   this.prepareResource(context,buffer);
-                  context.setVertexBufferAt(index,buffer.putiwyfa[this.vivu],bufferOffset,format);
+                  context.setVertexBufferAt(index,buffer.buffers[this._stage3DIndex],bufferOffset,format);
                }
                else
                {
@@ -620,7 +620,7 @@ package alternativa.gfx.core
          var i:int = 0;
          var j:int = firstRegister << 2;
          var count:int = numRegisters < 0 ? int(data.length) : numRegisters << 2;
-         var constants:Vector.<Number> = programType == "vertex" ? this.dasybi.badoh : this.dasybi.befyjut;
+         var constants:Vector.<Number> = programType == "vertex" ? this.renderState.vertexConstants : this.renderState.fragmentConstants;
          if(compare)
          {
             for(diff = false; i < count; )
@@ -636,7 +636,7 @@ package alternativa.gfx.core
             }
             if(diff)
             {
-               context = this.habyvem.context3D;
+               context = this.stage3D.context3D;
                if(context != null)
                {
                   context.setProgramConstantsFromVector(programType,firstRegister,data,numRegisters);
@@ -651,7 +651,7 @@ package alternativa.gfx.core
                i++;
                j++;
             }
-            context = this.habyvem.context3D;
+            context = this.stage3D.context3D;
             if(context != null)
             {
                context.setProgramConstantsFromVector(programType,firstRegister,data,numRegisters);
@@ -665,17 +665,17 @@ package alternativa.gfx.core
          var cy:int = 0;
          var cw:int = 0;
          var ch:int = 0;
-         var context:Context3D = this.habyvem.context3D;
+         var context:Context3D = this.stage3D.context3D;
          if(context != null)
          {
-            if(!this.wofew)
+            if(!this.configured)
             {
-               if(this.qyvaququ == "baselineConstrained")
+               if(this._profile == "baselineConstrained")
                {
-                  cx = this.zyzafyg;
-                  cy = this.rogu;
-                  cw = this.cof;
-                  ch = this.gugap;
+                  cx = this._x;
+                  cy = this._y;
+                  cw = this._width;
+                  ch = this._height;
                   if(cx < 0)
                   {
                      cx = 0;
@@ -692,38 +692,38 @@ package alternativa.gfx.core
                   {
                      ch = this.stage.stageHeight - cy;
                   }
-                  if(cx != this.habyvem.x || cy != this.habyvem.y || cw != this.pepitoso || ch != this.jegicakof || this.cowativi != this.zoje)
+                  if(cx != this.stage3D.x || cy != this.stage3D.y || cw != this.backBufferWidth || ch != this.backBufferHeight || this._enableDepthAndStencil != this.backBufferEnableDepthAndStencil)
                   {
-                     context.configureBackBuffer(50,50,0,this.cowativi);
-                     this.habyvem.x = cx;
-                     this.habyvem.y = cy;
-                     context.configureBackBuffer(cw,ch,0,this.cowativi);
-                     this.pepitoso = cw;
-                     this.jegicakof = ch;
-                     this.fide = this.pucel;
-                     this.zoje = this.cowativi;
+                     context.configureBackBuffer(50,50,0,this._enableDepthAndStencil);
+                     this.stage3D.x = cx;
+                     this.stage3D.y = cy;
+                     context.configureBackBuffer(cw,ch,0,this._enableDepthAndStencil);
+                     this.backBufferWidth = cw;
+                     this.backBufferHeight = ch;
+                     this.backBufferAntiAlias = this._antiAlias;
+                     this.backBufferEnableDepthAndStencil = this._enableDepthAndStencil;
                   }
                }
                else
                {
-                  if(this.habyvem.x != this.zyzafyg)
+                  if(this.stage3D.x != this._x)
                   {
-                     this.habyvem.x = this.zyzafyg;
+                     this.stage3D.x = this._x;
                   }
-                  if(this.habyvem.y != this.rogu)
+                  if(this.stage3D.y != this._y)
                   {
-                     this.habyvem.y = this.rogu;
+                     this.stage3D.y = this._y;
                   }
-                  if(this.cof != this.pepitoso || this.gugap != this.jegicakof || this.pucel != this.fide || this.cowativi != this.zoje)
+                  if(this._width != this.backBufferWidth || this._height != this.backBufferHeight || this._antiAlias != this.backBufferAntiAlias || this._enableDepthAndStencil != this.backBufferEnableDepthAndStencil)
                   {
-                     context.configureBackBuffer(this.cof,this.gugap,this.pucel,this.cowativi);
-                     this.pepitoso = this.cof;
-                     this.jegicakof = this.gugap;
-                     this.fide = this.pucel;
-                     this.zoje = this.cowativi;
+                     context.configureBackBuffer(this._width,this._height,this._antiAlias,this._enableDepthAndStencil);
+                     this.backBufferWidth = this._width;
+                     this.backBufferHeight = this._height;
+                     this.backBufferAntiAlias = this._antiAlias;
+                     this.backBufferEnableDepthAndStencil = this._enableDepthAndStencil;
                   }
                }
-               this.wofew = true;
+               this.configured = true;
             }
             context.clear(red,green,blue,alpha,depth,stencil,mask);
          }
@@ -731,7 +731,7 @@ package alternativa.gfx.core
       
       public function drawToBitmapData(destination:BitmapData) : void
       {
-         var context:Context3D = this.habyvem.context3D;
+         var context:Context3D = this.stage3D.context3D;
          if(context != null)
          {
             context.drawToBitmapData(destination);
@@ -742,25 +742,25 @@ package alternativa.gfx.core
       {
          if(!indexBuffer.available)
          {
-            throw new Error(dapymat);
+            throw new Error(RESOURCE_NOT_AVAILABLE);
          }
-         var context:Context3D = this.habyvem.context3D;
+         var context:Context3D = this.stage3D.context3D;
          if(context != null)
          {
             this.prepareResource(context,indexBuffer);
-            context.drawTriangles(indexBuffer.putiwyfa[this.vivu],firstIndex,numTriangles);
+            context.drawTriangles(indexBuffer.buffers[this._stage3DIndex],firstIndex,numTriangles);
          }
       }
       
       public function present() : void
       {
-         this.dasybi.wucukyj = null;
-         var context:Context3D = this.habyvem.context3D;
+         this.renderState.texture = null;
+         var context:Context3D = this.stage3D.context3D;
          if(context != null)
          {
             context.present();
          }
-         this.wofew = false;
+         this.configured = false;
       }
    }
 }

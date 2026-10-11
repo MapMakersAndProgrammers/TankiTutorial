@@ -7,21 +7,21 @@ package alternativa.physics.collision
       
       public var indices:Vector.<int>;
       
-      public var henanaja:Vector.<int>;
+      public var splitIndices:Vector.<int>;
       
-      public var taqa:AABB;
+      public var boundBox:AABB;
       
-      public var vewu:CollisionKdNode;
+      public var parent:CollisionKdNode;
       
-      public var tuz:CollisionKdTree2D;
+      public var splitTree:CollisionKdTree2D;
       
-      public var zekos:int = -1;
+      public var axis:int = -1;
       
-      public var retycel:Number;
+      public var coord:Number;
       
-      public var gumipiw:CollisionKdNode;
+      public var positive:CollisionKdNode;
       
-      public var hab:CollisionKdNode;
+      public var negative:CollisionKdNode;
       
       public function CollisionKdNode()
       {

@@ -12,198 +12,198 @@ package alternativa.tanks.shared.usertitle
    public class EffectIndicator
    {
       
-      private static var leb:Dictionary;
+      private static var icons:Dictionary;
       
-      private static var qyhyli:Rectangle;
+      private static var iconRect:Rectangle;
       
-      private static const vybizy:int = 1;
+      private static const STATE_HIDDEN:int = 1;
       
-      private static const koqacap:int = 2;
+      private static const STATE_SHOWING:int = 2;
       
-      private static const dec:int = 4;
+      private static const STATE_VISIBLE:int = 4;
       
-      private static const mobihyle:int = 8;
+      private static const STATE_HIDING:int = 8;
       
-      private static const myz:Number = 0.2;
+      private static const MIN_ALPHA:Number = 0.2;
       
-      private static var gijalatyt:Matrix = new Matrix();
+      private static var matrix:Matrix = new Matrix();
       
-      private var japesuh:int;
+      private var _effectId:int;
       
-      private var fidycah:BitmapData;
+      private var icon:BitmapData;
       
-      private var cug:int;
+      private var blinkingTime:int;
       
-      private var fur:ColorTransform = new ColorTransform();
+      private var colorTransform:ColorTransform = new ColorTransform();
       
-      private var nedup:int;
+      private var blinkingStartTime:int;
       
-      private var duleruve:Blinker;
+      private var blinker:Blinker;
       
-      private var wedebuga:Number = 1;
+      private var alpha:Number = 1;
       
-      private var cizyhemy:Boolean;
+      private var needRedraw:Boolean;
       
       private var x:int;
       
       private var y:int;
       
-      private var zab:UserTitle;
+      private var userTitle:UserTitle;
       
-      private var kejo:int;
+      private var state:int;
       
-      private var jemusyvin:Boolean;
+      private var blinking:Boolean;
       
-      public function EffectIndicator(param1:int, param2:int, param3:UserTitle, param4:int, param5:int)
+      public function EffectIndicator(effectId:int, blinkingTime:int, userTitle:UserTitle, initialInterval:int, intervalDecrement:int)
       {
          super();
-         if(leb == null)
+         if(icons == null)
          {
             initIcons();
          }
-         this.japesuh = param1;
-         this.fidycah = leb[param1];
-         this.cug = param2;
-         this.zab = param3;
-         this.duleruve = new Blinker(param4,20,param5,myz,1,10);
-         this.kejo = vybizy;
+         this._effectId = effectId;
+         this.icon = icons[effectId];
+         this.blinkingTime = blinkingTime;
+         this.userTitle = userTitle;
+         this.blinker = new Blinker(initialInterval,20,intervalDecrement,MIN_ALPHA,1,10);
+         this.state = STATE_HIDDEN;
       }
       
       private static function initIcons() : void
       {
-         leb = new Dictionary();
-         qyhyli = BitmapData(leb[InventoryItemType.gezah]).rect;
+         icons = new Dictionary();
+         iconRect = BitmapData(icons[InventoryItemType.gezah]).rect;
       }
       
       public function get effectId() : int
       {
-         return this.japesuh;
+         return this._effectId;
       }
       
       public function isVisible() : Boolean
       {
-         return (this.kejo & dec) != 0;
+         return (this.state & STATE_VISIBLE) != 0;
       }
       
       public function isHidden() : Boolean
       {
-         return this.kejo == vybizy;
+         return this.state == STATE_HIDDEN;
       }
       
-      public function show(param1:int) : void
+      public function show(duration:int) : void
       {
-         this.kejo &= ~mobihyle;
-         if(this.kejo != dec || this.wedebuga != 1)
+         this.state &= ~STATE_HIDING;
+         if(this.state != STATE_VISIBLE || this.alpha != 1)
          {
-            this.cizyhemy = true;
+            this.needRedraw = true;
          }
-         this.nedup = getTimer() + param1 - this.cug;
-         this.jemusyvin = false;
-         this.wedebuga = 1;
-         if(this.kejo == vybizy)
+         this.blinkingStartTime = getTimer() + duration - this.blinkingTime;
+         this.blinking = false;
+         this.alpha = 1;
+         if(this.state == STATE_HIDDEN)
          {
-            this.kejo = koqacap;
+            this.state = STATE_SHOWING;
          }
       }
       
       public function hide() : void
       {
-         if(this.kejo == koqacap)
+         if(this.state == STATE_SHOWING)
          {
-            this.zab.doHideIndicator(this);
-            this.kejo = vybizy;
+            this.userTitle.doHideIndicator(this);
+            this.state = STATE_HIDDEN;
             return;
          }
-         if((this.kejo & (vybizy | mobihyle)) != 0)
+         if((this.state & (STATE_HIDDEN | STATE_HIDING)) != 0)
          {
             return;
          }
-         this.kejo |= mobihyle;
-         this.duleruve.setMinValue(0);
-         if(!this.jemusyvin)
+         this.state |= STATE_HIDING;
+         this.blinker.setMinValue(0);
+         if(!this.blinking)
          {
-            this.nedup = 0;
-            this.duleruve.init(getTimer());
-            this.jemusyvin = true;
+            this.blinkingStartTime = 0;
+            this.blinker.init(getTimer());
+            this.blinking = true;
          }
       }
       
-      public function clear(param1:BitmapData) : void
+      public function clear(texture:BitmapData) : void
       {
-         if(this.kejo == vybizy || this.kejo == koqacap)
+         if(this.state == STATE_HIDDEN || this.state == STATE_SHOWING)
          {
             return;
          }
-         qyhyli.x = this.x;
-         qyhyli.y = this.y;
-         param1.fillRect(qyhyli,0);
+         iconRect.x = this.x;
+         iconRect.y = this.y;
+         texture.fillRect(iconRect,0);
       }
       
-      public function setPosition(param1:int, param2:int) : void
+      public function setPosition(x:int, y:int) : void
       {
-         this.x = param1;
-         this.y = param2;
-         this.cizyhemy = true;
+         this.x = x;
+         this.y = y;
+         this.needRedraw = true;
       }
       
       public function forceRedraw() : void
       {
-         this.cizyhemy = true;
+         this.needRedraw = true;
       }
       
-      public function update(param1:int, param2:int, param3:BitmapData) : void
+      public function update(time:int, deltaTime:int, texture:BitmapData) : void
       {
-         if(this.kejo == vybizy)
+         if(this.state == STATE_HIDDEN)
          {
             return;
          }
-         if(this.cizyhemy)
+         if(this.needRedraw)
          {
-            this.draw(param3);
-            this.cizyhemy = false;
+            this.draw(texture);
+            this.needRedraw = false;
          }
-         if(param1 > this.nedup)
+         if(time > this.blinkingStartTime)
          {
-            this.updateBlinking(param1,param2,param3);
+            this.updateBlinking(time,deltaTime,texture);
          }
-         if(this.kejo == koqacap)
+         if(this.state == STATE_SHOWING)
          {
-            this.kejo = dec;
+            this.state = STATE_VISIBLE;
          }
       }
       
-      private function updateBlinking(param1:int, param2:int, param3:BitmapData) : void
+      private function updateBlinking(time:int, deltaTime:int, texture:BitmapData) : void
       {
-         var _loc4_:Number = NaN;
-         if(this.jemusyvin)
+         var value:Number = NaN;
+         if(this.blinking)
          {
-            _loc4_ = Number(this.duleruve.updateValue(param1,param2));
-            if(_loc4_ != this.wedebuga)
+            value = Number(this.blinker.updateValue(time,deltaTime));
+            if(value != this.alpha)
             {
-               this.wedebuga = _loc4_;
-               this.draw(param3);
+               this.alpha = value;
+               this.draw(texture);
             }
-            if((this.kejo & mobihyle) != 0 && this.wedebuga == 0)
+            if((this.state & STATE_HIDING) != 0 && this.alpha == 0)
             {
-               this.zab.doHideIndicator(this);
-               this.kejo = vybizy;
+               this.userTitle.doHideIndicator(this);
+               this.state = STATE_HIDDEN;
             }
          }
          else
          {
-            this.duleruve.setMinValue(myz);
-            this.duleruve.init(param1);
-            this.jemusyvin = true;
+            this.blinker.setMinValue(MIN_ALPHA);
+            this.blinker.init(time);
+            this.blinking = true;
          }
       }
       
-      private function draw(param1:BitmapData) : void
+      private function draw(texture:BitmapData) : void
       {
-         this.clear(param1);
-         gijalatyt.tx = this.x;
-         gijalatyt.ty = this.y;
-         this.fur.alphaMultiplier = this.wedebuga;
-         param1.draw(this.fidycah,gijalatyt,this.fur,null,null,true);
+         this.clear(texture);
+         matrix.tx = this.x;
+         matrix.ty = this.y;
+         this.colorTransform.alphaMultiplier = this.alpha;
+         texture.draw(this.icon,matrix,this.colorTransform,null,null,true);
       }
    }
 }

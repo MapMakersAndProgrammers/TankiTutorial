@@ -5,123 +5,123 @@ package tutorial
    public class TimeData
    {
       
-      private static const qawyzeby:int = 10;
+      private static const AVERAGE_FRAMES:int = 10;
       
-      public var lecopojen:uint;
+      public var time:uint;
       
-      public var rud:uint;
+      public var deltaTimeMs:uint;
       
-      public var ziqod:Number;
+      public var deltaTime:Number;
       
-      private var sirali:Number;
+      private var _averageTimeInMs:Number;
       
-      private var gymut:Number;
+      private var _fps:Number;
       
-      private var cyhyfu:Number;
+      private var _minFPS:Number;
       
-      private var suguhoror:Number;
+      private var _maxFPS:Number;
       
-      private var ruhisa:int;
+      private var _totalFrames:int;
       
-      private var cawicozy:int;
+      private var frameCounter:int;
       
-      private var pekup:int;
+      private var startTime:int;
       
-      private var cifytotis:int;
+      private var lastAverageTime:int;
       
       public function TimeData()
       {
          super();
-         this.lecopojen = getTimer();
-         this.rud = 0;
-         this.ziqod = 0;
+         this.time = getTimer();
+         this.deltaTimeMs = 0;
+         this.deltaTime = 0;
          this.reset();
       }
       
       public function calculate() : void
       {
-         var _loc1_:uint = uint(getTimer());
-         this.rud = _loc1_ - this.lecopojen;
-         this.ziqod = this.rud * 0.001;
-         this.lecopojen = _loc1_;
+         var currentTime:uint = uint(getTimer());
+         this.deltaTimeMs = currentTime - this.time;
+         this.deltaTime = this.deltaTimeMs * 0.001;
+         this.time = currentTime;
          this.increaseFrameCounters();
-         if(this.shoudCalculateAverageValues(this.lecopojen))
+         if(this.shoudCalculateAverageValues(this.time))
          {
-            this.calculateAverageValues(this.lecopojen);
+            this.calculateAverageValues(this.time);
             this.updateMinMaxFPSValues();
-            this.cifytotis = this.lecopojen;
+            this.lastAverageTime = this.time;
          }
       }
       
       public function get averageTimeInMs() : Number
       {
-         return this.sirali;
+         return this._averageTimeInMs;
       }
       
       public function get fps() : Number
       {
-         return this.gymut;
+         return this._fps;
       }
       
       public function get minFPS() : Number
       {
-         return this.cyhyfu;
+         return this._minFPS;
       }
       
       public function get maxFPS() : Number
       {
-         return this.suguhoror;
+         return this._maxFPS;
       }
       
       public function getAverageFPS() : Number
       {
-         return 1000 / (this.cifytotis - this.pekup) * this.ruhisa;
+         return 1000 / (this.lastAverageTime - this.startTime) * this._totalFrames;
       }
       
       public function get totalFrames() : int
       {
-         return this.ruhisa;
+         return this._totalFrames;
       }
       
       public function get totalTime() : int
       {
-         return this.cifytotis - this.pekup;
+         return this.lastAverageTime - this.startTime;
       }
       
       public function reset() : void
       {
-         this.cawicozy = 0;
-         this.sirali = 0;
-         this.gymut = 100;
-         this.cyhyfu = 100;
-         this.suguhoror = 0;
-         this.ruhisa = 0;
-         this.pekup = getTimer();
-         this.cifytotis = this.pekup;
+         this.frameCounter = 0;
+         this._averageTimeInMs = 0;
+         this._fps = 100;
+         this._minFPS = 100;
+         this._maxFPS = 0;
+         this._totalFrames = 0;
+         this.startTime = getTimer();
+         this.lastAverageTime = this.startTime;
       }
       
       private function increaseFrameCounters() : void
       {
-         ++this.ruhisa;
-         ++this.cawicozy;
+         ++this._totalFrames;
+         ++this.frameCounter;
       }
       
-      private function shoudCalculateAverageValues(param1:int) : Boolean
+      private function shoudCalculateAverageValues(currentTime:int) : Boolean
       {
-         return this.cawicozy >= qawyzeby && param1 > this.cifytotis;
+         return this.frameCounter >= AVERAGE_FRAMES && currentTime > this.lastAverageTime;
       }
       
-      private function calculateAverageValues(param1:int) : void
+      private function calculateAverageValues(currentTime:int) : void
       {
-         this.sirali = (param1 - this.cifytotis) / this.cawicozy;
-         this.gymut = 1000 / this.sirali;
-         this.cawicozy = 0;
+         this._averageTimeInMs = (currentTime - this.lastAverageTime) / this.frameCounter;
+         this._fps = 1000 / this._averageTimeInMs;
+         this.frameCounter = 0;
       }
       
       private function updateMinMaxFPSValues() : void
       {
-         this.cyhyfu = Math.min(this.cyhyfu,this.gymut);
-         this.suguhoror = Math.max(this.suguhoror,this.gymut);
+         this._minFPS = Math.min(this._minFPS,this._fps);
+         this._maxFPS = Math.max(this._maxFPS,this._fps);
       }
    }
 }

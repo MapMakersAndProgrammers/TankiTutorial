@@ -5,38 +5,38 @@ package tutorial.tasks
    public class CrystalIndicatorTask extends Task
    {
       
-      public static const qufifyqi:String = "show";
+      public static const SHOW:String = "show";
       
-      public static const zijuzohyl:String = "hide";
+      public static const HIDE:String = "hide";
       
-      public static const dabilenoc:String = "inc";
+      public static const INC:String = "inc";
       
-      public static const sel:String = "none";
+      public static const NONE:String = "none";
       
-      private var hemire:String = "none";
+      private var action:String = "none";
       
-      public function CrystalIndicatorTask(param1:String)
+      public function CrystalIndicatorTask(action:String)
       {
          super();
-         this.hemire = param1;
+         this.action = action;
       }
       
       override public function process() : Boolean
       {
-         switch(this.hemire)
+         switch(this.action)
          {
-            case qufifyqi:
-               GameData.maji.showIndicator();
-               this.hemire = sel;
+            case SHOW:
+               GameData.crystalIndicatorManager.showIndicator();
+               this.action = NONE;
                break;
-            case zijuzohyl:
-               GameData.maji.hideIndicator();
-               this.hemire = sel;
+            case HIDE:
+               GameData.crystalIndicatorManager.hideIndicator();
+               this.action = NONE;
                break;
-            case dabilenoc:
-               this.hemire = sel;
+            case INC:
+               this.action = NONE;
                break;
-            case sel:
+            case NONE:
          }
          return true;
       }

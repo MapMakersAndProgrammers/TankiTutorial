@@ -20,468 +20,468 @@ package alternativa.tanks.shared.physics
    public class TanksCollisionDetector implements CollisionDetector
    {
       
-      private static const luculeqa:Number = 0.01;
+      private static const EPSILON:Number = 0.01;
       
-      private const pusuc:Object = {};
+      private const colliders:Object = {};
       
-      private const tet:RayHit = new RayHit();
+      private const rayHit:RayHit = new RayHit();
       
-      private const bilaw:MinMax = new MinMax();
+      private const minMax:MinMax = new MinMax();
       
-      private const wawuse:Vector3 = new Vector3();
+      private const normal:Vector3 = new Vector3();
       
-      private const zidihyw:Vector3 = new Vector3();
+      private const point:Vector3 = new Vector3();
       
-      private const mydip:RayHit = new RayHit();
+      private const dynamicRayHit:RayHit = new RayHit();
       
-      private const lukej:AABB = new AABB();
+      private const rayAABB:AABB = new AABB();
       
-      private const pupicic:Vector.<ShapeContact> = new Vector.<ShapeContact>();
+      private const shapeContacts:Vector.<ShapeContact> = new Vector.<ShapeContact>();
       
-      private var nyseh:CollisionKdTree = new CollisionKdTree();
+      private var kdTree:CollisionKdTree = new CollisionKdTree();
       
-      private var hevarer:Number = 0.0001;
+      private var threshold:Number = 0.0001;
       
-      private var cubajedid:Vector.<TankBody> = new Vector.<TankBody>();
+      private var tankBodies:Vector.<TankBody> = new Vector.<TankBody>();
       
-      private var sity:Vector.<Body> = new Vector.<Body>();
+      private var kinematicBodies:Vector.<Body> = new Vector.<Body>();
       
-      private var kobet:Body;
+      private var staticBody:Body;
       
       public function TanksCollisionDetector()
       {
          super();
-         var _loc1_:Number = 0.000001;
-         this.setCollider(CollisionShape.jupod,CollisionShape.jupod,new BoxBoxCollider(_loc1_));
-         this.setCollider(CollisionShape.jupod,CollisionShape.hosomubeb,new BoxRectCollider(_loc1_));
-         this.setCollider(CollisionShape.jupod,CollisionShape.miluvo,new BoxTriangleCollider(_loc1_));
+         var epsilon:Number = 0.000001;
+         this.setCollider(CollisionShape.BOX,CollisionShape.BOX,new BoxBoxCollider(epsilon));
+         this.setCollider(CollisionShape.BOX,CollisionShape.RECT,new BoxRectCollider(epsilon));
+         this.setCollider(CollisionShape.BOX,CollisionShape.TRIANGLE,new BoxTriangleCollider(epsilon));
          this.createStaticBody();
       }
       
-      private function setCollider(param1:int, param2:int, param3:Collider) : void
+      private function setCollider(type1:int, type2:int, collider:Collider) : void
       {
-         this.pusuc[param1 | param2] = param3;
+         this.colliders[type1 | type2] = collider;
       }
       
       private function createStaticBody() : void
       {
-         this.kobet = new Body(1,new Matrix3());
-         this.kobet.midorofic = false;
+         this.staticBody = new Body(1,new Matrix3());
+         this.staticBody.movable = false;
       }
       
-      public function buildKdTree(param1:Vector.<CollisionShape>, param2:AABB = null) : void
+      public function buildKdTree(shapes:Vector.<CollisionShape>, bounds:AABB = null) : void
       {
-         var _loc3_:CollisionShape = null;
-         for each(_loc3_ in param1)
+         var shape:CollisionShape = null;
+         for each(shape in shapes)
          {
-            _loc3_.body = this.kobet;
+            shape.body = this.staticBody;
          }
-         this.nyseh.createTree(param1,param2);
+         this.kdTree.createTree(shapes,bounds);
       }
       
-      public function addTankBody(param1:TankBody) : void
+      public function addTankBody(tankBody:TankBody) : void
       {
-         this.cubajedid.push(param1);
+         this.tankBodies.push(tankBody);
       }
       
-      public function removeTankBody(param1:TankBody) : void
+      public function removeTankBody(tankBody:TankBody) : void
       {
-         var _loc3_:int = 0;
-         var _loc2_:int = this.cubajedid.indexOf(param1);
-         if(_loc2_ > -1)
+         var lastIndex:int = 0;
+         var index:int = this.tankBodies.indexOf(tankBody);
+         if(index > -1)
          {
-            _loc3_ = this.cubajedid.length - 1;
-            this.cubajedid[_loc2_] = this.cubajedid[_loc3_];
-            this.cubajedid.length = _loc3_;
-         }
-      }
-      
-      public function addKineamticBody(param1:Body) : void
-      {
-         if(this.sity.indexOf(param1) < 0)
-         {
-            this.sity.push(param1);
+            lastIndex = this.tankBodies.length - 1;
+            this.tankBodies[index] = this.tankBodies[lastIndex];
+            this.tankBodies.length = lastIndex;
          }
       }
       
-      public function removeKinematicBody(param1:Body) : void
+      public function addKineamticBody(body:Body) : void
       {
-         var _loc2_:int = this.sity.indexOf(param1);
-         if(_loc2_ > -1)
+         if(this.kinematicBodies.indexOf(body) < 0)
          {
-            this.sity.splice(_loc2_,1);
+            this.kinematicBodies.push(body);
          }
       }
       
-      public function getBodyContacts(param1:Vector.<BodyContact>) : void
+      public function removeKinematicBody(body:Body) : void
       {
-         var _loc4_:TankBody = null;
-         var _loc5_:int = 0;
-         var _loc2_:int = int(this.cubajedid.length);
-         var _loc3_:int = 0;
-         while(_loc3_ < _loc2_)
+         var index:int = this.kinematicBodies.indexOf(body);
+         if(index > -1)
          {
-            _loc4_ = this.cubajedid[_loc3_];
-            _loc4_.vahuzys = false;
-            _loc4_.put = false;
-            _loc5_ = int(param1.length);
-            this.getContactsWithStatic(_loc4_,param1);
-            if(_loc5_ != param1.length)
+            this.kinematicBodies.splice(index,1);
+         }
+      }
+      
+      public function getBodyContacts(contacts:Vector.<BodyContact>) : void
+      {
+         var tankBody:TankBody = null;
+         var numContacts:int = 0;
+         var len:int = int(this.tankBodies.length);
+         var i:int = 0;
+         while(i < len)
+         {
+            tankBody = this.tankBodies[i];
+            tankBody.vahuzys = false;
+            tankBody.put = false;
+            numContacts = int(contacts.length);
+            this.getContactsWithStatic(tankBody,contacts);
+            if(numContacts != contacts.length)
             {
-               _loc4_.vahuzys = true;
+               tankBody.vahuzys = true;
             }
-            _loc5_ = int(param1.length);
-            this.getContactsWithOtherBodies(_loc4_,_loc3_ + 1,param1);
-            if(_loc5_ != param1.length)
+            numContacts = int(contacts.length);
+            this.getContactsWithOtherBodies(tankBody,i + 1,contacts);
+            if(numContacts != contacts.length)
             {
-               _loc4_.put = true;
+               tankBody.put = true;
             }
-            this.getContactsWithKinematicBodies(_loc4_,param1);
-            _loc3_++;
+            this.getContactsWithKinematicBodies(tankBody,contacts);
+            i++;
          }
       }
       
-      private function getContactsWithStatic(param1:TankBody, param2:Vector.<BodyContact>) : void
+      private function getContactsWithStatic(tankBody:TankBody, contacts:Vector.<BodyContact>) : void
       {
-         var _loc3_:int = 0;
-         var _loc4_:int = 0;
-         var _loc5_:BodyContact = null;
-         if(!param1.body.vowymov)
+         var len:int = 0;
+         var i:int = 0;
+         var bodyContact:BodyContact = null;
+         if(!tankBody.body.frozen)
          {
-            _loc3_ = int(param1.kodasy.length);
-            _loc4_ = 0;
-            while(_loc4_ < _loc3_)
+            len = int(tankBody.staticCollisionBoxes.length);
+            i = 0;
+            while(i < len)
             {
-               this.getShapeNodeCollisions(this.nyseh.wymyhujoq,param1.kodasy[_loc4_],this.pupicic);
-               _loc4_++;
+               this.getShapeNodeCollisions(this.kdTree.rootNode,tankBody.staticCollisionBoxes[i],this.shapeContacts);
+               i++;
             }
-            if(this.pupicic.length > 0)
+            if(this.shapeContacts.length > 0)
             {
-               _loc5_ = BodyContact.create();
-               _loc5_.rukowicyp = param1.body;
-               _loc5_.zata = this.kobet;
-               _loc5_.setShapeContacts(this.pupicic);
-               this.pupicic.length = 0;
-               param2[param2.length] = _loc5_;
+               bodyContact = BodyContact.create();
+               bodyContact.body1 = tankBody.body;
+               bodyContact.body2 = this.staticBody;
+               bodyContact.setShapeContacts(this.shapeContacts);
+               this.shapeContacts.length = 0;
+               contacts[contacts.length] = bodyContact;
             }
          }
       }
       
-      private function getContactsWithOtherBodies(param1:TankBody, param2:int, param3:Vector.<BodyContact>) : void
+      private function getContactsWithOtherBodies(tankBody:TankBody, startIndex:int, contacts:Vector.<BodyContact>) : void
       {
-         var _loc6_:TankBody = null;
-         var _loc7_:Body = null;
-         var _loc8_:Body = null;
-         var _loc9_:int = 0;
+         var otherTankBody:TankBody = null;
+         var body1:Body = null;
+         var body2:Body = null;
+         var numShapeContacts:int = 0;
          var _loc10_:Boolean = false;
          var _loc11_:Boolean = false;
-         var _loc12_:BodyContact = null;
-         var _loc13_:int = 0;
-         var _loc14_:ShapeContact = null;
-         var _loc4_:int = int(this.cubajedid.length);
-         var _loc5_:int = param2;
-         while(_loc5_ < _loc4_)
+         var bodyContact:BodyContact = null;
+         var j:int = 0;
+         var shapeContact:ShapeContact = null;
+         var len:int = int(this.tankBodies.length);
+         var i:int = startIndex;
+         while(i < len)
          {
-            _loc6_ = this.cubajedid[_loc5_];
-            _loc7_ = param1.body;
-            _loc8_ = _loc6_.body;
-            if(!(Boolean(_loc7_.vowymov) && Boolean(_loc8_.vowymov)) && Boolean(_loc7_.raruluk.intersects(_loc8_.raruluk,luculeqa)))
+            otherTankBody = this.tankBodies[i];
+            body1 = tankBody.body;
+            body2 = otherTankBody.body;
+            if(!(Boolean(body1.frozen) && Boolean(body2.frozen)) && Boolean(body1.aabb.intersects(body2.aabb,EPSILON)))
             {
-               this.getContacts(param1.kyripama,_loc6_.kyripama,this.pupicic);
-               _loc9_ = int(this.pupicic.length);
-               if(_loc9_ > 0)
+               this.getContacts(tankBody.tankCollisionBox,otherTankBody.tankCollisionBox,this.shapeContacts);
+               numShapeContacts = int(this.shapeContacts.length);
+               if(numShapeContacts > 0)
                {
-                  _loc10_ = _loc7_.fosa == null || Boolean(_loc7_.fosa.considerBodies(_loc7_,_loc8_));
-                  _loc11_ = _loc8_.fosa == null || Boolean(_loc8_.fosa.considerBodies(_loc8_,_loc7_));
+                  _loc10_ = body1.collisionFilter == null || Boolean(body1.collisionFilter.considerBodies(body1,body2));
+                  _loc11_ = body2.collisionFilter == null || Boolean(body2.collisionFilter.considerBodies(body2,body1));
                   if(_loc10_ && _loc11_)
                   {
-                     _loc12_ = BodyContact.create();
-                     _loc12_.rukowicyp = _loc7_;
-                     _loc12_.zata = _loc8_;
-                     _loc12_.setShapeContacts(this.pupicic);
-                     param3[param3.length] = _loc12_;
+                     bodyContact = BodyContact.create();
+                     bodyContact.body1 = body1;
+                     bodyContact.body2 = body2;
+                     bodyContact.setShapeContacts(this.shapeContacts);
+                     contacts[contacts.length] = bodyContact;
                   }
                   else
                   {
-                     _loc13_ = 0;
-                     while(_loc13_ < _loc9_)
+                     j = 0;
+                     while(j < numShapeContacts)
                      {
-                        _loc14_ = this.pupicic[_loc13_];
-                        _loc14_.dispose();
-                        _loc13_++;
+                        shapeContact = this.shapeContacts[j];
+                        shapeContact.dispose();
+                        j++;
                      }
                   }
-                  this.pupicic.length = 0;
+                  this.shapeContacts.length = 0;
                }
             }
-            _loc5_++;
+            i++;
          }
       }
       
-      private function getContactsWithKinematicBodies(param1:TankBody, param2:Vector.<BodyContact>) : void
+      private function getContactsWithKinematicBodies(tankBody:TankBody, contacts:Vector.<BodyContact>) : void
       {
-         var _loc5_:Body = null;
-         var _loc3_:int = int(this.sity.length);
-         var _loc4_:int = 0;
-         while(_loc4_ < _loc3_)
+         var body:Body = null;
+         var len:int = int(this.kinematicBodies.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc5_ = this.sity[_loc4_];
-            this.getBodyBodyContact(param1.body,_loc5_,param2);
-            _loc4_++;
+            body = this.kinematicBodies[i];
+            this.getBodyBodyContact(tankBody.body,body,contacts);
+            i++;
          }
       }
       
-      private function getBodyBodyContact(param1:Body, param2:Body, param3:Vector.<BodyContact>) : void
+      private function getBodyBodyContact(body1:Body, body2:Body, contacts:Vector.<BodyContact>) : void
       {
-         var _loc4_:int = 0;
-         var _loc5_:Vector.<CollisionShape> = null;
-         var _loc6_:int = 0;
-         var _loc7_:Vector.<CollisionShape> = null;
-         var _loc8_:int = 0;
-         var _loc9_:CollisionShape = null;
-         var _loc10_:int = 0;
-         var _loc11_:BodyContact = null;
-         if(param1.raruluk.intersects(param2.raruluk,luculeqa))
+         var numShapes1:int = 0;
+         var shapes1:Vector.<CollisionShape> = null;
+         var numShapes2:int = 0;
+         var shapes2:Vector.<CollisionShape> = null;
+         var i:int = 0;
+         var shape1:CollisionShape = null;
+         var j:int = 0;
+         var bodyContact:BodyContact = null;
+         if(body1.aabb.intersects(body2.aabb,EPSILON))
          {
-            _loc4_ = int(param1.kizuvam);
-            _loc5_ = param1.hebevy;
-            _loc6_ = int(param2.kizuvam);
-            _loc7_ = param2.hebevy;
-            _loc8_ = 0;
-            while(_loc8_ < _loc4_)
+            numShapes1 = int(body1.numCollisionShapes);
+            shapes1 = body1.collisionShapes;
+            numShapes2 = int(body2.numCollisionShapes);
+            shapes2 = body2.collisionShapes;
+            i = 0;
+            while(i < numShapes1)
             {
-               _loc9_ = _loc5_[_loc8_];
-               _loc10_ = 0;
-               while(_loc10_ < _loc6_)
+               shape1 = shapes1[i];
+               j = 0;
+               while(j < numShapes2)
                {
-                  this.getContacts(_loc9_,_loc7_[_loc10_],this.pupicic);
-                  _loc10_++;
+                  this.getContacts(shape1,shapes2[j],this.shapeContacts);
+                  j++;
                }
-               _loc8_++;
+               i++;
             }
-            if(this.pupicic.length > 0)
+            if(this.shapeContacts.length > 0)
             {
-               _loc11_ = BodyContact.create();
-               _loc11_.rukowicyp = param1;
-               _loc11_.zata = param2;
-               _loc11_.setShapeContacts(this.pupicic);
-               param3[param3.length] = _loc11_;
-               this.pupicic.length = 0;
+               bodyContact = BodyContact.create();
+               bodyContact.body1 = body1;
+               bodyContact.body2 = body2;
+               bodyContact.setShapeContacts(this.shapeContacts);
+               contacts[contacts.length] = bodyContact;
+               this.shapeContacts.length = 0;
             }
          }
       }
       
-      public function getContacts(param1:CollisionShape, param2:CollisionShape, param3:Vector.<ShapeContact>) : void
+      public function getContacts(shape1:CollisionShape, shape2:CollisionShape, contacts:Vector.<ShapeContact>) : void
       {
-         if((param1.nute & param2.nute) == 0)
+         if((shape1.collisionGroup & shape2.collisionGroup) == 0)
          {
             return;
          }
-         if(param1.body == param2.body)
+         if(shape1.body == shape2.body)
          {
             return;
          }
-         if(!param1.raruluk.intersects(param2.raruluk,luculeqa))
+         if(!shape1.aabb.intersects(shape2.aabb,EPSILON))
          {
             return;
          }
-         var _loc4_:Collider = this.pusuc[param1.huvozage | param2.huvozage];
-         _loc4_.getContacts(param1,param2,param3);
+         var collider:Collider = this.colliders[shape1.type | shape2.type];
+         collider.getContacts(shape1,shape2,contacts);
       }
       
-      public function testCollision(param1:CollisionShape, param2:CollisionShape) : Boolean
+      public function testCollision(shape1:CollisionShape, shape2:CollisionShape) : Boolean
       {
-         if((param1.nute & param2.nute) == 0)
+         if((shape1.collisionGroup & shape2.collisionGroup) == 0)
          {
             return false;
          }
-         if(param1.body == param2.body)
+         if(shape1.body == shape2.body)
          {
             return false;
          }
-         if(!param1.raruluk.intersects(param2.raruluk,luculeqa))
+         if(!shape1.aabb.intersects(shape2.aabb,EPSILON))
          {
             return false;
          }
-         var _loc3_:Collider = this.pusuc[param1.huvozage | param2.huvozage];
-         return _loc3_.haveCollision(param1,param2);
+         var collider:Collider = this.colliders[shape1.type | shape2.type];
+         return collider.haveCollision(shape1,shape2);
       }
       
-      public function raycast(param1:Vector3, param2:Vector3, param3:int, param4:Number, param5:IRayCollisionFilter, param6:RayHit) : Boolean
+      public function raycast(origin:Vector3, direction:Vector3, collisionGroup:int, maxTime:Number, filter:IRayCollisionFilter, result:RayHit) : Boolean
       {
-         var _loc7_:Boolean = this.raycastStatic(param1,param2,param3,param4,param5,param6);
-         var _loc8_:Boolean = this.raycastDynamic(param1,param2,param3,param4,param5,this.mydip);
-         if(!(_loc8_ || _loc7_))
+         var staticHit:Boolean = this.raycastStatic(origin,direction,collisionGroup,maxTime,filter,result);
+         var dynamicHit:Boolean = this.raycastDynamic(origin,direction,collisionGroup,maxTime,filter,this.dynamicRayHit);
+         if(!(dynamicHit || staticHit))
          {
             return false;
          }
-         if(_loc8_ && _loc7_)
+         if(dynamicHit && staticHit)
          {
-            if(param6.jomuc > this.mydip.jomuc)
+            if(result.time > this.dynamicRayHit.time)
             {
-               param6.copy(this.mydip);
+               result.copy(this.dynamicRayHit);
             }
-            this.mydip.clear();
+            this.dynamicRayHit.clear();
             return true;
          }
-         if(_loc7_)
+         if(staticHit)
          {
-            this.mydip.clear();
+            this.dynamicRayHit.clear();
             return true;
          }
-         param6.copy(this.mydip);
-         this.mydip.clear();
+         result.copy(this.dynamicRayHit);
+         this.dynamicRayHit.clear();
          return true;
       }
       
-      public function raycastStatic(param1:Vector3, param2:Vector3, param3:int, param4:Number, param5:IRayCollisionFilter, param6:RayHit) : Boolean
+      public function raycastStatic(origin:Vector3, direction:Vector3, collisionGroup:int, maxTime:Number, filter:IRayCollisionFilter, result:RayHit) : Boolean
       {
-         if(!this.getRayBoundBoxIntersection(param1,param2,this.nyseh.wymyhujoq.taqa,this.bilaw))
+         if(!this.getRayBoundBoxIntersection(origin,direction,this.kdTree.rootNode.boundBox,this.minMax))
          {
             return false;
          }
-         if(this.bilaw.rekycave < 0 || this.bilaw.rylegyqa > param4)
+         if(this.minMax.max < 0 || this.minMax.min > maxTime)
          {
             return false;
          }
-         if(this.bilaw.rylegyqa <= 0)
+         if(this.minMax.min <= 0)
          {
-            this.bilaw.rylegyqa = 0;
-            this.zidihyw.x = param1.x;
-            this.zidihyw.y = param1.y;
-            this.zidihyw.z = param1.z;
+            this.minMax.min = 0;
+            this.point.x = origin.x;
+            this.point.y = origin.y;
+            this.point.z = origin.z;
          }
          else
          {
-            this.zidihyw.x = param1.x + this.bilaw.rylegyqa * param2.x;
-            this.zidihyw.y = param1.y + this.bilaw.rylegyqa * param2.y;
-            this.zidihyw.z = param1.z + this.bilaw.rylegyqa * param2.z;
+            this.point.x = origin.x + this.minMax.min * direction.x;
+            this.point.y = origin.y + this.minMax.min * direction.y;
+            this.point.z = origin.z + this.minMax.min * direction.z;
          }
-         if(this.bilaw.rekycave > param4)
+         if(this.minMax.max > maxTime)
          {
-            this.bilaw.rekycave = param4;
+            this.minMax.max = maxTime;
          }
-         var _loc7_:Boolean = this.testRayAgainstNode(this.nyseh.wymyhujoq,param1,this.zidihyw,param2,param3,this.bilaw.rylegyqa,this.bilaw.rekycave,param5,param6);
-         return _loc7_ ? param6.jomuc <= param4 : false;
+         var hit:Boolean = this.testRayAgainstNode(this.kdTree.rootNode,origin,this.point,direction,collisionGroup,this.minMax.min,this.minMax.max,filter,result);
+         return hit ? result.time <= maxTime : false;
       }
       
-      public function hasStaticHit(param1:Vector3, param2:Vector3, param3:int, param4:Number, param5:IRayCollisionFilter = null) : Boolean
+      public function hasStaticHit(origin:Vector3, direction:Vector3, collisionGroup:int, maxTime:Number, filter:IRayCollisionFilter = null) : Boolean
       {
-         var _loc6_:Boolean = this.raycastStatic(param1,param2,param3,param4,param5,this.tet);
-         this.tet.clear();
-         return _loc6_;
+         var hit:Boolean = this.raycastStatic(origin,direction,collisionGroup,maxTime,filter,this.rayHit);
+         this.rayHit.clear();
+         return hit;
       }
       
-      private function getShapeNodeCollisions(param1:CollisionKdNode, param2:CollisionShape, param3:Vector.<ShapeContact>) : void
+      private function getShapeNodeCollisions(node:CollisionKdNode, shape:CollisionShape, contacts:Vector.<ShapeContact>) : void
       {
-         var _loc4_:Number = NaN;
-         var _loc5_:Number = NaN;
-         var _loc6_:Vector.<CollisionShape> = null;
-         var _loc7_:Vector.<int> = null;
-         var _loc8_:int = 0;
-         var _loc9_:int = 0;
-         if(param1.indices != null)
+         var min:Number = NaN;
+         var max:Number = NaN;
+         var primitives:Vector.<CollisionShape> = null;
+         var indices:Vector.<int> = null;
+         var len:int = 0;
+         var i:int = 0;
+         if(node.indices != null)
          {
-            _loc6_ = this.nyseh.gogoq;
-            _loc7_ = param1.indices;
-            _loc8_ = int(_loc7_.length);
-            _loc9_ = 0;
-            while(_loc9_ < _loc8_)
+            primitives = this.kdTree.primitives;
+            indices = node.indices;
+            len = int(indices.length);
+            i = 0;
+            while(i < len)
             {
-               this.getContacts(param2,_loc6_[_loc7_[_loc9_]],param3);
-               _loc9_++;
+               this.getContacts(shape,primitives[indices[i]],contacts);
+               i++;
             }
          }
-         if(param1.zekos == -1)
+         if(node.axis == -1)
          {
             return;
          }
-         switch(param1.zekos)
+         switch(node.axis)
          {
             case 0:
-               _loc4_ = Number(param2.raruluk.cubegyw);
-               _loc5_ = Number(param2.raruluk.jys);
+               min = Number(shape.aabb.minX);
+               max = Number(shape.aabb.maxX);
                break;
             case 1:
-               _loc4_ = Number(param2.raruluk.nicomosa);
-               _loc5_ = Number(param2.raruluk.juri);
+               min = Number(shape.aabb.minY);
+               max = Number(shape.aabb.maxY);
                break;
             case 2:
-               _loc4_ = Number(param2.raruluk.gesuwi);
-               _loc5_ = Number(param2.raruluk.zepoci);
+               min = Number(shape.aabb.minZ);
+               max = Number(shape.aabb.maxZ);
          }
-         if(_loc4_ < param1.retycel)
+         if(min < node.coord)
          {
-            this.getShapeNodeCollisions(param1.hab,param2,param3);
+            this.getShapeNodeCollisions(node.negative,shape,contacts);
          }
-         if(_loc5_ > param1.retycel)
+         if(max > node.coord)
          {
-            this.getShapeNodeCollisions(param1.gumipiw,param2,param3);
+            this.getShapeNodeCollisions(node.positive,shape,contacts);
          }
-         if(param1.tuz != null && _loc4_ < param1.retycel && _loc5_ > param1.retycel)
+         if(node.splitTree != null && min < node.coord && max > node.coord)
          {
-            this.getShapeNodeCollisions(param1.tuz.wymyhujoq,param2,param3);
+            this.getShapeNodeCollisions(node.splitTree.rootNode,shape,contacts);
          }
       }
       
-      private function testShapeNodeCollision(param1:CollisionShape, param2:CollisionKdNode) : Boolean
+      private function testShapeNodeCollision(shape:CollisionShape, node:CollisionKdNode) : Boolean
       {
-         var _loc3_:Number = NaN;
-         var _loc4_:Number = NaN;
-         var _loc5_:Vector.<CollisionShape> = null;
-         var _loc6_:Vector.<int> = null;
-         var _loc7_:int = 0;
-         var _loc8_:int = 0;
-         if(param2.indices != null)
+         var min:Number = NaN;
+         var max:Number = NaN;
+         var primitives:Vector.<CollisionShape> = null;
+         var indices:Vector.<int> = null;
+         var len:int = 0;
+         var i:int = 0;
+         if(node.indices != null)
          {
-            _loc5_ = this.nyseh.gogoq;
-            _loc6_ = param2.indices;
-            _loc7_ = int(_loc6_.length);
-            _loc8_ = 0;
-            while(_loc8_ < _loc7_)
+            primitives = this.kdTree.primitives;
+            indices = node.indices;
+            len = int(indices.length);
+            i = 0;
+            while(i < len)
             {
-               if(this.testCollision(param1,_loc5_[_loc6_[_loc8_]]))
+               if(this.testCollision(shape,primitives[indices[i]]))
                {
                   return true;
                }
-               _loc8_++;
+               i++;
             }
          }
-         if(param2.zekos == -1)
+         if(node.axis == -1)
          {
             return false;
          }
-         switch(param2.zekos)
+         switch(node.axis)
          {
             case 0:
-               _loc3_ = Number(param1.raruluk.cubegyw);
-               _loc4_ = Number(param1.raruluk.jys);
+               min = Number(shape.aabb.minX);
+               max = Number(shape.aabb.maxX);
                break;
             case 1:
-               _loc3_ = Number(param1.raruluk.nicomosa);
-               _loc4_ = Number(param1.raruluk.juri);
+               min = Number(shape.aabb.minY);
+               max = Number(shape.aabb.maxY);
                break;
             case 2:
-               _loc3_ = Number(param1.raruluk.gesuwi);
-               _loc4_ = Number(param1.raruluk.zepoci);
+               min = Number(shape.aabb.minZ);
+               max = Number(shape.aabb.maxZ);
          }
-         if(param2.tuz != null && _loc3_ < param2.retycel && _loc4_ > param2.retycel)
+         if(node.splitTree != null && min < node.coord && max > node.coord)
          {
-            if(this.testShapeNodeCollision(param1,param2.tuz.wymyhujoq))
+            if(this.testShapeNodeCollision(shape,node.splitTree.rootNode))
             {
                return true;
             }
          }
-         if(_loc3_ < param2.retycel)
+         if(min < node.coord)
          {
-            if(this.testShapeNodeCollision(param1,param2.hab))
+            if(this.testShapeNodeCollision(shape,node.negative))
             {
                return true;
             }
          }
-         if(_loc4_ > param2.retycel)
+         if(max > node.coord)
          {
-            if(this.testShapeNodeCollision(param1,param2.gumipiw))
+            if(this.testShapeNodeCollision(shape,node.positive))
             {
                return true;
             }
@@ -489,167 +489,167 @@ package alternativa.tanks.shared.physics
          return false;
       }
       
-      private function raycastDynamic(param1:Vector3, param2:Vector3, param3:int, param4:Number, param5:IRayCollisionFilter, param6:RayHit) : Boolean
+      private function raycastDynamic(origin:Vector3, direction:Vector3, collisionGroup:int, maxTime:Number, filter:IRayCollisionFilter, result:RayHit) : Boolean
       {
-         var _loc13_:TankBody = null;
-         var _loc14_:Body = null;
-         var _loc15_:AABB = null;
-         var _loc16_:int = 0;
-         var _loc17_:CollisionShape = null;
-         var _loc18_:Number = NaN;
-         var _loc7_:Number = param1.x + param2.x * param4;
-         var _loc8_:Number = param1.y + param2.y * param4;
-         var _loc9_:Number = param1.z + param2.z * param4;
-         if(_loc7_ < param1.x)
+         var tankBody:TankBody = null;
+         var body:Body = null;
+         var aabb:AABB = null;
+         var j:int = 0;
+         var shape:CollisionShape = null;
+         var t:Number = NaN;
+         var endX:Number = origin.x + direction.x * maxTime;
+         var endY:Number = origin.y + direction.y * maxTime;
+         var endZ:Number = origin.z + direction.z * maxTime;
+         if(endX < origin.x)
          {
-            this.lukej.cubegyw = _loc7_;
-            this.lukej.jys = param1.x;
+            this.rayAABB.minX = endX;
+            this.rayAABB.maxX = origin.x;
          }
          else
          {
-            this.lukej.cubegyw = param1.x;
-            this.lukej.jys = _loc7_;
+            this.rayAABB.minX = origin.x;
+            this.rayAABB.maxX = endX;
          }
-         if(_loc8_ < param1.y)
+         if(endY < origin.y)
          {
-            this.lukej.nicomosa = _loc8_;
-            this.lukej.juri = param1.y;
-         }
-         else
-         {
-            this.lukej.nicomosa = param1.y;
-            this.lukej.juri = _loc8_;
-         }
-         if(_loc9_ < param1.z)
-         {
-            this.lukej.gesuwi = _loc9_;
-            this.lukej.zepoci = param1.z;
+            this.rayAABB.minY = endY;
+            this.rayAABB.maxY = origin.y;
          }
          else
          {
-            this.lukej.gesuwi = param1.z;
-            this.lukej.zepoci = _loc9_;
+            this.rayAABB.minY = origin.y;
+            this.rayAABB.maxY = endY;
          }
-         var _loc10_:Number = param4 + 1;
-         var _loc11_:int = int(this.cubajedid.length);
-         var _loc12_:int = 0;
-         while(_loc12_ < _loc11_)
+         if(endZ < origin.z)
          {
-            _loc13_ = this.cubajedid[_loc12_];
-            _loc14_ = _loc13_.body;
-            _loc15_ = _loc14_.raruluk;
-            if(!(this.lukej.jys < _loc15_.cubegyw || this.lukej.cubegyw > _loc15_.jys || this.lukej.juri < _loc15_.nicomosa || this.lukej.nicomosa > _loc15_.juri || this.lukej.zepoci < _loc15_.gesuwi || this.lukej.gesuwi > _loc15_.zepoci))
+            this.rayAABB.minZ = endZ;
+            this.rayAABB.maxZ = origin.z;
+         }
+         else
+         {
+            this.rayAABB.minZ = origin.z;
+            this.rayAABB.maxZ = endZ;
+         }
+         var minTime:Number = maxTime + 1;
+         var len:int = int(this.tankBodies.length);
+         var i:int = 0;
+         while(i < len)
+         {
+            tankBody = this.tankBodies[i];
+            body = tankBody.body;
+            aabb = body.aabb;
+            if(!(this.rayAABB.maxX < aabb.minX || this.rayAABB.minX > aabb.maxX || this.rayAABB.maxY < aabb.minY || this.rayAABB.minY > aabb.maxY || this.rayAABB.maxZ < aabb.minZ || this.rayAABB.minZ > aabb.maxZ))
             {
-               _loc16_ = 0;
-               while(_loc16_ < _loc14_.kizuvam)
+               j = 0;
+               while(j < body.numCollisionShapes)
                {
-                  _loc17_ = _loc14_.hebevy[_loc16_];
-                  if((_loc17_.nute & param3) != 0)
+                  shape = body.collisionShapes[j];
+                  if((shape.collisionGroup & collisionGroup) != 0)
                   {
-                     _loc15_ = _loc17_.raruluk;
-                     if(!(this.lukej.jys < _loc15_.cubegyw || this.lukej.cubegyw > _loc15_.jys || this.lukej.juri < _loc15_.nicomosa || this.lukej.nicomosa > _loc15_.juri || this.lukej.zepoci < _loc15_.gesuwi || this.lukej.gesuwi > _loc15_.zepoci))
+                     aabb = shape.aabb;
+                     if(!(this.rayAABB.maxX < aabb.minX || this.rayAABB.minX > aabb.maxX || this.rayAABB.maxY < aabb.minY || this.rayAABB.minY > aabb.maxY || this.rayAABB.maxZ < aabb.minZ || this.rayAABB.minZ > aabb.maxZ))
                      {
-                        if(!(param5 != null && !param5.considerBody(_loc14_)))
+                        if(!(filter != null && !filter.considerBody(body)))
                         {
-                           _loc18_ = Number(_loc17_.raycast(param1,param2,this.hevarer,this.wawuse));
-                           if(_loc18_ >= 0 && _loc18_ < _loc10_)
+                           t = Number(shape.raycast(origin,direction,this.threshold,this.normal));
+                           if(t >= 0 && t < minTime)
                            {
-                              _loc10_ = _loc18_;
-                              param6.vetudozi = _loc17_;
-                              param6.lefugefo.x = this.wawuse.x;
-                              param6.lefugefo.y = this.wawuse.y;
-                              param6.lefugefo.z = this.wawuse.z;
+                              minTime = t;
+                              result.shape = shape;
+                              result.normal.x = this.normal.x;
+                              result.normal.y = this.normal.y;
+                              result.normal.z = this.normal.z;
                            }
                         }
                      }
                   }
-                  _loc16_++;
+                  j++;
                }
             }
-            _loc12_++;
+            i++;
          }
-         if(_loc10_ > param4)
+         if(minTime > maxTime)
          {
             return false;
          }
-         param6.position.x = param1.x + param2.x * _loc10_;
-         param6.position.y = param1.y + param2.y * _loc10_;
-         param6.position.z = param1.z + param2.z * _loc10_;
-         param6.jomuc = _loc10_;
+         result.position.x = origin.x + direction.x * minTime;
+         result.position.y = origin.y + direction.y * minTime;
+         result.position.z = origin.z + direction.z * minTime;
+         result.time = minTime;
          return true;
       }
       
-      private function getRayBoundBoxIntersection(param1:Vector3, param2:Vector3, param3:AABB, param4:MinMax) : Boolean
+      private function getRayBoundBoxIntersection(origin:Vector3, direction:Vector3, boundBox:AABB, result:MinMax) : Boolean
       {
-         var _loc5_:Number = NaN;
-         var _loc6_:Number = NaN;
-         param4.rylegyqa = -1;
-         param4.rekycave = 1e+308;
-         var _loc7_:int = 0;
-         for(; _loc7_ < 3; _loc7_++)
+         var t1:Number = NaN;
+         var t2:Number = NaN;
+         result.min = -1;
+         result.max = 1e+308;
+         var i:int = 0;
+         for(; i < 3; i++)
          {
-            switch(_loc7_)
+            switch(i)
             {
                case 0:
-                  if(!(param2.x < this.hevarer && param2.x > -this.hevarer))
+                  if(!(direction.x < this.threshold && direction.x > -this.threshold))
                   {
-                     _loc5_ = (param3.cubegyw - param1.x) / param2.x;
-                     _loc6_ = (param3.jys - param1.x) / param2.x;
+                     t1 = (boundBox.minX - origin.x) / direction.x;
+                     t2 = (boundBox.maxX - origin.x) / direction.x;
                      break;
                   }
-                  if(param1.x < param3.cubegyw || param1.x > param3.jys)
+                  if(origin.x < boundBox.minX || origin.x > boundBox.maxX)
                   {
                      return false;
                   }
                   continue;
                case 1:
-                  if(!(param2.y < this.hevarer && param2.y > -this.hevarer))
+                  if(!(direction.y < this.threshold && direction.y > -this.threshold))
                   {
-                     _loc5_ = (param3.nicomosa - param1.y) / param2.y;
-                     _loc6_ = (param3.juri - param1.y) / param2.y;
+                     t1 = (boundBox.minY - origin.y) / direction.y;
+                     t2 = (boundBox.maxY - origin.y) / direction.y;
                      break;
                   }
-                  if(param1.y < param3.nicomosa || param1.y > param3.juri)
+                  if(origin.y < boundBox.minY || origin.y > boundBox.maxY)
                   {
                      return false;
                   }
                   continue;
                case 2:
-                  if(!(param2.z < this.hevarer && param2.z > -this.hevarer))
+                  if(!(direction.z < this.threshold && direction.z > -this.threshold))
                   {
-                     _loc5_ = (param3.gesuwi - param1.z) / param2.z;
-                     _loc6_ = (param3.zepoci - param1.z) / param2.z;
+                     t1 = (boundBox.minZ - origin.z) / direction.z;
+                     t2 = (boundBox.maxZ - origin.z) / direction.z;
                      break;
                   }
-                  if(param1.z < param3.gesuwi || param1.z > param3.zepoci)
+                  if(origin.z < boundBox.minZ || origin.z > boundBox.maxZ)
                   {
                      return false;
                   }
                   continue;
             }
-            if(_loc5_ < _loc6_)
+            if(t1 < t2)
             {
-               if(_loc5_ > param4.rylegyqa)
+               if(t1 > result.min)
                {
-                  param4.rylegyqa = _loc5_;
+                  result.min = t1;
                }
-               if(_loc6_ < param4.rekycave)
+               if(t2 < result.max)
                {
-                  param4.rekycave = _loc6_;
+                  result.max = t2;
                }
             }
             else
             {
-               if(_loc6_ > param4.rylegyqa)
+               if(t2 > result.min)
                {
-                  param4.rylegyqa = _loc6_;
+                  result.min = t2;
                }
-               if(_loc5_ < param4.rekycave)
+               if(t1 < result.max)
                {
-                  param4.rekycave = _loc5_;
+                  result.max = t1;
                }
             }
-            if(param4.rekycave < param4.rylegyqa)
+            if(result.max < result.min)
             {
                return false;
             }
@@ -657,155 +657,155 @@ package alternativa.tanks.shared.physics
          return true;
       }
       
-      private function testRayAgainstNode(param1:CollisionKdNode, param2:Vector3, param3:Vector3, param4:Vector3, param5:int, param6:Number, param7:Number, param8:IRayCollisionFilter, param9:RayHit) : Boolean
+      private function testRayAgainstNode(node:CollisionKdNode, origin:Vector3, entryPoint:Vector3, direction:Vector3, collisionGroup:int, minTime:Number, maxTime:Number, filter:IRayCollisionFilter, result:RayHit) : Boolean
       {
-         var _loc10_:Number = NaN;
-         var _loc11_:CollisionKdNode = null;
-         var _loc12_:Boolean = false;
-         var _loc13_:CollisionKdNode = null;
-         var _loc14_:int = 0;
-         var _loc15_:int = 0;
-         var _loc16_:CollisionShape = null;
-         if(param1.indices != null && this.getRayNodeIntersection(param2,param4,param5,this.nyseh.gogoq,param1.indices,param8,param9))
+         var splitTime:Number = NaN;
+         var nearNode:CollisionKdNode = null;
+         var hit:Boolean = false;
+         var splitTreeNode:CollisionKdNode = null;
+         var len:int = 0;
+         var i:int = 0;
+         var shape:CollisionShape = null;
+         if(node.indices != null && this.getRayNodeIntersection(origin,direction,collisionGroup,this.kdTree.primitives,node.indices,filter,result))
          {
             return true;
          }
-         if(param1.zekos == -1)
+         if(node.axis == -1)
          {
             return false;
          }
-         switch(param1.zekos)
+         switch(node.axis)
          {
             case 0:
-               if(param4.x > -this.hevarer && param4.x < this.hevarer)
+               if(direction.x > -this.threshold && direction.x < this.threshold)
                {
-                  _loc10_ = param7 + 1;
+                  splitTime = maxTime + 1;
                }
                else
                {
-                  _loc10_ = (param1.retycel - param2.x) / param4.x;
+                  splitTime = (node.coord - origin.x) / direction.x;
                }
-               _loc11_ = param3.x < param1.retycel ? param1.hab : param1.gumipiw;
+               nearNode = entryPoint.x < node.coord ? node.negative : node.positive;
                break;
             case 1:
-               if(param4.y > -this.hevarer && param4.y < this.hevarer)
+               if(direction.y > -this.threshold && direction.y < this.threshold)
                {
-                  _loc10_ = param7 + 1;
+                  splitTime = maxTime + 1;
                }
                else
                {
-                  _loc10_ = (param1.retycel - param2.y) / param4.y;
+                  splitTime = (node.coord - origin.y) / direction.y;
                }
-               _loc11_ = param3.y < param1.retycel ? param1.hab : param1.gumipiw;
+               nearNode = entryPoint.y < node.coord ? node.negative : node.positive;
                break;
             case 2:
-               if(param4.z > -this.hevarer && param4.z < this.hevarer)
+               if(direction.z > -this.threshold && direction.z < this.threshold)
                {
-                  _loc10_ = param7 + 1;
+                  splitTime = maxTime + 1;
                }
                else
                {
-                  _loc10_ = (param1.retycel - param2.z) / param4.z;
+                  splitTime = (node.coord - origin.z) / direction.z;
                }
-               _loc11_ = param3.z < param1.retycel ? param1.hab : param1.gumipiw;
+               nearNode = entryPoint.z < node.coord ? node.negative : node.positive;
          }
-         if(_loc10_ < param6 || _loc10_ > param7)
+         if(splitTime < minTime || splitTime > maxTime)
          {
-            return this.testRayAgainstNode(_loc11_,param2,param3,param4,param5,param6,param7,param8,param9);
+            return this.testRayAgainstNode(nearNode,origin,entryPoint,direction,collisionGroup,minTime,maxTime,filter,result);
          }
-         _loc12_ = this.testRayAgainstNode(_loc11_,param2,param3,param4,param5,param6,_loc10_,param8,param9);
-         if(_loc12_)
+         hit = this.testRayAgainstNode(nearNode,origin,entryPoint,direction,collisionGroup,minTime,splitTime,filter,result);
+         if(hit)
          {
             return true;
          }
-         this.zidihyw.x = param2.x + _loc10_ * param4.x;
-         this.zidihyw.y = param2.y + _loc10_ * param4.y;
-         this.zidihyw.z = param2.z + _loc10_ * param4.z;
-         if(param1.tuz != null)
+         this.point.x = origin.x + splitTime * direction.x;
+         this.point.y = origin.y + splitTime * direction.y;
+         this.point.z = origin.z + splitTime * direction.z;
+         if(node.splitTree != null)
          {
-            _loc13_ = param1.tuz.wymyhujoq;
-            while(_loc13_ != null && _loc13_.zekos != -1)
+            splitTreeNode = node.splitTree.rootNode;
+            while(splitTreeNode != null && splitTreeNode.axis != -1)
             {
-               switch(_loc13_.zekos)
+               switch(splitTreeNode.axis)
                {
                   case 0:
-                     _loc13_ = this.zidihyw.x < _loc13_.retycel ? _loc13_.hab : _loc13_.gumipiw;
+                     splitTreeNode = this.point.x < splitTreeNode.coord ? splitTreeNode.negative : splitTreeNode.positive;
                      break;
                   case 1:
-                     _loc13_ = this.zidihyw.y < _loc13_.retycel ? _loc13_.hab : _loc13_.gumipiw;
+                     splitTreeNode = this.point.y < splitTreeNode.coord ? splitTreeNode.negative : splitTreeNode.positive;
                      break;
                   case 2:
-                     _loc13_ = this.zidihyw.z < _loc13_.retycel ? _loc13_.hab : _loc13_.gumipiw;
+                     splitTreeNode = this.point.z < splitTreeNode.coord ? splitTreeNode.negative : splitTreeNode.positive;
                }
             }
-            if(_loc13_ != null && _loc13_.indices != null)
+            if(splitTreeNode != null && splitTreeNode.indices != null)
             {
-               _loc14_ = int(_loc13_.indices.length);
-               _loc15_ = 0;
-               while(_loc15_ < _loc14_)
+               len = int(splitTreeNode.indices.length);
+               i = 0;
+               while(i < len)
                {
-                  _loc16_ = this.nyseh.gogoq[_loc13_.indices[_loc15_]];
-                  if((_loc16_.nute & param5) != 0)
+                  shape = this.kdTree.primitives[splitTreeNode.indices[i]];
+                  if((shape.collisionGroup & collisionGroup) != 0)
                   {
-                     if(!(param8 != null && !param8.considerBody(_loc16_.body)))
+                     if(!(filter != null && !filter.considerBody(shape.body)))
                      {
-                        param9.jomuc = _loc16_.raycast(param2,param4,this.hevarer,param9.lefugefo);
-                        if(param9.jomuc >= 0)
+                        result.time = shape.raycast(origin,direction,this.threshold,result.normal);
+                        if(result.time >= 0)
                         {
-                           param9.position.copy(this.zidihyw);
-                           param9.vetudozi = _loc16_;
+                           result.position.copy(this.point);
+                           result.shape = shape;
                            return true;
                         }
                      }
                   }
-                  _loc15_++;
+                  i++;
                }
             }
          }
-         return this.testRayAgainstNode(_loc11_ == param1.hab ? param1.gumipiw : param1.hab,param2,this.zidihyw,param4,param5,_loc10_,param7,param8,param9);
+         return this.testRayAgainstNode(nearNode == node.negative ? node.positive : node.negative,origin,this.point,direction,collisionGroup,splitTime,maxTime,filter,result);
       }
       
-      private function getRayNodeIntersection(param1:Vector3, param2:Vector3, param3:int, param4:Vector.<CollisionShape>, param5:Vector.<int>, param6:IRayCollisionFilter, param7:RayHit) : Boolean
+      private function getRayNodeIntersection(origin:Vector3, direction:Vector3, collisionGroup:int, primitives:Vector.<CollisionShape>, indices:Vector.<int>, filter:IRayCollisionFilter, result:RayHit) : Boolean
       {
-         var _loc11_:CollisionShape = null;
-         var _loc12_:Number = NaN;
-         var _loc8_:int = int(param5.length);
-         var _loc9_:Number = 1e+308;
-         var _loc10_:int = 0;
-         while(_loc10_ < _loc8_)
+         var shape:CollisionShape = null;
+         var t:Number = NaN;
+         var len:int = int(indices.length);
+         var minTime:Number = 1e+308;
+         var i:int = 0;
+         while(i < len)
          {
-            _loc11_ = param4[param5[_loc10_]];
-            if((_loc11_.nute & param3) != 0)
+            shape = primitives[indices[i]];
+            if((shape.collisionGroup & collisionGroup) != 0)
             {
-               if(!(param6 != null && !param6.considerBody(_loc11_.body)))
+               if(!(filter != null && !filter.considerBody(shape.body)))
                {
-                  _loc12_ = Number(_loc11_.raycast(param1,param2,this.hevarer,this.wawuse));
-                  if(_loc12_ > 0 && _loc12_ < _loc9_)
+                  t = Number(shape.raycast(origin,direction,this.threshold,this.normal));
+                  if(t > 0 && t < minTime)
                   {
-                     _loc9_ = _loc12_;
-                     param7.vetudozi = _loc11_;
-                     param7.lefugefo.x = this.wawuse.x;
-                     param7.lefugefo.y = this.wawuse.y;
-                     param7.lefugefo.z = this.wawuse.z;
+                     minTime = t;
+                     result.shape = shape;
+                     result.normal.x = this.normal.x;
+                     result.normal.y = this.normal.y;
+                     result.normal.z = this.normal.z;
                   }
                }
             }
-            _loc10_++;
+            i++;
          }
-         if(_loc9_ == 1e+308)
+         if(minTime == 1e+308)
          {
             return false;
          }
-         param7.position.x = param1.x + param2.x * _loc9_;
-         param7.position.y = param1.y + param2.y * _loc9_;
-         param7.position.z = param1.z + param2.z * _loc9_;
-         param7.jomuc = _loc9_;
+         result.position.x = origin.x + direction.x * minTime;
+         result.position.y = origin.y + direction.y * minTime;
+         result.position.z = origin.z + direction.z * minTime;
+         result.time = minTime;
          return true;
       }
       
-      public function testStaticCollision(param1:CollisionShape) : Boolean
+      public function testStaticCollision(shape:CollisionShape) : Boolean
       {
-         return this.testShapeNodeCollision(param1,this.nyseh.wymyhujoq);
+         return this.testShapeNodeCollision(shape,this.kdTree.rootNode);
       }
    }
 }

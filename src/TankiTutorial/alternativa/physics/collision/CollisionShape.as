@@ -9,93 +9,93 @@ package alternativa.physics.collision
    public class CollisionShape
    {
       
-      public static const jupod:int = 1;
+      public static const BOX:int = 1;
       
       public static const lumog:int = 2;
       
-      public static const hosomubeb:int = 4;
+      public static const RECT:int = 4;
       
-      public static const miluvo:int = 8;
+      public static const TRIANGLE:int = 8;
       
-      public var huvozage:int;
+      public var type:int;
       
-      public var nute:int;
+      public var collisionGroup:int;
       
       public var body:Body;
       
-      public var koma:Matrix4;
+      public var localTransform:Matrix4;
       
-      public var wet:Matrix4 = new Matrix4();
+      public var transform:Matrix4 = new Matrix4();
       
-      public var raruluk:AABB = new AABB();
+      public var aabb:AABB = new AABB();
       
       public var material:PhysicsMaterial;
       
-      public function CollisionShape(param1:int, param2:int, param3:PhysicsMaterial)
+      public function CollisionShape(type:int, collisionGroup:int, material:PhysicsMaterial)
       {
          super();
-         this.huvozage = param1;
-         this.nute = param2;
-         this.material = param3;
+         this.type = type;
+         this.collisionGroup = collisionGroup;
+         this.material = material;
       }
       
-      public function setBody(param1:Body, param2:Matrix4 = null) : void
+      public function setBody(body:Body, localTransform:Matrix4 = null) : void
       {
-         if(this.body == param1)
+         if(this.body == body)
          {
             return;
          }
-         this.body = param1;
-         if(param1 != null)
+         this.body = body;
+         if(body != null)
          {
-            if(param2 != null)
+            if(localTransform != null)
             {
-               if(this.koma == null)
+               if(this.localTransform == null)
                {
-                  this.koma = new Matrix4();
+                  this.localTransform = new Matrix4();
                }
-               this.koma.copy(param2);
+               this.localTransform.copy(localTransform);
             }
             else
             {
-               this.koma = null;
+               this.localTransform = null;
             }
          }
       }
       
       public function calculateAABB() : AABB
       {
-         return this.raruluk;
+         return this.aabb;
       }
       
-      public function raycast(param1:Vector3, param2:Vector3, param3:Number, param4:Vector3) : Number
+      public function raycast(origin:Vector3, direction:Vector3, epsilon:Number, normal:Vector3) : Number
       {
          return -1;
       }
       
       public function clone() : CollisionShape
       {
-         var _loc1_:CollisionShape = this.createPrimitive();
-         return _loc1_.copyFrom(this);
+         var shape:CollisionShape = this.createPrimitive();
+         return shape.copyFrom(this);
       }
       
-      public function copyFrom(param1:CollisionShape) : CollisionShape
+      public function copyFrom(source:CollisionShape) : CollisionShape
       {
-         if(param1 == null)
+         if(source == null)
          {
             throw new ArgumentError("Parameter source cannot be null");
          }
-         this.huvozage = param1.huvozage;
-         this.wet.copy(param1.wet);
-         this.nute = param1.nute;
-         this.setBody(param1.body,param1.koma);
-         this.raruluk.copyFrom(param1.raruluk);
+         this.type = source.type;
+         this.transform.copy(source.transform);
+         this.collisionGroup = source.collisionGroup;
+         this.setBody(source.body,source.localTransform);
+         this.aabb.copyFrom(source.aabb);
          return this;
       }
       
       protected function createPrimitive() : CollisionShape
       {
-         return new CollisionShape(this.huvozage,this.nute,this.material);
+         return new CollisionShape(this.type,this.collisionGroup,this.material);
       }
    }
 }

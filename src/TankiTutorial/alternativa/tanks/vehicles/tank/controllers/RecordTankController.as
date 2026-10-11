@@ -8,86 +8,86 @@ package alternativa.tanks.vehicles.tank.controllers
    public class RecordTankController extends UserTankController
    {
       
-      private var fof:int;
+      private var prevControlState:int;
       
-      private var ruwi:Boolean = false;
+      private var recording:Boolean = false;
       
-      private var fod:String;
+      private var record:String;
       
-      private var lecopojen:uint;
+      private var time:uint;
       
-      public function RecordTankController(param1:IEventDispatcher, param2:Tank)
+      public function RecordTankController(eventSource:IEventDispatcher, tank:Tank)
       {
-         super(param1,param2);
+         super(eventSource,tank);
       }
       
       public function getRecord() : String
       {
-         return this.fod;
+         return this.record;
       }
       
       public function startRecording() : void
       {
-         this.ruwi = true;
-         this.fod = "";
-         this.lecopojen = getTimer();
+         this.recording = true;
+         this.record = "";
+         this.time = getTimer();
       }
       
       public function stopRecording() : void
       {
-         this.ruwi = false;
+         this.recording = false;
       }
       
       public function isRecording() : Boolean
       {
-         return this.ruwi;
+         return this.recording;
       }
       
-      override public function startAction(param1:int) : void
+      override public function startAction(action:int) : void
       {
-         super.startAction(param1);
-         if(this.ruwi && this.fof != ses)
+         super.startAction(action);
+         if(this.recording && this.prevControlState != controlState)
          {
             this.makeRecord();
          }
-         this.fof = ses;
+         this.prevControlState = controlState;
       }
       
-      override public function stopAction(param1:int) : void
+      override public function stopAction(action:int) : void
       {
-         super.stopAction(param1);
-         if(this.ruwi && this.fof != ses)
+         super.stopAction(action);
+         if(this.recording && this.prevControlState != controlState)
          {
             this.makeRecord();
          }
-         this.fof = ses;
+         this.prevControlState = controlState;
       }
       
       override public function setAction(param1:int) : void
       {
          super.setAction(param1);
-         if(this.ruwi && this.fof != ses)
+         if(this.recording && this.prevControlState != controlState)
          {
             this.makeRecord();
          }
-         this.fof = ses;
+         this.prevControlState = controlState;
       }
       
-      override public function update(param1:int, param2:int, param3:Number) : void
+      override public function update(time:int, deltaTime:int, dt:Number) : void
       {
-         if(!(GameData.butefu.controller is SpectatorCameraController))
+         if(!(GameData.camera.controller is SpectatorCameraController))
          {
-            super.update(param1,param2,param3);
+            super.update(time,deltaTime,dt);
          }
       }
       
       private function makeRecord() : void
       {
-         var _loc1_:uint = uint(getTimer());
-         var _loc2_:uint = _loc1_ - this.lecopojen;
-         this.lecopojen = _loc1_;
-         var _loc3_:String = " " + ses.toString() + " " + _loc2_.toString();
-         this.fod += _loc3_;
+         var now:uint = uint(getTimer());
+         var delta:uint = now - this.time;
+         this.time = now;
+         var entry:String = " " + controlState.toString() + " " + delta.toString();
+         this.record += entry;
       }
    }
 }

@@ -30,49 +30,49 @@ package movieclips
       
       public function ControlsClip()
       {
-         var _loc1_:BitmapData = null;
-         var _loc2_:BitmapData = null;
+         var keyboardBitmapData:BitmapData = null;
+         var mouseBitmapData:BitmapData = null;
          this.arrowsGlowMC = ControlsClip_arrowsGlowMC;
          this.spaceGlowMC = ControlsClip_spaceGlowMC;
          super();
          if(Lang.language == Lang.DE)
          {
-            _loc1_ = Assets.getData("help_de_png",BitmapData);
+            keyboardBitmapData = Assets.getData("help_de_png",BitmapData);
          }
          else
          {
-            _loc1_ = Assets.getData("help_png",BitmapData);
+            keyboardBitmapData = Assets.getData("help_png",BitmapData);
          }
-         _loc2_ = Assets.getData("help_mouse",BitmapData);
+         mouseBitmapData = Assets.getData("help_mouse",BitmapData);
          this.arrowsGlow = new this.arrowsGlowMC();
          this.spaceGlow = new this.spaceGlowMC();
          this.arrowsGlow.alpha = 0.43;
          this.spaceGlow.alpha = 0.43;
-         var _loc3_:Sprite = new Sprite();
-         var _loc4_:TextField = Text.getTextField(Lang.getText(LocalizedStrings.TURRET),12,100,"center");
-         var _loc5_:TextField = Text.getTextField(Lang.getText(LocalizedStrings.FIRE),12,100,"center");
-         var _loc6_:TextField = Text.getTextField(Lang.getText(LocalizedStrings.MOVING),12,100,"center");
-         _loc4_.x = 4;
-         _loc4_.y = 65;
-         _loc5_.x = 115;
-         _loc5_.y = 65;
-         _loc6_.x = 223;
-         _loc6_.y = 65;
-         _loc3_.addChild(_loc4_);
-         _loc3_.addChild(_loc5_);
-         _loc3_.addChild(_loc6_);
+         var sprite:Sprite = new Sprite();
+         var turretLabel:TextField = Text.getTextField(Lang.getText(LocalizedStrings.TURRET),12,100,"center");
+         var fireLabel:TextField = Text.getTextField(Lang.getText(LocalizedStrings.FIRE),12,100,"center");
+         var movingLabel:TextField = Text.getTextField(Lang.getText(LocalizedStrings.MOVING),12,100,"center");
+         turretLabel.x = 4;
+         turretLabel.y = 65;
+         fireLabel.x = 115;
+         fireLabel.y = 65;
+         movingLabel.x = 223;
+         movingLabel.y = 65;
+         sprite.addChild(turretLabel);
+         sprite.addChild(fireLabel);
+         sprite.addChild(movingLabel);
          this.text = Text.getTextField(Lang.getText(LocalizedStrings.CONTROL_SEPARATOR),12);
-         var _loc7_:BitmapData = new BitmapData(_loc1_.width,_loc1_.height,true,0);
-         _loc7_.draw(_loc1_);
-         _loc7_.draw(_loc3_);
-         this.keyboardBitmap = new Bitmap(_loc7_);
+         var bitmapData:BitmapData = new BitmapData(keyboardBitmapData.width,keyboardBitmapData.height,true,0);
+         bitmapData.draw(keyboardBitmapData);
+         bitmapData.draw(sprite);
+         this.keyboardBitmap = new Bitmap(bitmapData);
          addChild(this.keyboardBitmap);
-         _loc7_ = new BitmapData(_loc2_.width,_loc2_.height,true,0);
-         _loc7_.draw(_loc2_);
-         _loc7_.draw(_loc3_);
-         if(GameData.vucofena)
+         bitmapData = new BitmapData(mouseBitmapData.width,mouseBitmapData.height,true,0);
+         bitmapData.draw(mouseBitmapData);
+         bitmapData.draw(sprite);
+         if(GameData.mouseEnabled)
          {
-            this.mouseBitmap = new Bitmap(_loc7_);
+            this.mouseBitmap = new Bitmap(bitmapData);
             addChild(this.text);
             this.text.y = this.mouseBitmap.height + 10;
             this.text.x = this.mouseBitmap.width - this.text.textWidth >> 1;

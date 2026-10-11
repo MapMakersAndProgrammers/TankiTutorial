@@ -8,51 +8,51 @@ package tutorial.tasks
    public class TurretChangeTask extends Task
    {
       
-      private var jifom:Tank = GameData.jifom;
+      private var playerTank:Tank = GameData.playerTank;
       
-      private var sacoteg:String;
+      private var turretName:String;
       
-      private var fur:ColorTransform = new ColorTransform();
+      private var colorTransform:ColorTransform = new ColorTransform();
       
-      private var qadol:Number = 300;
+      private var speed:Number = 300;
       
-      private var kejo:int = 0;
+      private var state:int = 0;
       
-      public function TurretChangeTask(param1:String)
+      public function TurretChangeTask(turretName:String)
       {
          super();
-         this.sacoteg = param1;
-         this.jifom.kuca.turretMesh.colorTransform = this.fur;
+         this.turretName = turretName;
+         this.playerTank.skin.turretMesh.colorTransform = this.colorTransform;
       }
       
       override public function process() : Boolean
       {
-         var _loc1_:TimeData = GameData.lecopojen;
-         switch(this.kejo)
+         var timeData:TimeData = GameData.time;
+         switch(this.state)
          {
             case 0:
-               this.fur.redOffset += this.qadol * _loc1_.ziqod;
-               this.fur.greenOffset += this.qadol * _loc1_.ziqod;
-               this.fur.blueOffset += this.qadol * _loc1_.ziqod;
-               if(this.fur.redOffset >= 255)
+               this.colorTransform.redOffset += this.speed * timeData.deltaTime;
+               this.colorTransform.greenOffset += this.speed * timeData.deltaTime;
+               this.colorTransform.blueOffset += this.speed * timeData.deltaTime;
+               if(this.colorTransform.redOffset >= 255)
                {
-                  this.kejo = 1;
+                  this.state = 1;
                }
                break;
             case 1:
-               this.jifom.kuca.turretMesh.colorTransform = null;
-               this.jifom.setTurret(this.sacoteg);
-               this.jifom.kuca.turretMesh.colorTransform = this.fur;
-               this.kejo = 2;
+               this.playerTank.skin.turretMesh.colorTransform = null;
+               this.playerTank.setTurret(this.turretName);
+               this.playerTank.skin.turretMesh.colorTransform = this.colorTransform;
+               this.state = 2;
                break;
             case 2:
-               this.fur.redOffset -= this.qadol * _loc1_.ziqod;
-               this.fur.greenOffset -= this.qadol * _loc1_.ziqod;
-               this.fur.blueOffset -= this.qadol * _loc1_.ziqod;
-               if(this.fur.redOffset <= 0)
+               this.colorTransform.redOffset -= this.speed * timeData.deltaTime;
+               this.colorTransform.greenOffset -= this.speed * timeData.deltaTime;
+               this.colorTransform.blueOffset -= this.speed * timeData.deltaTime;
+               if(this.colorTransform.redOffset <= 0)
                {
-                  this.kejo = 3;
-                  this.jifom.kuca.turretMesh.colorTransform = null;
+                  this.state = 3;
+                  this.playerTank.skin.turretMesh.colorTransform = null;
                   return true;
                }
          }

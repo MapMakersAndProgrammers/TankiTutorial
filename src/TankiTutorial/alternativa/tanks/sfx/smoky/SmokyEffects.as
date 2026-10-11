@@ -18,95 +18,95 @@ package alternativa.tanks.sfx.smoky
    public class SmokyEffects
    {
       
-      public static const tilubizy:Number = 900;
+      public static const EXPLOSION_SIZE:Number = 900;
       
-      private static const nydas:Number = 1;
+      private static const SHOT_SOUND_VOLUME:Number = 1;
       
       private static const qalibi:Number = 200;
       
-      private static const podahypoc:int = 100;
+      private static const MUZZLE_FLASH_DURATION:int = 100;
       
-      private static const naj:int = 100;
+      private static const EXPLOSION_SOUND_DELAY:int = 100;
       
-      private static const karymo:int = 30;
+      private static const EXPLOSION_FPS:int = 30;
       
-      private const bijatil:ISoundManager = GameData.bijatil;
+      private const soundManager:ISoundManager = GameData.soundManager;
       
-      private const murow:ObjectPool = GameData.murow;
+      private const objectPool:ObjectPool = GameData.objectPool;
       
-      private const hobuna:EffectsManager = GameData.hobuna;
+      private const effects:EffectsManager = GameData.effects;
       
-      private var dymojes:SmokySFXData;
+      private var sfxData:SmokySFXData;
       
-      public function SmokyEffects(param1:SmokySFXData)
+      public function SmokyEffects(sfxData:SmokySFXData)
       {
          super();
-         this.dymojes = param1;
+         this.sfxData = sfxData;
       }
       
-      public function createShotEffects(param1:Vector3, param2:Mesh) : void
+      public function createShotEffects(localMuzzlePosition:Vector3, turretMesh:Mesh) : void
       {
-         if(!this.dymojes.isReady)
+         if(!this.sfxData.isReady)
          {
-            this.dymojes.init();
+            this.sfxData.init();
          }
-         this.createShotSoundEffect(param2);
-         this.createMuzzleFlashEffect(param1,param2);
-         this.createMuzzleFlashLightEffect(param1,param2);
+         this.createShotSoundEffect(turretMesh);
+         this.createMuzzleFlashEffect(localMuzzlePosition,turretMesh);
+         this.createMuzzleFlashLightEffect(localMuzzlePosition,turretMesh);
       }
       
-      private function createShotSoundEffect(param1:Mesh) : void
+      private function createShotSoundEffect(turretMesh:Mesh) : void
       {
-         var _loc2_:Sound3D = Sound3D.create(this.dymojes.kopefus,SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,nydas);
-         this.bijatil.addEffect(Sound3DEffect.create(this.murow,new Vector3(param1.x,param1.y,param1.z),_loc2_));
+         var sound:Sound3D = Sound3D.create(this.sfxData.shotSound,SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,SHOT_SOUND_VOLUME);
+         this.soundManager.addEffect(Sound3DEffect.create(this.objectPool,new Vector3(turretMesh.x,turretMesh.y,turretMesh.z),sound));
       }
       
-      private function createMuzzleFlashEffect(param1:Vector3, param2:Mesh) : void
+      private function createMuzzleFlashEffect(localMuzzlePosition:Vector3, turretMesh:Mesh) : void
       {
-         var _loc3_:SmokyMuzzleFlashEffect = SmokyMuzzleFlashEffect(this.murow.getObject(SmokyMuzzleFlashEffect));
-         _loc3_.init(param1,param2,this.dymojes.pasinavuj,podahypoc);
-         this.hobuna.addEffect(_loc3_);
+         var muzzleFlashEffect:SmokyMuzzleFlashEffect = SmokyMuzzleFlashEffect(this.objectPool.getObject(SmokyMuzzleFlashEffect));
+         muzzleFlashEffect.init(localMuzzlePosition,turretMesh,this.sfxData.shotMaterial,MUZZLE_FLASH_DURATION);
+         this.effects.addEffect(muzzleFlashEffect);
       }
       
-      private function createMuzzleFlashLightEffect(param1:Vector3, param2:Mesh) : void
+      private function createMuzzleFlashLightEffect(localMuzzlePosition:Vector3, turretMesh:Mesh) : void
       {
-         var _loc3_:AnimatedLightEffect = AnimatedLightEffect(this.murow.getObject(AnimatedLightEffect));
-         var _loc4_:MuzzlePositionProvider = MuzzlePositionProvider(this.murow.getObject(MuzzlePositionProvider));
-         _loc4_.init(param2,param1,0);
-         _loc3_.init(_loc4_,this.dymojes.quf);
-         this.hobuna.addEffect(_loc3_);
+         var lightEffect:AnimatedLightEffect = AnimatedLightEffect(this.objectPool.getObject(AnimatedLightEffect));
+         var positionProvider:MuzzlePositionProvider = MuzzlePositionProvider(this.objectPool.getObject(MuzzlePositionProvider));
+         positionProvider.init(turretMesh,localMuzzlePosition,0);
+         lightEffect.init(positionProvider,this.sfxData.shotLight);
+         this.effects.addEffect(lightEffect);
       }
       
-      public function createExplosionEffects(param1:Vector3, param2:Number) : void
+      public function createExplosionEffects(position:Vector3, scale:Number) : void
       {
-         this.createExplosionSoundEffect(param1);
-         this.createExplosionGraphicEffect(param1,param2);
-         this.createExplosionLightEffect(param1);
+         this.createExplosionSoundEffect(position);
+         this.createExplosionGraphicEffect(position,scale);
+         this.createExplosionLightEffect(position);
       }
       
-      private function createExplosionSoundEffect(param1:Vector3) : void
+      private function createExplosionSoundEffect(position:Vector3) : void
       {
-         var _loc2_:Sound3D = Sound3D.create(this.dymojes.lyrydab,SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,1);
-         this.bijatil.addEffect(Sound3DEffect.create(this.murow,param1,_loc2_,naj));
+         var sound:Sound3D = Sound3D.create(this.sfxData.explosionSound,SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,1);
+         this.soundManager.addEffect(Sound3DEffect.create(this.objectPool,position,sound,EXPLOSION_SOUND_DELAY));
       }
       
-      private function createExplosionGraphicEffect(param1:Vector3, param2:Number) : void
+      private function createExplosionGraphicEffect(position:Vector3, scale:Number) : void
       {
-         var _loc3_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(this.murow.getObject(StaticObject3DPositionProvider));
-         _loc3_.init(param1,qalibi);
-         var _loc4_:AnimatedSpriteEffect = AnimatedSpriteEffect(this.murow.getObject(AnimatedSpriteEffect));
-         var _loc5_:Number = tilubizy * param2;
-         _loc4_.init(_loc5_,_loc5_,this.dymojes.zabe,0,karymo,_loc3_);
-         this.hobuna.addEffect(_loc4_);
+         var positionProvider:StaticObject3DPositionProvider = StaticObject3DPositionProvider(this.objectPool.getObject(StaticObject3DPositionProvider));
+         positionProvider.init(position,qalibi);
+         var spriteEffect:AnimatedSpriteEffect = AnimatedSpriteEffect(this.objectPool.getObject(AnimatedSpriteEffect));
+         var size:Number = EXPLOSION_SIZE * scale;
+         spriteEffect.init(size,size,this.sfxData.explosionAnimation,0,EXPLOSION_FPS,positionProvider);
+         this.effects.addEffect(spriteEffect);
       }
       
-      private function createExplosionLightEffect(param1:Vector3) : void
+      private function createExplosionLightEffect(position:Vector3) : void
       {
-         var _loc2_:AnimatedLightEffect = AnimatedLightEffect(this.murow.getObject(AnimatedLightEffect));
-         var _loc3_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(this.murow.getObject(StaticObject3DPositionProvider));
-         _loc3_.init(param1,qalibi);
-         _loc2_.init(_loc3_,this.dymojes.zucezu);
-         this.hobuna.addEffect(_loc2_);
+         var lightEffect:AnimatedLightEffect = AnimatedLightEffect(this.objectPool.getObject(AnimatedLightEffect));
+         var positionProvider:StaticObject3DPositionProvider = StaticObject3DPositionProvider(this.objectPool.getObject(StaticObject3DPositionProvider));
+         positionProvider.init(position,qalibi);
+         lightEffect.init(positionProvider,this.sfxData.explosionLight);
+         this.effects.addEffect(lightEffect);
       }
    }
 }

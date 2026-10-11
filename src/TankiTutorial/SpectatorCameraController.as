@@ -14,41 +14,41 @@ package
    public class SpectatorCameraController implements CameraController
    {
       
-      private static const vyvew:ConsoleVarFloat = new ConsoleVarFloat("cam_spd",1300,0,10000);
+      private static const camSpeed:ConsoleVarFloat = new ConsoleVarFloat("cam_spd",1300,0,10000);
       
-      private static const rafypiv:ConsoleVarFloat = new ConsoleVarFloat("cam_acc",4,0,1000000);
+      private static const camAcc:ConsoleVarFloat = new ConsoleVarFloat("cam_acc",4,0,1000000);
       
-      private static const cumu:ConsoleVarFloat = new ConsoleVarFloat("cam_smooth",0.1,0.001,1);
+      private static const camSmooth:ConsoleVarFloat = new ConsoleVarFloat("cam_smooth",0.1,0.001,1);
       
-      private static const jofohinar:ConsoleVarFloat = new ConsoleVarFloat("m_pitch",-0.006,-100,100);
+      private static const mousePitch:ConsoleVarFloat = new ConsoleVarFloat("m_pitch",-0.006,-100,100);
       
-      private static const gyvareve:ConsoleVarFloat = new ConsoleVarFloat("m_yaw",-0.006,-100,100);
+      private static const mouseYaw:ConsoleVarFloat = new ConsoleVarFloat("m_yaw",-0.006,-100,100);
       
-      private static const cyjeruqa:int = 0;
+      private static const FORWARD:int = 0;
       
-      private static const vuhike:int = 1;
+      private static const BACK:int = 1;
       
-      private static const wogop:int = 2;
+      private static const LEFT:int = 2;
       
-      private static const dad:int = 3;
+      private static const RIGHT:int = 3;
       
-      private static const desu:int = 4;
+      private static const DOWN:int = 4;
       
-      private static const sulu:int = 5;
+      private static const UP:int = 5;
       
-      private static const coc:int = 6;
+      private static const ACCELERATE:int = 6;
       
       private static const giquju:int = 7;
       
-      private var wupeko:Dictionary = new Dictionary();
+      private var keyMap:Dictionary = new Dictionary();
       
-      private var selijy:IEventDispatcher;
+      private var eventDispatcher:IEventDispatcher;
       
-      private var butefu:GameCamera;
+      private var camera:GameCamera;
       
-      public var zopuduwar:Boolean;
+      public var mousePressed:Boolean;
       
-      private var ses:BitMask = new BitMask();
+      private var controlState:BitMask = new BitMask();
       
       private var byc:Number;
       
@@ -58,168 +58,168 @@ package
       
       private var qotok:Number;
       
-      private var sema:Vector3 = new Vector3();
+      private var localVector:Vector3 = new Vector3();
       
-      private var ruda:Vector3 = new Vector3();
+      private var direction:Vector3 = new Vector3();
       
       private var position:Vector3 = new Vector3();
       
-      private var poluwoh:Vector3 = new Vector3();
+      private var rotation:Vector3 = new Vector3();
       
-      public var vucofena:Boolean = true;
+      public var mouseEnabled:Boolean = true;
       
-      public function SpectatorCameraController(param1:IEventDispatcher, param2:GameCamera)
+      public function SpectatorCameraController(eventDispatcher:IEventDispatcher, camera:GameCamera)
       {
          super();
-         this.selijy = param1;
-         this.setCamera(param2);
+         this.eventDispatcher = eventDispatcher;
+         this.setCamera(camera);
          this.initKeyMap();
       }
       
       private function initKeyMap() : void
       {
-         this.wupeko[Keyboard.W] = cyjeruqa;
-         this.wupeko[Keyboard.S] = vuhike;
-         this.wupeko[Keyboard.A] = wogop;
-         this.wupeko[Keyboard.D] = dad;
-         this.wupeko[Keyboard.Q] = sulu;
-         this.wupeko[Keyboard.E] = desu;
-         this.wupeko[Keyboard.SHIFT] = coc;
-         this.wupeko[Keyboard.SPACE] = giquju;
+         this.keyMap[Keyboard.W] = FORWARD;
+         this.keyMap[Keyboard.S] = BACK;
+         this.keyMap[Keyboard.A] = LEFT;
+         this.keyMap[Keyboard.D] = RIGHT;
+         this.keyMap[Keyboard.Q] = UP;
+         this.keyMap[Keyboard.E] = DOWN;
+         this.keyMap[Keyboard.SHIFT] = ACCELERATE;
+         this.keyMap[Keyboard.SPACE] = giquju;
       }
       
-      public function setCamera(param1:GameCamera) : void
+      public function setCamera(camera:GameCamera) : void
       {
-         this.butefu = param1;
-         this.position.x = param1.x;
-         this.position.y = param1.y;
-         this.position.z = param1.z;
-         this.poluwoh.x = param1.rotationX;
-         this.poluwoh.y = param1.rotationY;
-         this.poluwoh.z = param1.rotationZ;
+         this.camera = camera;
+         this.position.x = camera.x;
+         this.position.y = camera.y;
+         this.position.z = camera.z;
+         this.rotation.x = camera.rotationX;
+         this.rotation.y = camera.rotationY;
+         this.rotation.z = camera.rotationZ;
       }
       
-      public function update(param1:int, param2:int) : void
+      public function update(time:int, deltaTime:int) : void
       {
-         var _loc3_:Number = NaN;
+         var dt:Number = NaN;
          var _loc4_:Number = NaN;
-         if(this.butefu != null)
+         if(this.camera != null)
          {
-            _loc3_ = param2 / 1000;
-            if(this.ses.getBitValue(giquju) > 0)
+            dt = deltaTime / 1000;
+            if(this.controlState.getBitValue(giquju) > 0)
             {
-               this.sema.x = this.getDirection(dad,wogop);
-               this.sema.y = 0;
-               this.sema.z = this.getDirection(cyjeruqa,vuhike);
-               this.butefu.getGlobalVector(this.sema,this.ruda);
-               this.ruda.z = 0;
-               if(this.ruda.lengthSqr() > 0)
+               this.localVector.x = this.getDirection(RIGHT,LEFT);
+               this.localVector.y = 0;
+               this.localVector.z = this.getDirection(FORWARD,BACK);
+               this.camera.getGlobalVector(this.localVector,this.direction);
+               this.direction.z = 0;
+               if(this.direction.lengthSqr() > 0)
                {
-                  this.ruda.normalize();
+                  this.direction.normalize();
                }
-               this.ruda.z = -this.getDirection(sulu,desu);
+               this.direction.z = -this.getDirection(UP,DOWN);
             }
             else
             {
-               this.sema.x = this.getDirection(dad,wogop);
-               this.sema.y = this.getDirection(sulu,desu);
-               this.sema.z = this.getDirection(cyjeruqa,vuhike);
-               this.butefu.getGlobalVector(this.sema,this.ruda);
+               this.localVector.x = this.getDirection(RIGHT,LEFT);
+               this.localVector.y = this.getDirection(UP,DOWN);
+               this.localVector.z = this.getDirection(FORWARD,BACK);
+               this.camera.getGlobalVector(this.localVector,this.direction);
             }
-            if(this.ruda.lengthSqr() > 0)
+            if(this.direction.lengthSqr() > 0)
             {
-               this.ruda.normalize();
+               this.direction.normalize();
             }
-            if(this.ses.getBitValue(coc) > 0)
+            if(this.controlState.getBitValue(ACCELERATE) > 0)
             {
-               this.ruda.scale(vyvew.duz * rafypiv.duz * _loc3_);
+               this.direction.scale(camSpeed.value * camAcc.value * dt);
             }
             else
             {
-               this.ruda.scale(vyvew.duz * _loc3_);
+               this.direction.scale(camSpeed.value * dt);
             }
-            this.position.x += this.ruda.x;
-            this.position.y += this.ruda.y;
-            this.position.z += this.ruda.z;
-            if(this.zopuduwar)
+            this.position.x += this.direction.x;
+            this.position.y += this.direction.y;
+            this.position.z += this.direction.z;
+            if(this.mousePressed)
             {
-               _loc4_ = this.vucofena ? 1 : 0;
-               this.poluwoh.x = this.sunopival + _loc4_ * (GameData.stage.mouseY - this.jevezete) * jofohinar.duz;
-               this.poluwoh.z = this.qotok + _loc4_ * (GameData.stage.mouseX - this.byc) * gyvareve.duz;
-               if(this.poluwoh.x > 0)
+               _loc4_ = this.mouseEnabled ? 1 : 0;
+               this.rotation.x = this.sunopival + _loc4_ * (GameData.stage.mouseY - this.jevezete) * mousePitch.value;
+               this.rotation.z = this.qotok + _loc4_ * (GameData.stage.mouseX - this.byc) * mouseYaw.value;
+               if(this.rotation.x > 0)
                {
-                  this.poluwoh.x = 0;
+                  this.rotation.x = 0;
                }
-               else if(this.poluwoh.x < -Math.PI)
+               else if(this.rotation.x < -Math.PI)
                {
-                  this.poluwoh.x = -Math.PI;
+                  this.rotation.x = -Math.PI;
                }
             }
-            this.butefu.x += (this.position.x - this.butefu.x) * cumu.duz;
-            this.butefu.y += (this.position.y - this.butefu.y) * cumu.duz;
-            this.butefu.z += (this.position.z - this.butefu.z) * cumu.duz;
-            this.butefu.rotationX += (this.poluwoh.x - this.butefu.rotationX) * cumu.duz;
-            this.butefu.rotationY += (this.poluwoh.y - this.butefu.rotationY) * cumu.duz;
-            this.butefu.rotationZ += (this.poluwoh.z - this.butefu.rotationZ) * cumu.duz;
+            this.camera.x += (this.position.x - this.camera.x) * camSmooth.value;
+            this.camera.y += (this.position.y - this.camera.y) * camSmooth.value;
+            this.camera.z += (this.position.z - this.camera.z) * camSmooth.value;
+            this.camera.rotationX += (this.rotation.x - this.camera.rotationX) * camSmooth.value;
+            this.camera.rotationY += (this.rotation.y - this.camera.rotationY) * camSmooth.value;
+            this.camera.rotationZ += (this.rotation.z - this.camera.rotationZ) * camSmooth.value;
          }
       }
       
-      private function getDirection(param1:int, param2:int) : int
+      private function getDirection(positiveAction:int, negativeAction:int) : int
       {
-         return this.ses.getBitValue(param1) - this.ses.getBitValue(param2);
+         return this.controlState.getBitValue(positiveAction) - this.controlState.getBitValue(negativeAction);
       }
       
       public function activate() : void
       {
-         this.selijy.addEventListener(MouseEvent.MOUSE_DOWN,this.onMouseDown);
-         this.selijy.addEventListener(KeyboardEvent.KEY_DOWN,this.onKeyDown);
-         this.selijy.addEventListener(KeyboardEvent.KEY_UP,this.onKeyUp);
+         this.eventDispatcher.addEventListener(MouseEvent.MOUSE_DOWN,this.onMouseDown);
+         this.eventDispatcher.addEventListener(KeyboardEvent.KEY_DOWN,this.onKeyDown);
+         this.eventDispatcher.addEventListener(KeyboardEvent.KEY_UP,this.onKeyUp);
       }
       
       public function deactivate() : void
       {
          this.releaseMouse();
-         this.selijy.removeEventListener(MouseEvent.MOUSE_DOWN,this.onMouseDown);
-         this.selijy.removeEventListener(KeyboardEvent.KEY_DOWN,this.onKeyDown);
-         this.selijy.removeEventListener(KeyboardEvent.KEY_UP,this.onKeyUp);
+         this.eventDispatcher.removeEventListener(MouseEvent.MOUSE_DOWN,this.onMouseDown);
+         this.eventDispatcher.removeEventListener(KeyboardEvent.KEY_DOWN,this.onKeyDown);
+         this.eventDispatcher.removeEventListener(KeyboardEvent.KEY_UP,this.onKeyUp);
       }
       
-      private function onMouseDown(param1:MouseEvent) : void
+      private function onMouseDown(mouseEvent:MouseEvent) : void
       {
-         this.zopuduwar = true;
-         this.byc = param1.stageX;
-         this.jevezete = param1.stageY;
-         this.sunopival = this.butefu.rotationX;
-         this.qotok = this.butefu.rotationZ;
-         this.selijy.addEventListener(MouseEvent.MOUSE_UP,this.onMouseUp);
+         this.mousePressed = true;
+         this.byc = mouseEvent.stageX;
+         this.jevezete = mouseEvent.stageY;
+         this.sunopival = this.camera.rotationX;
+         this.qotok = this.camera.rotationZ;
+         this.eventDispatcher.addEventListener(MouseEvent.MOUSE_UP,this.onMouseUp);
       }
       
-      private function onKeyUp(param1:KeyboardEvent) : void
+      private function onKeyUp(keyboardEvent:KeyboardEvent) : void
       {
-         if(this.wupeko[param1.keyCode] != null)
+         if(this.keyMap[keyboardEvent.keyCode] != null)
          {
-            this.ses.clearBit(this.wupeko[param1.keyCode]);
+            this.controlState.clearBit(this.keyMap[keyboardEvent.keyCode]);
          }
       }
       
-      private function onKeyDown(param1:KeyboardEvent) : void
+      private function onKeyDown(keyboardEvent:KeyboardEvent) : void
       {
-         if(this.wupeko[param1.keyCode] != null)
+         if(this.keyMap[keyboardEvent.keyCode] != null)
          {
-            this.ses.setBit(this.wupeko[param1.keyCode]);
+            this.controlState.setBit(this.keyMap[keyboardEvent.keyCode]);
          }
       }
       
       private function releaseMouse() : void
       {
-         if(this.zopuduwar)
+         if(this.mousePressed)
          {
-            this.selijy.removeEventListener(MouseEvent.MOUSE_UP,this.onMouseUp);
-            this.zopuduwar = false;
+            this.eventDispatcher.removeEventListener(MouseEvent.MOUSE_UP,this.onMouseUp);
+            this.mousePressed = false;
          }
       }
       
-      private function onMouseUp(param1:MouseEvent) : void
+      private function onMouseUp(mouseEvent:MouseEvent) : void
       {
          this.releaseMouse();
       }

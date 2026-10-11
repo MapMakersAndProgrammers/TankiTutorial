@@ -5,60 +5,60 @@ package alternativa.tanks.vehicles.tank.weapons
    public class Weapon
    {
       
-      public var gepocivaj:String;
+      public var name:String;
       
-      public var kuqy:Number = 1;
+      public var damageMultiplier:Number = 1;
       
-      private const myfo:TurretData = new TurretData();
+      private const data:TurretData = new TurretData();
       
-      private var citacir:Tank;
+      private var tank:Tank;
       
-      protected var zadawe:Boolean;
+      protected var active:Boolean;
       
-      protected var mamifoma:Number;
+      protected var _status:Number;
       
-      public function Weapon(param1:String)
+      public function Weapon(name:String)
       {
          super();
-         this.gepocivaj = param1;
+         this.name = name;
       }
       
       public function getData() : TurretData
       {
-         return this.myfo;
+         return this.data;
       }
       
       public function getTank() : Tank
       {
-         return this.citacir;
+         return this.tank;
       }
       
-      public function setTank(param1:Tank) : void
+      public function setTank(tank:Tank) : void
       {
-         this.citacir = param1;
+         this.tank = tank;
       }
       
       public function get status() : Number
       {
-         return this.mamifoma;
+         return this._status;
       }
       
       public function start() : void
       {
-         if(this.zadawe)
+         if(this.active)
          {
             return;
          }
-         this.zadawe = true;
+         this.active = true;
       }
       
       public function stop() : void
       {
-         if(!this.zadawe)
+         if(!this.active)
          {
             return;
          }
-         this.zadawe = false;
+         this.active = false;
       }
       
       public function getTarget() : Tank
@@ -66,7 +66,7 @@ package alternativa.tanks.vehicles.tank.weapons
          return null;
       }
       
-      public function update(param1:int, param2:int) : void
+      public function update(time:int, deltaTime:int) : void
       {
       }
    }

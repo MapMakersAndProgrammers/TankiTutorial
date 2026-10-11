@@ -3,68 +3,68 @@ package alternativa.physics
    public class QuickUnionFind
    {
       
-      private var gemaw:Vector.<int>;
+      private var parents:Vector.<int>;
       
-      private var jiso:Vector.<int>;
+      private var sizes:Vector.<int>;
       
       public function QuickUnionFind()
       {
          super();
-         this.gemaw = new Vector.<int>(1);
-         this.jiso = new Vector.<int>(1);
+         this.parents = new Vector.<int>(1);
+         this.sizes = new Vector.<int>(1);
       }
       
-      public function init(param1:int) : void
+      public function init(count:int) : void
       {
-         this.gemaw.length = param1;
-         this.jiso.length = param1;
-         var _loc2_:int = 0;
-         while(_loc2_ < param1)
+         this.parents.length = count;
+         this.sizes.length = count;
+         var i:int = 0;
+         while(i < count)
          {
-            this.gemaw[_loc2_] = _loc2_;
-            this.jiso[_loc2_] = 1;
-            _loc2_++;
+            this.parents[i] = i;
+            this.sizes[i] = 1;
+            i++;
          }
       }
       
-      public function union(param1:int, param2:int) : void
+      public function union(a:int, b:int) : void
       {
-         var _loc3_:int = 0;
-         var _loc4_:int = 0;
-         var _loc5_:int = 0;
-         var _loc6_:int = 0;
-         if(!this.connected(param1,param2))
+         var rootA:int = 0;
+         var rootB:int = 0;
+         var sizeA:int = 0;
+         var sizeB:int = 0;
+         if(!this.connected(a,b))
          {
-            _loc3_ = this.root(param1);
-            _loc4_ = this.root(param2);
-            _loc5_ = this.jiso[_loc3_];
-            _loc6_ = this.jiso[_loc4_];
-            if(_loc5_ > _loc6_)
+            rootA = this.root(a);
+            rootB = this.root(b);
+            sizeA = this.sizes[rootA];
+            sizeB = this.sizes[rootB];
+            if(sizeA > sizeB)
             {
-               this.gemaw[_loc4_] = _loc3_;
-               this.jiso[_loc3_] += _loc6_;
+               this.parents[rootB] = rootA;
+               this.sizes[rootA] += sizeB;
             }
             else
             {
-               this.gemaw[_loc3_] = _loc4_;
-               this.jiso[_loc4_] += _loc5_;
+               this.parents[rootA] = rootB;
+               this.sizes[rootB] += sizeA;
             }
          }
       }
       
-      public function connected(param1:int, param2:int) : Boolean
+      public function connected(a:int, b:int) : Boolean
       {
-         return this.root(param1) == this.root(param2);
+         return this.root(a) == this.root(b);
       }
       
-      public function root(param1:int) : int
+      public function root(index:int) : int
       {
-         var _loc2_:int = param1;
-         while(this.gemaw[_loc2_] != _loc2_)
+         var id:int = index;
+         while(this.parents[id] != id)
          {
-            _loc2_ = this.gemaw[_loc2_];
+            id = this.parents[id];
          }
-         return _loc2_;
+         return id;
       }
    }
 }

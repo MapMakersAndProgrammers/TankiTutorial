@@ -9,213 +9,213 @@ package alternativa.physics.collision.primitives
    public class CollisionBox extends CollisionShape
    {
       
-      public var nezav:Vector3 = new Vector3();
+      public var halfSize:Vector3 = new Vector3();
       
-      public function CollisionBox(param1:Vector3, param2:int, param3:PhysicsMaterial)
+      public function CollisionBox(halfSize:Vector3, collisionGroup:int, material:PhysicsMaterial)
       {
-         super(jupod,param2,param3);
-         this.nezav.copy(param1);
+         super(BOX,collisionGroup,material);
+         this.halfSize.copy(halfSize);
       }
       
       override public function calculateAABB() : AABB
       {
-         var _loc1_:Matrix4 = null;
-         var _loc2_:AABB = null;
+         var matrix:Matrix4 = null;
+         var bounds:AABB = null;
          var _loc3_:Number = NaN;
          var _loc4_:Number = NaN;
          var _loc5_:Number = NaN;
-         _loc1_ = wet;
-         _loc2_ = this.raruluk;
-         _loc3_ = _loc1_.gusat < 0 ? -_loc1_.gusat : Number(_loc1_.gusat);
-         _loc4_ = _loc1_.cydop < 0 ? -_loc1_.cydop : Number(_loc1_.cydop);
-         _loc5_ = _loc1_.sivy < 0 ? -_loc1_.sivy : Number(_loc1_.sivy);
-         _loc2_.jys = this.nezav.x * _loc3_ + this.nezav.y * _loc4_ + this.nezav.z * _loc5_;
-         _loc2_.cubegyw = -_loc2_.jys;
-         _loc3_ = _loc1_.sig < 0 ? -_loc1_.sig : Number(_loc1_.sig);
-         _loc4_ = _loc1_.qanezycap < 0 ? -_loc1_.qanezycap : Number(_loc1_.qanezycap);
-         _loc5_ = _loc1_.wyvukog < 0 ? -_loc1_.wyvukog : Number(_loc1_.wyvukog);
-         _loc2_.juri = this.nezav.x * _loc3_ + this.nezav.y * _loc4_ + this.nezav.z * _loc5_;
-         _loc2_.nicomosa = -_loc2_.juri;
-         _loc3_ = _loc1_.vug < 0 ? -_loc1_.vug : Number(_loc1_.vug);
-         _loc4_ = _loc1_.luwym < 0 ? -_loc1_.luwym : Number(_loc1_.luwym);
-         _loc5_ = _loc1_.tari < 0 ? -_loc1_.tari : Number(_loc1_.tari);
-         _loc2_.zepoci = this.nezav.x * _loc3_ + this.nezav.y * _loc4_ + this.nezav.z * _loc5_;
-         _loc2_.gesuwi = -_loc2_.zepoci;
-         _loc2_.cubegyw += _loc1_.kyvuru;
-         _loc2_.jys += _loc1_.kyvuru;
-         _loc2_.nicomosa += _loc1_.zumidynip;
-         _loc2_.juri += _loc1_.zumidynip;
-         _loc2_.gesuwi += _loc1_.sunafepo;
-         _loc2_.zepoci += _loc1_.sunafepo;
-         return _loc2_;
+         matrix = transform;
+         bounds = this.aabb;
+         _loc3_ = matrix.ma < 0 ? -matrix.ma : Number(matrix.ma);
+         _loc4_ = matrix.mb < 0 ? -matrix.mb : Number(matrix.mb);
+         _loc5_ = matrix.mc < 0 ? -matrix.mc : Number(matrix.mc);
+         bounds.maxX = this.halfSize.x * _loc3_ + this.halfSize.y * _loc4_ + this.halfSize.z * _loc5_;
+         bounds.minX = -bounds.maxX;
+         _loc3_ = matrix.me < 0 ? -matrix.me : Number(matrix.me);
+         _loc4_ = matrix.mf < 0 ? -matrix.mf : Number(matrix.mf);
+         _loc5_ = matrix.mg < 0 ? -matrix.mg : Number(matrix.mg);
+         bounds.maxY = this.halfSize.x * _loc3_ + this.halfSize.y * _loc4_ + this.halfSize.z * _loc5_;
+         bounds.minY = -bounds.maxY;
+         _loc3_ = matrix.mi < 0 ? -matrix.mi : Number(matrix.mi);
+         _loc4_ = matrix.mj < 0 ? -matrix.mj : Number(matrix.mj);
+         _loc5_ = matrix.mk < 0 ? -matrix.mk : Number(matrix.mk);
+         bounds.maxZ = this.halfSize.x * _loc3_ + this.halfSize.y * _loc4_ + this.halfSize.z * _loc5_;
+         bounds.minZ = -bounds.maxZ;
+         bounds.minX += matrix.md;
+         bounds.maxX += matrix.md;
+         bounds.minY += matrix.mh;
+         bounds.maxY += matrix.mh;
+         bounds.minZ += matrix.ml;
+         bounds.maxZ += matrix.ml;
+         return bounds;
       }
       
-      override public function copyFrom(param1:CollisionShape) : CollisionShape
+      override public function copyFrom(source:CollisionShape) : CollisionShape
       {
-         var _loc2_:CollisionBox = param1 as CollisionBox;
-         if(_loc2_ == null)
+         var box:CollisionBox = source as CollisionBox;
+         if(box == null)
          {
             return this;
          }
-         super.copyFrom(_loc2_);
-         this.nezav.copy(_loc2_.nezav);
+         super.copyFrom(box);
+         this.halfSize.copy(box.halfSize);
          return this;
       }
       
       override protected function createPrimitive() : CollisionShape
       {
-         return new CollisionBox(this.nezav,nute,material);
+         return new CollisionBox(this.halfSize,collisionGroup,material);
       }
       
-      override public function raycast(param1:Vector3, param2:Vector3, param3:Number, param4:Vector3) : Number
+      override public function raycast(origin:Vector3, direction:Vector3, epsilon:Number, normal:Vector3) : Number
       {
-         var _loc8_:Number = NaN;
-         var _loc9_:Number = NaN;
-         var _loc5_:Matrix4 = this.wet;
-         var _loc6_:Number = -1;
-         var _loc7_:Number = 1e+308;
-         var _loc10_:Number = param1.x - _loc5_.kyvuru;
-         var _loc11_:Number = param1.y - _loc5_.zumidynip;
-         var _loc12_:Number = param1.z - _loc5_.sunafepo;
-         var _loc13_:Number = _loc5_.gusat * _loc10_ + _loc5_.sig * _loc11_ + _loc5_.vug * _loc12_;
-         var _loc14_:Number = _loc5_.cydop * _loc10_ + _loc5_.qanezycap * _loc11_ + _loc5_.luwym * _loc12_;
-         var _loc15_:Number = _loc5_.sivy * _loc10_ + _loc5_.wyvukog * _loc11_ + _loc5_.tari * _loc12_;
-         _loc10_ = _loc5_.gusat * param2.x + _loc5_.sig * param2.y + _loc5_.vug * param2.z;
-         _loc11_ = _loc5_.cydop * param2.x + _loc5_.qanezycap * param2.y + _loc5_.luwym * param2.z;
-         _loc12_ = _loc5_.sivy * param2.x + _loc5_.wyvukog * param2.y + _loc5_.tari * param2.z;
-         if(_loc10_ < param3 && _loc10_ > -param3)
+         var t1:Number = NaN;
+         var t2:Number = NaN;
+         var matrix:Matrix4 = this.transform;
+         var tMin:Number = -1;
+         var tMax:Number = 1e+308;
+         var dx:Number = origin.x - matrix.md;
+         var dy:Number = origin.y - matrix.mh;
+         var dz:Number = origin.z - matrix.ml;
+         var ox:Number = matrix.ma * dx + matrix.me * dy + matrix.mi * dz;
+         var oy:Number = matrix.mb * dx + matrix.mf * dy + matrix.mj * dz;
+         var oz:Number = matrix.mc * dx + matrix.mg * dy + matrix.mk * dz;
+         dx = matrix.ma * direction.x + matrix.me * direction.y + matrix.mi * direction.z;
+         dy = matrix.mb * direction.x + matrix.mf * direction.y + matrix.mj * direction.z;
+         dz = matrix.mc * direction.x + matrix.mg * direction.y + matrix.mk * direction.z;
+         if(dx < epsilon && dx > -epsilon)
          {
-            if(_loc13_ < -this.nezav.x || _loc13_ > this.nezav.x)
+            if(ox < -this.halfSize.x || ox > this.halfSize.x)
             {
                return -1;
             }
          }
          else
          {
-            _loc8_ = (-this.nezav.x - _loc13_) / _loc10_;
-            _loc9_ = (this.nezav.x - _loc13_) / _loc10_;
-            if(_loc8_ < _loc9_)
+            t1 = (-this.halfSize.x - ox) / dx;
+            t2 = (this.halfSize.x - ox) / dx;
+            if(t1 < t2)
             {
-               if(_loc8_ > _loc6_)
+               if(t1 > tMin)
                {
-                  _loc6_ = _loc8_;
-                  param4.x = -1;
-                  param4.y = param4.z = 0;
+                  tMin = t1;
+                  normal.x = -1;
+                  normal.y = normal.z = 0;
                }
-               if(_loc9_ < _loc7_)
+               if(t2 < tMax)
                {
-                  _loc7_ = _loc9_;
+                  tMax = t2;
                }
             }
             else
             {
-               if(_loc9_ > _loc6_)
+               if(t2 > tMin)
                {
-                  _loc6_ = _loc9_;
-                  param4.x = 1;
-                  param4.y = param4.z = 0;
+                  tMin = t2;
+                  normal.x = 1;
+                  normal.y = normal.z = 0;
                }
-               if(_loc8_ < _loc7_)
+               if(t1 < tMax)
                {
-                  _loc7_ = _loc8_;
+                  tMax = t1;
                }
             }
-            if(_loc7_ < _loc6_)
+            if(tMax < tMin)
             {
                return -1;
             }
          }
-         if(_loc11_ < param3 && _loc11_ > -param3)
+         if(dy < epsilon && dy > -epsilon)
          {
-            if(_loc14_ < -this.nezav.y || _loc14_ > this.nezav.y)
+            if(oy < -this.halfSize.y || oy > this.halfSize.y)
             {
                return -1;
             }
          }
          else
          {
-            _loc8_ = (-this.nezav.y - _loc14_) / _loc11_;
-            _loc9_ = (this.nezav.y - _loc14_) / _loc11_;
-            if(_loc8_ < _loc9_)
+            t1 = (-this.halfSize.y - oy) / dy;
+            t2 = (this.halfSize.y - oy) / dy;
+            if(t1 < t2)
             {
-               if(_loc8_ > _loc6_)
+               if(t1 > tMin)
                {
-                  _loc6_ = _loc8_;
-                  param4.y = -1;
-                  param4.x = param4.z = 0;
+                  tMin = t1;
+                  normal.y = -1;
+                  normal.x = normal.z = 0;
                }
-               if(_loc9_ < _loc7_)
+               if(t2 < tMax)
                {
-                  _loc7_ = _loc9_;
+                  tMax = t2;
                }
             }
             else
             {
-               if(_loc9_ > _loc6_)
+               if(t2 > tMin)
                {
-                  _loc6_ = _loc9_;
-                  param4.y = 1;
-                  param4.x = param4.z = 0;
+                  tMin = t2;
+                  normal.y = 1;
+                  normal.x = normal.z = 0;
                }
-               if(_loc8_ < _loc7_)
+               if(t1 < tMax)
                {
-                  _loc7_ = _loc8_;
+                  tMax = t1;
                }
             }
-            if(_loc7_ < _loc6_)
+            if(tMax < tMin)
             {
                return -1;
             }
          }
-         if(_loc12_ < param3 && _loc12_ > -param3)
+         if(dz < epsilon && dz > -epsilon)
          {
-            if(_loc15_ < -this.nezav.z || _loc15_ > this.nezav.z)
+            if(oz < -this.halfSize.z || oz > this.halfSize.z)
             {
                return -1;
             }
          }
          else
          {
-            _loc8_ = (-this.nezav.z - _loc15_) / _loc12_;
-            _loc9_ = (this.nezav.z - _loc15_) / _loc12_;
-            if(_loc8_ < _loc9_)
+            t1 = (-this.halfSize.z - oz) / dz;
+            t2 = (this.halfSize.z - oz) / dz;
+            if(t1 < t2)
             {
-               if(_loc8_ > _loc6_)
+               if(t1 > tMin)
                {
-                  _loc6_ = _loc8_;
-                  param4.z = -1;
-                  param4.x = param4.y = 0;
+                  tMin = t1;
+                  normal.z = -1;
+                  normal.x = normal.y = 0;
                }
-               if(_loc9_ < _loc7_)
+               if(t2 < tMax)
                {
-                  _loc7_ = _loc9_;
+                  tMax = t2;
                }
             }
             else
             {
-               if(_loc9_ > _loc6_)
+               if(t2 > tMin)
                {
-                  _loc6_ = _loc9_;
-                  param4.z = 1;
-                  param4.x = param4.y = 0;
+                  tMin = t2;
+                  normal.z = 1;
+                  normal.x = normal.y = 0;
                }
-               if(_loc8_ < _loc7_)
+               if(t1 < tMax)
                {
-                  _loc7_ = _loc8_;
+                  tMax = t1;
                }
             }
-            if(_loc7_ < _loc6_)
+            if(tMax < tMin)
             {
                return -1;
             }
          }
-         _loc10_ = Number(param4.x);
-         _loc11_ = Number(param4.y);
-         _loc12_ = Number(param4.z);
-         param4.x = _loc5_.gusat * _loc10_ + _loc5_.cydop * _loc11_ + _loc5_.sivy * _loc12_;
-         param4.y = _loc5_.sig * _loc10_ + _loc5_.qanezycap * _loc11_ + _loc5_.wyvukog * _loc12_;
-         param4.z = _loc5_.vug * _loc10_ + _loc5_.luwym * _loc11_ + _loc5_.tari * _loc12_;
-         return _loc6_;
+         dx = Number(normal.x);
+         dy = Number(normal.y);
+         dz = Number(normal.z);
+         normal.x = matrix.ma * dx + matrix.mb * dy + matrix.mc * dz;
+         normal.y = matrix.me * dx + matrix.mf * dy + matrix.mg * dz;
+         normal.z = matrix.mi * dx + matrix.mj * dy + matrix.mk * dz;
+         return tMin;
       }
    }
 }

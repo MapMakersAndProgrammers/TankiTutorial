@@ -9,67 +9,67 @@ package tutorial.loader
    public class SWFLoader extends TanksLoader
    {
       
-      private var ryv:Vector.<String>;
+      private var urls:Vector.<String>;
       
-      private var besitelob:Vector.<String>;
+      private var ids:Vector.<String>;
       
-      private var dodycoli:int;
+      private var index:int;
       
-      private var wija:Loader;
+      private var loader:Loader;
       
       public function SWFLoader()
       {
          super();
       }
       
-      override public function check(param1:XML) : Boolean
+      override public function check(sceneXML:XML) : Boolean
       {
-         return param1.movies.length() > 0;
+         return sceneXML.movies.length() > 0;
       }
       
-      override public function load(param1:String, param2:XML, param3:Function) : void
+      override public function load(sceneURL:String, sceneXML:XML, completeListener:Function) : void
       {
-         var _loc6_:XML = null;
-         this.pomagu = param2.movies[0];
-         this.hon = param3;
-         this.ryv = new Vector.<String>();
-         this.besitelob = new Vector.<String>();
-         this.dodycoli = 0;
-         var _loc4_:String = param1 + pomagu.@baseURL;
-         var _loc5_:int = 0;
-         for each(_loc6_ in pomagu.elements("movie"))
+         var movieXML:XML = null;
+         this.xml = sceneXML.movies[0];
+         this.callback = completeListener;
+         this.urls = new Vector.<String>();
+         this.ids = new Vector.<String>();
+         this.index = 0;
+         var baseURL:String = sceneURL + xml.@baseURL;
+         var i:int = 0;
+         for each(movieXML in xml.elements("movie"))
          {
-            this.besitelob[_loc5_] = _loc6_.@id.toString();
-            this.ryv[_loc5_] = _loc4_ + _loc6_.@url.toString();
-            _loc5_++;
+            this.ids[i] = movieXML.@id.toString();
+            this.urls[i] = baseURL + movieXML.@url.toString();
+            i++;
          }
          this.loadMovies();
       }
       
-      private function loadMovies(param1:Event = null) : void
+      private function loadMovies(e:Event = null) : void
       {
-         if(param1 != null)
+         if(e != null)
          {
-            Assets.saveData(this.besitelob[this.dodycoli],this.wija.content,MovieClip);
-            ++this.dodycoli;
+            Assets.saveData(this.ids[this.index],this.loader.content,MovieClip);
+            ++this.index;
          }
-         if(this.dodycoli < this.ryv.length)
+         if(this.index < this.urls.length)
          {
-            if(Assets.hasData(this.besitelob[this.dodycoli],MovieClip))
+            if(Assets.hasData(this.ids[this.index],MovieClip))
             {
-               ++this.dodycoli;
+               ++this.index;
                this.loadMovies();
             }
             else
             {
-               this.wija = createLoader(this.loadMovies,onError,onProgress);
-               this.wija.load(new URLRequest(this.ryv[this.dodycoli]));
+               this.loader = createLoader(this.loadMovies,onError,onProgress);
+               this.loader.load(new URLRequest(this.urls[this.index]));
             }
          }
-         else if(hon != null)
+         else if(callback != null)
          {
-            this.wija = null;
-            hon();
+            this.loader = null;
+            callback();
          }
       }
       

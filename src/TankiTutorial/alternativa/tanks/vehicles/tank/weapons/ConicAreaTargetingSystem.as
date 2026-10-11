@@ -11,143 +11,143 @@ package alternativa.tanks.vehicles.tank.weapons
    public class ConicAreaTargetingSystem
    {
       
-      private static const sowe:int = CollisionGroup.deli;
+      private static const COLLISION_GROUP:int = CollisionGroup.WEAPON;
       
-      private static const vyhomopog:Vector3 = new Vector3();
+      private static const rayPoint:Vector3 = new Vector3();
       
       private var range:Number;
       
-      private var lomusipu:Number;
+      private var halfConeAngle:Number;
       
-      private var wavi:int;
+      private var numRays:int;
       
-      private var zogefyv:int;
+      private var numSectors:int;
       
-      private var kymaqos:CollisionDetector;
+      private var collisionDetector:CollisionDetector;
       
-      private var dugojame:ConicAreaTargetValidator;
+      private var targetValidator:ConicAreaTargetValidator;
       
-      private const dibi:Vector3 = new Vector3();
+      private const sectorAxis:Vector3 = new Vector3();
       
-      private const gijalatyt:Matrix3 = new Matrix3();
+      private const matrix:Matrix3 = new Matrix3();
       
-      private const gizynuzelu:Matrix3 = new Matrix3();
+      private const sectorMatrix:Matrix3 = new Matrix3();
       
-      private const wonuhig:RayHit = new RayHit();
+      private const rayHit:RayHit = new RayHit();
       
-      private const woz:ConicTargetingCollisionFilter = new ConicTargetingCollisionFilter();
+      private const collisionFilter:ConicTargetingCollisionFilter = new ConicTargetingCollisionFilter();
       
-      private const janimamu:Vector3 = new Vector3();
+      private const rayDirection:Vector3 = new Vector3();
       
-      private const symamume:Vector3 = new Vector3();
+      private const rayOrigin:Vector3 = new Vector3();
       
-      private var pezacu:Dictionary;
+      private var targetDistances:Dictionary;
       
-      public function ConicAreaTargetingSystem(param1:Number, param2:Number, param3:int, param4:int, param5:CollisionDetector, param6:ConicAreaTargetValidator)
+      public function ConicAreaTargetingSystem(range:Number, coneAngle:Number, numRays:int, numSectors:int, collisionDetector:CollisionDetector, targetValidator:ConicAreaTargetValidator)
       {
          super();
-         this.range = param1;
-         this.lomusipu = 0.5 * param2;
-         this.wavi = param3;
-         this.zogefyv = param4;
-         this.kymaqos = param5;
-         this.dugojame = param6;
+         this.range = range;
+         this.halfConeAngle = 0.5 * coneAngle;
+         this.numRays = numRays;
+         this.numSectors = numSectors;
+         this.collisionDetector = collisionDetector;
+         this.targetValidator = targetValidator;
       }
       
-      public function getTargets(param1:Body, param2:Number, param3:Number, param4:Vector3, param5:Vector3, param6:Vector3, param7:Vector.<Body>, param8:Vector.<Number>) : void
+      public function getTargets(body:Body, barrelLength:Number, param3:Number, barrelOrigin:Vector3, direction:Vector3, axis:Vector3, targets:Vector.<Body>, distances:Vector.<Number>) : void
       {
-         var _loc15_:* = undefined;
-         var _loc16_:Number = NaN;
-         this.woz.wyd = param1;
-         this.pezacu = new Dictionary();
-         var _loc9_:Number = param3 * param2;
-         var _loc10_:Number = param2 - _loc9_;
-         if(this.kymaqos.raycast(param4,param5,sowe,param2,this.woz,this.wonuhig) && this.wonuhig.vetudozi.body == null)
+         var key:* = undefined;
+         var distance:Number = NaN;
+         this.collisionFilter.excludedBody = body;
+         this.targetDistances = new Dictionary();
+         var rayOriginOffset:Number = param3 * barrelLength;
+         var muzzleDistance:Number = barrelLength - rayOriginOffset;
+         if(this.collisionDetector.raycast(barrelOrigin,direction,COLLISION_GROUP,barrelLength,this.collisionFilter,this.rayHit) && this.rayHit.shape.body == null)
          {
             return;
          }
-         this.dibi.copy(param6);
-         this.symamume.copy(param4).addScaled(_loc9_,param5);
-         var _loc11_:Number = this.range + _loc10_;
-         this.processRay(this.symamume,param5,_loc11_);
-         this.gizynuzelu.fromAxisAngle(param5,Math.PI / this.zogefyv);
-         var _loc12_:Number = this.lomusipu / this.wavi;
-         var _loc13_:int = 0;
-         while(_loc13_ < this.zogefyv)
+         this.sectorAxis.copy(axis);
+         this.rayOrigin.copy(barrelOrigin).addScaled(rayOriginOffset,direction);
+         var rayLength:Number = this.range + muzzleDistance;
+         this.processRay(this.rayOrigin,direction,rayLength);
+         this.sectorMatrix.fromAxisAngle(direction,Math.PI / this.numSectors);
+         var angleStep:Number = this.halfConeAngle / this.numRays;
+         var i:int = 0;
+         while(i < this.numSectors)
          {
-            this.processSector(this.symamume,param5,this.dibi,_loc11_,this.wavi,_loc12_);
-            this.processSector(this.symamume,param5,this.dibi,_loc11_,this.wavi,-_loc12_);
-            this.dibi.transform3(this.gizynuzelu);
-            _loc13_++;
+            this.processSector(this.rayOrigin,direction,this.sectorAxis,rayLength,this.numRays,angleStep);
+            this.processSector(this.rayOrigin,direction,this.sectorAxis,rayLength,this.numRays,-angleStep);
+            this.sectorAxis.transform3(this.sectorMatrix);
+            i++;
          }
-         var _loc14_:int = 0;
-         for(_loc15_ in this.pezacu)
+         var numTargets:int = 0;
+         for(key in this.targetDistances)
          {
-            param7[_loc14_] = _loc15_;
-            _loc16_ = this.pezacu[_loc15_] - _loc10_;
-            if(_loc16_ < 0)
+            targets[numTargets] = key;
+            distance = this.targetDistances[key] - muzzleDistance;
+            if(distance < 0)
             {
-               _loc16_ = 0;
+               distance = 0;
             }
-            param8[_loc14_] = _loc16_;
-            _loc14_++;
+            distances[numTargets] = distance;
+            numTargets++;
          }
-         param7.length = _loc14_;
-         param8.length = _loc14_;
-         this.woz.wyd = null;
-         this.woz.clearInvalidTargets();
-         this.pezacu = null;
+         targets.length = numTargets;
+         distances.length = numTargets;
+         this.collisionFilter.excludedBody = null;
+         this.collisionFilter.clearInvalidTargets();
+         this.targetDistances = null;
       }
       
-      private function processSector(param1:Vector3, param2:Vector3, param3:Vector3, param4:Number, param5:int, param6:Number) : void
+      private function processSector(origin:Vector3, direction:Vector3, axis:Vector3, length:Number, numSectorRays:int, angleStep:Number) : void
       {
-         var _loc7_:Number = 0;
-         var _loc8_:int = 0;
-         while(_loc8_ < param5)
+         var angle:Number = 0;
+         var i:int = 0;
+         while(i < numSectorRays)
          {
-            _loc7_ += param6;
-            this.gijalatyt.fromAxisAngle(param3,_loc7_);
-            this.gijalatyt.transformVector(param2,this.janimamu);
-            this.processRay(param1,this.janimamu,param4);
-            _loc8_++;
+            angle += angleStep;
+            this.matrix.fromAxisAngle(axis,angle);
+            this.matrix.transformVector(direction,this.rayDirection);
+            this.processRay(origin,this.rayDirection,length);
+            i++;
          }
       }
       
-      private function processRay(param1:Vector3, param2:Vector3, param3:Number) : void
+      private function processRay(origin:Vector3, direction:Vector3, length:Number) : void
       {
-         var _loc5_:Body = null;
-         var _loc6_:Number = NaN;
-         vyhomopog.copy(param1);
-         var _loc4_:Number = 0;
-         while(param3 > 0.1)
+         var body:Body = null;
+         var prevDistance:Number = NaN;
+         rayPoint.copy(origin);
+         var distance:Number = 0;
+         while(length > 0.1)
          {
-            if(!this.kymaqos.raycast(vyhomopog,param2,sowe,param3,this.woz,this.wonuhig))
+            if(!this.collisionDetector.raycast(rayPoint,direction,COLLISION_GROUP,length,this.collisionFilter,this.rayHit))
             {
                break;
             }
-            _loc5_ = this.wonuhig.vetudozi.body;
-            if(_loc5_ == null)
+            body = this.rayHit.shape.body;
+            if(body == null)
             {
                break;
             }
-            vyhomopog.addScaled(this.wonuhig.jomuc,param2);
-            _loc4_ += this.wonuhig.jomuc;
-            if(this.dugojame.isValidTarget(_loc5_))
+            rayPoint.addScaled(this.rayHit.time,direction);
+            distance += this.rayHit.time;
+            if(this.targetValidator.isValidTarget(body))
             {
-               this.woz.addTarget(_loc5_);
-               _loc6_ = Number(this.pezacu[_loc5_]);
-               if(isNaN(_loc6_) || _loc6_ > _loc4_)
+               this.collisionFilter.addTarget(body);
+               prevDistance = Number(this.targetDistances[body]);
+               if(isNaN(prevDistance) || prevDistance > distance)
                {
-                  this.pezacu[_loc5_] = _loc4_;
+                  this.targetDistances[body] = distance;
                }
             }
             else
             {
-               this.woz.addInvalidTarget(_loc5_);
+               this.collisionFilter.addInvalidTarget(body);
             }
-            param3 -= this.wonuhig.jomuc;
+            length -= this.rayHit.time;
          }
-         this.woz.clearTargets();
+         this.collisionFilter.clearTargets();
       }
    }
 }

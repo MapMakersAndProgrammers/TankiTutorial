@@ -10,20 +10,20 @@ package alternativa.tanks.vehicles.tank.weapons.twins
    public class TwinsData
    {
       
-      public var syli:WeaponSettings;
+      public var settings:WeaponSettings;
       
-      public var hobuna:PlasmaEffects;
+      public var effects:PlasmaEffects;
       
-      public var namekazaf:CommonTargetingSystem;
+      public var targetingSystem:CommonTargetingSystem;
       
       public function TwinsData()
       {
          super();
-         this.syli = new WeaponSettings(0.3,0.25,50,330);
-         this.hobuna = new PlasmaEffects();
-         var _loc1_:Number = 10 * Math.PI / 180;
-         var _loc2_:Number = 14 * Math.PI / 180;
-         this.namekazaf = new CommonTargetingSystem(PlasmaShot.qyk,_loc1_,WeaponSettings.getNumRays(_loc1_),_loc2_,WeaponSettings.getNumRays(_loc2_),GameData.kymaqos,new DMCommonTargetEvaluator());
+         this.settings = new WeaponSettings(0.3,0.25,50,330);
+         this.effects = new PlasmaEffects();
+         var angleUp:Number = 10 * Math.PI / 180;
+         var angleDown:Number = 14 * Math.PI / 180;
+         this.targetingSystem = new CommonTargetingSystem(PlasmaShot.MAX_DISTANCE,angleUp,WeaponSettings.getNumRays(angleUp),angleDown,WeaponSettings.getNumRays(angleDown),GameData.collisionDetector,new DMCommonTargetEvaluator());
       }
    }
 }

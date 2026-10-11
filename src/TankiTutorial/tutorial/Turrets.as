@@ -18,50 +18,50 @@ package tutorial
    public class Turrets
    {
       
-      private static var zuby:ConicAreaTargetingSystem;
+      private static var targetingSystem:ConicAreaTargetingSystem;
       
-      private static var gohosumy:SmokyData;
+      private static var smokyData:SmokyData;
       
-      private static var zehedori:TwinsData;
+      private static var twinsData:TwinsData;
       
-      public static const meco:String = "thunder";
+      public static const THUNDER:String = "thunder";
       
-      public static const daduhah:String = "twins";
+      public static const TWINS:String = "twins";
       
-      public static const byqif:String = "flamethrower";
+      public static const FLAMETHROWER:String = "flamethrower";
       
-      public static const leqib:Object = new Object();
+      public static const objects:Object = new Object();
       
       public function Turrets()
       {
          super();
       }
       
-      public static function getWeapon(param1:String) : Weapon
+      public static function getWeapon(name:String) : Weapon
       {
-         var _loc2_:TankTurret = leqib[param1];
-         switch(param1)
+         var turret:TankTurret = objects[name];
+         switch(name)
          {
-            case meco:
-               if(gohosumy == null)
+            case THUNDER:
+               if(smokyData == null)
                {
-                  gohosumy = new SmokyData();
-                  gohosumy.syli.beryfitu = _loc2_.beryfitu;
+                  smokyData = new SmokyData();
+                  smokyData.settings.damage = turret.damage;
                }
-               return new SmokyWeapon(gohosumy.syli,gohosumy.namekazaf,gohosumy.hobuna);
-            case daduhah:
-               if(zehedori == null)
+               return new SmokyWeapon(smokyData.settings,smokyData.targetingSystem,smokyData.effects);
+            case TWINS:
+               if(twinsData == null)
                {
-                  zehedori = new TwinsData();
-                  zehedori.syli.beryfitu = _loc2_.beryfitu;
+                  twinsData = new TwinsData();
+                  twinsData.settings.damage = turret.damage;
                }
-               return new PlasmaWeapon(zehedori.syli,zehedori.namekazaf,zehedori.hobuna,2);
-            case byqif:
-               if(zuby == null)
+               return new PlasmaWeapon(twinsData.settings,twinsData.targetingSystem,twinsData.effects,2);
+            case FLAMETHROWER:
+               if(targetingSystem == null)
                {
-                  zuby = new ConicAreaTargetingSystem(2000,20 * Math.PI / 180,5,6,GameData.kymaqos,new DefaultConicAreaTargetValidator());
+                  targetingSystem = new ConicAreaTargetingSystem(2000,20 * Math.PI / 180,5,6,GameData.collisionDetector,new DefaultConicAreaTargetValidator());
                }
-               return new StreamWeapon(_loc2_.beryfitu,1000,100,80,500,zuby,getFlamethrowerEffects());
+               return new StreamWeapon(turret.damage,1000,100,80,500,targetingSystem,getFlamethrowerEffects());
             default:
                return null;
          }
@@ -69,11 +69,11 @@ package tutorial
       
       private static function getFlamethrowerEffects() : FlamethrowerEffects
       {
-         var _loc1_:StreamWeaponSFXData = new StreamWeaponSFXData();
-         _loc1_.mutovudi = Assets.getData("flame",Sound);
-         _loc1_.qywyr = Assets.getData("flame",TextureAnimation);
-         _loc1_.qywyr.fps = 30;
-         return new FlamethrowerEffects(2000,20 * Math.PI / 180,_loc1_);
+         var sfxData:StreamWeaponSFXData = new StreamWeaponSFXData();
+         sfxData.flameSound = Assets.getData("flame",Sound);
+         sfxData.particleAnimation = Assets.getData("flame",TextureAnimation);
+         sfxData.particleAnimation.fps = 30;
+         return new FlamethrowerEffects(2000,20 * Math.PI / 180,sfxData);
       }
    }
 }

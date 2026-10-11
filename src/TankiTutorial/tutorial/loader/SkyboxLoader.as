@@ -13,54 +13,54 @@ package tutorial.loader
          super();
       }
       
-      override public function check(param1:XML) : Boolean
+      override public function check(sceneXML:XML) : Boolean
       {
-         return param1.skybox.length() > 0;
+         return sceneXML.skybox.length() > 0;
       }
       
-      override public function load(param1:String, param2:XML, param3:Function) : void
+      override public function load(sceneURL:String, sceneXML:XML, completeListener:Function) : void
       {
-         var _loc7_:XML = null;
-         this.pomagu = param2.skybox[0];
-         this.hon = param3;
-         var _loc4_:Vector.<String> = new Vector.<String>();
-         var _loc5_:String = param1 + pomagu.@baseURL;
-         var _loc6_:int = 0;
-         for each(_loc7_ in pomagu.elements("bitmap"))
+         var bitmapXML:XML = null;
+         this.xml = sceneXML.skybox[0];
+         this.callback = completeListener;
+         var urls:Vector.<String> = new Vector.<String>();
+         var baseURL:String = sceneURL + xml.@baseURL;
+         var i:int = 0;
+         for each(bitmapXML in xml.elements("bitmap"))
          {
-            _loc4_[_loc6_] = _loc5_ + _loc7_.@url.toString();
-            _loc6_++;
+            urls[i] = baseURL + bitmapXML.@url.toString();
+            i++;
          }
-         GameData.root.addChildAt(this.createSkyBox(_loc4_),0);
-         if(param3 != null)
+         GameData.root.addChildAt(this.createSkyBox(urls),0);
+         if(completeListener != null)
          {
-            param3();
+            completeListener();
          }
       }
       
-      private function createSkyBox(param1:Vector.<String>) : SkyBox
+      private function createSkyBox(urls:Vector.<String>) : SkyBox
       {
-         var _loc2_:BitmapData = new BitmapData(1,1,false,10475506);
-         var _loc3_:TextureMaterial = new TextureMaterial(_loc2_);
-         var _loc4_:TextureMaterial = new TextureMaterial(_loc2_);
-         var _loc5_:TextureMaterial = new TextureMaterial(_loc2_);
-         var _loc6_:TextureMaterial = new TextureMaterial(_loc2_);
-         var _loc7_:TextureMaterial = new TextureMaterial(_loc2_);
-         var _loc8_:TextureMaterial = new TextureMaterial(_loc2_);
-         _loc3_.diffuseMapURL = param1[0];
-         _loc4_.diffuseMapURL = param1[1];
-         _loc5_.diffuseMapURL = param1[2];
-         _loc6_.diffuseMapURL = param1[3];
-         _loc7_.diffuseMapURL = param1[4];
-         _loc8_.diffuseMapURL = param1[5];
-         GameData.ciqoby.addToQueue(_loc3_,10);
-         GameData.ciqoby.addToQueue(_loc4_,10);
-         GameData.ciqoby.addToQueue(_loc5_,10);
-         GameData.ciqoby.addToQueue(_loc6_,10);
-         GameData.ciqoby.addToQueue(_loc7_,10);
-         GameData.ciqoby.addToQueue(_loc8_,10);
-         var _loc9_:int = 200000;
-         return new SkyBox(_loc9_,_loc5_,_loc3_,_loc4_,_loc6_,_loc8_,_loc7_);
+         var bitmapData:BitmapData = new BitmapData(1,1,false,10475506);
+         var left:TextureMaterial = new TextureMaterial(bitmapData);
+         var right:TextureMaterial = new TextureMaterial(bitmapData);
+         var back:TextureMaterial = new TextureMaterial(bitmapData);
+         var front:TextureMaterial = new TextureMaterial(bitmapData);
+         var bottom:TextureMaterial = new TextureMaterial(bitmapData);
+         var top:TextureMaterial = new TextureMaterial(bitmapData);
+         left.diffuseMapURL = urls[0];
+         right.diffuseMapURL = urls[1];
+         back.diffuseMapURL = urls[2];
+         front.diffuseMapURL = urls[3];
+         bottom.diffuseMapURL = urls[4];
+         top.diffuseMapURL = urls[5];
+         GameData.texturesLoader.addToQueue(left,10);
+         GameData.texturesLoader.addToQueue(right,10);
+         GameData.texturesLoader.addToQueue(back,10);
+         GameData.texturesLoader.addToQueue(front,10);
+         GameData.texturesLoader.addToQueue(bottom,10);
+         GameData.texturesLoader.addToQueue(top,10);
+         var size:int = 200000;
+         return new SkyBox(size,back,left,right,front,top,bottom);
       }
    }
 }

@@ -10,57 +10,57 @@ package tutorial
    public class ScreenMovieClipManager
    {
       
-      private static const kiqidevov:int = 20;
+      private static const MARGIN:int = 20;
       
-      private var cyferov:MovieClip;
+      private var movie:MovieClip;
       
-      private var wyfyk:MovieClip;
+      private var nextMovie:MovieClip;
       
-      public var pere:MovieClip;
+      public var currentMovie:MovieClip;
       
-      private var cinilu:String;
+      private var align:String;
       
-      private var danewazam:DisplayObjectContainer;
+      private var container:DisplayObjectContainer;
       
       private var stage:Stage;
       
-      private var lecopojen:uint;
+      private var time:uint;
       
-      private var wiciqy:Number = 1;
+      private var speed:Number = 1;
       
-      private var vocid:Boolean;
+      private var hiding:Boolean;
       
-      public function ScreenMovieClipManager(param1:Stage, param2:DisplayObjectContainer)
+      public function ScreenMovieClipManager(stage:Stage, container:DisplayObjectContainer)
       {
          super();
-         this.danewazam = param2;
-         this.stage = param1;
-         param1.addEventListener(Event.RESIZE,this.updateAlign);
+         this.container = container;
+         this.stage = stage;
+         stage.addEventListener(Event.RESIZE,this.updateAlign);
       }
       
-      public function showMovie(param1:MovieClip, param2:String, param3:Boolean = false) : void
+      public function showMovie(clip:MovieClip, align:String, immediate:Boolean = false) : void
       {
-         this.pere = param1;
-         if(param3)
+         this.currentMovie = clip;
+         if(immediate)
          {
-            if(this.cyferov != null)
+            if(this.movie != null)
             {
                this.hide();
             }
-            this.cyferov = param1;
-            this.wyfyk = null;
+            this.movie = clip;
+            this.nextMovie = null;
             this.updateAlign();
-            this.danewazam.addChild(this.cyferov);
+            this.container.addChild(this.movie);
          }
          else
          {
-            this.wyfyk = param1;
-            param1.stop();
-            this.cinilu = param2;
-            if(this.cyferov != null)
+            this.nextMovie = clip;
+            clip.stop();
+            this.align = align;
+            if(this.movie != null)
             {
                this.stage.addEventListener(Event.ENTER_FRAME,this.hideImage);
-               this.lecopojen = getTimer();
+               this.time = getTimer();
             }
             else
             {
@@ -69,54 +69,54 @@ package tutorial
          }
       }
       
-      public function hideMovie(param1:Boolean = false) : void
+      public function hideMovie(immediate:Boolean = false) : void
       {
-         this.pere = null;
-         if(this.cyferov != null && !this.vocid)
+         this.currentMovie = null;
+         if(this.movie != null && !this.hiding)
          {
-            if(param1)
+            if(immediate)
             {
                this.hide();
             }
             else
             {
-               this.vocid = true;
+               this.hiding = true;
                this.stage.addEventListener(Event.ENTER_FRAME,this.hideImage);
-               this.lecopojen = getTimer();
+               this.time = getTimer();
             }
          }
       }
       
       private function initMovie() : void
       {
-         this.cyferov = this.wyfyk;
-         this.wyfyk = null;
-         this.cyferov.alpha = 0;
+         this.movie = this.nextMovie;
+         this.nextMovie = null;
+         this.movie.alpha = 0;
          this.updateAlign();
-         this.danewazam.addChild(this.cyferov);
+         this.container.addChild(this.movie);
          this.stage.addEventListener(Event.ENTER_FRAME,this.showImage);
-         this.lecopojen = getTimer();
+         this.time = getTimer();
       }
       
-      private function showImage(param1:Event) : void
+      private function showImage(e:Event) : void
       {
-         var _loc2_:Number = (getTimer() - this.lecopojen) * 0.001;
-         this.lecopojen = getTimer();
-         this.cyferov.alpha += _loc2_ * this.wiciqy;
-         if(this.cyferov.alpha >= 1)
+         var deltaTime:Number = (getTimer() - this.time) * 0.001;
+         this.time = getTimer();
+         this.movie.alpha += deltaTime * this.speed;
+         if(this.movie.alpha >= 1)
          {
-            this.cyferov.alpha = 1;
-            this.cyferov.gotoAndPlay(0);
+            this.movie.alpha = 1;
+            this.movie.gotoAndPlay(0);
             this.stage.removeEventListener(Event.ENTER_FRAME,this.showImage);
          }
       }
       
-      private function hideImage(param1:Event) : void
+      private function hideImage(e:Event) : void
       {
-         var _loc2_:Number = (getTimer() - this.lecopojen) * 0.001;
-         this.lecopojen = getTimer();
-         this.cyferov.alpha -= _loc2_ * this.wiciqy;
-         if(this.cyferov.alpha <= 0)
+         var deltaTime:Number = (getTimer() - this.time) * 0.001;
+         this.time = getTimer();
+         this.movie.alpha -= deltaTime * this.speed;
+         if(this.movie.alpha <= 0)
          {
             this.hide();
          }
@@ -124,56 +124,56 @@ package tutorial
       
       private function hide() : void
       {
-         this.cyferov.alpha = 0;
-         this.danewazam.removeChild(this.cyferov);
-         this.cyferov = null;
+         this.movie.alpha = 0;
+         this.container.removeChild(this.movie);
+         this.movie = null;
          this.stage.removeEventListener(Event.ENTER_FRAME,this.hideImage);
-         this.vocid = false;
-         if(this.wyfyk != null)
+         this.hiding = false;
+         if(this.nextMovie != null)
          {
             this.initMovie();
          }
       }
       
-      private function updateAlign(param1:Event = null) : void
+      private function updateAlign(e:Event = null) : void
       {
-         if(this.cyferov == null)
+         if(this.movie == null)
          {
             return;
          }
-         switch(this.cinilu)
+         switch(this.align)
          {
             case StageAlign.BOTTOM:
-               this.cyferov.x = (this.stage.stageWidth - this.cyferov.width) * 0.5;
-               this.cyferov.y = this.stage.stageHeight - this.cyferov.height - kiqidevov;
+               this.movie.x = (this.stage.stageWidth - this.movie.width) * 0.5;
+               this.movie.y = this.stage.stageHeight - this.movie.height - MARGIN;
                break;
             case StageAlign.BOTTOM_LEFT:
-               this.cyferov.x = kiqidevov;
-               this.cyferov.y = this.stage.stageHeight - this.cyferov.height - kiqidevov;
+               this.movie.x = MARGIN;
+               this.movie.y = this.stage.stageHeight - this.movie.height - MARGIN;
                break;
             case StageAlign.BOTTOM_RIGHT:
-               this.cyferov.x = this.stage.stageWidth - this.cyferov.width - kiqidevov;
-               this.cyferov.y = this.stage.stageHeight - this.cyferov.height - kiqidevov;
+               this.movie.x = this.stage.stageWidth - this.movie.width - MARGIN;
+               this.movie.y = this.stage.stageHeight - this.movie.height - MARGIN;
                break;
             case StageAlign.LEFT:
-               this.cyferov.x = kiqidevov;
-               this.cyferov.y = (this.stage.stageHeight - this.cyferov.height) * 0.5;
+               this.movie.x = MARGIN;
+               this.movie.y = (this.stage.stageHeight - this.movie.height) * 0.5;
                break;
             case StageAlign.RIGHT:
-               this.cyferov.x = this.stage.stageWidth - this.cyferov.width - kiqidevov;
-               this.cyferov.y = (this.stage.stageHeight - this.cyferov.height) * 0.5;
+               this.movie.x = this.stage.stageWidth - this.movie.width - MARGIN;
+               this.movie.y = (this.stage.stageHeight - this.movie.height) * 0.5;
                break;
             case StageAlign.TOP:
-               this.cyferov.x = (this.stage.stageWidth - this.cyferov.width) * 0.5;
-               this.cyferov.y = kiqidevov;
+               this.movie.x = (this.stage.stageWidth - this.movie.width) * 0.5;
+               this.movie.y = MARGIN;
                break;
             case StageAlign.TOP_LEFT:
-               this.cyferov.x = kiqidevov;
-               this.cyferov.y = kiqidevov;
+               this.movie.x = MARGIN;
+               this.movie.y = MARGIN;
                break;
             case StageAlign.TOP_RIGHT:
-               this.cyferov.x = this.stage.stageWidth - this.cyferov.width - kiqidevov;
-               this.cyferov.y = kiqidevov;
+               this.movie.x = this.stage.stageWidth - this.movie.width - MARGIN;
+               this.movie.y = MARGIN;
          }
       }
    }

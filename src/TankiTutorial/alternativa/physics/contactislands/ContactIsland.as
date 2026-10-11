@@ -9,31 +9,31 @@ package alternativa.physics.contactislands
    public class ContactIsland
    {
       
-      private static var hem:int;
+      private static var poolSize:int;
       
-      private static const hybuhy:Vector.<ContactIsland> = new Vector.<ContactIsland>();
+      private static const pool:Vector.<ContactIsland> = new Vector.<ContactIsland>();
       
-      private static const jyz:Vector3 = new Vector3();
+      private static const velocity:Vector3 = new Vector3();
       
-      private static const noravog:int = 0;
+      private static const COLLISION_MODE:int = 0;
       
-      private static const jeq:int = 1;
+      private static const CONTACT_MODE:int = 1;
       
-      public const hikocos:Vector.<BodyContact> = new Vector.<BodyContact>();
+      public const bodyContacts:Vector.<BodyContact> = new Vector.<BodyContact>();
       
-      private var gov:PhysicsScene;
+      private var physicsScene:PhysicsScene;
       
-      private const recegalu:Vector.<ShapeContact> = new Vector.<ShapeContact>();
+      private const shapeContacts:Vector.<ShapeContact> = new Vector.<ShapeContact>();
       
-      private const kuto:Vector.<ShapeContact> = new Vector.<ShapeContact>();
+      private const levelContacts:Vector.<ShapeContact> = new Vector.<ShapeContact>();
       
-      private var waj:Vector.<Body> = new Vector.<Body>();
+      private var levelBodies:Vector.<Body> = new Vector.<Body>();
       
-      private var hefadab:Vector.<Body> = new Vector.<Body>();
+      private var nextLevelBodies:Vector.<Body> = new Vector.<Body>();
       
-      private const reqepoquq:Vector.<BodyContact> = new Vector.<BodyContact>();
+      private const levelBodyContacts:Vector.<BodyContact> = new Vector.<BodyContact>();
       
-      private const pyc:ContactLevels = new ContactLevels();
+      private const contactLevels:ContactLevels = new ContactLevels();
       
       public function ContactIsland()
       {
@@ -42,371 +42,371 @@ package alternativa.physics.contactislands
       
       public static function create() : ContactIsland
       {
-         if(hem == 0)
+         if(poolSize == 0)
          {
             return new ContactIsland();
          }
-         --hem;
-         var _loc1_:ContactIsland = hybuhy[hem];
-         hybuhy[hem] = null;
-         return _loc1_;
+         --poolSize;
+         var island:ContactIsland = pool[poolSize];
+         pool[poolSize] = null;
+         return island;
       }
       
       public function dispose() : void
       {
-         this.gov = null;
-         this.hikocos.length = 0;
-         this.recegalu.length = 0;
-         this.kuto.length = 0;
-         this.waj.length = 0;
-         this.hefadab.length = 0;
-         this.reqepoquq.length = 0;
-         this.pyc.clear();
-         hybuhy[hem++] = this;
+         this.physicsScene = null;
+         this.bodyContacts.length = 0;
+         this.shapeContacts.length = 0;
+         this.levelContacts.length = 0;
+         this.levelBodies.length = 0;
+         this.nextLevelBodies.length = 0;
+         this.levelBodyContacts.length = 0;
+         this.contactLevels.clear();
+         pool[poolSize++] = this;
       }
       
-      public function init(param1:PhysicsScene) : void
+      public function init(scene:PhysicsScene) : void
       {
-         var _loc5_:BodyContact = null;
-         var _loc6_:Vector.<ShapeContact> = null;
-         var _loc7_:int = 0;
-         var _loc8_:int = 0;
-         this.gov = param1;
-         var _loc2_:int = int(this.hikocos.length);
-         var _loc3_:Vector.<ShapeContact> = this.recegalu;
-         var _loc4_:int = 0;
-         while(_loc4_ < _loc2_)
+         var bodyContact:BodyContact = null;
+         var bodyShapeContacts:Vector.<ShapeContact> = null;
+         var numShapeContacts:int = 0;
+         var j:int = 0;
+         this.physicsScene = scene;
+         var len:int = int(this.bodyContacts.length);
+         var contacts:Vector.<ShapeContact> = this.shapeContacts;
+         var i:int = 0;
+         while(i < len)
          {
-            _loc5_ = this.hikocos[_loc4_];
-            _loc6_ = _loc5_.pupicic;
-            _loc7_ = int(_loc6_.length);
-            _loc8_ = 0;
-            while(_loc8_ < _loc7_)
+            bodyContact = this.bodyContacts[i];
+            bodyShapeContacts = bodyContact.shapeContacts;
+            numShapeContacts = int(bodyShapeContacts.length);
+            j = 0;
+            while(j < numShapeContacts)
             {
-               _loc3_[_loc3_.length] = _loc6_[_loc8_];
-               _loc8_++;
+               contacts[contacts.length] = bodyShapeContacts[j];
+               j++;
             }
-            _loc4_++;
+            i++;
          }
       }
       
-      public function collisionPhase(param1:int) : void
+      public function collisionPhase(iterations:int) : void
       {
-         this.resolveCollisions(param1);
+         this.resolveCollisions(iterations);
       }
       
-      public function contactPhase(param1:int) : void
+      public function contactPhase(iterations:int) : void
       {
-         this.resolveContacts(param1);
+         this.resolveContacts(iterations);
       }
       
-      private function resolveCollisions(param1:int) : void
+      private function resolveCollisions(iterations:int) : void
       {
-         var _loc4_:int = 0;
-         var _loc2_:int = int(this.recegalu.length);
-         var _loc3_:int = 0;
-         while(_loc3_ < param1)
+         var j:int = 0;
+         var len:int = int(this.shapeContacts.length);
+         var i:int = 0;
+         while(i < iterations)
          {
-            this.shuffleContacts(this.recegalu);
-            _loc4_ = 0;
-            while(_loc4_ < _loc2_)
+            this.shuffleContacts(this.shapeContacts);
+            j = 0;
+            while(j < len)
             {
-               this.resolveContact(this.recegalu[_loc4_],noravog);
-               _loc4_++;
+               this.resolveContact(this.shapeContacts[j],COLLISION_MODE);
+               j++;
             }
-            _loc3_++;
+            i++;
          }
       }
       
-      private function resolveContacts(param1:int) : void
+      private function resolveContacts(iterations:int) : void
       {
-         var _loc2_:Vector.<Body> = null;
-         var _loc3_:int = 0;
-         var _loc4_:int = 0;
-         var _loc5_:ShapeContact = null;
-         this.processContacts(param1);
-         this.pyc.init(this.hikocos);
-         this.pyc.getStaticLevel(this.reqepoquq,this.hefadab);
-         if(this.reqepoquq.length > 0)
+         var bodies:Vector.<Body> = null;
+         var len:int = 0;
+         var i:int = 0;
+         var contact:ShapeContact = null;
+         this.processContacts(iterations);
+         this.contactLevels.init(this.bodyContacts);
+         this.contactLevels.getStaticLevel(this.levelBodyContacts,this.nextLevelBodies);
+         if(this.levelBodyContacts.length > 0)
          {
-            this.getShapeContacts(this.reqepoquq,this.kuto);
-            this.resolveContactsForLevel(param1,this.kuto);
-            this.calculatePseudoVelocities(param1,this.kuto);
-            while(this.pyc.hasContacts())
+            this.getShapeContacts(this.levelBodyContacts,this.levelContacts);
+            this.resolveContactsForLevel(iterations,this.levelContacts);
+            this.calculatePseudoVelocities(iterations,this.levelContacts);
+            while(this.contactLevels.hasContacts())
             {
-               _loc2_ = this.waj;
-               this.waj = this.hefadab;
-               this.hefadab = _loc2_;
-               this.reqepoquq.length = 0;
-               this.hefadab.length = 0;
-               this.pyc.getNextLevel(this.waj,this.reqepoquq,this.hefadab);
-               this.setBodiesMobility(this.waj,false);
-               this.kuto.length = 0;
-               this.getShapeContacts(this.reqepoquq,this.kuto);
-               _loc3_ = int(this.kuto.length);
-               _loc4_ = 0;
-               while(_loc4_ < _loc3_)
+               bodies = this.levelBodies;
+               this.levelBodies = this.nextLevelBodies;
+               this.nextLevelBodies = bodies;
+               this.levelBodyContacts.length = 0;
+               this.nextLevelBodies.length = 0;
+               this.contactLevels.getNextLevel(this.levelBodies,this.levelBodyContacts,this.nextLevelBodies);
+               this.setBodiesMobility(this.levelBodies,false);
+               this.levelContacts.length = 0;
+               this.getShapeContacts(this.levelBodyContacts,this.levelContacts);
+               len = int(this.levelContacts.length);
+               i = 0;
+               while(i < len)
                {
-                  _loc5_ = this.kuto[_loc4_];
-                  _loc5_.calcualteDynamicFrameData(this.gov.gyge,this.gov.dikaruly,this.gov.finybyle,this.gov.favobyfum);
-                  _loc4_++;
+                  contact = this.levelContacts[i];
+                  contact.calcualteDynamicFrameData(this.physicsScene.allowedPenetration,this.physicsScene.penetrationCorrectionFactor,this.physicsScene.maxPenetrationCorrection,this.physicsScene.timeStep);
+                  i++;
                }
-               this.resolveContactsForLevel(param1,this.kuto);
-               this.calculatePseudoVelocities(param1,this.kuto);
-               this.setBodiesMobility(this.waj,true);
+               this.resolveContactsForLevel(iterations,this.levelContacts);
+               this.calculatePseudoVelocities(iterations,this.levelContacts);
+               this.setBodiesMobility(this.levelBodies,true);
             }
          }
          else
          {
-            this.getShapeContacts(this.hikocos,this.kuto);
-            this.resolveContactsForLevel(param1,this.kuto);
-            this.calculatePseudoVelocities(param1,this.kuto);
+            this.getShapeContacts(this.bodyContacts,this.levelContacts);
+            this.resolveContactsForLevel(iterations,this.levelContacts);
+            this.calculatePseudoVelocities(iterations,this.levelContacts);
          }
       }
       
-      private function processContacts(param1:int) : void
+      private function processContacts(iterations:int) : void
       {
-         var _loc4_:int = 0;
-         var _loc2_:int = int(this.recegalu.length);
-         var _loc3_:int = 0;
-         while(_loc3_ < param1)
+         var j:int = 0;
+         var len:int = int(this.shapeContacts.length);
+         var i:int = 0;
+         while(i < iterations)
          {
-            this.shuffleContacts(this.recegalu);
-            _loc4_ = 0;
-            while(_loc4_ < _loc2_)
+            this.shuffleContacts(this.shapeContacts);
+            j = 0;
+            while(j < len)
             {
-               this.resolveContact(this.recegalu[_loc4_],jeq);
-               _loc4_++;
+               this.resolveContact(this.shapeContacts[j],CONTACT_MODE);
+               j++;
             }
-            _loc3_++;
+            i++;
          }
       }
       
-      private function getShapeContacts(param1:Vector.<BodyContact>, param2:Vector.<ShapeContact>) : void
+      private function getShapeContacts(contacts:Vector.<BodyContact>, result:Vector.<ShapeContact>) : void
       {
-         var _loc5_:BodyContact = null;
-         var _loc6_:Vector.<ShapeContact> = null;
-         var _loc7_:int = 0;
-         var _loc8_:int = 0;
-         var _loc3_:int = int(param1.length);
-         var _loc4_:int = 0;
-         while(_loc4_ < _loc3_)
+         var bodyContact:BodyContact = null;
+         var bodyShapeContacts:Vector.<ShapeContact> = null;
+         var numShapeContacts:int = 0;
+         var j:int = 0;
+         var len:int = int(contacts.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc5_ = param1[_loc4_];
-            _loc6_ = _loc5_.pupicic;
-            _loc7_ = int(_loc6_.length);
-            _loc8_ = 0;
-            while(_loc8_ < _loc7_)
+            bodyContact = contacts[i];
+            bodyShapeContacts = bodyContact.shapeContacts;
+            numShapeContacts = int(bodyShapeContacts.length);
+            j = 0;
+            while(j < numShapeContacts)
             {
-               param2[param2.length] = _loc6_[_loc8_];
-               _loc8_++;
+               result[result.length] = bodyShapeContacts[j];
+               j++;
             }
-            _loc4_++;
+            i++;
          }
       }
       
-      private function shuffleContacts(param1:Vector.<ShapeContact>) : void
+      private function shuffleContacts(contacts:Vector.<ShapeContact>) : void
       {
-         var _loc4_:int = 0;
-         var _loc5_:ShapeContact = null;
-         var _loc2_:int = int(param1.length);
-         var _loc3_:int = 1;
-         while(_loc3_ < _loc2_)
+         var j:int = 0;
+         var contact:ShapeContact = null;
+         var len:int = int(contacts.length);
+         var i:int = 1;
+         while(i < len)
          {
-            _loc4_ = _loc3_ * Math.random();
-            _loc5_ = param1[_loc4_];
-            param1[_loc4_] = param1[_loc3_];
-            param1[_loc3_] = _loc5_;
-            _loc3_++;
+            j = i * Math.random();
+            contact = contacts[j];
+            contacts[j] = contacts[i];
+            contacts[i] = contact;
+            i++;
          }
       }
       
-      private function resolveContactsForLevel(param1:int, param2:Vector.<ShapeContact>) : void
+      private function resolveContactsForLevel(iterations:int, contacts:Vector.<ShapeContact>) : void
       {
-         var _loc4_:int = 0;
-         var _loc5_:int = 0;
-         var _loc3_:int = 0;
-         while(_loc3_ < param1)
+         var len:int = 0;
+         var j:int = 0;
+         var i:int = 0;
+         while(i < iterations)
          {
-            this.shuffleContacts(param2);
-            _loc4_ = int(param2.length);
-            _loc5_ = 0;
-            while(_loc5_ < _loc4_)
+            this.shuffleContacts(contacts);
+            len = int(contacts.length);
+            j = 0;
+            while(j < len)
             {
-               this.resolveContact(param2[_loc5_],jeq);
-               _loc5_++;
+               this.resolveContact(contacts[j],CONTACT_MODE);
+               j++;
             }
-            _loc3_++;
+            i++;
          }
       }
       
-      private function calculatePseudoVelocities(param1:int, param2:Vector.<ShapeContact>) : void
+      private function calculatePseudoVelocities(iterations:int, contacts:Vector.<ShapeContact>) : void
       {
-         var _loc4_:int = 0;
-         var _loc5_:int = 0;
-         var _loc3_:int = 0;
-         while(_loc3_ < param1)
+         var len:int = 0;
+         var j:int = 0;
+         var i:int = 0;
+         while(i < iterations)
          {
-            this.shuffleContacts(param2);
-            _loc4_ = int(param2.length);
-            _loc5_ = 0;
-            while(_loc5_ < _loc4_)
+            this.shuffleContacts(contacts);
+            len = int(contacts.length);
+            j = 0;
+            while(j < len)
             {
-               this.resolveContactPseudoVelocity(param2[_loc5_]);
-               _loc5_++;
+               this.resolveContactPseudoVelocity(contacts[j]);
+               j++;
             }
-            _loc3_++;
+            i++;
          }
       }
       
-      private function setBodiesMobility(param1:Vector.<Body>, param2:Boolean) : void
+      private function setBodiesMobility(bodies:Vector.<Body>, value:Boolean) : void
       {
-         var _loc5_:Body = null;
-         var _loc3_:int = int(param1.length);
-         var _loc4_:int = 0;
-         while(_loc4_ < _loc3_)
+         var body:Body = null;
+         var len:int = int(bodies.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc5_ = param1[_loc4_];
-            _loc5_.midorofic = param2;
-            _loc4_++;
+            body = bodies[i];
+            body.movable = value;
+            i++;
          }
       }
       
-      private function resolveContact(param1:ShapeContact, param2:int) : void
+      private function resolveContact(contact:ShapeContact, mode:int) : void
       {
-         var _loc8_:Number = NaN;
-         var _loc20_:Number = NaN;
-         var _loc3_:Vector3 = param1.lefugefo;
-         var _loc4_:Body = param1.ciqymaciv.body;
-         var _loc5_:Body = param1.dizad.body;
-         var _loc6_:Vector3 = jyz;
-         this.calculateRelativeVelocity(param1,_loc6_);
-         var _loc7_:Number = _loc6_.x * _loc3_.x + _loc6_.y * _loc3_.y + _loc6_.z * _loc3_.z;
-         if(param2 == jeq)
+         var targetVelocity:Number = NaN;
+         var frictionImpulse:Number = NaN;
+         var n:Vector3 = contact.normal;
+         var body1:Body = contact.shape1.body;
+         var body2:Body = contact.shape2.body;
+         var relativeVelocity:Vector3 = velocity;
+         this.calculateRelativeVelocity(contact,relativeVelocity);
+         var vn:Number = relativeVelocity.x * n.x + relativeVelocity.y * n.y + relativeVelocity.z * n.z;
+         if(mode == CONTACT_MODE)
          {
-            _loc8_ = 0;
-            if(_loc7_ < 0)
+            targetVelocity = 0;
+            if(vn < 0)
             {
-               param1.caduk = false;
+               contact.caduk = false;
             }
-            else if(param1.caduk)
+            else if(contact.caduk)
             {
                return;
             }
          }
          else
          {
-            param1.caduk = true;
-            _loc8_ = Number(param1.pisiryq);
+            contact.caduk = true;
+            targetVelocity = Number(contact.targetNormalVelocity);
          }
-         var _loc9_:Number = Number(_loc6_.dot(param1.cabuhyjyp));
-         var _loc10_:Number = Number(_loc6_.dot(param1.tufumiti));
-         var _loc11_:Number = param1.desesu - _loc9_ / param1.cywy;
-         var _loc12_:Number = param1.mejaj - _loc10_ / param1.kybifos;
-         var _loc13_:Number = _loc11_ * _loc11_ + _loc12_ * _loc12_;
-         var _loc14_:Number = param1.cyloviqu * param1.lasowicup;
-         if(_loc13_ > _loc14_ * _loc14_)
+         var tangentVelocity:Number = Number(relativeVelocity.dot(contact.tangent));
+         var binormalVelocity:Number = Number(relativeVelocity.dot(contact.binormal));
+         var newTangentImpulse:Number = contact.tangentImpulse - tangentVelocity / contact.tangentInvMass;
+         var newBinormalImpulse:Number = contact.binormalImpulse - binormalVelocity / contact.binormalInvMass;
+         var frictionImpulseSqr:Number = newTangentImpulse * newTangentImpulse + newBinormalImpulse * newBinormalImpulse;
+         var maxFrictionImpulse:Number = contact.friction * contact.normalImpulse;
+         if(frictionImpulseSqr > maxFrictionImpulse * maxFrictionImpulse)
          {
-            _loc20_ = Math.sqrt(_loc13_);
-            _loc11_ *= _loc14_ / _loc20_;
-            _loc12_ *= _loc14_ / _loc20_;
+            frictionImpulse = Math.sqrt(frictionImpulseSqr);
+            newTangentImpulse *= maxFrictionImpulse / frictionImpulse;
+            newBinormalImpulse *= maxFrictionImpulse / frictionImpulse;
          }
-         var _loc15_:Number = _loc11_ - param1.desesu;
-         var _loc16_:Number = _loc12_ - param1.mejaj;
-         param1.desesu = _loc11_;
-         param1.mejaj = _loc12_;
-         if(_loc4_.midorofic)
+         var deltaTangentImpulse:Number = newTangentImpulse - contact.tangentImpulse;
+         var deltaBinormalImpulse:Number = newBinormalImpulse - contact.binormalImpulse;
+         contact.tangentImpulse = newTangentImpulse;
+         contact.binormalImpulse = newBinormalImpulse;
+         if(body1.movable)
          {
-            _loc4_.applyWorldImpulseAtLocalPoint(param1.divute,param1.cabuhyjyp,_loc15_);
-            _loc4_.applyWorldImpulseAtLocalPoint(param1.divute,param1.tufumiti,_loc16_);
+            body1.applyWorldImpulseAtLocalPoint(contact.r1,contact.tangent,deltaTangentImpulse);
+            body1.applyWorldImpulseAtLocalPoint(contact.r1,contact.binormal,deltaBinormalImpulse);
          }
-         if(_loc5_.midorofic)
+         if(body2.movable)
          {
-            _loc5_.applyWorldImpulseAtLocalPoint(param1.bamod,param1.cabuhyjyp,-_loc15_);
-            _loc5_.applyWorldImpulseAtLocalPoint(param1.bamod,param1.tufumiti,-_loc16_);
+            body2.applyWorldImpulseAtLocalPoint(contact.r2,contact.tangent,-deltaTangentImpulse);
+            body2.applyWorldImpulseAtLocalPoint(contact.r2,contact.binormal,-deltaBinormalImpulse);
          }
-         this.calculateRelativeVelocity(param1,_loc6_);
-         _loc7_ = _loc6_.x * _loc3_.x + _loc6_.y * _loc3_.y + _loc6_.z * _loc3_.z;
-         var _loc17_:Number = _loc8_ - _loc7_;
-         var _loc18_:Number = param1.lasowicup + _loc17_ / param1.juqakilu;
-         if(_loc18_ < 0)
+         this.calculateRelativeVelocity(contact,relativeVelocity);
+         vn = relativeVelocity.x * n.x + relativeVelocity.y * n.y + relativeVelocity.z * n.z;
+         var deltaVelocity:Number = targetVelocity - vn;
+         var newNormalImpulse:Number = contact.normalImpulse + deltaVelocity / contact.normalInvMass;
+         if(newNormalImpulse < 0)
          {
-            _loc18_ = 0;
+            newNormalImpulse = 0;
          }
-         var _loc19_:Number = _loc18_ - param1.lasowicup;
-         param1.lasowicup = _loc18_;
-         if(_loc4_.midorofic)
+         var deltaNormalImpulse:Number = newNormalImpulse - contact.normalImpulse;
+         contact.normalImpulse = newNormalImpulse;
+         if(body1.movable)
          {
-            _loc4_.applyWorldImpulseAtLocalPoint(param1.divute,param1.lefugefo,_loc19_);
+            body1.applyWorldImpulseAtLocalPoint(contact.r1,contact.normal,deltaNormalImpulse);
          }
-         if(_loc5_.midorofic)
+         if(body2.movable)
          {
-            _loc5_.applyWorldImpulseAtLocalPoint(param1.bamod,param1.lefugefo,-_loc19_);
+            body2.applyWorldImpulseAtLocalPoint(contact.r2,contact.normal,-deltaNormalImpulse);
          }
       }
       
-      private function calculateRelativeVelocity(param1:ShapeContact, param2:Vector3) : void
+      private function calculateRelativeVelocity(contact:ShapeContact, result:Vector3) : void
       {
-         var _loc4_:Vector3 = null;
-         var _loc3_:Vector3 = param1.ciqymaciv.body.kejo.fev;
-         _loc4_ = param1.divute;
-         var _loc5_:Number = _loc3_.y * _loc4_.z - _loc3_.z * _loc4_.y;
-         var _loc6_:Number = _loc3_.z * _loc4_.x - _loc3_.x * _loc4_.z;
-         var _loc7_:Number = _loc3_.x * _loc4_.y - _loc3_.y * _loc4_.x;
-         _loc4_ = param1.ciqymaciv.body.kejo.zerus;
-         param2.x = _loc4_.x + _loc5_;
-         param2.y = _loc4_.y + _loc6_;
-         param2.z = _loc4_.z + _loc7_;
-         _loc3_ = param1.dizad.body.kejo.fev;
-         _loc4_ = param1.bamod;
-         _loc5_ = _loc3_.y * _loc4_.z - _loc3_.z * _loc4_.y;
-         _loc6_ = _loc3_.z * _loc4_.x - _loc3_.x * _loc4_.z;
-         _loc7_ = _loc3_.x * _loc4_.y - _loc3_.y * _loc4_.x;
-         _loc4_ = param1.dizad.body.kejo.zerus;
-         param2.x -= _loc4_.x + _loc5_;
-         param2.y -= _loc4_.y + _loc6_;
-         param2.z -= _loc4_.z + _loc7_;
+         var v:Vector3 = null;
+         var angularVelocity:Vector3 = contact.shape1.body.state.rotation;
+         v = contact.r1;
+         var cx:Number = angularVelocity.y * v.z - angularVelocity.z * v.y;
+         var cy:Number = angularVelocity.z * v.x - angularVelocity.x * v.z;
+         var cz:Number = angularVelocity.x * v.y - angularVelocity.y * v.x;
+         v = contact.shape1.body.state.velocity;
+         result.x = v.x + cx;
+         result.y = v.y + cy;
+         result.z = v.z + cz;
+         angularVelocity = contact.shape2.body.state.rotation;
+         v = contact.r2;
+         cx = angularVelocity.y * v.z - angularVelocity.z * v.y;
+         cy = angularVelocity.z * v.x - angularVelocity.x * v.z;
+         cz = angularVelocity.x * v.y - angularVelocity.y * v.x;
+         v = contact.shape2.body.state.velocity;
+         result.x -= v.x + cx;
+         result.y -= v.y + cy;
+         result.z -= v.z + cz;
       }
       
-      private function resolveContactPseudoVelocity(param1:ShapeContact) : void
+      private function resolveContactPseudoVelocity(contact:ShapeContact) : void
       {
-         var _loc2_:Vector3 = jyz;
-         this.calcPseudoSeparationVelocity(param1,_loc2_);
-         var _loc3_:Number = _loc2_.x * param1.lefugefo.x + _loc2_.y * param1.lefugefo.y + _loc2_.z * param1.lefugefo.z;
-         var _loc4_:Number = param1.dozusa - _loc3_;
-         var _loc5_:Number = _loc4_ / param1.juqakilu;
-         if(param1.ciqymaciv.body.midorofic)
+         var relativeVelocity:Vector3 = velocity;
+         this.calcPseudoSeparationVelocity(contact,relativeVelocity);
+         var vn:Number = relativeVelocity.x * contact.normal.x + relativeVelocity.y * contact.normal.y + relativeVelocity.z * contact.normal.z;
+         var deltaVelocity:Number = contact.targetPseudoVelocity - vn;
+         var impulse:Number = deltaVelocity / contact.normalInvMass;
+         if(contact.shape1.body.movable)
          {
-            param1.ciqymaciv.body.applyWorldPseudoImpulseAtLocalPoint(param1.divute,param1.lefugefo,_loc5_);
+            contact.shape1.body.applyWorldPseudoImpulseAtLocalPoint(contact.r1,contact.normal,impulse);
          }
-         if(param1.dizad.body.midorofic)
+         if(contact.shape2.body.movable)
          {
-            param1.dizad.body.applyWorldPseudoImpulseAtLocalPoint(param1.bamod,param1.lefugefo,-_loc5_);
+            contact.shape2.body.applyWorldPseudoImpulseAtLocalPoint(contact.r2,contact.normal,-impulse);
          }
       }
       
-      private function calcPseudoSeparationVelocity(param1:ShapeContact, param2:Vector3) : void
+      private function calcPseudoSeparationVelocity(contact:ShapeContact, result:Vector3) : void
       {
-         var _loc4_:Vector3 = null;
-         var _loc7_:Number = NaN;
-         var _loc3_:Vector3 = param1.ciqymaciv.body.bupu;
-         _loc4_ = param1.divute;
-         var _loc5_:Number = _loc3_.y * _loc4_.z - _loc3_.z * _loc4_.y;
-         var _loc6_:Number = _loc3_.z * _loc4_.x - _loc3_.x * _loc4_.z;
-         _loc7_ = _loc3_.x * _loc4_.y - _loc3_.y * _loc4_.x;
-         _loc4_ = param1.ciqymaciv.body.jalekiwaf;
-         param2.x = _loc4_.x + _loc5_;
-         param2.y = _loc4_.y + _loc6_;
-         param2.z = _loc4_.z + _loc7_;
-         _loc3_ = param1.dizad.body.bupu;
-         _loc4_ = param1.bamod;
-         _loc5_ = _loc3_.y * _loc4_.z - _loc3_.z * _loc4_.y;
-         _loc6_ = _loc3_.z * _loc4_.x - _loc3_.x * _loc4_.z;
-         _loc7_ = _loc3_.x * _loc4_.y - _loc3_.y * _loc4_.x;
-         _loc4_ = param1.dizad.body.jalekiwaf;
-         param2.x -= _loc4_.x + _loc5_;
-         param2.y -= _loc4_.y + _loc6_;
-         param2.z -= _loc4_.z + _loc7_;
+         var v:Vector3 = null;
+         var cz:Number = NaN;
+         var angularVelocity:Vector3 = contact.shape1.body.pseudoRotation;
+         v = contact.r1;
+         var cx:Number = angularVelocity.y * v.z - angularVelocity.z * v.y;
+         var cy:Number = angularVelocity.z * v.x - angularVelocity.x * v.z;
+         cz = angularVelocity.x * v.y - angularVelocity.y * v.x;
+         v = contact.shape1.body.pseudoVelocity;
+         result.x = v.x + cx;
+         result.y = v.y + cy;
+         result.z = v.z + cz;
+         angularVelocity = contact.shape2.body.pseudoRotation;
+         v = contact.r2;
+         cx = angularVelocity.y * v.z - angularVelocity.z * v.y;
+         cy = angularVelocity.z * v.x - angularVelocity.x * v.z;
+         cz = angularVelocity.x * v.y - angularVelocity.y * v.x;
+         v = contact.shape2.body.pseudoVelocity;
+         result.x -= v.x + cx;
+         result.y -= v.y + cy;
+         result.z -= v.z + cz;
       }
    }
 }

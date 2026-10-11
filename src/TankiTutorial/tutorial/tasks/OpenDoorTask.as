@@ -8,34 +8,34 @@ package tutorial.tasks
    public class OpenDoorTask extends Task
    {
       
-      private const qecuhygy:Mesh = GameData.tuce.getObject("door") as Mesh;
+      private const door:Mesh = GameData.scene.getObject("door") as Mesh;
       
-      private const body:Body = GameData.gov.getBody("Door");
+      private const body:Body = GameData.physicsScene.getBody("Door");
       
       private var z:Number;
       
-      private var cawo:Number;
+      private var maxZ:Number;
       
       public function OpenDoorTask()
       {
          super();
-         this.z = this.qecuhygy.z;
-         this.cawo = this.qecuhygy.boundMaxZ + this.qecuhygy.z;
+         this.z = this.door.z;
+         this.maxZ = this.door.boundMaxZ + this.door.z;
       }
       
       override public function process() : Boolean
       {
-         if(this.qecuhygy.z >= this.cawo || this.z != this.qecuhygy.z)
+         if(this.door.z >= this.maxZ || this.z != this.door.z)
          {
             return true;
          }
-         var _loc1_:TimeData = GameData.lecopojen;
-         this.qecuhygy.z += 200 * _loc1_.ziqod;
+         var timeData:TimeData = GameData.time;
+         this.door.z += 200 * timeData.deltaTime;
          if(this.body != null)
          {
-            this.body.kejo.position.z += 200 * _loc1_.ziqod;
+            this.body.state.position.z += 200 * timeData.deltaTime;
          }
-         this.z = this.qecuhygy.z;
+         this.z = this.door.z;
          return false;
       }
    }

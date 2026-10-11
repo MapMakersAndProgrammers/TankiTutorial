@@ -7,29 +7,29 @@ package alternativa.tanks.shared.physics
    public class TankBody
    {
       
-      public var wucejydy:int;
+      public var id:int;
       
       public var body:Body;
       
-      public var kyripama:CollisionBox;
+      public var tankCollisionBox:CollisionBox;
       
-      public const kodasy:Vector.<CollisionShape> = new Vector.<CollisionShape>();
+      public const staticCollisionBoxes:Vector.<CollisionShape> = new Vector.<CollisionShape>();
       
       public var vahuzys:Boolean;
       
       public var put:Boolean;
       
-      public function TankBody(param1:Body)
+      public function TankBody(body:Body)
       {
          super();
-         this.body = param1;
+         this.body = body;
       }
       
       public function clearCollisionShapes() : void
       {
          this.body.clearCollisionShapes();
-         this.kodasy.length = 0;
-         this.kyripama = null;
+         this.staticCollisionBoxes.length = 0;
+         this.tankCollisionBox = null;
       }
    }
 }

@@ -20,81 +20,81 @@ package alternativa.tanks.vehicles.tank
          super();
       }
       
-      public static function createStaticCollisionBoxes(param1:Vector3, param2:Number, param3:TankBody) : void
+      public static function createStaticCollisionBoxes(halfSize:Vector3, height:Number, tankBody:TankBody) : void
       {
-         var _loc13_:Number = NaN;
-         var _loc14_:Number = NaN;
-         var _loc4_:Number = param2 - 10;
-         var _loc5_:Number = param1.y;
-         var _loc6_:Number = _loc4_ / 2;
-         var _loc7_:Number = 0.82;
-         var _loc8_:Number = 1 - (1 - _loc7_) * (1 - _loc7_) * _loc5_ * _loc5_ / (_loc6_ * _loc6_);
+         var cornerY:Number = NaN;
+         var cornerZ:Number = NaN;
+         var bodyHeight:Number = height - 10;
+         var halfLength:Number = halfSize.y;
+         var halfHeight:Number = bodyHeight / 2;
+         var straightRatio:Number = 0.82;
+         var _loc8_:Number = 1 - (1 - straightRatio) * (1 - straightRatio) * halfLength * halfLength / (halfHeight * halfHeight);
          if(_loc8_ > 0)
          {
             _loc8_ = Math.sqrt(_loc8_);
          }
          else
          {
-            _loc8_ = 1 - (1 - _loc7_) * _loc5_ / _loc6_;
+            _loc8_ = 1 - (1 - straightRatio) * halfLength / halfHeight;
          }
-         var _loc9_:Number = (_loc7_ - 1) * _loc5_ / ((1 + _loc8_) * _loc6_);
-         var _loc10_:Number = _loc8_ * _loc6_ - _loc9_ * _loc5_;
-         var _loc11_:Number = (1 - _loc7_) * _loc5_ / ((1 + _loc8_) * _loc6_);
-         var _loc12_:Number = (1 - _loc8_) * _loc6_ / ((1 - _loc7_) * _loc5_);
+         var slope:Number = (straightRatio - 1) * halfLength / ((1 + _loc8_) * halfHeight);
+         var intercept:Number = _loc8_ * halfHeight - slope * halfLength;
+         var _loc11_:Number = (1 - straightRatio) * halfLength / ((1 + _loc8_) * halfHeight);
+         var _loc12_:Number = (1 - _loc8_) * halfHeight / ((1 - straightRatio) * halfLength);
          if(MathUtils.numbersEqual(_loc11_,_loc12_,0.00001) || _loc11_ < _loc12_)
          {
-            _loc13_ = _loc7_ * _loc5_;
-            _loc14_ = _loc9_ * _loc13_ + _loc10_;
+            cornerY = straightRatio * halfLength;
+            cornerZ = slope * cornerY + intercept;
          }
          else
          {
-            _loc13_ = (1 - _loc8_) * _loc6_ / _loc9_ + _loc5_;
-            _loc14_ = _loc6_;
+            cornerY = (1 - _loc8_) * halfHeight / slope + halfLength;
+            cornerZ = halfHeight;
          }
-         var _loc15_:Number = _loc14_ - _loc8_ * _loc6_;
-         var _loc16_:Number = _loc5_ - _loc13_;
-         var _loc17_:Number = Math.sqrt(_loc15_ * _loc15_ + _loc16_ * _loc16_) / 2;
-         _loc15_ = (1 + _loc8_) * _loc6_;
-         _loc16_ = (1 - _loc7_) * _loc5_;
-         var _loc18_:Number = Math.sqrt(_loc15_ * _loc15_ + _loc16_ * _loc16_) / 2;
-         var _loc19_:CollisionBox = new CollisionBox(new Vector3(param1.x,_loc17_,_loc18_),CollisionGroup.neli,lymuwykos);
-         var _loc20_:Matrix4 = new Matrix4();
-         var _loc21_:Number = Math.atan(_loc11_);
-         _loc20_.setRotationMatrix(-_loc21_,0,0);
-         var _loc22_:Number = _loc7_ * _loc5_ + _loc18_ * Math.sin(_loc21_) - _loc17_ * Math.cos(_loc21_);
-         var _loc23_:Number = -_loc6_ + _loc18_ * Math.cos(_loc21_) + _loc17_ * Math.sin(_loc21_) - (param1.z - _loc4_ / 2);
-         _loc20_.setPosition(new Vector3(0,_loc22_,_loc23_));
-         param3.body.addCollisionShape(_loc19_,_loc20_);
-         param3.kodasy.push(_loc19_);
-         _loc19_ = new CollisionBox(new Vector3(param1.x,_loc17_,_loc18_),CollisionGroup.neli,lymuwykos);
-         _loc20_.setRotationMatrix(_loc21_,0,0);
-         _loc20_.setPosition(new Vector3(0,-_loc22_,_loc23_));
-         param3.body.addCollisionShape(_loc19_,_loc20_);
-         param3.kodasy.push(_loc19_);
-         var _loc24_:Number = param2 * 3 / 4;
-         var _loc25_:Vector3 = new Vector3(param1.x,param1.y * _loc7_,_loc24_ / 2);
-         var _loc26_:Matrix4 = new Matrix4();
-         _loc26_.sunafepo = _loc25_.z - param1.z;
-         var _loc27_:CollisionBox = new CollisionBox(_loc25_,CollisionGroup.neli,lymuwykos);
-         param3.body.addCollisionShape(_loc27_,_loc26_);
-         param3.kodasy.push(_loc27_);
-         var _loc28_:Number = param2 * 3 / 4;
-         var _loc29_:Vector3 = new Vector3(param1.x,param1.y * _loc7_,_loc28_ / 2);
-         var _loc30_:Matrix4 = new Matrix4();
-         _loc30_.sunafepo = param2 - _loc29_.z - param1.z;
-         var _loc31_:CollisionBox = new CollisionBox(_loc29_,CollisionGroup.neli,zabybam);
-         param3.body.addCollisionShape(_loc31_,_loc30_);
-         param3.kodasy.push(_loc31_);
+         var dz:Number = cornerZ - _loc8_ * halfHeight;
+         var dy:Number = halfLength - cornerY;
+         var boxHalfLength:Number = Math.sqrt(dz * dz + dy * dy) / 2;
+         dz = (1 + _loc8_) * halfHeight;
+         dy = (1 - straightRatio) * halfLength;
+         var boxHalfHeight:Number = Math.sqrt(dz * dz + dy * dy) / 2;
+         var box:CollisionBox = new CollisionBox(new Vector3(halfSize.x,boxHalfLength,boxHalfHeight),CollisionGroup.STATIC,lymuwykos);
+         var transform:Matrix4 = new Matrix4();
+         var angle:Number = Math.atan(_loc11_);
+         transform.setRotationMatrix(-angle,0,0);
+         var boxY:Number = straightRatio * halfLength + boxHalfHeight * Math.sin(angle) - boxHalfLength * Math.cos(angle);
+         var boxZ:Number = -halfHeight + boxHalfHeight * Math.cos(angle) + boxHalfLength * Math.sin(angle) - (halfSize.z - bodyHeight / 2);
+         transform.setPosition(new Vector3(0,boxY,boxZ));
+         tankBody.body.addCollisionShape(box,transform);
+         tankBody.staticCollisionBoxes.push(box);
+         box = new CollisionBox(new Vector3(halfSize.x,boxHalfLength,boxHalfHeight),CollisionGroup.STATIC,lymuwykos);
+         transform.setRotationMatrix(angle,0,0);
+         transform.setPosition(new Vector3(0,-boxY,boxZ));
+         tankBody.body.addCollisionShape(box,transform);
+         tankBody.staticCollisionBoxes.push(box);
+         var lowerBoxHeight:Number = height * 3 / 4;
+         var lowerBoxHalfSize:Vector3 = new Vector3(halfSize.x,halfSize.y * straightRatio,lowerBoxHeight / 2);
+         var lowerBoxTransform:Matrix4 = new Matrix4();
+         lowerBoxTransform.ml = lowerBoxHalfSize.z - halfSize.z;
+         var lowerBox:CollisionBox = new CollisionBox(lowerBoxHalfSize,CollisionGroup.STATIC,lymuwykos);
+         tankBody.body.addCollisionShape(lowerBox,lowerBoxTransform);
+         tankBody.staticCollisionBoxes.push(lowerBox);
+         var upperBoxHeight:Number = height * 3 / 4;
+         var upperBoxHalfSize:Vector3 = new Vector3(halfSize.x,halfSize.y * straightRatio,upperBoxHeight / 2);
+         var upperBoxTransform:Matrix4 = new Matrix4();
+         upperBoxTransform.ml = height - upperBoxHalfSize.z - halfSize.z;
+         var upperBox:CollisionBox = new CollisionBox(upperBoxHalfSize,CollisionGroup.STATIC,zabybam);
+         tankBody.body.addCollisionShape(upperBox,upperBoxTransform);
+         tankBody.staticCollisionBoxes.push(upperBox);
       }
       
-      public static function createTankCollisionBox(param1:Vector3, param2:Number, param3:TankBody) : void
+      public static function createTankCollisionBox(halfSize:Vector3, height:Number, tankBody:TankBody) : void
       {
-         var _loc4_:Vector3 = new Vector3(param1.x,param1.y,param2 / 2);
-         var _loc5_:CollisionBox = new CollisionBox(_loc4_,0,lymuwykos);
-         var _loc6_:Matrix4 = new Matrix4();
-         _loc6_.sunafepo = param2 / 2 - param1.z;
-         param3.body.addCollisionShape(_loc5_,_loc6_);
-         param3.kyripama = _loc5_;
+         var boxHalfSize:Vector3 = new Vector3(halfSize.x,halfSize.y,height / 2);
+         var box:CollisionBox = new CollisionBox(boxHalfSize,0,lymuwykos);
+         var transform:Matrix4 = new Matrix4();
+         transform.ml = height / 2 - halfSize.z;
+         tankBody.body.addCollisionShape(box,transform);
+         tankBody.tankCollisionBox = box;
       }
    }
 }

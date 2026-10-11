@@ -328,95 +328,95 @@ package embed
          super();
       }
       
-      public static function init(param1:Function) : void
+      public static function init(callback:Function) : void
       {
-         var _loc2_:String = null;
-         listener = param1;
-         _loc2_ = "resources/map/library2/hangar/";
-         Assets.saveData(_loc2_ + "ammo.3dz",parse3DZ(new ammo_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "barr_1.3dz",parse3DZ(new barr_1_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "barr_2.3dz",parse3DZ(new barr_2_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "computer.3dz",parse3DZ(new computer_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "door.3dz",parse3DZ(new door_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "gener.3dz",parse3DZ(new gener_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "hang_in.3dz",parse3DZ(new hang_in_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "hang_out.3dz",parse3DZ(new hang_out_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "noDo.3dz",parse3DZ(new noDo_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "toolDesk.3dz",parse3DZ(new toolDesk_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "topPeril.3dz",parse3DZ(new topPeril_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "wire_1.3dz",parse3DZ(new wire_1_3dz()),Parser3DS);
-         _loc2_ = "resources/map/library2/builds/";
-         Assets.saveData(_loc2_ + "bilboard.3dz",parse3DZ(new bilboard_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "fab_tow.3dz",parse3DZ(new fab_tow_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "fab_tow2.3dz",parse3DZ(new fab_tow2_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_1.3dz",parse3DZ(new nubu_1_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_10.3dz",parse3DZ(new nubu_10_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_11.3dz",parse3DZ(new nubu_11_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_12.3dz",parse3DZ(new nubu_12_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_13.3dz",parse3DZ(new nubu_13_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_14.3dz",parse3DZ(new nubu_14_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_2.3dz",parse3DZ(new nubu_2_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_3.3dz",parse3DZ(new nubu_3_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_4.3dz",parse3DZ(new nubu_4_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_5.3dz",parse3DZ(new nubu_5_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_6.3dz",parse3DZ(new nubu_6_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_7.3dz",parse3DZ(new nubu_7_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_8.3dz",parse3DZ(new nubu_8_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "nubu_9.3dz",parse3DZ(new nubu_9_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "vilhou_1.3dz",parse3DZ(new vilhou_1_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "vilhou_2.3dz",parse3DZ(new vilhou_2_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "vilhou_3.3dz",parse3DZ(new vilhou_3_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "vilhou_4.3dz",parse3DZ(new vilhou_4_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "wall_3w.3dz",parse3DZ(new wall_3w_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "wall_cr.3dz",parse3DZ(new wall_cr_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "wall_e1.3dz",parse3DZ(new wall_e1_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "wall_e2.3dz",parse3DZ(new wall_e2_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "wall_e3.3dz",parse3DZ(new wall_e3_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "wall_st.3dz",parse3DZ(new wall_st_3dz()),Parser3DS);
-         _loc2_ = "resources/map/library2/landscape/";
-         Assets.saveData(_loc2_ + "br_01.3dz",parse3DZ(new br_01_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "bridge_1_1.3dz",parse3DZ(new bridge_1_1_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "bridge_1.3dz",parse3DZ(new bridge_1_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "bridge_2.3dz",parse3DZ(new bridge_2_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "bridge_3.3dz",parse3DZ(new bridge_3_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "bridge_4.3dz",parse3DZ(new bridge_4_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "bridge_5.3dz",parse3DZ(new bridge_5_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "bridge_8.3dz",parse3DZ(new bridge_8_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "cliff_0.3dz",parse3DS(new cliff_0_3ds()),Parser3DS);
-         Assets.saveData(_loc2_ + "cliff_1.3dz",parse3DS(new cliff_1_3ds()),Parser3DS);
-         Assets.saveData(_loc2_ + "cliff_2.3dz",parse3DS(new cliff_2_3ds()),Parser3DS);
-         Assets.saveData(_loc2_ + "cliff_4.3dz",parse3DS(new cliff_4_3ds()),Parser3DS);
-         Assets.saveData(_loc2_ + "cliff_c2.3dz",parse3DS(new cliff_c2_3ds()),Parser3DS);
-         Assets.saveData(_loc2_ + "cliff_cor.3dz",parse3DS(new cliff_cor_3ds()),Parser3DS);
-         Assets.saveData(_loc2_ + "cliff_cor2.3dz",parse3DS(new cliff_cor2_3ds()),Parser3DS);
-         Assets.saveData(_loc2_ + "cliff_r2.3dz",parse3DS(new cliff_r2_3ds()),Parser3DS);
-         Assets.saveData(_loc2_ + "cliff_ri.3dz",parse3DS(new cliff_ri_3ds()),Parser3DS);
-         Assets.saveData(_loc2_ + "fliptile.3dz",parse3DZ(new fliptile_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "rise_2.3dz",parse3DZ(new rise_2_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "rise_3.3dz",parse3DZ(new rise_3_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "rise_4.3dz",parse3DZ(new rise_4_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "rise_5.3dz",parse3DZ(new rise_5_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "slope_1.3dz",parse3DZ(new slope_1_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "slope_2.3dz",parse3DZ(new slope_2_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "smbr_1.3dz",parse3DZ(new smbr_1_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "smbr_2.3dz",parse3DZ(new smbr_2_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "smbr_3.3dz",parse3DZ(new smbr_3_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "smbr_4.3dz",parse3DZ(new smbr_4_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "smbr_5.3dz",parse3DZ(new smbr_5_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "smbr_6.3dz",parse3DZ(new smbr_6_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "tile_01.3dz",parse3DZ(new tile_01_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "tile2_1.3dz",parse3DZ(new tile2_1_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "tile2_2.3dz",parse3DZ(new tile2_2_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "tile3_1.3dz",parse3DZ(new tile3_1_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "tile3_2.3dz",parse3DZ(new tile3_2_3dz()),Parser3DS);
-         Assets.saveData(_loc2_ + "tile3_3.3dz",parse3DZ(new tile3_3_3dz()),Parser3DS);
+         var path:String = null;
+         listener = callback;
+         path = "resources/map/library2/hangar/";
+         Assets.saveData(path + "ammo.3dz",parse3DZ(new ammo_3dz()),Parser3DS);
+         Assets.saveData(path + "barr_1.3dz",parse3DZ(new barr_1_3dz()),Parser3DS);
+         Assets.saveData(path + "barr_2.3dz",parse3DZ(new barr_2_3dz()),Parser3DS);
+         Assets.saveData(path + "computer.3dz",parse3DZ(new computer_3dz()),Parser3DS);
+         Assets.saveData(path + "door.3dz",parse3DZ(new door_3dz()),Parser3DS);
+         Assets.saveData(path + "gener.3dz",parse3DZ(new gener_3dz()),Parser3DS);
+         Assets.saveData(path + "hang_in.3dz",parse3DZ(new hang_in_3dz()),Parser3DS);
+         Assets.saveData(path + "hang_out.3dz",parse3DZ(new hang_out_3dz()),Parser3DS);
+         Assets.saveData(path + "noDo.3dz",parse3DZ(new noDo_3dz()),Parser3DS);
+         Assets.saveData(path + "toolDesk.3dz",parse3DZ(new toolDesk_3dz()),Parser3DS);
+         Assets.saveData(path + "topPeril.3dz",parse3DZ(new topPeril_3dz()),Parser3DS);
+         Assets.saveData(path + "wire_1.3dz",parse3DZ(new wire_1_3dz()),Parser3DS);
+         path = "resources/map/library2/builds/";
+         Assets.saveData(path + "bilboard.3dz",parse3DZ(new bilboard_3dz()),Parser3DS);
+         Assets.saveData(path + "fab_tow.3dz",parse3DZ(new fab_tow_3dz()),Parser3DS);
+         Assets.saveData(path + "fab_tow2.3dz",parse3DZ(new fab_tow2_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_1.3dz",parse3DZ(new nubu_1_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_10.3dz",parse3DZ(new nubu_10_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_11.3dz",parse3DZ(new nubu_11_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_12.3dz",parse3DZ(new nubu_12_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_13.3dz",parse3DZ(new nubu_13_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_14.3dz",parse3DZ(new nubu_14_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_2.3dz",parse3DZ(new nubu_2_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_3.3dz",parse3DZ(new nubu_3_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_4.3dz",parse3DZ(new nubu_4_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_5.3dz",parse3DZ(new nubu_5_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_6.3dz",parse3DZ(new nubu_6_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_7.3dz",parse3DZ(new nubu_7_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_8.3dz",parse3DZ(new nubu_8_3dz()),Parser3DS);
+         Assets.saveData(path + "nubu_9.3dz",parse3DZ(new nubu_9_3dz()),Parser3DS);
+         Assets.saveData(path + "vilhou_1.3dz",parse3DZ(new vilhou_1_3dz()),Parser3DS);
+         Assets.saveData(path + "vilhou_2.3dz",parse3DZ(new vilhou_2_3dz()),Parser3DS);
+         Assets.saveData(path + "vilhou_3.3dz",parse3DZ(new vilhou_3_3dz()),Parser3DS);
+         Assets.saveData(path + "vilhou_4.3dz",parse3DZ(new vilhou_4_3dz()),Parser3DS);
+         Assets.saveData(path + "wall_3w.3dz",parse3DZ(new wall_3w_3dz()),Parser3DS);
+         Assets.saveData(path + "wall_cr.3dz",parse3DZ(new wall_cr_3dz()),Parser3DS);
+         Assets.saveData(path + "wall_e1.3dz",parse3DZ(new wall_e1_3dz()),Parser3DS);
+         Assets.saveData(path + "wall_e2.3dz",parse3DZ(new wall_e2_3dz()),Parser3DS);
+         Assets.saveData(path + "wall_e3.3dz",parse3DZ(new wall_e3_3dz()),Parser3DS);
+         Assets.saveData(path + "wall_st.3dz",parse3DZ(new wall_st_3dz()),Parser3DS);
+         path = "resources/map/library2/landscape/";
+         Assets.saveData(path + "br_01.3dz",parse3DZ(new br_01_3dz()),Parser3DS);
+         Assets.saveData(path + "bridge_1_1.3dz",parse3DZ(new bridge_1_1_3dz()),Parser3DS);
+         Assets.saveData(path + "bridge_1.3dz",parse3DZ(new bridge_1_3dz()),Parser3DS);
+         Assets.saveData(path + "bridge_2.3dz",parse3DZ(new bridge_2_3dz()),Parser3DS);
+         Assets.saveData(path + "bridge_3.3dz",parse3DZ(new bridge_3_3dz()),Parser3DS);
+         Assets.saveData(path + "bridge_4.3dz",parse3DZ(new bridge_4_3dz()),Parser3DS);
+         Assets.saveData(path + "bridge_5.3dz",parse3DZ(new bridge_5_3dz()),Parser3DS);
+         Assets.saveData(path + "bridge_8.3dz",parse3DZ(new bridge_8_3dz()),Parser3DS);
+         Assets.saveData(path + "cliff_0.3dz",parse3DS(new cliff_0_3ds()),Parser3DS);
+         Assets.saveData(path + "cliff_1.3dz",parse3DS(new cliff_1_3ds()),Parser3DS);
+         Assets.saveData(path + "cliff_2.3dz",parse3DS(new cliff_2_3ds()),Parser3DS);
+         Assets.saveData(path + "cliff_4.3dz",parse3DS(new cliff_4_3ds()),Parser3DS);
+         Assets.saveData(path + "cliff_c2.3dz",parse3DS(new cliff_c2_3ds()),Parser3DS);
+         Assets.saveData(path + "cliff_cor.3dz",parse3DS(new cliff_cor_3ds()),Parser3DS);
+         Assets.saveData(path + "cliff_cor2.3dz",parse3DS(new cliff_cor2_3ds()),Parser3DS);
+         Assets.saveData(path + "cliff_r2.3dz",parse3DS(new cliff_r2_3ds()),Parser3DS);
+         Assets.saveData(path + "cliff_ri.3dz",parse3DS(new cliff_ri_3ds()),Parser3DS);
+         Assets.saveData(path + "fliptile.3dz",parse3DZ(new fliptile_3dz()),Parser3DS);
+         Assets.saveData(path + "rise_2.3dz",parse3DZ(new rise_2_3dz()),Parser3DS);
+         Assets.saveData(path + "rise_3.3dz",parse3DZ(new rise_3_3dz()),Parser3DS);
+         Assets.saveData(path + "rise_4.3dz",parse3DZ(new rise_4_3dz()),Parser3DS);
+         Assets.saveData(path + "rise_5.3dz",parse3DZ(new rise_5_3dz()),Parser3DS);
+         Assets.saveData(path + "slope_1.3dz",parse3DZ(new slope_1_3dz()),Parser3DS);
+         Assets.saveData(path + "slope_2.3dz",parse3DZ(new slope_2_3dz()),Parser3DS);
+         Assets.saveData(path + "smbr_1.3dz",parse3DZ(new smbr_1_3dz()),Parser3DS);
+         Assets.saveData(path + "smbr_2.3dz",parse3DZ(new smbr_2_3dz()),Parser3DS);
+         Assets.saveData(path + "smbr_3.3dz",parse3DZ(new smbr_3_3dz()),Parser3DS);
+         Assets.saveData(path + "smbr_4.3dz",parse3DZ(new smbr_4_3dz()),Parser3DS);
+         Assets.saveData(path + "smbr_5.3dz",parse3DZ(new smbr_5_3dz()),Parser3DS);
+         Assets.saveData(path + "smbr_6.3dz",parse3DZ(new smbr_6_3dz()),Parser3DS);
+         Assets.saveData(path + "tile_01.3dz",parse3DZ(new tile_01_3dz()),Parser3DS);
+         Assets.saveData(path + "tile2_1.3dz",parse3DZ(new tile2_1_3dz()),Parser3DS);
+         Assets.saveData(path + "tile2_2.3dz",parse3DZ(new tile2_2_3dz()),Parser3DS);
+         Assets.saveData(path + "tile3_1.3dz",parse3DZ(new tile3_1_3dz()),Parser3DS);
+         Assets.saveData(path + "tile3_2.3dz",parse3DZ(new tile3_2_3dz()),Parser3DS);
+         Assets.saveData(path + "tile3_3.3dz",parse3DZ(new tile3_3_3dz()),Parser3DS);
          defferedSaveBin("smoky_shot",new shot_m3_bin());
          defferedSaveBin("plasma",new shot_bin());
          Assets.saveData("arrow",new arrow_gif().bitmapData,BitmapData);
          Assets.saveData("blue",new blue_gif().bitmapData,BitmapData);
-         var _loc3_:BitmapData = new cords_gif().bitmapData;
-         GameData.colorize(_loc3_);
-         Assets.saveData("cords",_loc3_,BitmapData);
+         var cordsTexture:BitmapData = new cords_gif().bitmapData;
+         GameData.colorize(cordsTexture);
+         Assets.saveData("cords",cordsTexture,BitmapData);
          Assets.saveData("target_pointer",new target_pointer_gif().bitmapData,BitmapData);
          Assets.saveData("shadow",new shadow_gif().bitmapData,BitmapData);
          Assets.saveData("black",new black_jpg().bitmapData,BitmapData);
@@ -440,39 +440,39 @@ package embed
          Assets.saveData("crystal",new box_med_3ds(),ByteArray);
          Assets.saveData("parachute_inner",new parachute_inner_3ds(),ByteArray);
          Assets.saveData("parachute",new parachute_3ds(),ByteArray);
-         var _loc4_:BitmapData = new box_med_jpg().bitmapData;
-         GameData.colorize(_loc4_);
-         Assets.saveData("med",_loc4_,BitmapData);
-         var _loc5_:BitmapData = new box_crystal_jpg().bitmapData;
-         GameData.colorize(_loc5_);
-         Assets.saveData("crystal",_loc5_,BitmapData);
-         var _loc6_:BitmapData = new para_jpg().bitmapData;
-         GameData.colorize(_loc6_);
-         Assets.saveData("parachute_inner",_loc6_,BitmapData);
-         Assets.saveData("parachute",_loc6_,BitmapData);
-         var _loc7_:BitmapData = new repairKitClass().bitmapData;
-         GameData.colorize(_loc7_);
-         Assets.saveData("repairKitBonusRegion",_loc7_,BitmapData);
-         _loc2_ = "resources/hulls/";
-         Assets.saveData(_loc2_ + "viking.3dz",new viking_3dz(),ByteArray);
-         Assets.saveData(_loc2_ + "viking.jpg",new viking_jpg().bitmapData,BitmapData);
-         defferedSaveBin(_loc2_ + "viking.bin",new viking_bin());
-         Assets.saveData(_loc2_ + "hornet.3dz",new hornet_3dz(),ByteArray);
-         Assets.saveData(_loc2_ + "hornet.jpg",new hornet_jpg().bitmapData,BitmapData);
-         defferedSaveBin(_loc2_ + "hornet.bin",new hornet_bin());
-         Assets.saveData(_loc2_ + "mammoth.3dz",new mammoth_3dz(),ByteArray);
-         Assets.saveData(_loc2_ + "mammoth_low.jpg",new mammoth_jpg().bitmapData,BitmapData);
-         defferedSaveBin(_loc2_ + "mammoth.bin",new mammoth_bin());
-         _loc2_ = "resources/turrets/";
-         Assets.saveData(_loc2_ + "thunder.3dz",new thunder_3dz(),ByteArray);
-         Assets.saveData(_loc2_ + "thunder_low.jpg",new thunder_jpg().bitmapData,BitmapData);
-         defferedSaveBin(_loc2_ + "thunder.bin",new thunder_bin());
-         Assets.saveData(_loc2_ + "firebird.3dz",new firebird_3dz(),ByteArray);
-         Assets.saveData(_loc2_ + "firebird_low.jpg",new firebird_jpg().bitmapData,BitmapData);
-         defferedSaveBin(_loc2_ + "firebird.bin",new firebird_bin());
-         Assets.saveData(_loc2_ + "twins.3dz",new twins_3dz(),ByteArray);
-         Assets.saveData(_loc2_ + "twins_low.jpg",new twins_jpg().bitmapData,BitmapData);
-         defferedSaveBin(_loc2_ + "twins.bin",new twins_bin());
+         var medTexture:BitmapData = new box_med_jpg().bitmapData;
+         GameData.colorize(medTexture);
+         Assets.saveData("med",medTexture,BitmapData);
+         var crystalTexture:BitmapData = new box_crystal_jpg().bitmapData;
+         GameData.colorize(crystalTexture);
+         Assets.saveData("crystal",crystalTexture,BitmapData);
+         var parachuteTexture:BitmapData = new para_jpg().bitmapData;
+         GameData.colorize(parachuteTexture);
+         Assets.saveData("parachute_inner",parachuteTexture,BitmapData);
+         Assets.saveData("parachute",parachuteTexture,BitmapData);
+         var repairKitTexture:BitmapData = new repairKitClass().bitmapData;
+         GameData.colorize(repairKitTexture);
+         Assets.saveData("repairKitBonusRegion",repairKitTexture,BitmapData);
+         path = "resources/hulls/";
+         Assets.saveData(path + "viking.3dz",new viking_3dz(),ByteArray);
+         Assets.saveData(path + "viking.jpg",new viking_jpg().bitmapData,BitmapData);
+         defferedSaveBin(path + "viking.bin",new viking_bin());
+         Assets.saveData(path + "hornet.3dz",new hornet_3dz(),ByteArray);
+         Assets.saveData(path + "hornet.jpg",new hornet_jpg().bitmapData,BitmapData);
+         defferedSaveBin(path + "hornet.bin",new hornet_bin());
+         Assets.saveData(path + "mammoth.3dz",new mammoth_3dz(),ByteArray);
+         Assets.saveData(path + "mammoth_low.jpg",new mammoth_jpg().bitmapData,BitmapData);
+         defferedSaveBin(path + "mammoth.bin",new mammoth_bin());
+         path = "resources/turrets/";
+         Assets.saveData(path + "thunder.3dz",new thunder_3dz(),ByteArray);
+         Assets.saveData(path + "thunder_low.jpg",new thunder_jpg().bitmapData,BitmapData);
+         defferedSaveBin(path + "thunder.bin",new thunder_bin());
+         Assets.saveData(path + "firebird.3dz",new firebird_3dz(),ByteArray);
+         Assets.saveData(path + "firebird_low.jpg",new firebird_jpg().bitmapData,BitmapData);
+         defferedSaveBin(path + "firebird.bin",new firebird_bin());
+         Assets.saveData(path + "twins.3dz",new twins_3dz(),ByteArray);
+         Assets.saveData(path + "twins_low.jpg",new twins_jpg().bitmapData,BitmapData);
+         defferedSaveBin(path + "twins.bin",new twins_bin());
          Assets.saveData("delete_help",new TurnedUpClip(),MovieClip);
          Assets.saveData("finish",new FinishClip(),MovieClip);
          Assets.saveData("help",new ControlsClip(),MovieClip);
@@ -483,79 +483,79 @@ package embed
          uncompressBin();
       }
       
-      private static function parse3DZ(param1:ByteArray) : Parser3DS
+      private static function parse3DZ(data:ByteArray) : Parser3DS
       {
-         var _loc2_:Parser3DS = new Parser3DS();
-         param1.uncompress();
-         _loc2_.parse(param1);
-         var _loc3_:Mesh = Mesh(_loc2_.objects[0]);
-         _loc3_.weldVertices(0.001,0.0001);
-         _loc3_.weldFaces(0.001,0.0001,0.01);
-         _loc3_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
-         _loc3_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
-         return _loc2_;
+         var parser:Parser3DS = new Parser3DS();
+         data.uncompress();
+         parser.parse(data);
+         var mesh:Mesh = Mesh(parser.objects[0]);
+         mesh.weldVertices(0.001,0.0001);
+         mesh.weldFaces(0.001,0.0001,0.01);
+         mesh.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
+         mesh.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
+         return parser;
       }
       
-      private static function parse3DS(param1:ByteArray) : Parser3DS
+      private static function parse3DS(data:ByteArray) : Parser3DS
       {
-         var _loc2_:Parser3DS = new Parser3DS();
-         _loc2_.parse(param1);
-         var _loc3_:Mesh = Mesh(_loc2_.objects[0]);
-         _loc3_.weldVertices(0.001,0.0001);
-         _loc3_.weldFaces(0.001,0.0001,0.01);
-         _loc3_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
-         _loc3_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
-         return _loc2_;
+         var parser:Parser3DS = new Parser3DS();
+         parser.parse(data);
+         var mesh:Mesh = Mesh(parser.objects[0]);
+         mesh.weldVertices(0.001,0.0001);
+         mesh.weldFaces(0.001,0.0001,0.01);
+         mesh.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
+         mesh.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
+         return parser;
       }
       
-      private static function defferedSaveBin(param1:String, param2:ByteArray) : void
+      private static function defferedSaveBin(url:String, data:ByteArray) : void
       {
-         binMap[param1] = param2;
+         binMap[url] = data;
       }
       
-      private static function defferedSaveSwf(param1:String, param2:ByteArray) : void
+      private static function defferedSaveSwf(url:String, data:ByteArray) : void
       {
-         swfMap[param1] = param2;
+         swfMap[url] = data;
       }
       
-      private static function defferedSaveEffect(param1:String, param2:ByteArray, param3:int, param4:int, param5:int) : void
+      private static function defferedSaveEffect(url:String, data:ByteArray, numFrames:int, width:int, height:int) : void
       {
-         var _loc6_:Object = new Object();
-         _loc6_["width"] = param4;
-         _loc6_["height"] = param5;
-         _loc6_["numFrames"] = param3;
-         _loc6_["data"] = param2;
-         effectMap[param1] = _loc6_;
+         var effect:Object = new Object();
+         effect["width"] = width;
+         effect["height"] = height;
+         effect["numFrames"] = numFrames;
+         effect["data"] = data;
+         effectMap[url] = effect;
       }
       
       private static function uncompressBin() : void
       {
-         var _loc2_:* = undefined;
-         var _loc3_:uint = 0;
-         var _loc4_:uint = 0;
+         var url:* = undefined;
+         var diffuseLength:uint = 0;
+         var alphaLength:uint = 0;
          UnpackingProgressUpdating.update();
-         var _loc1_:ByteArray = null;
+         var data:ByteArray = null;
          var _loc5_:int = 0;
          var _loc6_:* = binMap;
 
          // According to the pcode this code is correct even if strange
-         for(_loc2_ in _loc6_)
+         for(url in _loc6_)
          {
-            currentURL = _loc2_;
-            _loc1_ = binMap[_loc2_];
-            delete binMap[_loc2_];
+            currentURL = url;
+            data = binMap[url];
+            delete binMap[url];
             break;
          }
          
-         if(_loc1_ != null)
+         if(data != null)
          {
-            _loc1_.uncompress();
+            data.uncompress();
             diffuse.length = 0;
             alpha.length = 0;
-            _loc3_ = _loc1_.readUnsignedInt();
-            _loc1_.readBytes(diffuse,0,_loc3_);
-            _loc4_ = _loc1_.readUnsignedInt();
-            _loc1_.readBytes(alpha,0,_loc4_);
+            diffuseLength = data.readUnsignedInt();
+            data.readBytes(diffuse,0,diffuseLength);
+            alphaLength = data.readUnsignedInt();
+            data.readBytes(alpha,0,alphaLength);
             loader = TanksLoader.createLoader(onOpaueLoaded,uncompressBin);
             loader.loadBytes(diffuse);
          }
@@ -568,34 +568,34 @@ package embed
       
       private static function uncompressEffect() : void
       {
-         var _loc1_:* = undefined;
-         var _loc2_:ByteArray = null;
-         var _loc3_:uint = 0;
-         var _loc4_:uint = 0;
+         var url:* = undefined;
+         var data:ByteArray = null;
+         var diffuseLength:uint = 0;
+         var alphaLength:uint = 0;
          UnpackingProgressUpdating.update();
          currentEffect = null;
          var _loc5_:int = 0;
          var _loc6_:* = effectMap;
 
          // According to the pcode this code is correct even if strange
-         for(_loc1_ in _loc6_)
+         for(url in _loc6_)
          {
-            currentURL = _loc1_;
-            currentEffect = effectMap[_loc1_];
-            delete effectMap[_loc1_];
+            currentURL = url;
+            currentEffect = effectMap[url];
+            delete effectMap[url];
             break;
          }
          
          if(currentEffect != null)
          {
-            _loc2_ = currentEffect["data"];
-            _loc2_.uncompress();
+            data = currentEffect["data"];
+            data.uncompress();
             diffuse.length = 0;
             alpha.length = 0;
-            _loc3_ = _loc2_.readUnsignedInt();
-            _loc2_.readBytes(diffuse,0,_loc3_);
-            _loc4_ = _loc2_.readUnsignedInt();
-            _loc2_.readBytes(alpha,0,_loc4_);
+            diffuseLength = data.readUnsignedInt();
+            data.readBytes(diffuse,0,diffuseLength);
+            alphaLength = data.readUnsignedInt();
+            data.readBytes(alpha,0,alphaLength);
             loader = TanksLoader.createLoader(onOpaueLoadedEffect,uncompressEffect);
             loader.loadBytes(diffuse);
          }
@@ -609,69 +609,69 @@ package embed
          }
       }
       
-      private static function onOpaueLoaded(param1:Event) : void
+      private static function onOpaueLoaded(e:Event) : void
       {
          UnpackingProgressUpdating.update();
-         var _loc2_:BitmapData = Bitmap(loader.content).bitmapData;
-         currentBMP = new BitmapData(_loc2_.width,_loc2_.height,true,0);
-         currentBMP.copyPixels(_loc2_,_loc2_.rect,new Point());
-         _loc2_.dispose();
+         var bitmapData:BitmapData = Bitmap(loader.content).bitmapData;
+         currentBMP = new BitmapData(bitmapData.width,bitmapData.height,true,0);
+         currentBMP.copyPixels(bitmapData,bitmapData.rect,new Point());
+         bitmapData.dispose();
          loader = TanksLoader.createLoader(onAlphaLoaded,uncompressBin);
          loader.loadBytes(alpha);
       }
       
-      private static function onAlphaLoaded(param1:Event) : void
+      private static function onAlphaLoaded(e:Event) : void
       {
          UnpackingProgressUpdating.update();
-         var _loc2_:BitmapData = Bitmap(loader.content).bitmapData;
-         currentBMP.copyChannel(_loc2_,_loc2_.rect,new Point(),1,8);
-         _loc2_.dispose();
+         var bitmapData:BitmapData = Bitmap(loader.content).bitmapData;
+         currentBMP.copyChannel(bitmapData,bitmapData.rect,new Point(),1,8);
+         bitmapData.dispose();
          Assets.saveData(currentURL,currentBMP,BitmapData);
          uncompressBin();
       }
       
-      private static function onOpaueLoadedEffect(param1:Event) : void
+      private static function onOpaueLoadedEffect(e:Event) : void
       {
          UnpackingProgressUpdating.update();
-         var _loc2_:BitmapData = Bitmap(loader.content).bitmapData;
-         currentBMP = new BitmapData(_loc2_.width,_loc2_.height,true,0);
-         currentBMP.copyPixels(_loc2_,_loc2_.rect,new Point());
-         _loc2_.dispose();
+         var bitmapData:BitmapData = Bitmap(loader.content).bitmapData;
+         currentBMP = new BitmapData(bitmapData.width,bitmapData.height,true,0);
+         currentBMP.copyPixels(bitmapData,bitmapData.rect,new Point());
+         bitmapData.dispose();
          loader = TanksLoader.createLoader(onAlphaLoadedEffect,uncompressEffect);
          loader.loadBytes(alpha);
       }
       
-      private static function onAlphaLoadedEffect(param1:Event) : void
+      private static function onAlphaLoadedEffect(e:Event) : void
       {
          UnpackingProgressUpdating.update();
-         var _loc2_:BitmapData = Bitmap(loader.content).bitmapData;
-         currentBMP.copyChannel(_loc2_,_loc2_.rect,new Point(),1,8);
-         _loc2_.dispose();
+         var bitmapData:BitmapData = Bitmap(loader.content).bitmapData;
+         currentBMP.copyChannel(bitmapData,bitmapData.rect,new Point(),1,8);
+         bitmapData.dispose();
          Assets.saveData(currentURL,new TextureAnimation(new TextureMaterial(currentBMP),GraphicsUtils.getUVFramesFromTexture(currentBMP,currentEffect["width"],currentEffect["height"],currentEffect["numFrames"]),30),TextureAnimation);
          uncompressEffect();
       }
       
       private static function uncompressSwf() : void
       {
-         var _loc1_:ByteArray = null;
-         var _loc2_:String = null;
+         var data:ByteArray = null;
+         var url:String = null;
          UnpackingProgressUpdating.update();
          var _loc3_:int = 0;
          var _loc4_:* = swfMap;
 
          // According to the pcode this code is correct even if strange
-         for(_loc2_ in _loc4_)
+         for(url in _loc4_)
          {
-            currentURL = _loc2_;
-            _loc1_ = swfMap[_loc2_];
-            delete swfMap[_loc2_];
+            currentURL = url;
+            data = swfMap[url];
+            delete swfMap[url];
             break;
          }
 
-         if(_loc1_ != null)
+         if(data != null)
          {
             loader = TanksLoader.createLoader(onSwfLoaded,uncompressSwf);
-            loader.loadBytes(_loc1_);
+            loader.loadBytes(data);
          }
          else
          {
@@ -682,7 +682,7 @@ package embed
          }
       }
       
-      private static function onSwfLoaded(param1:Event) : void
+      private static function onSwfLoaded(e:Event) : void
       {
          UnpackingProgressUpdating.update();
          Assets.saveData(currentURL,loader.content,MovieClip);

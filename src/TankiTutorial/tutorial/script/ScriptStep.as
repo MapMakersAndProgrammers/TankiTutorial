@@ -40,495 +40,495 @@ package tutorial.script
    public class ScriptStep
    {
       
-      public static const ryk:String = "waypoint";
+      public static const WAYPOINT:String = "waypoint";
       
-      public static const qawi:String = "waywall";
+      public static const WAYWALL:String = "waywall";
       
-      public static const niliribu:String = "wayarea";
+      public static const WAYAREA:String = "wayarea";
       
-      public static const cefod:String = "open-door";
+      public static const OPEN_DOOR:String = "open-door";
       
-      public static const tuzydi:String = "show-crystal-indicator";
+      public static const SHOW_CRYSTAL_INDICATOR:String = "show-crystal-indicator";
       
-      public static const kal:String = "hide-crystal-indicator";
+      public static const HIDE_CRYSTAL_INDICATOR:String = "hide-crystal-indicator";
       
-      public static const qumajozy:String = "close-door";
+      public static const CLOSE_DOOR:String = "close-door";
       
-      public static const qiby:String = "enemy";
+      public static const ENEMY:String = "enemy";
       
-      public static const hemutunaj:String = "change";
+      public static const CHANGE:String = "change";
       
-      public static const wejaqat:String = "medicine";
+      public static const MEDICINE:String = "medicine";
       
-      public static const qogihyzug:String = "crystal";
+      public static const CRYSTAL:String = "crystal";
       
-      public static const dymikary:String = "camera.angle";
+      public static const CAMERA_ANGLE:String = "camera.angle";
       
-      public static const vyqysen:String = "camera.controller";
+      public static const CAMERA_CONTROLLER:String = "camera.controller";
       
-      public static const rawaly:String = "camera.matrix";
+      public static const CAMERA_MATRIX:String = "camera.matrix";
       
-      public static const nymynykov:String = "fadeout";
+      public static const FADEOUT:String = "fadeout";
       
-      public static const copumir:String = "fadein";
+      public static const FADEIN:String = "fadein";
       
-      public static const culytiq:String = "title";
+      public static const TITLE:String = "title";
       
-      public static const sil:String = "player.controller";
+      public static const PLAYER_CONTROLLER:String = "player.controller";
       
-      public static const quka:String = "player.spawn";
+      public static const PLAYER_SPAWN:String = "player.spawn";
       
-      public static const fytuqo:String = "bitmap.show";
+      public static const BITMAP_SHOW:String = "bitmap.show";
       
-      public static const gityquryh:String = "bitmap.hide";
+      public static const BITMAP_HIDE:String = "bitmap.hide";
       
-      public static const tyroji:String = "player.canSuicide";
+      public static const PLAYER_CAN_SUICIDE:String = "player.canSuicide";
       
-      public static const fojehem:String = "wait";
+      public static const WAIT:String = "wait";
       
-      public static const sose:String = "movie.show";
+      public static const MOVIE_SHOW:String = "movie.show";
       
-      public static const zevubuzyd:String = "movie.hide";
+      public static const MOVIE_HIDE:String = "movie.hide";
       
-      public static const byficy:String = "start";
+      public static const START:String = "start";
       
-      public static const fafycavav:String = "adaptiveFPS";
+      public static const ADAPTIVE_FPS:String = "adaptiveFPS";
       
-      public static const myrajyzin:String = "arrow-glow.show";
+      public static const ARROW_GLOW_SHOW:String = "arrow-glow.show";
       
-      public static const pofigik:String = "arrow-glow.hide";
+      public static const ARROW_GLOW_HIDE:String = "arrow-glow.hide";
       
-      public static const wafusemob:String = "space-glow.show";
+      public static const SPACE_GLOW_SHOW:String = "space-glow.show";
       
-      public static const dekijyf:String = "space-glow.hide";
+      public static const SPACE_GLOW_HIDE:String = "space-glow.hide";
       
-      private static const namab:TaskGroup = GameData.namab;
+      private static const taskGroup:TaskGroup = GameData.taskGroup;
       
-      private var hon:Function;
+      private var callback:Function;
       
-      private var tomynec:Vector.<Task>;
+      private var tasks:Vector.<Task>;
       
-      private var rarenyq:int;
+      private var numRequired:int;
       
-      private var jifom:Tank;
+      private var playerTank:Tank;
       
-      private var murow:ObjectPool;
+      private var objectPool:ObjectPool;
       
-      private var fazony:Vector.<Function>;
+      private var functions:Vector.<Function>;
       
-      private var vyjure:Vector.<Object>;
+      private var functionParams:Vector.<Object>;
       
-      public var gepocivaj:String;
+      public var name:String;
       
-      public var medyq:String;
+      public var fullName:String;
       
-      public var bip:Vector3;
+      public var position:Vector3;
       
-      private var nudyde:uint;
+      private var numKilled:uint;
       
-      public function ScriptStep(param1:XML)
+      public function ScriptStep(xml:XML)
       {
-         var _loc2_:XML = null;
-         var _loc3_:Vector3 = null;
-         var _loc4_:Wall = null;
-         var _loc5_:TankFunctionParams = null;
-         var _loc6_:BitmapShowParams = null;
-         var _loc7_:Vector3 = null;
-         var _loc8_:EnemyTankTask = null;
-         this.tomynec = new Vector.<Task>();
-         this.jifom = GameData.jifom;
-         this.murow = GameData.murow;
-         this.fazony = new Vector.<Function>();
-         this.vyjure = new Vector.<Object>();
-         this.bip = new Vector3();
+         var actionXML:XML = null;
+         var waypoint:Vector3 = null;
+         var wall:Wall = null;
+         var tankParams:TankFunctionParams = null;
+         var bitmapParams:BitmapShowParams = null;
+         var activator:Vector3 = null;
+         var enemyTask:EnemyTankTask = null;
+         this.tasks = new Vector.<Task>();
+         this.playerTank = GameData.playerTank;
+         this.objectPool = GameData.objectPool;
+         this.functions = new Vector.<Function>();
+         this.functionParams = new Vector.<Object>();
+         this.position = new Vector3();
          super();
-         this.gepocivaj = param1.@name.toString();
-         this.medyq = "";
-         for each(_loc2_ in param1.elements())
+         this.name = xml.@name.toString();
+         this.fullName = "";
+         for each(actionXML in xml.elements())
          {
-            switch(_loc2_.name().toString())
+            switch(actionXML.name().toString())
             {
-               case ryk:
-                  _loc3_ = this.parseWaypoint(_loc2_);
-                  this.bip.copy(_loc3_);
-                  this.tomynec.push(new WaypointTask(_loc3_,this.jifom,this.onStepDone));
-                  ++this.rarenyq;
+               case WAYPOINT:
+                  waypoint = this.parseWaypoint(actionXML);
+                  this.position.copy(waypoint);
+                  this.tasks.push(new WaypointTask(waypoint,this.playerTank,this.onStepDone));
+                  ++this.numRequired;
                   break;
-               case qawi:
-                  _loc4_ = this.parseWayWall(_loc2_);
-                  this.bip.copy(_loc4_.kiw);
-                  this.tomynec.push(new WaywallTask(_loc4_,this.jifom,this.onStepDone));
-                  ++this.rarenyq;
+               case WAYWALL:
+                  wall = this.parseWayWall(actionXML);
+                  this.position.copy(wall.indicator);
+                  this.tasks.push(new WaywallTask(wall,this.playerTank,this.onStepDone));
+                  ++this.numRequired;
                   break;
-               case cefod:
-                  this.tomynec.push(new OpenDoorTask());
+               case OPEN_DOOR:
+                  this.tasks.push(new OpenDoorTask());
                   break;
-               case tuzydi:
-                  this.tomynec.push(new CrystalIndicatorTask(CrystalIndicatorTask.qufifyqi));
+               case SHOW_CRYSTAL_INDICATOR:
+                  this.tasks.push(new CrystalIndicatorTask(CrystalIndicatorTask.SHOW));
                   break;
-               case kal:
-                  this.tomynec.push(new CrystalIndicatorTask(CrystalIndicatorTask.zijuzohyl));
+               case HIDE_CRYSTAL_INDICATOR:
+                  this.tasks.push(new CrystalIndicatorTask(CrystalIndicatorTask.HIDE));
                   break;
-               case qumajozy:
-                  this.tomynec.push(new CloseDoorTask());
+               case CLOSE_DOOR:
+                  this.tasks.push(new CloseDoorTask());
                   break;
-               case dymikary:
-                  this.tomynec.push(new ChangeCameraAngleTask(_loc2_.@t,_loc2_.@speed));
+               case CAMERA_ANGLE:
+                  this.tasks.push(new ChangeCameraAngleTask(actionXML.@t,actionXML.@speed));
                   break;
-               case vyqysen:
-                  this.fazony.push(this.cameraController);
-                  this.vyjure.push(null);
+               case CAMERA_CONTROLLER:
+                  this.functions.push(this.cameraController);
+                  this.functionParams.push(null);
                   break;
-               case wejaqat:
-                  this.tomynec.push(new DropMedicineTask(this.parseWaypoint(_loc2_)));
+               case MEDICINE:
+                  this.tasks.push(new DropMedicineTask(this.parseWaypoint(actionXML)));
                   break;
-               case qogihyzug:
-                  this.tomynec.push(new DropCrystalTask(this.parseWaypoint(_loc2_)));
+               case CRYSTAL:
+                  this.tasks.push(new DropCrystalTask(this.parseWaypoint(actionXML)));
                   break;
-               case qiby:
-                  if(_loc2_.waypoint.length() > 0)
+               case ENEMY:
+                  if(actionXML.waypoint.length() > 0)
                   {
-                     if(_loc2_.activator.length() > 0)
+                     if(actionXML.activator.length() > 0)
                      {
-                        _loc7_ = this.parseWaypoint(_loc2_.activator[0]);
+                        activator = this.parseWaypoint(actionXML.activator[0]);
                      }
-                     _loc8_ = new EnemyTankTask(_loc2_.@hull,_loc2_.@turret,_loc2_.@color,this.parsePosition(_loc2_.@position),this.parseOrientation(_loc2_.@orientation),this.parseWaypoints(_loc2_.waypoint),_loc2_.@health,_loc2_.@damageMultiplier.toString() != "" ? Number(_loc2_.@damageMultiplier) : 1,this.onEnemyKilled,_loc2_.@startShootDelay > 0 ? uint(_loc2_.@startShootDelay) : 3000,_loc2_.@cycled.toString() == "true",_loc7_);
-                     this.tomynec.push(_loc8_);
+                     enemyTask = new EnemyTankTask(actionXML.@hull,actionXML.@turret,actionXML.@color,this.parsePosition(actionXML.@position),this.parseOrientation(actionXML.@orientation),this.parseWaypoints(actionXML.waypoint),actionXML.@health,actionXML.@damageMultiplier.toString() != "" ? Number(actionXML.@damageMultiplier) : 1,this.onEnemyKilled,actionXML.@startShootDelay > 0 ? uint(actionXML.@startShootDelay) : 3000,actionXML.@cycled.toString() == "true",activator);
+                     this.tasks.push(enemyTask);
                   }
                   else
                   {
-                     this.tomynec.push(new RecordedTankTask(_loc2_.@hull,_loc2_.@turret,_loc2_.@color,this.parsePosition(_loc2_.@position),this.parseOrientation(_loc2_.@orientation),this.parseEnemyData(_loc2_.@data),_loc2_.@health,_loc2_.@damageMultiplier.toString() != "" ? Number(_loc2_.@damageMultiplier) : 1,this.onEnemyKilled,_loc2_.@startShootDelay > 0 ? uint(_loc2_.@startShootDelay) : 3000));
+                     this.tasks.push(new RecordedTankTask(actionXML.@hull,actionXML.@turret,actionXML.@color,this.parsePosition(actionXML.@position),this.parseOrientation(actionXML.@orientation),this.parseEnemyData(actionXML.@data),actionXML.@health,actionXML.@damageMultiplier.toString() != "" ? Number(actionXML.@damageMultiplier) : 1,this.onEnemyKilled,actionXML.@startShootDelay > 0 ? uint(actionXML.@startShootDelay) : 3000));
                   }
-                  if(_loc2_.@required == "true")
+                  if(actionXML.@required == "true")
                   {
-                     ++this.rarenyq;
+                     ++this.numRequired;
                   }
                   break;
-               case hemutunaj:
-                  if(_loc2_.@hull.toString() != "")
+               case CHANGE:
+                  if(actionXML.@hull.toString() != "")
                   {
-                     this.tomynec.push(new HullChangeTask(_loc2_.@hull));
+                     this.tasks.push(new HullChangeTask(actionXML.@hull));
                   }
-                  if(_loc2_.@turret.toString() != "")
+                  if(actionXML.@turret.toString() != "")
                   {
-                     this.tomynec.push(new TurretChangeTask(_loc2_.@turret));
+                     this.tasks.push(new TurretChangeTask(actionXML.@turret));
                   }
-                  this.tomynec.push(new CameraRotateTask());
+                  this.tasks.push(new CameraRotateTask());
                   break;
-               case nymynykov:
-                  this.tomynec.push(new FadeOutTask(_loc2_.@time,this.onStepDone));
-                  ++this.rarenyq;
+               case FADEOUT:
+                  this.tasks.push(new FadeOutTask(actionXML.@time,this.onStepDone));
+                  ++this.numRequired;
                   break;
-               case culytiq:
-                  this.fazony.push(this.setTitle);
-                  this.vyjure.push(null);
+               case TITLE:
+                  this.functions.push(this.setTitle);
+                  this.functionParams.push(null);
                   break;
-               case sil:
-                  this.fazony.push(this.playerController);
-                  this.vyjure.push(null);
+               case PLAYER_CONTROLLER:
+                  this.functions.push(this.playerController);
+                  this.functionParams.push(null);
                   break;
-               case fafycavav:
-                  this.tomynec.push(new FrameRateTask());
+               case ADAPTIVE_FPS:
+                  this.tasks.push(new FrameRateTask());
                   break;
-               case quka:
-                  this.fazony.push(this.playerSpawn);
-                  _loc5_ = this.murow.getObject(TankFunctionParams) as TankFunctionParams;
-                  _loc5_.position = this.parsePosition(_loc2_.@position.toString());
-                  _loc5_.orientation = this.parseOrientation(_loc2_.@orientation.toString());
-                  _loc5_.hull = _loc2_.@hull.toString();
-                  _loc5_.turret = _loc2_.@turret.toString();
-                  _loc5_.color = _loc2_.@color.toString();
-                  _loc5_.health = _loc2_.@health;
-                  _loc5_.damageMultiplier = _loc2_.@damageMultiplier.toString() != "" ? Number(_loc2_.@damageMultiplier) : 1;
-                  this.vyjure.push(_loc5_);
+               case PLAYER_SPAWN:
+                  this.functions.push(this.playerSpawn);
+                  tankParams = this.objectPool.getObject(TankFunctionParams) as TankFunctionParams;
+                  tankParams.position = this.parsePosition(actionXML.@position.toString());
+                  tankParams.orientation = this.parseOrientation(actionXML.@orientation.toString());
+                  tankParams.hull = actionXML.@hull.toString();
+                  tankParams.turret = actionXML.@turret.toString();
+                  tankParams.color = actionXML.@color.toString();
+                  tankParams.health = actionXML.@health;
+                  tankParams.damageMultiplier = actionXML.@damageMultiplier.toString() != "" ? Number(actionXML.@damageMultiplier) : 1;
+                  this.functionParams.push(tankParams);
                   break;
-               case rawaly:
-                  this.fazony.push(this.cameraMatrix);
-                  this.vyjure.push(this.getMatrix(_loc2_.@matrix));
+               case CAMERA_MATRIX:
+                  this.functions.push(this.cameraMatrix);
+                  this.functionParams.push(this.getMatrix(actionXML.@matrix));
                   break;
-               case fytuqo:
-                  this.fazony.push(this.bitmapShow);
-                  _loc6_ = this.murow.getObject(BitmapShowParams) as BitmapShowParams;
-                  _loc6_.align = _loc2_.@align.toString();
-                  _loc6_.bitmapID = _loc2_.@id.toString();
-                  this.vyjure.push(_loc6_);
+               case BITMAP_SHOW:
+                  this.functions.push(this.bitmapShow);
+                  bitmapParams = this.objectPool.getObject(BitmapShowParams) as BitmapShowParams;
+                  bitmapParams.align = actionXML.@align.toString();
+                  bitmapParams.bitmapID = actionXML.@id.toString();
+                  this.functionParams.push(bitmapParams);
                   break;
-               case gityquryh:
-                  this.fazony.push(this.bitmapHide);
-                  this.vyjure.push(null);
+               case BITMAP_HIDE:
+                  this.functions.push(this.bitmapHide);
+                  this.functionParams.push(null);
                   break;
-               case fojehem:
-                  this.fazony.push(this.wait);
-                  ++this.rarenyq;
-                  this.vyjure.push(_loc2_.@time);
+               case WAIT:
+                  this.functions.push(this.wait);
+                  ++this.numRequired;
+                  this.functionParams.push(actionXML.@time);
                   break;
-               case tyroji:
-                  this.tomynec.push(new PlayerRespawnTask());
+               case PLAYER_CAN_SUICIDE:
+                  this.tasks.push(new PlayerRespawnTask());
                   break;
-               case sose:
-                  this.fazony.push(this.movieShow);
-                  _loc6_ = this.murow.getObject(BitmapShowParams) as BitmapShowParams;
-                  _loc6_.align = _loc2_.@align.toString();
-                  _loc6_.bitmapID = _loc2_.@id.toString();
-                  this.vyjure.push(_loc6_);
+               case MOVIE_SHOW:
+                  this.functions.push(this.movieShow);
+                  bitmapParams = this.objectPool.getObject(BitmapShowParams) as BitmapShowParams;
+                  bitmapParams.align = actionXML.@align.toString();
+                  bitmapParams.bitmapID = actionXML.@id.toString();
+                  this.functionParams.push(bitmapParams);
                   break;
-               case zevubuzyd:
-                  this.fazony.push(this.movieHide);
-                  this.vyjure.push(null);
+               case MOVIE_HIDE:
+                  this.functions.push(this.movieHide);
+                  this.functionParams.push(null);
                   break;
-               case byficy:
-                  this.tomynec.push(new StartTutorialTask(this.onStepDone));
-                  ++this.rarenyq;
+               case START:
+                  this.tasks.push(new StartTutorialTask(this.onStepDone));
+                  ++this.numRequired;
                   break;
-               case myrajyzin:
-                  this.fazony.push(this.arrowGlowShow);
-                  this.vyjure.push(null);
+               case ARROW_GLOW_SHOW:
+                  this.functions.push(this.arrowGlowShow);
+                  this.functionParams.push(null);
                   break;
-               case pofigik:
-                  this.fazony.push(this.arrowGlowHide);
-                  this.vyjure.push(null);
+               case ARROW_GLOW_HIDE:
+                  this.functions.push(this.arrowGlowHide);
+                  this.functionParams.push(null);
                   break;
-               case wafusemob:
-                  this.fazony.push(this.spaceGlowShow);
-                  this.vyjure.push(null);
+               case SPACE_GLOW_SHOW:
+                  this.functions.push(this.spaceGlowShow);
+                  this.functionParams.push(null);
                   break;
-               case dekijyf:
-                  this.fazony.push(this.spaceGlowHide);
-                  this.vyjure.push(null);
+               case SPACE_GLOW_HIDE:
+                  this.functions.push(this.spaceGlowHide);
+                  this.functionParams.push(null);
             }
          }
       }
       
       private function onEnemyKilled() : void
       {
-         var _loc1_:String = null;
-         ++this.nudyde;
-         if(this.medyq != "")
+         var eventName:String = null;
+         ++this.numKilled;
+         if(this.fullName != "")
          {
-            _loc1_ = this.medyq + "[enemy" + this.nudyde.toString() + " dead]";
-            Shared.tracker.trackEvent(Shared.TUTORIAL,_loc1_,"");
-            Shared.currentStep = _loc1_;
+            eventName = this.fullName + "[enemy" + this.numKilled.toString() + " dead]";
+            Shared.tracker.trackEvent(Shared.TUTORIAL,eventName,"");
+            Shared.currentStep = eventName;
          }
          this.onStepDone();
       }
       
-      private function parseWaypoints(param1:XMLList) : Vector.<Vector3>
+      private function parseWaypoints(list:XMLList) : Vector.<Vector3>
       {
-         var _loc3_:XML = null;
-         var _loc2_:Vector.<Vector3> = new Vector.<Vector3>();
-         for each(_loc3_ in param1)
+         var waypointXML:XML = null;
+         var waypoints:Vector.<Vector3> = new Vector.<Vector3>();
+         for each(waypointXML in list)
          {
-            _loc2_.push(this.parseWaypoint(_loc3_));
+            waypoints.push(this.parseWaypoint(waypointXML));
          }
-         return _loc2_;
+         return waypoints;
       }
       
-      private function parseWaypoint(param1:XML) : Vector3
+      private function parseWaypoint(xml:XML) : Vector3
       {
-         return new Vector3(param1.@x,param1.@y,param1.@z);
+         return new Vector3(xml.@x,xml.@y,xml.@z);
       }
       
-      private function parseWayWall(param1:XML) : Wall
+      private function parseWayWall(xml:XML) : Wall
       {
-         return new Wall(param1.@x1,param1.@y1,param1.@x2,param1.@y2,param1.@indicatorX,param1.@indicatorY,param1.@indicatorZ);
+         return new Wall(xml.@x1,xml.@y1,xml.@x2,xml.@y2,xml.@indicatorX,xml.@indicatorY,xml.@indicatorZ);
       }
       
-      private function movieShow(param1:BitmapShowParams) : void
+      private function movieShow(params:BitmapShowParams) : void
       {
-         GameData.hulaf.showMovie(Assets.getData(param1.bitmapID,MovieClip),param1.align);
+         GameData.screenMovieClipManager.showMovie(Assets.getData(params.bitmapID,MovieClip),params.align);
       }
       
       private function arrowGlowShow() : void
       {
-         var _loc1_:ControlsClip = GameData.hulaf.pere as ControlsClip;
-         if(Boolean(_loc1_))
+         var controlsClip:ControlsClip = GameData.screenMovieClipManager.currentMovie as ControlsClip;
+         if(Boolean(controlsClip))
          {
-            _loc1_.showArrowGlow();
+            controlsClip.showArrowGlow();
          }
       }
       
       private function arrowGlowHide() : void
       {
-         var _loc1_:ControlsClip = GameData.hulaf.pere as ControlsClip;
-         if(Boolean(_loc1_))
+         var controlsClip:ControlsClip = GameData.screenMovieClipManager.currentMovie as ControlsClip;
+         if(Boolean(controlsClip))
          {
-            _loc1_.hideArrowGlow();
+            controlsClip.hideArrowGlow();
          }
       }
       
       private function spaceGlowShow() : void
       {
-         var _loc1_:ControlsClip = GameData.hulaf.pere as ControlsClip;
-         if(Boolean(_loc1_))
+         var controlsClip:ControlsClip = GameData.screenMovieClipManager.currentMovie as ControlsClip;
+         if(Boolean(controlsClip))
          {
-            _loc1_.showSpaceGlow();
+            controlsClip.showSpaceGlow();
          }
       }
       
       private function spaceGlowHide() : void
       {
-         var _loc1_:ControlsClip = GameData.hulaf.pere as ControlsClip;
-         if(Boolean(_loc1_))
+         var controlsClip:ControlsClip = GameData.screenMovieClipManager.currentMovie as ControlsClip;
+         if(Boolean(controlsClip))
          {
-            _loc1_.hideSpaceGlow();
+            controlsClip.hideSpaceGlow();
          }
       }
       
       private function movieHide() : void
       {
-         GameData.hulaf.hideMovie();
+         GameData.screenMovieClipManager.hideMovie();
       }
       
-      private function wait(param1:uint) : void
+      private function wait(time:uint) : void
       {
-         setTimeout(this.onStepDone,param1);
+         setTimeout(this.onStepDone,time);
       }
       
-      private function bitmapShow(param1:BitmapShowParams) : void
+      private function bitmapShow(params:BitmapShowParams) : void
       {
-         var _loc2_:BitmapData = Assets.getData(param1.bitmapID,BitmapData);
-         GameData.dazupuzif.showBitmap(_loc2_,param1.align);
+         var bitmapData:BitmapData = Assets.getData(params.bitmapID,BitmapData);
+         GameData.screenBitmapManager.showBitmap(bitmapData,params.align);
       }
       
       private function bitmapHide() : void
       {
-         GameData.dazupuzif.hideBimap();
+         GameData.screenBitmapManager.hideBimap();
       }
       
       private function cameraController() : void
       {
-         var _loc1_:FollowCameraController = new FollowCameraController(GameData.stage,GameData.butefu);
-         _loc1_.setCollisionParameters(GameData.guzinizub);
-         _loc1_.setTarget(this.jifom);
-         _loc1_.activate();
-         GameData.butefu.controller = _loc1_;
+         var controller:FollowCameraController = new FollowCameraController(GameData.stage,GameData.camera);
+         controller.setCollisionParameters(GameData.kdContainer);
+         controller.setTarget(this.playerTank);
+         controller.activate();
+         GameData.camera.controller = controller;
       }
       
-      private function cameraMatrix(param1:Matrix3D) : void
+      private function cameraMatrix(matrix:Matrix3D) : void
       {
-         GameData.butefu.matrix = param1;
+         GameData.camera.matrix = matrix;
       }
       
-      private function playerSpawn(param1:TankFunctionParams) : void
+      private function playerSpawn(params:TankFunctionParams) : void
       {
-         if(this.jifom.inGame)
+         if(this.playerTank.inGame)
          {
-            this.jifom.removeFromGame();
+            this.playerTank.removeFromGame();
          }
-         this.jifom.init(param1.hull,param1.turret,param1.color,param1.health);
-         this.jifom.setPosition(param1.position);
-         this.jifom.setOrientation(param1.orientation);
-         this.jifom.addToGame();
-         this.jifom.setWeaponDamageMultiplier(param1.damageMultiplier);
-         this.jifom.setCheckpoint();
-         this.jifom.lysecof.setSilentMode();
-         param1.recycle();
+         this.playerTank.init(params.hull,params.turret,params.color,params.health);
+         this.playerTank.setPosition(params.position);
+         this.playerTank.setOrientation(params.orientation);
+         this.playerTank.addToGame();
+         this.playerTank.setWeaponDamageMultiplier(params.damageMultiplier);
+         this.playerTank.setCheckpoint();
+         this.playerTank.sounds.setSilentMode();
+         params.recycle();
       }
       
       private function playerController() : void
       {
-         namab.addTask(new TankControlTask(this.jifom,GameData.qemikoq));
-         this.jifom.turretController = new LocalTurretController(0,0,GameData.stage);
-         this.jifom.lysecof.setIdleMode();
+         taskGroup.addTask(new TankControlTask(this.playerTank,GameData.recordTankController));
+         this.playerTank.turretController = new LocalTurretController(0,0,GameData.stage);
+         this.playerTank.sounds.setIdleMode();
       }
       
       private function setTitle() : void
       {
-         var _loc1_:UserTitle = this.jifom.kakow == null ? new UserTitle(0,GameData.root) : this.jifom.kakow;
-         var _loc2_:uint = uint(TitleConfigFlags.qoj | TitleConfigFlags.deli);
-         _loc1_.setConfiguration(_loc2_);
-         _loc1_.addToContainer();
-         _loc1_.show();
-         this.jifom.kakow = _loc1_;
+         var title:UserTitle = this.playerTank.userTitle == null ? new UserTitle(0,GameData.root) : this.playerTank.userTitle;
+         var flags:uint = uint(TitleConfigFlags.HEALTH | TitleConfigFlags.WEAPON);
+         title.setConfiguration(flags);
+         title.addToContainer();
+         title.show();
+         this.playerTank.userTitle = title;
       }
       
       private function onStepDone() : void
       {
-         --this.rarenyq;
-         if(this.rarenyq == 0)
+         --this.numRequired;
+         if(this.numRequired == 0)
          {
-            this.hon();
+            this.callback();
          }
       }
       
-      public function start(param1:Function) : void
+      public function start(callback:Function) : void
       {
-         var _loc2_:Task = null;
-         var _loc3_:int = 0;
-         var _loc4_:int = 0;
-         var _loc5_:Object = null;
-         this.hon = param1;
-         for each(_loc2_ in this.tomynec)
+         var task:Task = null;
+         var len:int = 0;
+         var i:int = 0;
+         var params:Object = null;
+         this.callback = callback;
+         for each(task in this.tasks)
          {
-            GameData.namab.addTask(_loc2_);
+            GameData.taskGroup.addTask(task);
          }
-         _loc3_ = int(this.fazony.length);
-         _loc4_ = 0;
-         while(_loc4_ < _loc3_)
+         len = int(this.functions.length);
+         i = 0;
+         while(i < len)
          {
-            _loc5_ = this.vyjure[_loc4_];
-            if(_loc5_ != null)
+            params = this.functionParams[i];
+            if(params != null)
             {
-               this.fazony[_loc4_](_loc5_);
+               this.functions[i](params);
             }
             else
             {
-               this.fazony[_loc4_]();
+               this.functions[i]();
             }
-            _loc4_++;
+            i++;
          }
-         if(this.rarenyq == 0)
+         if(this.numRequired == 0)
          {
-            param1();
+            callback();
          }
       }
       
-      private function parsePosition(param1:String) : Vector3
+      private function parsePosition(str:String) : Vector3
       {
-         var _loc2_:Array = param1.split(" ");
-         return new Vector3(parseFloat(_loc2_[0]),parseFloat(_loc2_[1]),parseFloat(_loc2_[2]));
+         var parts:Array = str.split(" ");
+         return new Vector3(parseFloat(parts[0]),parseFloat(parts[1]),parseFloat(parts[2]));
       }
       
-      private function parseOrientation(param1:String) : Quaternion
+      private function parseOrientation(str:String) : Quaternion
       {
-         var _loc2_:Array = param1.split(" ");
-         return new Quaternion(parseFloat(_loc2_[0]),parseFloat(_loc2_[1]),parseFloat(_loc2_[2]),parseFloat(_loc2_[3]));
+         var parts:Array = str.split(" ");
+         return new Quaternion(parseFloat(parts[0]),parseFloat(parts[1]),parseFloat(parts[2]),parseFloat(parts[3]));
       }
       
-      private function parseEnemyData(param1:String) : Vector.<uint>
+      private function parseEnemyData(str:String) : Vector.<uint>
       {
-         var _loc5_:String = null;
-         var _loc2_:Vector.<uint> = new Vector.<uint>();
-         var _loc3_:Array = param1.split(" ");
-         var _loc4_:int = 0;
-         while(_loc4_ < _loc3_.length)
+         var part:String = null;
+         var data:Vector.<uint> = new Vector.<uint>();
+         var parts:Array = str.split(" ");
+         var i:int = 0;
+         while(i < parts.length)
          {
-            _loc5_ = _loc3_[_loc4_];
-            if(_loc5_ != "")
+            part = parts[i];
+            if(part != "")
             {
-               _loc2_.push(parseInt(_loc5_));
+               data.push(parseInt(part));
             }
-            _loc4_++;
+            i++;
          }
-         return _loc2_;
+         return data;
       }
       
-      private function getMatrix(param1:String) : Matrix3D
+      private function getMatrix(str:String) : Matrix3D
       {
-         var _loc5_:String = null;
-         var _loc2_:Vector.<Number> = new Vector.<Number>();
-         var _loc3_:Array = param1.split(",");
-         var _loc4_:int = 0;
-         while(_loc4_ < _loc3_.length)
+         var part:String = null;
+         var values:Vector.<Number> = new Vector.<Number>();
+         var parts:Array = str.split(",");
+         var i:int = 0;
+         while(i < parts.length)
          {
-            _loc5_ = _loc3_[_loc4_];
-            if(_loc5_ != "")
+            part = parts[i];
+            if(part != "")
             {
-               _loc2_.push(parseFloat(_loc5_));
+               values.push(parseFloat(part));
             }
-            _loc4_++;
+            i++;
          }
-         return new Matrix3D(_loc2_);
+         return new Matrix3D(values);
       }
    }
 }
@@ -555,9 +555,9 @@ class TankFunctionParams extends PooledObject
    
    public var damageMultiplier:Number;
    
-   public function TankFunctionParams(param1:Pool)
+   public function TankFunctionParams(pool:Pool)
    {
-      super(param1);
+      super(pool);
    }
 }
 
@@ -568,8 +568,8 @@ class BitmapShowParams extends PooledObject
    
    public var align:String;
    
-   public function BitmapShowParams(param1:Pool)
+   public function BitmapShowParams(pool:Pool)
    {
-      super(param1);
+      super(pool);
    }
 }

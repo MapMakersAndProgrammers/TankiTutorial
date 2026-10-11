@@ -9,43 +9,43 @@ package alternativa.tanks.sfx
    public class ScalingObject3DPositionProvider extends PooledObject implements Object3DPositionProvider
    {
       
-      private var kiji:Vector3 = new Vector3();
+      private var position:Vector3 = new Vector3();
       
-      private var zerus:Vector3 = new Vector3();
+      private var velocity:Vector3 = new Vector3();
       
       private var ceki:Number;
       
-      public function ScalingObject3DPositionProvider(param1:Pool)
+      public function ScalingObject3DPositionProvider(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function initPosition(param1:Object3D) : void
+      public function initPosition(object:Object3D) : void
       {
-         param1.x = this.kiji.x;
-         param1.y = this.kiji.y;
-         param1.z = this.kiji.z;
-         param1.scaleX = 1;
-         param1.scaleY = 1;
-         param1.scaleZ = 1;
+         object.x = this.position.x;
+         object.y = this.position.y;
+         object.z = this.position.z;
+         object.scaleX = 1;
+         object.scaleY = 1;
+         object.scaleZ = 1;
       }
       
-      public function init(param1:Vector3, param2:Vector3, param3:Number) : void
+      public function init(position:Vector3, velocity:Vector3, param3:Number) : void
       {
-         this.kiji.copy(param1);
-         this.zerus.copy(param2);
+         this.position.copy(position);
+         this.velocity.copy(velocity);
          this.ceki = param3;
       }
       
-      public function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void
+      public function updateObjectPosition(object:Object3D, camera:GameCamera, deltaTime:int) : void
       {
-         var _loc4_:Number = 0.001 * param3;
-         param1.x += this.zerus.x * _loc4_;
-         param1.y += this.zerus.y * _loc4_;
-         param1.z += this.zerus.z * _loc4_;
-         param1.scaleX += this.ceki;
-         param1.scaleY += this.ceki;
-         param1.scaleZ += this.ceki;
+         var dt:Number = 0.001 * deltaTime;
+         object.x += this.velocity.x * dt;
+         object.y += this.velocity.y * dt;
+         object.z += this.velocity.z * dt;
+         object.scaleX += this.ceki;
+         object.scaleY += this.ceki;
+         object.scaleZ += this.ceki;
       }
       
       public function destroy() : void

@@ -9,39 +9,39 @@ package tutorial.loader
    public class TextureQueueEntry extends PooledObject
    {
       
-      public var zyl:BitmapData;
+      public var texture:BitmapData;
       
       public var material:TextureMaterial;
       
-      public var gohigewam:int;
+      public var priority:int;
       
-      public function TextureQueueEntry(param1:Pool)
+      public function TextureQueueEntry(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public static function create(param1:TextureMaterial, param2:BitmapData, param3:int) : TextureQueueEntry
+      public static function create(material:TextureMaterial, texture:BitmapData, priority:int) : TextureQueueEntry
       {
-         var _loc4_:TextureQueueEntry = TextureQueueEntry(GameData.murow.getObject(TextureQueueEntry));
-         _loc4_.init(param1,param2,param3);
-         return _loc4_;
+         var entry:TextureQueueEntry = TextureQueueEntry(GameData.objectPool.getObject(TextureQueueEntry));
+         entry.init(material,texture,priority);
+         return entry;
       }
       
-      public function init(param1:TextureMaterial, param2:BitmapData, param3:int) : void
+      public function init(material:TextureMaterial, texture:BitmapData, priority:int) : void
       {
-         this.material = param1;
-         this.zyl = param2;
-         this.gohigewam = param3;
+         this.material = material;
+         this.texture = texture;
+         this.priority = priority;
       }
       
       public function upload() : void
       {
-         this.material.texture = this.zyl;
+         this.material.texture = this.texture;
       }
       
       override public function recycle() : void
       {
-         this.zyl = null;
+         this.texture = null;
          this.material = null;
          super.recycle();
       }

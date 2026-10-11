@@ -8,21 +8,21 @@ package alternativa.tanks.vehicles.tank.weapons
    public class TurretData
    {
       
-      private static const bul:Matrix4 = new Matrix4();
+      private static const matrix:Matrix4 = new Matrix4();
       
-      private static const sikomowar:Vector3 = new Vector3();
+      private static const localBarrelOrigin:Vector3 = new Vector3();
       
-      public const toqumyc:Vector3 = new Vector3();
+      public const localMuzzlePosition:Vector3 = new Vector3();
       
-      public const symamume:Vector3 = new Vector3();
+      public const muzzlePosition:Vector3 = new Vector3();
       
-      public const fybumu:Vector3 = new Vector3();
+      public const barrelOrigin:Vector3 = new Vector3();
       
-      public const zequsir:Vector3 = new Vector3();
+      public const xAxis:Vector3 = new Vector3();
       
-      public const ruda:Vector3 = new Vector3();
+      public const direction:Vector3 = new Vector3();
       
-      public var siwowop:Number;
+      public var barrelLength:Number;
       
       public var turretMesh:Mesh;
       
@@ -31,25 +31,25 @@ package alternativa.tanks.vehicles.tank.weapons
          super();
       }
       
-      public function update(param1:Tank, param2:int) : void
+      public function update(tank:Tank, muzzleIndex:int) : void
       {
-         var _loc3_:Vector3 = param1.firaqe.jun[param2];
-         this.toqumyc.x = _loc3_.x;
-         this.toqumyc.y = _loc3_.y;
-         this.toqumyc.z = _loc3_.z;
-         this.turretMesh = param1.kuca.turretMesh;
-         this.siwowop = _loc3_.y;
-         bul.setMatrix(this.turretMesh.x,this.turretMesh.y,this.turretMesh.z,this.turretMesh.rotationX,this.turretMesh.rotationY,this.turretMesh.rotationZ);
-         bul.transformVector(this.toqumyc,this.symamume);
-         sikomowar.x = this.toqumyc.x;
-         sikomowar.z = this.toqumyc.z;
-         bul.transformVector(sikomowar,this.fybumu);
-         this.zequsir.x = bul.gusat;
-         this.zequsir.y = bul.sig;
-         this.zequsir.z = bul.vug;
-         this.ruda.x = bul.cydop;
-         this.ruda.y = bul.qanezycap;
-         this.ruda.z = bul.luwym;
+         var muzzle:Vector3 = tank.turret.muzzles[muzzleIndex];
+         this.localMuzzlePosition.x = muzzle.x;
+         this.localMuzzlePosition.y = muzzle.y;
+         this.localMuzzlePosition.z = muzzle.z;
+         this.turretMesh = tank.skin.turretMesh;
+         this.barrelLength = muzzle.y;
+         matrix.setMatrix(this.turretMesh.x,this.turretMesh.y,this.turretMesh.z,this.turretMesh.rotationX,this.turretMesh.rotationY,this.turretMesh.rotationZ);
+         matrix.transformVector(this.localMuzzlePosition,this.muzzlePosition);
+         localBarrelOrigin.x = this.localMuzzlePosition.x;
+         localBarrelOrigin.z = this.localMuzzlePosition.z;
+         matrix.transformVector(localBarrelOrigin,this.barrelOrigin);
+         this.xAxis.x = matrix.ma;
+         this.xAxis.y = matrix.me;
+         this.xAxis.z = matrix.mi;
+         this.direction.x = matrix.mb;
+         this.direction.y = matrix.mf;
+         this.direction.z = matrix.mj;
       }
    }
 }

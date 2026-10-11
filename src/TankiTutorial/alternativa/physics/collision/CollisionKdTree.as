@@ -5,376 +5,376 @@ package alternativa.physics.collision
    public class CollisionKdTree
    {
       
-      private static const tyvak:AABB = new AABB();
+      private static const nodeBoundBoxThreshold:AABB = new AABB();
       
-      private static const tibuh:Vector.<Number> = new Vector.<Number>();
+      private static const splitCoordsX:Vector.<Number> = new Vector.<Number>();
       
-      private static const vydumu:Vector.<Number> = new Vector.<Number>();
+      private static const splitCoordsY:Vector.<Number> = new Vector.<Number>();
       
-      private static const zyq:Vector.<Number> = new Vector.<Number>();
+      private static const splitCoordsZ:Vector.<Number> = new Vector.<Number>();
       
-      private static const gaboder:Vector.<Number> = new Vector.<Number>(6);
+      private static const nodeBounds:Vector.<Number> = new Vector.<Number>(6);
       
-      private static const pekeryf:Vector.<Number> = new Vector.<Number>(6);
+      private static const primitiveBounds:Vector.<Number> = new Vector.<Number>(6);
       
-      public var hevarer:Number = 0.1;
+      public var threshold:Number = 0.1;
       
       public var cihi:int = 1;
       
-      public var wymyhujoq:CollisionKdNode;
+      public var rootNode:CollisionKdNode;
       
-      public var gogoq:Vector.<CollisionShape>;
+      public var primitives:Vector.<CollisionShape>;
       
-      public var pojisahyz:int;
+      public var numPrimitives:int;
       
-      public var nyrimobo:Vector.<AABB> = new Vector.<AABB>();
+      public var boundBoxes:Vector.<AABB> = new Vector.<AABB>();
       
-      private var ladoba:int;
+      private var splitAxis:int;
       
-      private var qijysa:Number;
+      private var splitCoord:Number;
       
-      private var zadarypus:Number;
+      private var bestCost:Number;
       
       public function CollisionKdTree()
       {
          super();
       }
       
-      public function createTree(param1:Vector.<CollisionShape>, param2:AABB = null) : void
+      public function createTree(shapes:Vector.<CollisionShape>, bounds:AABB = null) : void
       {
-         var _loc5_:CollisionShape = null;
-         var _loc6_:AABB = null;
-         this.gogoq = param1.concat();
-         this.pojisahyz = this.gogoq.length;
-         this.wymyhujoq = new CollisionKdNode();
-         this.wymyhujoq.indices = new Vector.<int>();
-         var _loc3_:AABB = this.wymyhujoq.taqa = param2 != null ? param2 : new AABB();
-         var _loc4_:int = 0;
-         while(_loc4_ < this.pojisahyz)
+         var shape:CollisionShape = null;
+         var primitiveBoundBox:AABB = null;
+         this.primitives = shapes.concat();
+         this.numPrimitives = this.primitives.length;
+         this.rootNode = new CollisionKdNode();
+         this.rootNode.indices = new Vector.<int>();
+         var rootBoundBox:AABB = this.rootNode.boundBox = bounds != null ? bounds : new AABB();
+         var i:int = 0;
+         while(i < this.numPrimitives)
          {
-            _loc5_ = this.gogoq[_loc4_];
-            _loc6_ = this.nyrimobo[_loc4_] = _loc5_.calculateAABB();
-            _loc3_.addBoundBox(_loc6_);
-            this.wymyhujoq.indices[_loc4_] = _loc4_;
-            _loc4_++;
+            shape = this.primitives[i];
+            primitiveBoundBox = this.boundBoxes[i] = shape.calculateAABB();
+            rootBoundBox.addBoundBox(primitiveBoundBox);
+            this.rootNode.indices[i] = i;
+            i++;
          }
-         this.nyrimobo.length = this.pojisahyz;
-         this.splitNode(this.wymyhujoq);
-         tibuh.length = vydumu.length = zyq.length = 0;
+         this.boundBoxes.length = this.numPrimitives;
+         this.splitNode(this.rootNode);
+         splitCoordsX.length = splitCoordsY.length = splitCoordsZ.length = 0;
       }
       
-      private function splitNode(param1:CollisionKdNode) : void
+      private function splitNode(node:CollisionKdNode) : void
       {
-         var _loc4_:AABB = null;
-         var _loc6_:int = 0;
-         var _loc7_:int = 0;
-         var _loc15_:AABB = null;
-         var _loc16_:Number = NaN;
-         var _loc17_:Number = NaN;
-         var _loc2_:Vector.<int> = param1.indices;
-         var _loc3_:int = int(_loc2_.length);
-         if(_loc3_ <= this.cihi)
+         var nodeBoundBox:AABB = null;
+         var i:int = 0;
+         var j:int = 0;
+         var bound:AABB = null;
+         var min:Number = NaN;
+         var max:Number = NaN;
+         var indices:Vector.<int> = node.indices;
+         var numIndices:int = int(indices.length);
+         if(numIndices <= this.cihi)
          {
             return;
          }
-         _loc4_ = param1.taqa;
-         tyvak.cubegyw = _loc4_.cubegyw + this.hevarer;
-         tyvak.nicomosa = _loc4_.nicomosa + this.hevarer;
-         tyvak.gesuwi = _loc4_.gesuwi + this.hevarer;
-         tyvak.jys = _loc4_.jys - this.hevarer;
-         tyvak.juri = _loc4_.juri - this.hevarer;
-         tyvak.zepoci = _loc4_.zepoci - this.hevarer;
-         var _loc5_:Number = this.hevarer * 2;
-         var _loc8_:int = 0;
-         var _loc9_:int = 0;
-         var _loc10_:int = 0;
-         _loc6_ = 0;
-         while(_loc6_ < _loc3_)
+         nodeBoundBox = node.boundBox;
+         nodeBoundBoxThreshold.minX = nodeBoundBox.minX + this.threshold;
+         nodeBoundBoxThreshold.minY = nodeBoundBox.minY + this.threshold;
+         nodeBoundBoxThreshold.minZ = nodeBoundBox.minZ + this.threshold;
+         nodeBoundBoxThreshold.maxX = nodeBoundBox.maxX - this.threshold;
+         nodeBoundBoxThreshold.maxY = nodeBoundBox.maxY - this.threshold;
+         nodeBoundBoxThreshold.maxZ = nodeBoundBox.maxZ - this.threshold;
+         var doubleThreshold:Number = this.threshold * 2;
+         var numSplitCoordsX:int = 0;
+         var numSplitCoordsY:int = 0;
+         var numSplitCoordsZ:int = 0;
+         i = 0;
+         while(i < numIndices)
          {
-            _loc15_ = this.nyrimobo[_loc2_[_loc6_]];
-            if(_loc15_.jys - _loc15_.cubegyw <= _loc5_)
+            bound = this.boundBoxes[indices[i]];
+            if(bound.maxX - bound.minX <= doubleThreshold)
             {
-               if(_loc15_.cubegyw <= tyvak.cubegyw)
+               if(bound.minX <= nodeBoundBoxThreshold.minX)
                {
-                  tibuh[_loc8_++] = _loc4_.cubegyw;
+                  splitCoordsX[numSplitCoordsX++] = nodeBoundBox.minX;
                }
-               else if(_loc15_.jys >= tyvak.jys)
+               else if(bound.maxX >= nodeBoundBoxThreshold.maxX)
                {
-                  tibuh[_loc8_++] = _loc4_.jys;
+                  splitCoordsX[numSplitCoordsX++] = nodeBoundBox.maxX;
                }
                else
                {
-                  tibuh[_loc8_++] = (_loc15_.cubegyw + _loc15_.jys) * 0.5;
+                  splitCoordsX[numSplitCoordsX++] = (bound.minX + bound.maxX) * 0.5;
                }
             }
             else
             {
-               if(_loc15_.cubegyw > tyvak.cubegyw)
+               if(bound.minX > nodeBoundBoxThreshold.minX)
                {
-                  tibuh[_loc8_++] = _loc15_.cubegyw;
+                  splitCoordsX[numSplitCoordsX++] = bound.minX;
                }
-               if(_loc15_.jys < tyvak.jys)
+               if(bound.maxX < nodeBoundBoxThreshold.maxX)
                {
-                  tibuh[_loc8_++] = _loc15_.jys;
+                  splitCoordsX[numSplitCoordsX++] = bound.maxX;
                }
             }
-            if(_loc15_.juri - _loc15_.nicomosa <= _loc5_)
+            if(bound.maxY - bound.minY <= doubleThreshold)
             {
-               if(_loc15_.nicomosa <= tyvak.nicomosa)
+               if(bound.minY <= nodeBoundBoxThreshold.minY)
                {
-                  vydumu[_loc9_++] = _loc4_.nicomosa;
+                  splitCoordsY[numSplitCoordsY++] = nodeBoundBox.minY;
                }
-               else if(_loc15_.juri >= tyvak.juri)
+               else if(bound.maxY >= nodeBoundBoxThreshold.maxY)
                {
-                  vydumu[_loc9_++] = _loc4_.juri;
+                  splitCoordsY[numSplitCoordsY++] = nodeBoundBox.maxY;
                }
                else
                {
-                  vydumu[_loc9_++] = (_loc15_.nicomosa + _loc15_.juri) * 0.5;
+                  splitCoordsY[numSplitCoordsY++] = (bound.minY + bound.maxY) * 0.5;
                }
             }
             else
             {
-               if(_loc15_.nicomosa > tyvak.nicomosa)
+               if(bound.minY > nodeBoundBoxThreshold.minY)
                {
-                  vydumu[_loc9_++] = _loc15_.nicomosa;
+                  splitCoordsY[numSplitCoordsY++] = bound.minY;
                }
-               if(_loc15_.juri < tyvak.juri)
+               if(bound.maxY < nodeBoundBoxThreshold.maxY)
                {
-                  vydumu[_loc9_++] = _loc15_.juri;
+                  splitCoordsY[numSplitCoordsY++] = bound.maxY;
                }
             }
-            if(_loc15_.zepoci - _loc15_.gesuwi <= _loc5_)
+            if(bound.maxZ - bound.minZ <= doubleThreshold)
             {
-               if(_loc15_.gesuwi <= tyvak.gesuwi)
+               if(bound.minZ <= nodeBoundBoxThreshold.minZ)
                {
-                  zyq[_loc10_++] = _loc4_.gesuwi;
+                  splitCoordsZ[numSplitCoordsZ++] = nodeBoundBox.minZ;
                }
-               else if(_loc15_.zepoci >= tyvak.zepoci)
+               else if(bound.maxZ >= nodeBoundBoxThreshold.maxZ)
                {
-                  zyq[_loc10_++] = _loc4_.zepoci;
+                  splitCoordsZ[numSplitCoordsZ++] = nodeBoundBox.maxZ;
                }
                else
                {
-                  zyq[_loc10_++] = (_loc15_.gesuwi + _loc15_.zepoci) * 0.5;
+                  splitCoordsZ[numSplitCoordsZ++] = (bound.minZ + bound.maxZ) * 0.5;
                }
             }
             else
             {
-               if(_loc15_.gesuwi > tyvak.gesuwi)
+               if(bound.minZ > nodeBoundBoxThreshold.minZ)
                {
-                  zyq[_loc10_++] = _loc15_.gesuwi;
+                  splitCoordsZ[numSplitCoordsZ++] = bound.minZ;
                }
-               if(_loc15_.zepoci < tyvak.zepoci)
+               if(bound.maxZ < nodeBoundBoxThreshold.maxZ)
                {
-                  zyq[_loc10_++] = _loc15_.zepoci;
+                  splitCoordsZ[numSplitCoordsZ++] = bound.maxZ;
                }
             }
-            _loc6_++;
+            i++;
          }
-         this.ladoba = -1;
-         this.zadarypus = 1e+308;
-         gaboder[0] = _loc4_.cubegyw;
-         gaboder[1] = _loc4_.nicomosa;
-         gaboder[2] = _loc4_.gesuwi;
-         gaboder[3] = _loc4_.jys;
-         gaboder[4] = _loc4_.juri;
-         gaboder[5] = _loc4_.zepoci;
-         this.checkNodeAxis(param1,0,_loc8_,tibuh,gaboder);
-         this.checkNodeAxis(param1,1,_loc9_,vydumu,gaboder);
-         this.checkNodeAxis(param1,2,_loc10_,zyq,gaboder);
-         if(this.ladoba < 0)
+         this.splitAxis = -1;
+         this.bestCost = 1e+308;
+         nodeBounds[0] = nodeBoundBox.minX;
+         nodeBounds[1] = nodeBoundBox.minY;
+         nodeBounds[2] = nodeBoundBox.minZ;
+         nodeBounds[3] = nodeBoundBox.maxX;
+         nodeBounds[4] = nodeBoundBox.maxY;
+         nodeBounds[5] = nodeBoundBox.maxZ;
+         this.checkNodeAxis(node,0,numSplitCoordsX,splitCoordsX,nodeBounds);
+         this.checkNodeAxis(node,1,numSplitCoordsY,splitCoordsY,nodeBounds);
+         this.checkNodeAxis(node,2,numSplitCoordsZ,splitCoordsZ,nodeBounds);
+         if(this.splitAxis < 0)
          {
             return;
          }
-         var _loc11_:Boolean = this.ladoba == 0;
-         var _loc12_:Boolean = this.ladoba == 1;
-         param1.zekos = this.ladoba;
-         param1.retycel = this.qijysa;
-         param1.hab = new CollisionKdNode();
-         param1.hab.vewu = param1;
-         param1.hab.taqa = _loc4_.clone();
-         param1.gumipiw = new CollisionKdNode();
-         param1.gumipiw.vewu = param1;
-         param1.gumipiw.taqa = _loc4_.clone();
-         if(_loc11_)
+         var axisX:Boolean = this.splitAxis == 0;
+         var axisY:Boolean = this.splitAxis == 1;
+         node.axis = this.splitAxis;
+         node.coord = this.splitCoord;
+         node.negative = new CollisionKdNode();
+         node.negative.parent = node;
+         node.negative.boundBox = nodeBoundBox.clone();
+         node.positive = new CollisionKdNode();
+         node.positive.parent = node;
+         node.positive.boundBox = nodeBoundBox.clone();
+         if(axisX)
          {
-            param1.hab.taqa.jys = param1.gumipiw.taqa.cubegyw = this.qijysa;
+            node.negative.boundBox.maxX = node.positive.boundBox.minX = this.splitCoord;
          }
-         else if(_loc12_)
+         else if(axisY)
          {
-            param1.hab.taqa.juri = param1.gumipiw.taqa.nicomosa = this.qijysa;
+            node.negative.boundBox.maxY = node.positive.boundBox.minY = this.splitCoord;
          }
          else
          {
-            param1.hab.taqa.zepoci = param1.gumipiw.taqa.gesuwi = this.qijysa;
+            node.negative.boundBox.maxZ = node.positive.boundBox.minZ = this.splitCoord;
          }
-         var _loc13_:Number = this.qijysa - this.hevarer;
-         var _loc14_:Number = this.qijysa + this.hevarer;
-         _loc6_ = 0;
-         while(_loc6_ < _loc3_)
+         var minCoord:Number = this.splitCoord - this.threshold;
+         var maxCoord:Number = this.splitCoord + this.threshold;
+         i = 0;
+         while(i < numIndices)
          {
-            _loc15_ = this.nyrimobo[_loc2_[_loc6_]];
-            _loc16_ = _loc11_ ? _loc15_.cubegyw : (_loc12_ ? _loc15_.nicomosa : _loc15_.gesuwi);
-            _loc17_ = _loc11_ ? _loc15_.jys : (_loc12_ ? _loc15_.juri : _loc15_.zepoci);
-            if(_loc17_ <= _loc14_)
+            bound = this.boundBoxes[indices[i]];
+            min = axisX ? bound.minX : (axisY ? bound.minY : bound.minZ);
+            max = axisX ? bound.maxX : (axisY ? bound.maxY : bound.maxZ);
+            if(max <= maxCoord)
             {
-               if(_loc16_ < _loc13_)
+               if(min < minCoord)
                {
-                  if(param1.hab.indices == null)
+                  if(node.negative.indices == null)
                   {
-                     param1.hab.indices = new Vector.<int>();
+                     node.negative.indices = new Vector.<int>();
                   }
-                  param1.hab.indices.push(_loc2_[_loc6_]);
-                  _loc2_[_loc6_] = -1;
+                  node.negative.indices.push(indices[i]);
+                  indices[i] = -1;
                }
                else
                {
-                  if(param1.henanaja == null)
+                  if(node.splitIndices == null)
                   {
-                     param1.henanaja = new Vector.<int>();
+                     node.splitIndices = new Vector.<int>();
                   }
-                  param1.henanaja.push(_loc2_[_loc6_]);
-                  _loc2_[_loc6_] = -1;
+                  node.splitIndices.push(indices[i]);
+                  indices[i] = -1;
                }
             }
-            else if(_loc16_ >= _loc13_)
+            else if(min >= minCoord)
             {
-               if(param1.gumipiw.indices == null)
+               if(node.positive.indices == null)
                {
-                  param1.gumipiw.indices = new Vector.<int>();
+                  node.positive.indices = new Vector.<int>();
                }
-               param1.gumipiw.indices.push(_loc2_[_loc6_]);
-               _loc2_[_loc6_] = -1;
+               node.positive.indices.push(indices[i]);
+               indices[i] = -1;
             }
-            _loc6_++;
+            i++;
          }
-         _loc6_ = 0;
-         _loc7_ = 0;
-         while(_loc6_ < _loc3_)
+         i = 0;
+         j = 0;
+         while(i < numIndices)
          {
-            if(_loc2_[_loc6_] >= 0)
+            if(indices[i] >= 0)
             {
-               _loc2_[_loc7_++] = _loc2_[_loc6_];
+               indices[j++] = indices[i];
             }
-            _loc6_++;
+            i++;
          }
-         if(_loc7_ > 0)
+         if(j > 0)
          {
-            _loc2_.length = _loc7_;
+            indices.length = j;
          }
          else
          {
-            param1.indices = null;
+            node.indices = null;
          }
-         if(param1.henanaja != null)
+         if(node.splitIndices != null)
          {
-            param1.tuz = new CollisionKdTree2D(this,param1);
-            param1.tuz.createTree();
+            node.splitTree = new CollisionKdTree2D(this,node);
+            node.splitTree.createTree();
          }
-         if(param1.hab.indices != null)
+         if(node.negative.indices != null)
          {
-            this.splitNode(param1.hab);
+            this.splitNode(node.negative);
          }
-         if(param1.gumipiw.indices != null)
+         if(node.positive.indices != null)
          {
-            this.splitNode(param1.gumipiw);
+            this.splitNode(node.positive);
          }
       }
       
-      private function checkNodeAxis(param1:CollisionKdNode, param2:int, param3:int, param4:Vector.<Number>, param5:Vector.<Number>) : void
+      private function checkNodeAxis(node:CollisionKdNode, axis:int, numSplitCoords:int, splitCoords:Vector.<Number>, bounds:Vector.<Number>) : void
       {
-         var _loc10_:Number = NaN;
-         var _loc11_:Number = NaN;
-         var _loc12_:Number = NaN;
-         var _loc13_:Number = NaN;
-         var _loc14_:Number = NaN;
-         var _loc15_:int = 0;
-         var _loc16_:int = 0;
-         var _loc17_:Boolean = false;
-         var _loc18_:int = 0;
-         var _loc19_:int = 0;
-         var _loc20_:Number = NaN;
-         var _loc21_:AABB = null;
-         var _loc6_:int = (param2 + 1) % 3;
-         var _loc7_:int = (param2 + 2) % 3;
-         var _loc8_:Number = (param5[_loc6_ + 3] - param5[_loc6_]) * (param5[_loc7_ + 3] - param5[_loc7_]);
-         var _loc9_:int = 0;
-         while(_loc9_ < param3)
+         var coord:Number = NaN;
+         var minCoord:Number = NaN;
+         var maxCoord:Number = NaN;
+         var areaNegative:Number = NaN;
+         var areaPositive:Number = NaN;
+         var numNegative:int = 0;
+         var numPositive:int = 0;
+         var conflict:Boolean = false;
+         var numIndices:int = 0;
+         var j:int = 0;
+         var cost:Number = NaN;
+         var bound:AABB = null;
+         var axis1:int = (axis + 1) % 3;
+         var axis2:int = (axis + 2) % 3;
+         var area:Number = (bounds[axis1 + 3] - bounds[axis1]) * (bounds[axis2 + 3] - bounds[axis2]);
+         var i:int = 0;
+         while(i < numSplitCoords)
          {
-            _loc10_ = param4[_loc9_];
-            if(!isNaN(_loc10_))
+            coord = splitCoords[i];
+            if(!isNaN(coord))
             {
-               _loc11_ = _loc10_ - this.hevarer;
-               _loc12_ = _loc10_ + this.hevarer;
-               _loc13_ = _loc8_ * (_loc10_ - param5[param2]);
-               _loc14_ = _loc8_ * (param5[int(param2 + 3)] - _loc10_);
-               _loc15_ = 0;
-               _loc16_ = 0;
-               _loc17_ = false;
-               _loc18_ = int(param1.indices.length);
-               _loc19_ = 0;
-               while(_loc19_ < _loc18_)
+               minCoord = coord - this.threshold;
+               maxCoord = coord + this.threshold;
+               areaNegative = area * (coord - bounds[axis]);
+               areaPositive = area * (bounds[int(axis + 3)] - coord);
+               numNegative = 0;
+               numPositive = 0;
+               conflict = false;
+               numIndices = int(node.indices.length);
+               j = 0;
+               while(j < numIndices)
                {
-                  _loc21_ = this.nyrimobo[param1.indices[_loc19_]];
-                  pekeryf[0] = _loc21_.cubegyw;
-                  pekeryf[1] = _loc21_.nicomosa;
-                  pekeryf[2] = _loc21_.gesuwi;
-                  pekeryf[3] = _loc21_.jys;
-                  pekeryf[4] = _loc21_.juri;
-                  pekeryf[5] = _loc21_.zepoci;
-                  if(pekeryf[param2 + 3] <= _loc12_)
+                  bound = this.boundBoxes[node.indices[j]];
+                  primitiveBounds[0] = bound.minX;
+                  primitiveBounds[1] = bound.minY;
+                  primitiveBounds[2] = bound.minZ;
+                  primitiveBounds[3] = bound.maxX;
+                  primitiveBounds[4] = bound.maxY;
+                  primitiveBounds[5] = bound.maxZ;
+                  if(primitiveBounds[axis + 3] <= maxCoord)
                   {
-                     if(pekeryf[param2] < _loc11_)
+                     if(primitiveBounds[axis] < minCoord)
                      {
-                        _loc15_++;
+                        numNegative++;
                      }
                   }
                   else
                   {
-                     if(pekeryf[param2] < _loc11_)
+                     if(primitiveBounds[axis] < minCoord)
                      {
-                        _loc17_ = true;
+                        conflict = true;
                         break;
                      }
-                     _loc16_++;
+                     numPositive++;
                   }
-                  _loc19_++;
+                  j++;
                }
-               _loc20_ = _loc13_ * _loc15_ + _loc14_ * _loc16_;
-               if(!_loc17_ && _loc20_ < this.zadarypus && _loc15_ > 0 && _loc16_ > 0)
+               cost = areaNegative * numNegative + areaPositive * numPositive;
+               if(!conflict && cost < this.bestCost && numNegative > 0 && numPositive > 0)
                {
-                  this.ladoba = param2;
-                  this.zadarypus = _loc20_;
-                  this.qijysa = _loc10_;
+                  this.splitAxis = axis;
+                  this.bestCost = cost;
+                  this.splitCoord = coord;
                }
-               _loc19_ = _loc9_ + 1;
-               while(_loc19_ < param3)
+               j = i + 1;
+               while(j < numSplitCoords)
                {
-                  if(param4[_loc19_] >= _loc10_ - this.hevarer && param4[_loc19_] <= _loc10_ + this.hevarer)
+                  if(splitCoords[j] >= coord - this.threshold && splitCoords[j] <= coord + this.threshold)
                   {
-                     param4[_loc19_] = NaN;
+                     splitCoords[j] = NaN;
                   }
-                  _loc19_++;
+                  j++;
                }
             }
-            _loc9_++;
+            i++;
          }
       }
       
       public function traceTree() : void
       {
-         this.traceNode("",this.wymyhujoq);
+         this.traceNode("",this.rootNode);
       }
       
-      private function traceNode(param1:String, param2:CollisionKdNode) : void
+      private function traceNode(prefix:String, node:CollisionKdNode) : void
       {
-         if(param2 == null)
+         if(node == null)
          {
             return;
          }
-         this.traceNode(param1 + "-",param2.hab);
-         this.traceNode(param1 + "+",param2.gumipiw);
+         this.traceNode(prefix + "-",node.negative);
+         this.traceNode(prefix + "+",node.positive);
       }
    }
 }

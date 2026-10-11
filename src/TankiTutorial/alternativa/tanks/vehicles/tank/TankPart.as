@@ -7,13 +7,13 @@ package alternativa.tanks.vehicles.tank
    public class TankPart
    {
       
-      public var gepocivaj:String;
+      public var name:String;
       
-      public var kuca:Mesh;
+      public var skin:Mesh;
       
-      public var sut:BitmapData;
+      public var lightmapTexture:BitmapData;
       
-      public var vypupital:BitmapData;
+      public var detailsTexture:BitmapData;
       
       public function TankPart()
       {
@@ -22,7 +22,7 @@ package alternativa.tanks.vehicles.tank
       
       public function getSkinDimensions() : Vector3
       {
-         return new Vector3(this.kuca.boundMaxX - this.kuca.boundMinX,this.kuca.boundMaxY - this.kuca.boundMinY,this.kuca.boundMaxZ - this.kuca.boundMinZ);
+         return new Vector3(this.skin.boundMaxX - this.skin.boundMinX,this.skin.boundMaxY - this.skin.boundMinY,this.skin.boundMaxZ - this.skin.boundMinZ);
       }
    }
 }

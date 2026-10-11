@@ -11,280 +11,280 @@ package alternativa.physics.collision.colliders
    public class BoxRectCollider implements Collider
    {
       
-      private static const zihuta:Vector.<Vertex> = Vector.<Vertex>([new Vertex(),new Vertex(),new Vertex(),new Vertex()]);
+      private static const boxVertices:Vector.<Vertex> = Vector.<Vertex>([new Vertex(),new Vertex(),new Vertex(),new Vertex()]);
       
-      private static const kifulylem:Vector.<Vertex> = Vector.<Vertex>([new Vertex(),new Vertex(),new Vertex(),new Vertex()]);
+      private static const rectVertices:Vector.<Vertex> = Vector.<Vertex>([new Vertex(),new Vertex(),new Vertex(),new Vertex()]);
       
-      private static const labisiqyg:Matrix4 = new Matrix4();
+      private static const contactBasis:Matrix4 = new Matrix4();
       
-      private const tupanamer:Vector3 = new Vector3();
+      private const vectorToBox:Vector3 = new Vector3();
       
-      private const nydyfi:Vector3 = new Vector3();
+      private const derivedAxis:Vector3 = new Vector3();
       
-      private const gisepimin:Vector3 = new Vector3();
+      private const axis10:Vector3 = new Vector3();
       
-      private const zimep:Vector3 = new Vector3();
+      private const axis11:Vector3 = new Vector3();
       
-      private const naruqe:Vector3 = new Vector3();
+      private const axis12:Vector3 = new Vector3();
       
-      private const gizy:Vector3 = new Vector3();
+      private const axis20:Vector3 = new Vector3();
       
-      private const vas:Vector3 = new Vector3();
+      private const axis21:Vector3 = new Vector3();
       
-      private const rapag:Vector3 = new Vector3();
+      private const axis22:Vector3 = new Vector3();
       
-      private const seko:Vector3 = new Vector3();
+      private const bestAxis:Vector3 = new Vector3();
       
-      private var jicywos:Number;
+      private var minOverlap:Number;
       
-      private var kurymyf:Number;
+      private var epsilon:Number;
       
-      public function BoxRectCollider(param1:Number)
+      public function BoxRectCollider(epsilon:Number)
       {
          super();
-         this.kurymyf = param1;
+         this.epsilon = epsilon;
       }
       
-      public function getContacts(param1:CollisionShape, param2:CollisionShape, param3:Vector.<ShapeContact>) : void
+      public function getContacts(shape1:CollisionShape, shape2:CollisionShape, contacts:Vector.<ShapeContact>) : void
       {
-         var _loc4_:CollisionRect = null;
-         var _loc5_:CollisionBox = null;
-         if(this.haveCollision(param1,param2))
+         var rect:CollisionRect = null;
+         var box:CollisionBox = null;
+         if(this.haveCollision(shape1,shape2))
          {
-            if(param1 is CollisionRect)
+            if(shape1 is CollisionRect)
             {
-               _loc4_ = CollisionRect(param1);
-               _loc5_ = CollisionBox(param2);
+               rect = CollisionRect(shape1);
+               box = CollisionBox(shape2);
             }
             else
             {
-               _loc4_ = CollisionRect(param2);
-               _loc5_ = CollisionBox(param1);
+               rect = CollisionRect(shape2);
+               box = CollisionBox(shape1);
             }
-            this.findContacts(_loc5_,_loc4_,this.seko,param3);
+            this.findContacts(box,rect,this.bestAxis,contacts);
          }
       }
       
-      public function haveCollision(param1:CollisionShape, param2:CollisionShape) : Boolean
+      public function haveCollision(shape1:CollisionShape, shape2:CollisionShape) : Boolean
       {
-         var _loc3_:CollisionBox = null;
-         var _loc4_:CollisionRect = null;
-         this.jicywos = 10000000000;
-         if(param1 is CollisionBox)
+         var box:CollisionBox = null;
+         var rect:CollisionRect = null;
+         this.minOverlap = 10000000000;
+         if(shape1 is CollisionBox)
          {
-            _loc3_ = CollisionBox(param1);
-            _loc4_ = CollisionRect(param2);
+            box = CollisionBox(shape1);
+            rect = CollisionRect(shape2);
          }
          else
          {
-            _loc3_ = CollisionBox(param2);
-            _loc4_ = CollisionRect(param1);
+            box = CollisionBox(shape2);
+            rect = CollisionRect(shape1);
          }
-         var _loc5_:Matrix4 = _loc3_.wet;
-         var _loc6_:Matrix4 = _loc4_.wet;
-         this.tupanamer.x = _loc5_.kyvuru - _loc6_.kyvuru;
-         this.tupanamer.y = _loc5_.zumidynip - _loc6_.zumidynip;
-         this.tupanamer.z = _loc5_.sunafepo - _loc6_.sunafepo;
-         this.rapag.x = _loc6_.sivy;
-         this.rapag.y = _loc6_.wyvukog;
-         this.rapag.z = _loc6_.tari;
-         if(!this.testMainAxis(_loc3_,_loc4_,this.rapag,this.tupanamer))
+         var boxTransform:Matrix4 = box.transform;
+         var rectTransform:Matrix4 = rect.transform;
+         this.vectorToBox.x = boxTransform.md - rectTransform.md;
+         this.vectorToBox.y = boxTransform.mh - rectTransform.mh;
+         this.vectorToBox.z = boxTransform.ml - rectTransform.ml;
+         this.axis22.x = rectTransform.mc;
+         this.axis22.y = rectTransform.mg;
+         this.axis22.z = rectTransform.mk;
+         if(!this.testMainAxis(box,rect,this.axis22,this.vectorToBox))
          {
             return false;
          }
-         this.gisepimin.x = _loc5_.gusat;
-         this.gisepimin.y = _loc5_.sig;
-         this.gisepimin.z = _loc5_.vug;
-         if(!this.testMainAxis(_loc3_,_loc4_,this.gisepimin,this.tupanamer))
+         this.axis10.x = boxTransform.ma;
+         this.axis10.y = boxTransform.me;
+         this.axis10.z = boxTransform.mi;
+         if(!this.testMainAxis(box,rect,this.axis10,this.vectorToBox))
          {
             return false;
          }
-         this.zimep.x = _loc5_.cydop;
-         this.zimep.y = _loc5_.qanezycap;
-         this.zimep.z = _loc5_.luwym;
-         if(!this.testMainAxis(_loc3_,_loc4_,this.zimep,this.tupanamer))
+         this.axis11.x = boxTransform.mb;
+         this.axis11.y = boxTransform.mf;
+         this.axis11.z = boxTransform.mj;
+         if(!this.testMainAxis(box,rect,this.axis11,this.vectorToBox))
          {
             return false;
          }
-         this.naruqe.x = _loc5_.sivy;
-         this.naruqe.y = _loc5_.wyvukog;
-         this.naruqe.z = _loc5_.tari;
-         if(!this.testMainAxis(_loc3_,_loc4_,this.naruqe,this.tupanamer))
+         this.axis12.x = boxTransform.mc;
+         this.axis12.y = boxTransform.mg;
+         this.axis12.z = boxTransform.mk;
+         if(!this.testMainAxis(box,rect,this.axis12,this.vectorToBox))
          {
             return false;
          }
-         this.gizy.x = _loc6_.gusat;
-         this.gizy.y = _loc6_.sig;
-         this.gizy.z = _loc6_.vug;
-         this.vas.x = _loc6_.cydop;
-         this.vas.y = _loc6_.qanezycap;
-         this.vas.z = _loc6_.luwym;
-         if(!this.testDerivedAxis(_loc3_,_loc4_,this.gisepimin,this.gizy,this.tupanamer))
+         this.axis20.x = rectTransform.ma;
+         this.axis20.y = rectTransform.me;
+         this.axis20.z = rectTransform.mi;
+         this.axis21.x = rectTransform.mb;
+         this.axis21.y = rectTransform.mf;
+         this.axis21.z = rectTransform.mj;
+         if(!this.testDerivedAxis(box,rect,this.axis10,this.axis20,this.vectorToBox))
          {
             return false;
          }
-         if(!this.testDerivedAxis(_loc3_,_loc4_,this.gisepimin,this.vas,this.tupanamer))
+         if(!this.testDerivedAxis(box,rect,this.axis10,this.axis21,this.vectorToBox))
          {
             return false;
          }
-         if(!this.testDerivedAxis(_loc3_,_loc4_,this.zimep,this.gizy,this.tupanamer))
+         if(!this.testDerivedAxis(box,rect,this.axis11,this.axis20,this.vectorToBox))
          {
             return false;
          }
-         if(!this.testDerivedAxis(_loc3_,_loc4_,this.zimep,this.vas,this.tupanamer))
+         if(!this.testDerivedAxis(box,rect,this.axis11,this.axis21,this.vectorToBox))
          {
             return false;
          }
-         if(!this.testDerivedAxis(_loc3_,_loc4_,this.naruqe,this.gizy,this.tupanamer))
+         if(!this.testDerivedAxis(box,rect,this.axis12,this.axis20,this.vectorToBox))
          {
             return false;
          }
-         if(!this.testDerivedAxis(_loc3_,_loc4_,this.naruqe,this.vas,this.tupanamer))
+         if(!this.testDerivedAxis(box,rect,this.axis12,this.axis21,this.vectorToBox))
          {
             return false;
          }
          return true;
       }
       
-      private function testMainAxis(param1:CollisionBox, param2:CollisionRect, param3:Vector3, param4:Vector3) : Boolean
+      private function testMainAxis(box:CollisionBox, rect:CollisionRect, axis:Vector3, toBox:Vector3) : Boolean
       {
-         var _loc5_:Number = this.getOverlapOnAxis(param1,param2,param3,param4);
-         return this.registerOverlap(_loc5_,param3);
+         var overlap:Number = this.getOverlapOnAxis(box,rect,axis,toBox);
+         return this.registerOverlap(overlap,axis);
       }
       
-      private function testDerivedAxis(param1:CollisionBox, param2:CollisionRect, param3:Vector3, param4:Vector3, param5:Vector3) : Boolean
+      private function testDerivedAxis(box:CollisionBox, rect:CollisionRect, axis1:Vector3, axis2:Vector3, toBox:Vector3) : Boolean
       {
-         var _loc7_:Number = NaN;
-         this.nydyfi.x = param3.y * param4.z - param3.z * param4.y;
-         this.nydyfi.y = param3.z * param4.x - param3.x * param4.z;
-         this.nydyfi.z = param3.x * param4.y - param3.y * param4.x;
-         var _loc6_:Number = this.nydyfi.x * this.nydyfi.x + this.nydyfi.y * this.nydyfi.y + this.nydyfi.z * this.nydyfi.z;
-         if(_loc6_ < 1e-10)
+         var invLen:Number = NaN;
+         this.derivedAxis.x = axis1.y * axis2.z - axis1.z * axis2.y;
+         this.derivedAxis.y = axis1.z * axis2.x - axis1.x * axis2.z;
+         this.derivedAxis.z = axis1.x * axis2.y - axis1.y * axis2.x;
+         var lenSqr:Number = this.derivedAxis.x * this.derivedAxis.x + this.derivedAxis.y * this.derivedAxis.y + this.derivedAxis.z * this.derivedAxis.z;
+         if(lenSqr < 1e-10)
          {
             return true;
          }
-         _loc7_ = 1 / Math.sqrt(_loc6_);
-         this.nydyfi.x *= _loc7_;
-         this.nydyfi.y *= _loc7_;
-         this.nydyfi.z *= _loc7_;
-         var _loc8_:Number = this.getOverlapOnAxis(param1,param2,this.nydyfi,param5);
-         return this.registerOverlap(_loc8_,this.nydyfi);
+         invLen = 1 / Math.sqrt(lenSqr);
+         this.derivedAxis.x *= invLen;
+         this.derivedAxis.y *= invLen;
+         this.derivedAxis.z *= invLen;
+         var overlap:Number = this.getOverlapOnAxis(box,rect,this.derivedAxis,toBox);
+         return this.registerOverlap(overlap,this.derivedAxis);
       }
       
-      private function getOverlapOnAxis(param1:CollisionBox, param2:CollisionRect, param3:Vector3, param4:Vector3) : Number
+      private function getOverlapOnAxis(box:CollisionBox, rect:CollisionRect, axis:Vector3, toBox:Vector3) : Number
       {
-         var _loc5_:Matrix4 = param1.wet;
-         var _loc6_:Number = (_loc5_.gusat * param3.x + _loc5_.sig * param3.y + _loc5_.vug * param3.z) * param1.nezav.x;
-         if(_loc6_ < 0)
+         var matrix:Matrix4 = box.transform;
+         var projection:Number = (matrix.ma * axis.x + matrix.me * axis.y + matrix.mi * axis.z) * box.halfSize.x;
+         if(projection < 0)
          {
-            _loc6_ = -_loc6_;
+            projection = -projection;
          }
-         var _loc7_:Number = _loc6_;
-         _loc6_ = (_loc5_.cydop * param3.x + _loc5_.qanezycap * param3.y + _loc5_.luwym * param3.z) * param1.nezav.y;
-         if(_loc6_ < 0)
+         var sum:Number = projection;
+         projection = (matrix.mb * axis.x + matrix.mf * axis.y + matrix.mj * axis.z) * box.halfSize.y;
+         if(projection < 0)
          {
-            _loc6_ = -_loc6_;
+            projection = -projection;
          }
-         _loc7_ += _loc6_;
-         _loc6_ = (_loc5_.sivy * param3.x + _loc5_.wyvukog * param3.y + _loc5_.tari * param3.z) * param1.nezav.z;
-         if(_loc6_ < 0)
+         sum += projection;
+         projection = (matrix.mc * axis.x + matrix.mg * axis.y + matrix.mk * axis.z) * box.halfSize.z;
+         if(projection < 0)
          {
-            _loc6_ = -_loc6_;
+            projection = -projection;
          }
-         _loc7_ += _loc6_;
-         _loc5_ = param2.wet;
-         _loc6_ = (_loc5_.gusat * param3.x + _loc5_.sig * param3.y + _loc5_.vug * param3.z) * param2.nezav.x;
-         if(_loc6_ < 0)
+         sum += projection;
+         matrix = rect.transform;
+         projection = (matrix.ma * axis.x + matrix.me * axis.y + matrix.mi * axis.z) * rect.halfSize.x;
+         if(projection < 0)
          {
-            _loc6_ = -_loc6_;
+            projection = -projection;
          }
-         _loc7_ += _loc6_;
-         _loc6_ = (_loc5_.cydop * param3.x + _loc5_.qanezycap * param3.y + _loc5_.luwym * param3.z) * param2.nezav.y;
-         if(_loc6_ < 0)
+         sum += projection;
+         projection = (matrix.mb * axis.x + matrix.mf * axis.y + matrix.mj * axis.z) * rect.halfSize.y;
+         if(projection < 0)
          {
-            _loc6_ = -_loc6_;
+            projection = -projection;
          }
-         _loc7_ += _loc6_;
-         _loc6_ = param4.x * param3.x + param4.y * param3.y + param4.z * param3.z;
-         if(_loc6_ < 0)
+         sum += projection;
+         projection = toBox.x * axis.x + toBox.y * axis.y + toBox.z * axis.z;
+         if(projection < 0)
          {
-            _loc6_ = -_loc6_;
+            projection = -projection;
          }
-         return _loc7_ - _loc6_;
+         return sum - projection;
       }
       
-      private function registerOverlap(param1:Number, param2:Vector3) : Boolean
+      private function registerOverlap(overlap:Number, axis:Vector3) : Boolean
       {
-         if(param1 < this.kurymyf)
+         if(overlap < this.epsilon)
          {
             return false;
          }
-         if(param1 + this.kurymyf < this.jicywos)
+         if(overlap + this.epsilon < this.minOverlap)
          {
-            this.jicywos = param1;
-            this.seko.x = param2.x;
-            this.seko.y = param2.y;
-            this.seko.z = param2.z;
+            this.minOverlap = overlap;
+            this.bestAxis.x = axis.x;
+            this.bestAxis.y = axis.y;
+            this.bestAxis.z = axis.z;
          }
          return true;
       }
       
-      private function findContacts(param1:CollisionBox, param2:CollisionRect, param3:Vector3, param4:Vector.<ShapeContact>) : void
+      private function findContacts(box:CollisionBox, rect:CollisionRect, collisionNormal:Vector3, contacts:Vector.<ShapeContact>) : void
       {
-         var _loc5_:Matrix4 = null;
-         var _loc12_:ShapeContact = null;
-         var _loc13_:Vector3 = null;
-         var _loc14_:Number = NaN;
-         var _loc15_:Number = NaN;
-         var _loc16_:Number = NaN;
-         _loc5_ = param1.wet;
-         var _loc6_:Matrix4 = param2.wet;
-         var _loc7_:Vector3 = this.tupanamer;
-         _loc7_.x = _loc5_.kyvuru - _loc6_.kyvuru;
-         _loc7_.y = _loc5_.zumidynip - _loc6_.zumidynip;
-         _loc7_.z = _loc5_.sunafepo - _loc6_.sunafepo;
-         if(param3.x * _loc7_.x + param3.y * _loc7_.y + param3.z * _loc7_.z < 0)
+         var boxTransform:Matrix4 = null;
+         var contact:ShapeContact = null;
+         var contactNormal:Vector3 = null;
+         var nx:Number = NaN;
+         var ny:Number = NaN;
+         var nz:Number = NaN;
+         boxTransform = box.transform;
+         var rectTransform:Matrix4 = rect.transform;
+         var toBox:Vector3 = this.vectorToBox;
+         toBox.x = boxTransform.md - rectTransform.md;
+         toBox.y = boxTransform.mh - rectTransform.mh;
+         toBox.z = boxTransform.ml - rectTransform.ml;
+         if(collisionNormal.x * toBox.x + collisionNormal.y * toBox.y + collisionNormal.z * toBox.z < 0)
          {
-            param3.x = -param3.x;
-            param3.y = -param3.y;
-            param3.z = -param3.z;
+            collisionNormal.x = -collisionNormal.x;
+            collisionNormal.y = -collisionNormal.y;
+            collisionNormal.z = -collisionNormal.z;
          }
-         var _loc8_:Matrix4 = labisiqyg;
-         ColliderUtils.buildContactBasis(param3,_loc5_,_loc6_,_loc8_);
-         ColliderUtils.getBoxFaceVerticesInCCWOrder(param1,param3,FaceSide.puwizi,zihuta);
-         ColliderUtils.getRectFaceInCCWOrder(param2,param3,kifulylem);
-         ColliderUtils.transformFaceToReferenceSpace(_loc8_,_loc5_,zihuta,4);
-         ColliderUtils.transformFaceToReferenceSpace(_loc8_,_loc6_,kifulylem,4);
-         var _loc9_:int = int(param4.length);
-         PolygonsIntersectionUtils.findContacts(param1,zihuta,4,param2,kifulylem,4,_loc8_,param4);
-         var _loc10_:int = int(param4.length);
-         var _loc11_:int = _loc9_;
-         while(_loc11_ < _loc10_)
+         var basis:Matrix4 = contactBasis;
+         ColliderUtils.buildContactBasis(collisionNormal,boxTransform,rectTransform,basis);
+         ColliderUtils.getBoxFaceVerticesInCCWOrder(box,collisionNormal,FaceSide.back,boxVertices);
+         ColliderUtils.getRectFaceInCCWOrder(rect,collisionNormal,rectVertices);
+         ColliderUtils.transformFaceToReferenceSpace(basis,boxTransform,boxVertices,4);
+         ColliderUtils.transformFaceToReferenceSpace(basis,rectTransform,rectVertices,4);
+         var startIndex:int = int(contacts.length);
+         PolygonsIntersectionUtils.findContacts(box,boxVertices,4,rect,rectVertices,4,basis,contacts);
+         var numContacts:int = int(contacts.length);
+         var i:int = startIndex;
+         while(i < numContacts)
          {
-            _loc12_ = param4[_loc11_];
-            _loc13_ = _loc12_.lefugefo;
-            _loc14_ = _loc6_.sivy;
-            _loc15_ = _loc6_.wyvukog;
-            _loc16_ = _loc6_.tari;
-            if(_loc13_.x * _loc14_ + _loc13_.y * _loc15_ + _loc13_.z * _loc16_ < 0)
+            contact = contacts[i];
+            contactNormal = contact.normal;
+            nx = rectTransform.mc;
+            ny = rectTransform.mg;
+            nz = rectTransform.mk;
+            if(contactNormal.x * nx + contactNormal.y * ny + contactNormal.z * nz < 0)
             {
-               _loc12_.dispose();
-               _loc10_--;
-               param4[_loc11_] = param4[_loc10_];
-               param4[_loc10_] = null;
-               _loc11_--;
+               contact.dispose();
+               numContacts--;
+               contacts[i] = contacts[numContacts];
+               contacts[numContacts] = null;
+               i--;
             }
-            else if(Math.abs(_loc6_.tari) > 0.999)
+            else if(Math.abs(rectTransform.mk) > 0.999)
             {
-               _loc13_.x = _loc14_;
-               _loc13_.y = _loc15_;
-               _loc13_.z = _loc16_;
+               contactNormal.x = nx;
+               contactNormal.y = ny;
+               contactNormal.z = nz;
             }
-            _loc11_++;
+            i++;
          }
-         if(_loc10_ < param4.length)
+         if(numContacts < contacts.length)
          {
-            param4.length = _loc10_;
+            contacts.length = numContacts;
          }
       }
    }

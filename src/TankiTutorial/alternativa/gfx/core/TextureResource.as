@@ -8,7 +8,7 @@ package alternativa.gfx.core
    public class TextureResource extends Resource
    {
       
-      alternativagfx var tylu:Vector.<TextureBase> = new Vector.<TextureBase>(4);
+      alternativagfx var textures:Vector.<TextureBase> = new Vector.<TextureBase>(4);
       
       public function TextureResource()
       {
@@ -20,10 +20,10 @@ package alternativa.gfx.core
          super.dispose();
          for(var i:int = 0; i < 4; i++)
          {
-            if(this.tylu[i] != null)
+            if(this.textures[i] != null)
             {
-               this.tylu[i].dispose();
-               this.tylu[i] = null;
+               this.textures[i].dispose();
+               this.textures[i] = null;
             }
          }
       }
@@ -33,10 +33,10 @@ package alternativa.gfx.core
          super.reset();
          for(var i:int = 0; i < 4; i++)
          {
-            if(this.tylu[i] != null)
+            if(this.textures[i] != null)
             {
-               this.tylu[i].dispose();
-               this.tylu[i] = null;
+               this.textures[i].dispose();
+               this.textures[i] = null;
             }
          }
       }

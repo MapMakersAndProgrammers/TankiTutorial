@@ -3,21 +3,21 @@ package
    public class ConsoleVarFloat
    {
       
-      private var gepocivaj:String;
+      private var name:String;
       
-      public var duz:Number;
+      public var value:Number;
       
-      private var lozusezyr:Number;
+      private var minValue:Number;
       
-      private var zabiso:Number;
+      private var maxValue:Number;
       
-      public function ConsoleVarFloat(param1:String, param2:Number, param3:Number, param4:Number)
+      public function ConsoleVarFloat(name:String, value:Number, minValue:Number, maxValue:Number)
       {
          super();
-         this.gepocivaj = param1;
-         this.duz = param2;
-         this.lozusezyr = param3;
-         this.zabiso = param4;
+         this.name = name;
+         this.value = value;
+         this.minValue = minValue;
+         this.maxValue = maxValue;
       }
    }
 }

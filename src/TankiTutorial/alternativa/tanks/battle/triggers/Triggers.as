@@ -6,84 +6,84 @@ package alternativa.tanks.battle.triggers
    public class Triggers
    {
       
-      private const wamura:Vector.<Trigger> = new Vector.<Trigger>();
+      private const triggers:Vector.<Trigger> = new Vector.<Trigger>();
       
-      private const muvymow:Vector.<DeferredAction> = new Vector.<DeferredAction>();
+      private const deferredActions:Vector.<DeferredAction> = new Vector.<DeferredAction>();
       
-      private var cinyfutu:Boolean;
+      private var checking:Boolean;
       
       public function Triggers()
       {
          super();
       }
       
-      public function add(param1:Trigger) : void
+      public function add(trigger:Trigger) : void
       {
-         if(this.cinyfutu)
+         if(this.checking)
          {
-            this.muvymow.push(new DeferredTriggerAddition(this,param1));
+            this.deferredActions.push(new DeferredTriggerAddition(this,trigger));
          }
-         else if(this.wamura.indexOf(param1) < 0)
+         else if(this.triggers.indexOf(trigger) < 0)
          {
-            this.wamura.push(param1);
+            this.triggers.push(trigger);
          }
       }
       
-      public function remove(param1:Trigger) : void
+      public function remove(trigger:Trigger) : void
       {
-         var _loc2_:int = 0;
-         var _loc3_:int = 0;
-         if(this.cinyfutu)
+         var len:int = 0;
+         var index:int = 0;
+         if(this.checking)
          {
-            this.muvymow.push(new DeferredTriggerDeletion(this,param1));
+            this.deferredActions.push(new DeferredTriggerDeletion(this,trigger));
          }
          else
          {
-            _loc2_ = int(this.wamura.length);
-            if(_loc2_ > 0)
+            len = int(this.triggers.length);
+            if(len > 0)
             {
-               _loc3_ = this.wamura.indexOf(param1);
-               if(_loc3_ >= 0)
+               index = this.triggers.indexOf(trigger);
+               if(index >= 0)
                {
-                  this.wamura[_loc3_] = this.wamura[--_loc2_];
-                  this.wamura.length = _loc2_;
+                  this.triggers[index] = this.triggers[--len];
+                  this.triggers.length = len;
                }
             }
          }
       }
       
-      public function check(param1:Body) : void
+      public function check(body:Body) : void
       {
-         var _loc2_:int = 0;
-         var _loc3_:int = 0;
-         var _loc4_:Trigger = null;
-         if(param1 != null)
+         var len:int = 0;
+         var i:int = 0;
+         var trigger:Trigger = null;
+         if(body != null)
          {
-            this.cinyfutu = true;
-            _loc2_ = int(this.wamura.length);
-            _loc3_ = 0;
-            while(_loc3_ < _loc2_)
+            this.checking = true;
+            len = int(this.triggers.length);
+            i = 0;
+            while(i < len)
             {
-               _loc4_ = this.wamura[_loc3_];
-               _loc4_.checkTrigger(param1);
-               _loc3_++;
+               trigger = this.triggers[i];
+               trigger.checkTrigger(body);
+               i++;
             }
-            this.cinyfutu = false;
+            this.checking = false;
             this.executeDeferredActions();
          }
       }
       
       private function executeDeferredActions() : void
       {
-         var _loc1_:DeferredAction = null;
+         var action:DeferredAction = null;
          while(true)
          {
-            _loc1_ = this.muvymow.pop();
-            if(_loc1_ == null)
+            action = this.deferredActions.pop();
+            if(action == null)
             {
                break;
             }
-            _loc1_.execute();
+            action.execute();
          }
       }
    }

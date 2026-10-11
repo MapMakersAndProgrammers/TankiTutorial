@@ -18,137 +18,137 @@ package alternativa.tanks.battle
       
       private static const pame:Number = 1;
       
-      private static const lesu:Vector3 = new Vector3(100,0,0);
+      private static const localDustVelocity:Vector3 = new Vector3(100,0,0);
       
-      private static const mazilynu:Vector3 = new Vector3();
+      private static const dustVelocity:Vector3 = new Vector3();
       
-      private static const dizecoca:Vector3 = new Vector3();
+      private static const particlePosition:Vector3 = new Vector3();
       
-      private var jujygiw:Number = 0;
+      private var particleSize:Number = 0;
       
-      private var zeg:TextureAnimation;
+      private var animation:TextureAnimation;
       
-      private var bim:Dictionary = new Dictionary();
+      private var tankScales:Dictionary = new Dictionary();
       
-      private var butefu:GameCamera;
+      private var camera:GameCamera;
       
-      private var kyfyjyril:Number;
+      private var nearDistance:Number;
       
-      private var ziqel:Number;
+      private var farDistance:Number;
       
       public var enabled:Boolean = true;
       
-      private var tywad:Number;
+      private var intensity:Number;
       
-      private var zymugypu:Number;
+      private var dustProbability:Number;
       
-      public function Dust(param1:GameCamera)
+      public function Dust(camera:GameCamera)
       {
          super();
-         this.butefu = param1;
+         this.camera = camera;
       }
       
-      private static function addJitter(param1:Vector3, param2:Number) : void
+      private static function addJitter(vector:Vector3, amount:Number) : void
       {
-         param1.x += (Math.random() - 0.5) * 2 * param2;
-         param1.y += (Math.random() - 0.5) * 2 * param2;
-         param1.z += (Math.random() - 0.5) * 2 * param2;
+         vector.x += (Math.random() - 0.5) * 2 * amount;
+         vector.y += (Math.random() - 0.5) * 2 * amount;
+         vector.z += (Math.random() - 0.5) * 2 * amount;
       }
       
-      public function init(param1:TextureAnimation, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number) : void
+      public function init(animation:TextureAnimation, farDistance:Number, nearDistance:Number, particleSize:Number, intensity:Number, dustProbability:Number) : void
       {
-         this.zeg = param1;
-         this.ziqel = param2;
-         this.kyfyjyril = param3;
-         this.jujygiw = param4;
-         this.tywad = param5;
-         this.zymugypu = param6;
+         this.animation = animation;
+         this.farDistance = farDistance;
+         this.nearDistance = nearDistance;
+         this.particleSize = particleSize;
+         this.intensity = intensity;
+         this.dustProbability = dustProbability;
       }
       
-      public function addTank(param1:Tank) : void
+      public function addTank(tank:Tank) : void
       {
-         this.bim[param1] = param1.fysa / 600;
+         this.tankScales[tank] = tank.boundSphereRadius / 600;
       }
       
-      public function removeTank(param1:Tank) : void
+      public function removeTank(tank:Tank) : void
       {
-         delete this.bim[param1];
+         delete this.tankScales[tank];
       }
       
       public function update() : void
       {
-         var _loc1_:* = undefined;
-         var _loc2_:Tank = null;
-         if(this.enabled && Boolean(this.butefu.softTransparency) && this.butefu.softTransparencyStrength > 0.01)
+         var key:* = undefined;
+         var tank:Tank = null;
+         if(this.enabled && Boolean(this.camera.softTransparency) && this.camera.softTransparencyStrength > 0.01)
          {
-            for(_loc1_ in this.bim)
+            for(key in this.tankScales)
             {
-               _loc2_ = _loc1_ as Tank;
-               if(_loc2_ != null && _loc2_.getLeftTrack() != null && _loc2_.getRightTrack() != null)
+               tank = key as Tank;
+               if(tank != null && tank.getLeftTrack() != null && tank.getRightTrack() != null)
                {
-                  this.addTankDust(_loc2_,100,this.zymugypu);
+                  this.addTankDust(tank,100,this.dustProbability);
                }
             }
          }
       }
       
-      public function addTankDust(param1:Tank, param2:Number = 100, param3:Number = 0.2) : void
+      public function addTankDust(tank:Tank, minSpeed:Number = 100, probability:Number = 0.2) : void
       {
-         var _loc4_:Number = NaN;
-         var _loc7_:Matrix3 = null;
-         _loc4_ = Number(this.bim[param1]);
-         var _loc5_:Track = param1.getLeftTrack();
-         var _loc6_:Track = param1.getRightTrack();
-         if(_loc5_.zigebota * _loc6_.zigebota < 0)
+         var scale:Number = NaN;
+         var matrix:Matrix3 = null;
+         scale = Number(this.tankScales[tank]);
+         var leftTrack:Track = tank.getLeftTrack();
+         var rightTrack:Track = tank.getRightTrack();
+         if(leftTrack.animationSpeed * rightTrack.animationSpeed < 0)
          {
-            param2 = 5;
+            minSpeed = 5;
          }
-         _loc7_ = param1.body.jefe;
-         lesu.x *= -1;
-         _loc7_.transformVector(lesu,mazilynu);
-         this.addTrackDust(_loc5_,_loc4_,mazilynu,param2,param3);
-         lesu.x *= -1;
-         _loc7_.transformVector(lesu,mazilynu);
-         this.addTrackDust(_loc6_,_loc4_,mazilynu,param2,param3);
+         matrix = tank.body.orientationMatrix;
+         localDustVelocity.x *= -1;
+         matrix.transformVector(localDustVelocity,dustVelocity);
+         this.addTrackDust(leftTrack,scale,dustVelocity,minSpeed,probability);
+         localDustVelocity.x *= -1;
+         matrix.transformVector(localDustVelocity,dustVelocity);
+         this.addTrackDust(rightTrack,scale,dustVelocity,minSpeed,probability);
       }
       
-      private function addTrackDust(param1:Track, param2:Number, param3:Vector3, param4:Number, param5:Number) : void
+      private function addTrackDust(track:Track, scale:Number, velocity:Vector3, minSpeed:Number, probability:Number) : void
       {
-         var _loc7_:SuspensionRay = null;
-         var _loc8_:Number = NaN;
-         var _loc9_:Number = NaN;
-         var _loc6_:int = 0;
-         while(_loc6_ < param1.wavi)
+         var suspensionRay:SuspensionRay = null;
+         var speed:Number = NaN;
+         var strength:Number = NaN;
+         var i:int = 0;
+         while(i < track.numRays)
          {
-            _loc7_ = param1.mofovoti[_loc6_];
-            _loc8_ = Math.abs(_loc7_.wiciqy);
-            if(_loc8_ > param4 && Math.random() < param5)
+            suspensionRay = track.rays[i];
+            speed = Math.abs(suspensionRay.speed);
+            if(speed > minSpeed && Math.random() < probability)
             {
-               _loc9_ = _loc8_ > 500 ? 1 : 0.3 + _loc8_ / 712;
-               dizecoca.copy(_loc7_.getGlobalOrigin());
-               addJitter(dizecoca,50);
-               param3.z = 100;
-               addJitter(param3,20);
-               this.createDustParticle(param2,dizecoca,param3,_loc9_);
+               strength = speed > 500 ? 1 : 0.3 + speed / 712;
+               particlePosition.copy(suspensionRay.getGlobalOrigin());
+               addJitter(particlePosition,50);
+               velocity.z = 100;
+               addJitter(velocity,20);
+               this.createDustParticle(scale,particlePosition,velocity,strength);
             }
-            _loc6_++;
+            i++;
          }
       }
       
-      private function createDustParticle(param1:Number, param2:Vector3, param3:Vector3, param4:Number) : void
+      private function createDustParticle(scale:Number, position:Vector3, velocity:Vector3, strength:Number) : void
       {
-         var _loc6_:ScalingObject3DPositionProvider = null;
-         var _loc7_:LimitedDistanceAnimatedSpriteEffect = null;
-         var _loc8_:Number = NaN;
-         var _loc5_:Number = this.tywad * param4 * this.butefu.softTransparencyStrength;
-         if(this.enabled && Boolean(this.butefu.softTransparency) && _loc5_ > 0)
+         var positionProvider:ScalingObject3DPositionProvider = null;
+         var spriteEffect:LimitedDistanceAnimatedSpriteEffect = null;
+         var size:Number = NaN;
+         var alpha:Number = this.intensity * strength * this.camera.softTransparencyStrength;
+         if(this.enabled && Boolean(this.camera.softTransparency) && alpha > 0)
          {
-            _loc6_ = ScalingObject3DPositionProvider(GameData.murow.getObject(ScalingObject3DPositionProvider));
-            _loc6_.init(param2,param3,0.01);
-            _loc7_ = LimitedDistanceAnimatedSpriteEffect(GameData.murow.getObject(LimitedDistanceAnimatedSpriteEffect));
-            _loc8_ = this.jujygiw * param1 * (1 + pame * Math.random());
-            _loc7_.init(_loc8_,_loc8_,this.zeg,Math.random() * 2 * Math.PI,_loc6_,0.5,0.5,null,130,BlendMode.NORMAL,this.kyfyjyril,this.ziqel,_loc5_);
-            GameData.hobuna.addEffect(_loc7_);
+            positionProvider = ScalingObject3DPositionProvider(GameData.objectPool.getObject(ScalingObject3DPositionProvider));
+            positionProvider.init(position,velocity,0.01);
+            spriteEffect = LimitedDistanceAnimatedSpriteEffect(GameData.objectPool.getObject(LimitedDistanceAnimatedSpriteEffect));
+            size = this.particleSize * scale * (1 + pame * Math.random());
+            spriteEffect.init(size,size,this.animation,Math.random() * 2 * Math.PI,positionProvider,0.5,0.5,null,130,BlendMode.NORMAL,this.nearDistance,this.farDistance,alpha);
+            GameData.effects.addEffect(spriteEffect);
          }
       }
    }

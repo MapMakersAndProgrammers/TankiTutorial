@@ -12,14 +12,14 @@ package tutorial.tasks
       
       private var clip:MovieClip;
       
-      private var hon:Function;
+      private var callback:Function;
       
       private var finished:Boolean;
       
-      public function StartTutorialTask(param1:Function)
+      public function StartTutorialTask(callback:Function)
       {
          super();
-         this.hon = param1;
+         this.callback = callback;
       }
       
       override public function process() : Boolean
@@ -28,20 +28,20 @@ package tutorial.tasks
          {
             this.clip = new StartClip();
             this.clip.addEventListener(Event.COMPLETE,this.finish);
-            GameData.hulaf.showMovie(this.clip,"TL",true);
+            GameData.screenMovieClipManager.showMovie(this.clip,"TL",true);
          }
          return this.finished;
       }
       
-      private function finish(param1:Event) : void
+      private function finish(e:Event) : void
       {
          this.finished = true;
-         var _loc2_:Graphics = Sprite(GameData.danewazam).graphics;
-         _loc2_.clear();
-         GameData.hulaf.hideMovie(true);
-         if(this.hon != null)
+         var graphics:Graphics = Sprite(GameData.container).graphics;
+         graphics.clear();
+         GameData.screenMovieClipManager.hideMovie(true);
+         if(this.callback != null)
          {
-            this.hon();
+            this.callback();
          }
       }
    }

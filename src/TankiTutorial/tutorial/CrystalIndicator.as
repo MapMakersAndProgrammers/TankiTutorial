@@ -6,43 +6,43 @@ package tutorial
    public class CrystalIndicator extends Sprite
    {
       
-      private var kadat:Class;
+      private var crystalClass:Class;
       
-      private var myw:MovieClip;
+      private var clip:MovieClip;
       
-      public var soluwirac:int = 0;
+      public var value:int = 0;
       
       public function CrystalIndicator()
       {
          var toRadians:int;
-         var doqe:Function = null;
-         this.kadat = CrystalIndicator_crystalClass;
+         var stopClip:Function = null;
+         this.crystalClass = CrystalIndicator_crystalClass;
          super();
-         doqe = function():void
+         stopClip = function():void
          {
-            myw.stop();
+            clip.stop();
          };
-         this.myw = new this.kadat() as MovieClip;
-         addChild(this.myw);
+         this.clip = new this.crystalClass() as MovieClip;
+         addChild(this.clip);
          this.setValue(0);
          toRadians = 0;
          while(toRadians < 60)
          {
-            this.myw.addFrameScript(8 + 10 * toRadians,doqe);
+            this.clip.addFrameScript(8 + 10 * toRadians,stopClip);
             toRadians++;
          }
       }
       
-      public function setValue(param1:int) : void
+      public function setValue(value:int) : void
       {
-         this.soluwirac = param1;
-         this.myw.gotoAndPlay(param1 == 0 ? 0 : param1 * 10);
+         this.value = value;
+         this.clip.gotoAndPlay(value == 0 ? 0 : value * 10);
       }
       
       public function inc() : void
       {
-         ++this.soluwirac;
-         this.myw.gotoAndPlay(this.soluwirac == 0 ? 0 : this.soluwirac * 10);
+         ++this.value;
+         this.clip.gotoAndPlay(this.value == 0 ? 0 : this.value * 10);
       }
    }
 }

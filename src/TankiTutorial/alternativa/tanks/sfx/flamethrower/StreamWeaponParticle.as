@@ -11,19 +11,19 @@ package alternativa.tanks.sfx.flamethrower
    public class StreamWeaponParticle extends AnimatedSprite3D
    {
       
-      private static var resym:int = 20;
+      private static var poolSize:int = 20;
       
-      private static var hybuhy:Vector.<StreamWeaponParticle> = new Vector.<StreamWeaponParticle>(resym);
+      private static var pool:Vector.<StreamWeaponParticle> = new Vector.<StreamWeaponParticle>(poolSize);
       
-      private static var byqe:int = -1;
+      private static var poolIndex:int = -1;
       
-      public var zerus:Vector3 = new Vector3();
+      public var velocity:Vector3 = new Vector3();
       
-      public var hyn:Number = 0;
+      public var flightDistance:Number = 0;
       
-      public var tyfu:Number;
+      public var frameIndex:Number;
       
-      public var huved:int;
+      public var rotationDirection:int;
       
       public function StreamWeaponParticle()
       {
@@ -34,78 +34,78 @@ package alternativa.tanks.sfx.flamethrower
       
       public static function getParticle() : StreamWeaponParticle
       {
-         if(byqe == -1)
+         if(poolIndex == -1)
          {
             return new StreamWeaponParticle();
          }
-         var _loc1_:StreamWeaponParticle = hybuhy[byqe];
-         hybuhy[byqe--] = null;
-         return _loc1_;
+         var particle:StreamWeaponParticle = pool[poolIndex];
+         pool[poolIndex--] = null;
+         return particle;
       }
       
-      private static function interpolateColorTransform(param1:ColorTransformEntry, param2:ColorTransformEntry, param3:Number, param4:ColorTransform) : void
+      private static function interpolateColorTransform(entry1:ColorTransformEntry, entry2:ColorTransformEntry, t:Number, result:ColorTransform) : void
       {
-         param4.alphaMultiplier = param1.fidemujil + param3 * (param2.fidemujil - param1.fidemujil);
-         param4.alphaOffset = param1.jadig + param3 * (param2.jadig - param1.jadig);
-         param4.redMultiplier = param1.kukuv + param3 * (param2.kukuv - param1.kukuv);
-         param4.redOffset = param1.goror + param3 * (param2.goror - param1.goror);
-         param4.greenMultiplier = param1.bofo + param3 * (param2.bofo - param1.bofo);
-         param4.greenOffset = param1.ruh + param3 * (param2.ruh - param1.ruh);
-         param4.blueMultiplier = param1.zybyjaweb + param3 * (param2.zybyjaweb - param1.zybyjaweb);
-         param4.blueOffset = param1.totejigi + param3 * (param2.totejigi - param1.totejigi);
+         result.alphaMultiplier = entry1.alphaMultiplier + t * (entry2.alphaMultiplier - entry1.alphaMultiplier);
+         result.alphaOffset = entry1.alphaOffset + t * (entry2.alphaOffset - entry1.alphaOffset);
+         result.redMultiplier = entry1.redMultiplier + t * (entry2.redMultiplier - entry1.redMultiplier);
+         result.redOffset = entry1.redOffset + t * (entry2.redOffset - entry1.redOffset);
+         result.greenMultiplier = entry1.greenMultiplier + t * (entry2.greenMultiplier - entry1.greenMultiplier);
+         result.greenOffset = entry1.greenOffset + t * (entry2.greenOffset - entry1.greenOffset);
+         result.blueMultiplier = entry1.blueMultiplier + t * (entry2.blueMultiplier - entry1.blueMultiplier);
+         result.blueOffset = entry1.blueOffset + t * (entry2.blueOffset - entry1.blueOffset);
       }
       
-      private static function copyStructToColorTransform(param1:ColorTransformEntry, param2:ColorTransform) : void
+      private static function copyStructToColorTransform(entry:ColorTransformEntry, result:ColorTransform) : void
       {
-         param2.alphaMultiplier = param1.fidemujil;
-         param2.alphaOffset = param1.jadig;
-         param2.redMultiplier = param1.kukuv;
-         param2.redOffset = param1.goror;
-         param2.greenMultiplier = param1.bofo;
-         param2.greenOffset = param1.ruh;
-         param2.blueMultiplier = param1.zybyjaweb;
-         param2.blueOffset = param1.totejigi;
+         result.alphaMultiplier = entry.alphaMultiplier;
+         result.alphaOffset = entry.alphaOffset;
+         result.redMultiplier = entry.redMultiplier;
+         result.redOffset = entry.redOffset;
+         result.greenMultiplier = entry.greenMultiplier;
+         result.greenOffset = entry.greenOffset;
+         result.blueMultiplier = entry.blueMultiplier;
+         result.blueOffset = entry.blueOffset;
       }
       
       public function dispose() : void
       {
          removeFromParent();
          clear();
-         hybuhy[++byqe] = this;
+         pool[++poolIndex] = this;
       }
       
-      public function updateColorTransofrm(param1:Number, param2:Vector.<ColorTransformEntry>) : void
+      public function updateColorTransofrm(range:Number, colorTransforms:Vector.<ColorTransformEntry>) : void
       {
-         var _loc3_:Number = NaN;
-         var _loc4_:ColorTransformEntry = null;
-         var _loc5_:ColorTransformEntry = null;
-         var _loc6_:int = 0;
-         if(param2 != null)
+         var t:Number = NaN;
+         var entry1:ColorTransformEntry = null;
+         var entry2:ColorTransformEntry = null;
+         var i:int = 0;
+         if(colorTransforms != null)
          {
-            _loc3_ = this.hyn / param1;
-            if(_loc3_ <= 0)
+            t = this.flightDistance / range;
+            if(t <= 0)
             {
-               _loc4_ = param2[0];
-               copyStructToColorTransform(_loc4_,colorTransform);
+               entry1 = colorTransforms[0];
+               copyStructToColorTransform(entry1,colorTransform);
             }
-            else if(_loc3_ >= 1)
+            else if(t >= 1)
             {
-               _loc4_ = param2[param2.length - 1];
-               copyStructToColorTransform(_loc4_,colorTransform);
+               entry1 = colorTransforms[colorTransforms.length - 1];
+               copyStructToColorTransform(entry1,colorTransform);
             }
             else
             {
-               _loc6_ = 1;
-               _loc4_ = param2[0];
-               _loc5_ = param2[1];
-               while(_loc5_.jomuc < _loc3_)
+               i = 1;
+               entry1 = colorTransforms[0];
+               entry2 = colorTransforms[1];
+               while(entry2.time < t)
                {
-                  _loc6_++;
-                  _loc4_ = _loc5_;
-                  _loc5_ = param2[_loc6_];
+                  i++;
+                  entry1 = entry2;
+                  entry2 = colorTransforms[i];
                }
-               _loc3_ = (_loc3_ - _loc4_.jomuc) / (_loc5_.jomuc - _loc4_.jomuc);
-               interpolateColorTransform(_loc4_,_loc5_,_loc3_,colorTransform);
+               t = (t - entry1.time) / (entry2.time - entry1.time);
+               interpolateColorTransform(entry1,entry2,t,colorTransform);
             }
             alpha = colorTransform.alphaMultiplier;
          }

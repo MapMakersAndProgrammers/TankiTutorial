@@ -3,65 +3,65 @@ package alternativa.tanks.animations
    public class KeyFrameAnimation
    {
       
-      private var tap:AnimationTrack;
+      private var track:AnimationTrack;
       
-      private var lamutameq:int;
+      private var frameIndex:int;
       
-      private var lecopojen:Number;
+      private var time:Number;
       
-      private var lyjewaky:AnimatedValue;
+      private var animatedValue:AnimatedValue;
       
-      public function KeyFrameAnimation(param1:AnimationTrack, param2:AnimatedValue)
+      public function KeyFrameAnimation(track:AnimationTrack, animatedValue:AnimatedValue)
       {
          super();
-         this.tap = param1;
-         this.lyjewaky = param2;
+         this.track = track;
+         this.animatedValue = animatedValue;
       }
       
       public function start() : void
       {
-         this.lecopojen = this.tap.getMinTime();
-         this.lamutameq = 0;
+         this.time = this.track.getMinTime();
+         this.frameIndex = 0;
       }
       
       public function isComplete() : Boolean
       {
-         return this.lamutameq == this.tap.getNumFrames() - 1;
+         return this.frameIndex == this.track.getNumFrames() - 1;
       }
       
-      public function update(param1:Number) : void
+      public function update(delta:Number) : void
       {
          if(!this.isComplete())
          {
-            this.lecopojen += param1;
-            while(this.lecopojen > this.tap.getFrameTime(this.lamutameq + 1))
+            this.time += delta;
+            while(this.time > this.track.getFrameTime(this.frameIndex + 1))
             {
-               ++this.lamutameq;
+               ++this.frameIndex;
                if(this.isComplete())
                {
-                  this.lecopojen = this.tap.getMaxTime();
+                  this.time = this.track.getMaxTime();
                   break;
                }
             }
-            this.lyjewaky.setAnimatedValue(this.getValue());
+            this.animatedValue.setAnimatedValue(this.getValue());
          }
       }
       
       private function getValue() : Number
       {
-         var _loc1_:Number = NaN;
-         var _loc2_:Number = NaN;
-         var _loc3_:Number = NaN;
-         var _loc4_:Number = NaN;
+         var startTime:Number = NaN;
+         var endTime:Number = NaN;
+         var startValue:Number = NaN;
+         var endValue:Number = NaN;
          if(this.isComplete())
          {
-            return this.tap.getFrameTime(this.lamutameq);
+            return this.track.getFrameTime(this.frameIndex);
          }
-         _loc1_ = this.tap.getFrameTime(this.lamutameq);
-         _loc2_ = this.tap.getFrameTime(this.lamutameq + 1);
-         _loc3_ = this.tap.getFrameValue(this.lamutameq);
-         _loc4_ = this.tap.getFrameValue(this.lamutameq + 1);
-         return _loc3_ + (_loc4_ - _loc3_) * (this.lecopojen - _loc1_) / (_loc2_ - _loc1_);
+         startTime = this.track.getFrameTime(this.frameIndex);
+         endTime = this.track.getFrameTime(this.frameIndex + 1);
+         startValue = this.track.getFrameValue(this.frameIndex);
+         endValue = this.track.getFrameValue(this.frameIndex + 1);
+         return startValue + (endValue - startValue) * (this.time - startTime) / (endTime - startTime);
       }
    }
 }

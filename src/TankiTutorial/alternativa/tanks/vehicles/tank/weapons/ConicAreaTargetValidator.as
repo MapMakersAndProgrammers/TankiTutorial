@@ -5,7 +5,7 @@ package alternativa.tanks.vehicles.tank.weapons
    public interface ConicAreaTargetValidator
    {
       
-      function isValidTarget(param1:Body) : Boolean;
+      function isValidTarget(body:Body) : Boolean;
    }
 }
 

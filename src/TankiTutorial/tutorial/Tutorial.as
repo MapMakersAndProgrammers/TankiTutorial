@@ -9,25 +9,25 @@ package tutorial
    public class Tutorial
    {
       
-      public var gepocivaj:String;
+      public var name:String;
       
       protected var stage:Stage = GameData.stage;
       
-      protected var namab:TaskGroup = GameData.namab;
+      protected var taskGroup:TaskGroup = GameData.taskGroup;
       
-      protected var jifom:Tank = GameData.jifom;
+      protected var playerTank:Tank = GameData.playerTank;
       
-      protected var guzinizub:KDContainer = GameData.guzinizub;
+      protected var kdContainer:KDContainer = GameData.kdContainer;
       
-      protected var gov:TanksPhysicsScene = GameData.gov;
+      protected var physicsScene:TanksPhysicsScene = GameData.physicsScene;
       
-      protected var vegetis:Boolean = false;
+      protected var _finished:Boolean = false;
       
-      protected var tuce:GameScene = GameData.tuce;
+      protected var scene:GameScene = GameData.scene;
       
-      protected var tezivasaf:Boolean;
+      protected var _stepFinished:Boolean;
       
-      public var feseju:Boolean = false;
+      public var loaded:Boolean = false;
       
       public function Tutorial()
       {
@@ -36,7 +36,7 @@ package tutorial
       
       public function get finished() : Boolean
       {
-         return this.vegetis;
+         return this._finished;
       }
       
       public function moveToNextStep() : void
@@ -54,14 +54,14 @@ package tutorial
       
       public function start() : void
       {
-         this.tuce.buildKDTree(this.guzinizub);
-         this.gov.build();
+         this.scene.buildKDTree(this.kdContainer);
+         this.physicsScene.build();
          GameData.initMarking();
       }
       
       public function get stepFinished() : Boolean
       {
-         return this.tezivasaf;
+         return this._stepFinished;
       }
    }
 }

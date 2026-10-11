@@ -9,44 +9,44 @@ package alternativa.gfx.core
    public class RenderTargetTextureResource extends TextureResource
    {
       
-      private var cof:int;
+      private var _width:int;
       
-      private var gugap:int;
+      private var _height:int;
       
-      private var rubajam:Boolean = true;
+      private var _available:Boolean = true;
       
       public function RenderTargetTextureResource(width:int, height:int)
       {
          super();
-         this.cof = width;
-         this.gugap = height;
+         this._width = width;
+         this._height = height;
       }
       
       public function get width() : int
       {
-         return this.cof;
+         return this._width;
       }
       
       public function get height() : int
       {
-         return this.gugap;
+         return this._height;
       }
       
       override public function dispose() : void
       {
          super.dispose();
-         this.rubajam = false;
+         this._available = false;
       }
       
       override public function get available() : Boolean
       {
-         return this.rubajam;
+         return this._available;
       }
       
       override alternativagfx function create(context:Context3D, stage3DIndex:int) : void
       {
          super.create(context,stage3DIndex);
-         tylu[stage3DIndex] = context.createTexture(this.cof,this.gugap,Context3DTextureFormat.BGRA,true);
+         textures[stage3DIndex] = context.createTexture(this._width,this._height,Context3DTextureFormat.BGRA,true);
       }
    }
 }

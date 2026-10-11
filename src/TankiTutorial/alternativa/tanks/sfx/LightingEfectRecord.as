@@ -3,24 +3,24 @@ package alternativa.tanks.sfx
    public class LightingEfectRecord
    {
       
-      public var muwydyzo:Number;
+      public var attenuationBegin:Number;
       
-      public var sej:Number;
+      public var attenuationEnd:Number;
       
       public var color:uint;
       
-      public var tywad:Number;
+      public var intensity:Number;
       
-      public var lecopojen:int;
+      public var time:int;
       
-      public function LightingEfectRecord(param1:Number = 0, param2:Number = 0, param3:uint = 0, param4:Number = 0, param5:int = 0)
+      public function LightingEfectRecord(attenuationBegin:Number = 0, attenuationEnd:Number = 0, color:uint = 0, intensity:Number = 0, time:int = 0)
       {
          super();
-         this.muwydyzo = param1;
-         this.sej = param2;
-         this.color = param3;
-         this.tywad = param4;
-         this.lecopojen = param5;
+         this.attenuationBegin = attenuationBegin;
+         this.attenuationEnd = attenuationEnd;
+         this.color = color;
+         this.intensity = intensity;
+         this.time = time;
       }
    }
 }

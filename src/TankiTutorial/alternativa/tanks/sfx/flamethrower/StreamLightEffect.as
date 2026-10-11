@@ -16,92 +16,92 @@ package alternativa.tanks.sfx.flamethrower
    public class StreamLightEffect extends PooledObject implements GraphicEffect
    {
       
-      private static const puludaqy:int = 250;
+      private static const STOP_DURATION:int = 250;
       
-      protected var qarehop:Light3D;
+      protected var light:Light3D;
       
-      protected var zituciky:LightAnimation;
+      protected var startAnimation:LightAnimation;
       
-      protected var ged:LightAnimation;
+      protected var loopAnimation:LightAnimation;
       
-      protected var racefom:int;
+      protected var startTime:int;
       
-      protected var bibe:int;
+      protected var loopTime:int;
       
       protected var lilamasy:int;
       
-      protected var wyzunime:int;
+      protected var time:int;
       
-      protected var dozalij:Boolean;
+      protected var starting:Boolean;
       
-      protected var toz:Object3DPositionProvider;
+      protected var positionProvider:Object3DPositionProvider;
       
-      protected var kat:Boolean;
+      protected var alive:Boolean;
       
       protected var tize:int;
       
       protected var scale:Number;
       
-      protected var rawo:Boolean;
+      protected var stopping:Boolean;
       
-      protected var jam:int;
+      protected var stopTime:int;
       
-      public function StreamLightEffect(param1:Pool, param2:Light3D)
+      public function StreamLightEffect(pool:Pool, light:Light3D)
       {
-         super(param1);
-         this.qarehop = param2;
+         super(pool);
+         this.light = light;
       }
       
-      public function addedToScene(param1:Object3DContainer) : void
+      public function addedToScene(container:Object3DContainer) : void
       {
-         param1.addChild(this.qarehop);
+         container.addChild(this.light);
       }
       
       private function startLoop() : void
       {
-         this.lilamasy = this.bibe + (Math.random() * this.tize - this.tize / 2);
+         this.lilamasy = this.loopTime + (Math.random() * this.tize - this.tize / 2);
       }
       
-      public function play(param1:int, param2:GameCamera) : Boolean
+      public function play(deltaTime:int, camera:GameCamera) : Boolean
       {
          var _loc3_:Number = NaN;
-         if(!this.kat)
+         if(!this.alive)
          {
             return false;
          }
-         if(this.dozalij)
+         if(this.starting)
          {
-            this.wyzunime += param1;
-            this.zituciky.updateByTime(this.qarehop,this.wyzunime,this.racefom);
-            if(this.wyzunime >= this.racefom)
+            this.time += deltaTime;
+            this.startAnimation.updateByTime(this.light,this.time,this.startTime);
+            if(this.time >= this.startTime)
             {
-               this.dozalij = false;
-               this.wyzunime = 0;
+               this.starting = false;
+               this.time = 0;
                this.startLoop();
             }
          }
          else
          {
-            this.wyzunime += param1;
-            if(this.wyzunime > this.lilamasy)
+            this.time += deltaTime;
+            if(this.time > this.lilamasy)
             {
-               this.wyzunime %= this.lilamasy;
+               this.time %= this.lilamasy;
                this.startLoop();
             }
-            this.ged.updateByTime(this.qarehop,this.wyzunime,this.bibe);
+            this.loopAnimation.updateByTime(this.light,this.time,this.loopTime);
          }
-         this.toz.updateObjectPosition(this.qarehop,param2,param1);
-         if(this.rawo)
+         this.positionProvider.updateObjectPosition(this.light,camera,deltaTime);
+         if(this.stopping)
          {
-            this.jam += param1;
-            if(this.jam <= puludaqy)
+            this.stopTime += deltaTime;
+            if(this.stopTime <= STOP_DURATION)
             {
-               _loc3_ = 1 - this.jam / puludaqy;
-               this.qarehop.intensity *= _loc3_;
+               _loc3_ = 1 - this.stopTime / STOP_DURATION;
+               this.light.intensity *= _loc3_;
             }
             else
             {
-               this.qarehop.intensity = 0;
+               this.light.intensity = 0;
                this.kill();
             }
          }
@@ -110,21 +110,21 @@ package alternativa.tanks.sfx.flamethrower
       
       public function destroy() : void
       {
-         this.qarehop.removeFromParent();
-         this.zituciky = null;
-         this.ged = null;
-         this.toz = null;
+         this.light.removeFromParent();
+         this.startAnimation = null;
+         this.loopAnimation = null;
+         this.positionProvider = null;
       }
       
       public function kill() : void
       {
-         this.kat = false;
+         this.alive = false;
       }
       
       public function stop() : void
       {
-         this.rawo = true;
-         this.jam = 0;
+         this.stopping = true;
+         this.stopTime = 0;
       }
    }
 }

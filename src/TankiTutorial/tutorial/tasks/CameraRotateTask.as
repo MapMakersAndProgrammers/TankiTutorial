@@ -8,52 +8,52 @@ package tutorial.tasks
       
       private static const mipid:Number = 0.1;
       
-      private var dodycoli:Number;
+      private var angle:Number;
       
-      private var cipa:Number;
+      private var cameraT:Number;
       
       public function CameraRotateTask()
       {
          super();
-         this.dodycoli = 0;
-         this.cipa = (GameData.butefu.controller as FollowCameraController).getCameraT();
+         this.angle = 0;
+         this.cameraT = (GameData.camera.controller as FollowCameraController).getCameraT();
       }
       
       override public function process() : Boolean
       {
-         var _loc2_:TimeData = null;
-         var _loc3_:Number = NaN;
-         var _loc1_:FollowCameraController = GameData.butefu.controller as FollowCameraController;
-         if(this.dodycoli == 0)
+         var timeData:TimeData = null;
+         var t:Number = NaN;
+         var controller:FollowCameraController = GameData.camera.controller as FollowCameraController;
+         if(this.angle == 0)
          {
-            GameData.jifom.kakow.hide();
+            GameData.playerTank.userTitle.hide();
          }
-         if(_loc1_ != null)
+         if(controller != null)
          {
-            GameData.jifom.lockMovement();
-            GameData.jifom.turretController.lock(1);
-            _loc2_ = GameData.lecopojen;
-            this.dodycoli += _loc2_.ziqod * 1.5;
-            _loc1_.qusejov = this.dodycoli;
-            if(this.dodycoli > Math.PI)
+            GameData.playerTank.lockMovement();
+            GameData.playerTank.turretController.lock(1);
+            timeData = GameData.time;
+            this.angle += timeData.deltaTime * 1.5;
+            controller.angle = this.angle;
+            if(this.angle > Math.PI)
             {
-               _loc3_ = this.dodycoli - Math.PI;
+               t = this.angle - Math.PI;
             }
             else
             {
-               _loc3_ = Math.PI - this.dodycoli;
+               t = Math.PI - this.angle;
             }
-            _loc3_ /= Math.PI;
-            _loc1_.setCameraT(this.cipa * (_loc3_ * (1 - mipid) + mipid));
-            _loc1_.bifejizi = -150 * (1 - _loc3_);
-            if(this.dodycoli > Math.PI * 2)
+            t /= Math.PI;
+            controller.setCameraT(this.cameraT * (t * (1 - mipid) + mipid));
+            controller.heightOffset = -150 * (1 - t);
+            if(this.angle > Math.PI * 2)
             {
-               _loc1_.qusejov = 0;
-               _loc1_.setCameraT(this.cipa);
-               GameData.jifom.unlockMovement();
-               _loc1_.bifejizi = 0;
-               GameData.jifom.turretController.unlock(1);
-               GameData.jifom.kakow.show();
+               controller.angle = 0;
+               controller.setCameraT(this.cameraT);
+               GameData.playerTank.unlockMovement();
+               controller.heightOffset = 0;
+               GameData.playerTank.turretController.unlock(1);
+               GameData.playerTank.userTitle.show();
                return true;
             }
          }

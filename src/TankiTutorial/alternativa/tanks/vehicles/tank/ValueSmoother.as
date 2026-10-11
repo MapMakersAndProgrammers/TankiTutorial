@@ -3,11 +3,11 @@ package alternativa.tanks.vehicles.tank
    public interface ValueSmoother
    {
       
-      function reset(param1:Number) : void;
+      function reset(value:Number) : void;
       
-      function update(param1:Number) : Number;
+      function update(dt:Number) : Number;
       
-      function setTargetValue(param1:Number) : void;
+      function setTargetValue(value:Number) : void;
       
       function getTargetValue() : Number;
    }

@@ -11,140 +11,140 @@ package alternativa.tanks.sfx
    public class MobileSound3DEffect extends PooledObject implements ISound3DEffect
    {
       
-      private static const kudyvug:Vector3 = new Vector3();
+      private static const position:Vector3 = new Vector3();
       
-      private var zib:Sound3D;
+      private var sound:Sound3D;
       
-      private var visadawa:int;
+      private var delay:int;
       
-      private var zyqa:int;
+      private var loops:int;
       
-      private var tyjom:Object3D;
+      private var object:Object3D;
       
       private var channel:SoundChannel;
       
-      private var dalipaz:Boolean;
+      private var _enabled:Boolean;
       
-      private var letere:Boolean;
+      private var started:Boolean;
       
-      private var fat:Boolean;
+      private var killed:Boolean;
       
-      private var lecopojen:int;
+      private var time:int;
       
-      private var koc:Number;
+      private var volume:Number;
       
-      private var qihaq:Number;
+      private var fadeSpeed:Number;
       
-      public function MobileSound3DEffect(param1:Pool)
+      public function MobileSound3DEffect(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function init(param1:Sound3D, param2:Object3D, param3:int, param4:int) : void
+      public function init(sound:Sound3D, object:Object3D, delay:int, loops:int) : void
       {
-         this.zib = param1;
-         this.tyjom = param2;
-         this.visadawa = param3;
-         this.zyqa = param4;
-         this.fat = false;
-         this.letere = false;
-         this.dalipaz = false;
-         this.lecopojen = 0;
-         if(param1 != null)
+         this.sound = sound;
+         this.object = object;
+         this.delay = delay;
+         this.loops = loops;
+         this.killed = false;
+         this.started = false;
+         this._enabled = false;
+         this.time = 0;
+         if(sound != null)
          {
-            this.koc = param1.volume;
+            this.volume = sound.volume;
          }
-         this.qihaq = 0;
+         this.fadeSpeed = 0;
       }
       
-      public function play(param1:int, param2:GameCamera) : void
+      public function play(deltaTime:int, camera:GameCamera) : void
       {
-         if(!this.letere)
+         if(!this.started)
          {
-            if(this.lecopojen < this.visadawa)
+            if(this.time < this.delay)
             {
-               this.lecopojen += param1;
+               this.time += deltaTime;
                return;
             }
-            this.letere = true;
-            this.channel = this.zib.play(0,this.zyqa);
+            this.started = true;
+            this.channel = this.sound.play(0,this.loops);
             if(this.channel == null)
             {
-               this.dalipaz = false;
+               this._enabled = false;
                return;
             }
             this.channel.addEventListener(Event.SOUND_COMPLETE,this.onSoundComplete);
          }
-         kudyvug.x = this.tyjom.x;
-         kudyvug.y = this.tyjom.y;
-         kudyvug.z = this.tyjom.z;
-         if(this.qihaq > 0)
+         position.x = this.object.x;
+         position.y = this.object.y;
+         position.z = this.object.z;
+         if(this.fadeSpeed > 0)
          {
-            this.koc -= this.qihaq * param1;
-            if(this.koc <= 0)
+            this.volume -= this.fadeSpeed * deltaTime;
+            if(this.volume <= 0)
             {
-               this.qihaq = 0;
-               this.koc = 0;
+               this.fadeSpeed = 0;
+               this.volume = 0;
             }
-            this.zib.volume = this.koc;
+            this.sound.volume = this.volume;
          }
-         this.zib.checkVolume(param2.position,kudyvug,param2.memyjenut);
+         this.sound.checkVolume(camera.position,position,camera.xAxis);
       }
       
       public function destroy() : void
       {
-         Sound3D.destroy(this.zib);
+         Sound3D.destroy(this.sound);
          if(this.channel != null)
          {
             this.onSoundComplete(null);
          }
-         this.tyjom = null;
-         this.zib = null;
+         this.object = null;
+         this.sound = null;
          recycle();
       }
       
       public function kill() : void
       {
-         this.fat = true;
+         this.killed = true;
       }
       
-      public function set enabled(param1:Boolean) : void
+      public function set enabled(value:Boolean) : void
       {
-         if(this.dalipaz == param1)
+         if(this._enabled == value)
          {
             return;
          }
-         if(!(this.dalipaz = param1))
+         if(!(this._enabled = value))
          {
             this.onSoundComplete(null);
          }
       }
       
-      public function readPosition(param1:Vector3) : void
+      public function readPosition(result:Vector3) : void
       {
-         param1.x = this.tyjom.x;
-         param1.y = this.tyjom.y;
-         param1.z = this.tyjom.z;
+         result.x = this.object.x;
+         result.y = this.object.y;
+         result.z = this.object.z;
       }
       
       public function get numSounds() : int
       {
-         return this.dalipaz && !this.fat ? 1 : 0;
+         return this._enabled && !this.killed ? 1 : 0;
       }
       
-      public function fade(param1:int) : void
+      public function fade(fadeTime:int) : void
       {
-         this.qihaq = this.koc / param1;
+         this.fadeSpeed = this.volume / fadeTime;
       }
       
-      private function onSoundComplete(param1:Event) : void
+      private function onSoundComplete(e:Event) : void
       {
          if(this.channel != null)
          {
             this.channel.removeEventListener(Event.SOUND_COMPLETE,this.onSoundComplete);
             this.channel = null;
          }
-         this.dalipaz = false;
+         this._enabled = false;
       }
    }
 }

@@ -10,9 +10,9 @@ package tutorial.commons
          super();
       }
       
-      public static function setListener(param1:Function) : *
+      public static function setListener(listener:Function) : *
       {
-         UnpackingProgressUpdating.updaterListener = param1;
+         UnpackingProgressUpdating.updaterListener = listener;
       }
       
       public static function update() : *

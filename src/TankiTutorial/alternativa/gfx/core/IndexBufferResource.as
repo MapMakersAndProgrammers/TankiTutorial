@@ -9,22 +9,22 @@ package alternativa.gfx.core
    public class IndexBufferResource extends Resource
    {
       
-      alternativagfx var putiwyfa:Vector.<IndexBuffer3D> = new Vector.<IndexBuffer3D>(4);
+      alternativagfx var buffers:Vector.<IndexBuffer3D> = new Vector.<IndexBuffer3D>(4);
       
-      private var voq:Vector.<uint>;
+      private var _indices:Vector.<uint>;
       
-      private var litewo:int;
+      private var numIndices:int;
       
       public function IndexBufferResource(indices:Vector.<uint>)
       {
          super();
-         this.voq = indices;
-         this.litewo = this.voq.length;
+         this._indices = indices;
+         this.numIndices = this._indices.length;
       }
       
       public function get indices() : Vector.<uint>
       {
-         return this.voq;
+         return this._indices;
       }
       
       override public function dispose() : void
@@ -32,13 +32,13 @@ package alternativa.gfx.core
          super.dispose();
          for(var i:int = 0; i < 4; i++)
          {
-            if(this.putiwyfa[i] != null)
+            if(this.buffers[i] != null)
             {
-               this.putiwyfa[i].dispose();
-               this.putiwyfa[i] = null;
+               this.buffers[i].dispose();
+               this.buffers[i] = null;
             }
          }
-         this.voq = null;
+         this._indices = null;
       }
       
       override public function reset() : void
@@ -46,29 +46,29 @@ package alternativa.gfx.core
          super.reset();
          for(var i:int = 0; i < 4; i++)
          {
-            if(this.putiwyfa[i] != null)
+            if(this.buffers[i] != null)
             {
-               this.putiwyfa[i].dispose();
-               this.putiwyfa[i] = null;
+               this.buffers[i].dispose();
+               this.buffers[i] = null;
             }
          }
       }
       
       override public function get available() : Boolean
       {
-         return this.voq != null;
+         return this._indices != null;
       }
       
       override alternativagfx function create(context:Context3D, stage3DIndex:int) : void
       {
          super.create(context,stage3DIndex);
-         this.putiwyfa[stage3DIndex] = context.createIndexBuffer(this.litewo);
+         this.buffers[stage3DIndex] = context.createIndexBuffer(this.numIndices);
       }
       
       override alternativagfx function upload(stage3DIndex:int) : void
       {
          super.upload(stage3DIndex);
-         IndexBuffer3D(this.putiwyfa[stage3DIndex]).uploadFromVector(this.voq,0,this.litewo);
+         IndexBuffer3D(this.buffers[stage3DIndex]).uploadFromVector(this._indices,0,this.numIndices);
       }
    }
 }

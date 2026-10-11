@@ -8,64 +8,64 @@ package alternativa.tanks.bonuses
    public class ParachuteDetachAnimation extends PooledObject implements Renderer
    {
       
-      private static const hacevul:Number = 0.001;
+      private static const ALPHA_SPEED:Number = 0.001;
       
-      private static const sevefe:Number = 1 / 4000;
+      private static const SCALE_XY_SPEED:Number = 1 / 4000;
       
-      private static const wojopyny:Number = 1 / 3000;
+      private static const SCALE_Z_SPEED:Number = 1 / 3000;
       
-      private var hyfecypi:BattleScene3D;
+      private var battleScene:BattleScene3D;
       
-      private var kyvedu:Parachute;
+      private var parachute:Parachute;
       
-      private var til:Cords;
+      private var cords:Cords;
       
-      private var pobano:Number;
+      private var fallSpeed:Number;
       
-      public function ParachuteDetachAnimation(param1:Pool)
+      public function ParachuteDetachAnimation(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function start(param1:BattleScene3D, param2:Parachute, param3:Cords, param4:Number) : void
+      public function start(battleScene:BattleScene3D, parachute:Parachute, cords:Cords, param4:Number) : void
       {
-         this.hyfecypi = param1;
-         this.kyvedu = param2;
-         this.til = param3;
-         this.pobano = param4 / 1000;
-         param1.addRenderer(this,0);
+         this.battleScene = battleScene;
+         this.parachute = parachute;
+         this.cords = cords;
+         this.fallSpeed = param4 / 1000;
+         battleScene.addRenderer(this,0);
       }
       
-      public function render(param1:int, param2:int) : void
+      public function render(time:int, deltaTime:int) : void
       {
-         var _loc3_:Number = NaN;
-         this.kyvedu.setAlpha(this.kyvedu.getAlpha() - hacevul * param2);
-         if(this.kyvedu.getAlpha() <= 0)
+         var scaleDelta:Number = NaN;
+         this.parachute.setAlpha(this.parachute.getAlpha() - ALPHA_SPEED * deltaTime);
+         if(this.parachute.getAlpha() <= 0)
          {
             this.destroy();
          }
          else
          {
-            this.til.setAlpha(this.kyvedu.getAlpha());
-            this.kyvedu.z -= this.pobano * param2;
-            _loc3_ = param2 * sevefe;
-            this.kyvedu.scaleX += _loc3_;
-            this.kyvedu.scaleY += _loc3_;
-            this.kyvedu.scaleZ -= param2 * wojopyny;
-            this.til.updateVertices();
+            this.cords.setAlpha(this.parachute.getAlpha());
+            this.parachute.z -= this.fallSpeed * deltaTime;
+            scaleDelta = deltaTime * SCALE_XY_SPEED;
+            this.parachute.scaleX += scaleDelta;
+            this.parachute.scaleY += scaleDelta;
+            this.parachute.scaleZ -= deltaTime * SCALE_Z_SPEED;
+            this.cords.updateVertices();
          }
       }
       
       private function destroy() : void
       {
-         this.hyfecypi.removeRenderer(this,0);
-         this.hyfecypi.removeObject(this.kyvedu);
-         this.hyfecypi.removeObject(this.til);
-         this.kyvedu.recycle();
-         this.kyvedu = null;
-         this.til.recycle();
-         this.til = null;
-         this.hyfecypi = null;
+         this.battleScene.removeRenderer(this,0);
+         this.battleScene.removeObject(this.parachute);
+         this.battleScene.removeObject(this.cords);
+         this.parachute.recycle();
+         this.parachute = null;
+         this.cords.recycle();
+         this.cords = null;
+         this.battleScene = null;
          recycle();
       }
    }

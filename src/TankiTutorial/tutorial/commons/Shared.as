@@ -48,8 +48,8 @@ package tutorial.commons
       
       public static function getMajorNavigatorVersion() : int
       {
-         var _loc1_:Array = navigatorVersion.split(".");
-         return int(_loc1_[0]);
+         var parts:Array = navigatorVersion.split(".");
+         return int(parts[0]);
       }
    }
 }

@@ -5,11 +5,11 @@ package alternativa.physics.collision.colliders
    public class Vertex
    {
       
-      public const vam:Vector3 = new Vector3();
+      public const localPosition:Vector3 = new Vector3();
       
-      public const bap:Vector3 = new Vector3();
+      public const worldPosition:Vector3 = new Vector3();
       
-      public const cujeqo:Vector3 = new Vector3();
+      public const referencePosition:Vector3 = new Vector3();
       
       public function Vertex()
       {

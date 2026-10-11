@@ -7,24 +7,24 @@ package alternativa.tanks.sfx
    public class AnimatedPlane extends Mesh
    {
       
-      private var gar:Vertex;
+      private var a:Vertex;
       
-      private var nityt:Vertex;
+      private var b:Vertex;
       
-      private var fysu:Vertex;
+      private var c:Vertex;
       
-      private var rok:Vertex;
+      private var d:Vertex;
       
-      private var gepoky:Vector.<UVFrame>;
+      private var frames:Vector.<UVFrame>;
       
-      private var nomupiz:int;
+      private var numFrames:int;
       
-      private var lelypa:Number = 0;
+      private var framesPerMs:Number = 0;
       
-      public function AnimatedPlane(param1:Number)
+      public function AnimatedPlane(size:Number)
       {
          super();
-         this.createFaces(param1);
+         this.createFaces(size);
          sorting = Sorting.DYNAMIC_BSP;
          calculateBounds();
          calculateFacesNormals();
@@ -35,64 +35,64 @@ package alternativa.tanks.sfx
          depthMapAlphaThreshold = 2;
       }
       
-      private function createFaces(param1:Number) : void
+      private function createFaces(size:Number) : void
       {
-         var _loc2_:Number = param1 / 2;
-         var _loc3_:Vector.<Number> = Vector.<Number>([-_loc2_,_loc2_,0,-_loc2_,-_loc2_,0,_loc2_,-_loc2_,0,_loc2_,_loc2_,0]);
-         var _loc4_:Vector.<Number> = Vector.<Number>([0,0,0,1,1,1,1,0]);
-         var _loc5_:Vector.<int> = Vector.<int>([4,0,1,2,3,4,0,3,2,1]);
-         addVerticesAndFaces(_loc3_,_loc4_,_loc5_,true);
+         var halfSize:Number = size / 2;
+         var _loc3_:Vector.<Number> = Vector.<Number>([-halfSize,halfSize,0,-halfSize,-halfSize,0,halfSize,-halfSize,0,halfSize,halfSize,0]);
+         var uvs:Vector.<Number> = Vector.<Number>([0,0,0,1,1,1,1,0]);
+         var indices:Vector.<int> = Vector.<int>([4,0,1,2,3,4,0,3,2,1]);
+         addVerticesAndFaces(_loc3_,uvs,indices,true);
       }
       
       private function writeVertices() : void
       {
          var _loc1_:Vector.<Vertex> = this.vertices;
-         this.gar = _loc1_[0];
-         this.nityt = _loc1_[1];
-         this.fysu = _loc1_[2];
-         this.rok = _loc1_[3];
+         this.a = _loc1_[0];
+         this.b = _loc1_[1];
+         this.c = _loc1_[2];
+         this.d = _loc1_[3];
       }
       
-      public function init(param1:TextureAnimation, param2:Number) : void
+      public function init(animation:TextureAnimation, framesPerMs:Number) : void
       {
-         setMaterialToAllFaces(param1.material);
-         this.gepoky = param1.qyvoladeg;
-         this.nomupiz = this.gepoky.length;
-         this.lelypa = param2;
+         setMaterialToAllFaces(animation.material);
+         this.frames = animation.frames;
+         this.numFrames = this.frames.length;
+         this.framesPerMs = framesPerMs;
       }
       
-      public function setTime(param1:Number) : void
+      public function setTime(time:Number) : void
       {
-         var _loc2_:int = param1 * this.lelypa;
-         if(_loc2_ >= this.nomupiz)
+         var frameIndex:int = time * this.framesPerMs;
+         if(frameIndex >= this.numFrames)
          {
-            _loc2_ = this.nomupiz - 1;
+            frameIndex = this.numFrames - 1;
          }
-         this.setFrame(this.gepoky[_loc2_]);
+         this.setFrame(this.frames[frameIndex]);
       }
       
       public function clear() : void
       {
          setMaterialToAllFaces(null);
-         this.gepoky = null;
-         this.nomupiz = 0;
+         this.frames = null;
+         this.numFrames = 0;
       }
       
       public function getOneLoopTime() : Number
       {
-         return this.nomupiz / this.lelypa;
+         return this.numFrames / this.framesPerMs;
       }
       
-      private function setFrame(param1:UVFrame) : void
+      private function setFrame(frame:UVFrame) : void
       {
-         this.gar.u = param1.picylyno;
-         this.gar.v = param1.lesenac;
-         this.nityt.u = param1.picylyno;
-         this.nityt.v = param1.salemat;
-         this.fysu.u = param1.pusunawy;
-         this.fysu.v = param1.salemat;
-         this.rok.u = param1.pusunawy;
-         this.rok.v = param1.lesenac;
+         this.a.u = frame.topLeftU;
+         this.a.v = frame.topLeftV;
+         this.b.u = frame.topLeftU;
+         this.b.v = frame.bottomRightV;
+         this.c.u = frame.bottomRightU;
+         this.c.v = frame.bottomRightV;
+         this.d.u = frame.bottomRightU;
+         this.d.v = frame.topLeftV;
       }
    }
 }

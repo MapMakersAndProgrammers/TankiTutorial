@@ -8,37 +8,37 @@ package alternativa.tanks.bonuses
    public class SpawnAnimation extends PooledObject implements Renderer
    {
       
-      private static const hacevul:Number = 0.001;
+      private static const ALPHA_SPEED:Number = 0.001;
       
-      private var nasybugo:BattleBonus;
+      private var bonus:BattleBonus;
       
-      private var hyfecypi:BattleScene3D;
+      private var battleScene:BattleScene3D;
       
-      private var wedebuga:Number = 0;
+      private var alpha:Number = 0;
       
-      public function SpawnAnimation(param1:Pool)
+      public function SpawnAnimation(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function start(param1:BattleBonus, param2:BattleScene3D) : void
+      public function start(bonus:BattleBonus, battleScene:BattleScene3D) : void
       {
-         this.nasybugo = param1;
-         this.hyfecypi = param2;
-         this.wedebuga = 0;
-         param1.gave.add(this.destroy);
-         param2.addRenderer(this,0);
+         this.bonus = bonus;
+         this.battleScene = battleScene;
+         this.alpha = 0;
+         bonus.gave.add(this.destroy);
+         battleScene.addRenderer(this,0);
       }
       
-      public function render(param1:int, param2:int) : void
+      public function render(time:int, deltaTime:int) : void
       {
-         this.wedebuga += hacevul * param2;
-         if(this.wedebuga > 1)
+         this.alpha += ALPHA_SPEED * deltaTime;
+         if(this.alpha > 1)
          {
-            this.wedebuga = 1;
+            this.alpha = 1;
          }
-         this.nasybugo.setAlpha(this.wedebuga);
-         if(this.wedebuga >= 1)
+         this.bonus.setAlpha(this.alpha);
+         if(this.alpha >= 1)
          {
             this.destroy();
          }
@@ -46,10 +46,10 @@ package alternativa.tanks.bonuses
       
       private function destroy() : void
       {
-         this.hyfecypi.removeRenderer(this,0);
-         this.hyfecypi = null;
-         this.nasybugo.gave.remove(this.destroy);
-         this.nasybugo = null;
+         this.battleScene.removeRenderer(this,0);
+         this.battleScene = null;
+         this.bonus.gave.remove(this.destroy);
+         this.bonus = null;
          recycle();
       }
    }

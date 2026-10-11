@@ -3,52 +3,52 @@ package tutorial.loader.proplib
    public class PropGroup
    {
       
-      public var gepocivaj:String;
+      public var name:String;
       
-      private var neludetur:Object;
+      private var props:Object;
       
-      private var luwuqap:String;
+      private var baseURL:String;
       
-      public function PropGroup(param1:XML, param2:String)
+      public function PropGroup(xml:XML, baseURL:String)
       {
-         var _loc3_:XML = null;
-         var _loc4_:PropMesh = null;
-         var _loc5_:PropSprite = null;
-         this.neludetur = new Object();
+         var propXML:XML = null;
+         var propMesh:PropMesh = null;
+         var propSprite:PropSprite = null;
+         this.props = new Object();
          super();
-         this.gepocivaj = XMLUtils.getAttributeAsString(param1,"name");
-         this.luwuqap = param2;
-         for each(_loc3_ in param1.prop)
+         this.name = XMLUtils.getAttributeAsString(xml,"name");
+         this.baseURL = baseURL;
+         for each(propXML in xml.prop)
          {
-            if(_loc3_.elements("mesh").length() > 0)
+            if(propXML.elements("mesh").length() > 0)
             {
-               _loc4_ = new PropMesh(_loc3_.mesh[0],param2);
-               _loc4_.gepocivaj = XMLUtils.getAttributeAsString(_loc3_,"name");
-               this.neludetur[_loc4_.gepocivaj] = _loc4_;
+               propMesh = new PropMesh(propXML.mesh[0],baseURL);
+               propMesh.name = XMLUtils.getAttributeAsString(propXML,"name");
+               this.props[propMesh.name] = propMesh;
             }
-            else if(_loc3_.elements("sprite").length() > 0)
+            else if(propXML.elements("sprite").length() > 0)
             {
-               _loc5_ = new PropSprite(_loc3_.sprite[0],param2);
-               _loc5_.gepocivaj = XMLUtils.getAttributeAsString(_loc3_,"name");
-               this.neludetur[_loc5_.gepocivaj] = _loc5_;
+               propSprite = new PropSprite(propXML.sprite[0],baseURL);
+               propSprite.name = XMLUtils.getAttributeAsString(propXML,"name");
+               this.props[propSprite.name] = propSprite;
             }
          }
       }
       
-      public function loadProp(param1:String, param2:String, param3:Function) : void
+      public function loadProp(propName:String, textureName:String, callback:Function) : void
       {
-         var _loc4_:Object = this.neludetur[param1];
-         if(_loc4_ is PropMesh)
+         var prop:Object = this.props[propName];
+         if(prop is PropMesh)
          {
-            PropMesh(_loc4_).load(param2,param3);
+            PropMesh(prop).load(textureName,callback);
          }
-         else if(_loc4_ is PropSprite)
+         else if(prop is PropSprite)
          {
-            param3(PropSprite(_loc4_).sprite);
+            callback(PropSprite(prop).sprite);
          }
          else
          {
-            param3();
+            callback();
          }
       }
    }

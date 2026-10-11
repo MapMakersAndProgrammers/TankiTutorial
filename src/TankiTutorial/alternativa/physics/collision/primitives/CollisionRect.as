@@ -9,104 +9,104 @@ package alternativa.physics.collision.primitives
    public class CollisionRect extends CollisionShape
    {
       
-      private static const nabyjyge:Number = 0.005;
+      private static const EPSILON:Number = 0.005;
       
-      public var nezav:Vector3 = new Vector3();
+      public var halfSize:Vector3 = new Vector3();
       
-      public function CollisionRect(param1:Vector3, param2:int, param3:PhysicsMaterial)
+      public function CollisionRect(halfSize:Vector3, collisionGroup:int, material:PhysicsMaterial)
       {
-         super(hosomubeb,param2,param3);
-         this.nezav.copy(param1);
+         super(RECT,collisionGroup,material);
+         this.halfSize.copy(halfSize);
       }
       
       override public function calculateAABB() : AABB
       {
-         var _loc1_:Matrix4 = null;
-         _loc1_ = wet;
-         var _loc2_:Number = _loc1_.gusat < 0 ? -_loc1_.gusat : _loc1_.gusat;
-         var _loc3_:Number = _loc1_.cydop < 0 ? -_loc1_.cydop : _loc1_.cydop;
-         var _loc4_:Number = _loc1_.sivy < 0 ? -_loc1_.sivy : _loc1_.sivy;
-         var _loc5_:AABB = this.raruluk;
-         _loc5_.jys = this.nezav.x * _loc2_ + this.nezav.y * _loc3_ + nabyjyge * _loc4_;
-         _loc5_.cubegyw = -_loc5_.jys;
-         _loc2_ = _loc1_.sig < 0 ? -_loc1_.sig : _loc1_.sig;
-         _loc3_ = _loc1_.qanezycap < 0 ? -_loc1_.qanezycap : _loc1_.qanezycap;
-         _loc4_ = _loc1_.wyvukog < 0 ? -_loc1_.wyvukog : _loc1_.wyvukog;
-         _loc5_.juri = this.nezav.x * _loc2_ + this.nezav.y * _loc3_ + nabyjyge * _loc4_;
-         _loc5_.nicomosa = -_loc5_.juri;
-         _loc2_ = _loc1_.vug < 0 ? -_loc1_.vug : _loc1_.vug;
-         _loc3_ = _loc1_.luwym < 0 ? -_loc1_.luwym : _loc1_.luwym;
-         _loc4_ = _loc1_.tari < 0 ? -_loc1_.tari : _loc1_.tari;
-         _loc5_.zepoci = this.nezav.x * _loc2_ + this.nezav.y * _loc3_ + nabyjyge * _loc4_;
-         _loc5_.gesuwi = -_loc5_.zepoci;
-         _loc5_.cubegyw += _loc1_.kyvuru;
-         _loc5_.jys += _loc1_.kyvuru;
-         _loc5_.nicomosa += _loc1_.zumidynip;
-         _loc5_.juri += _loc1_.zumidynip;
-         _loc5_.gesuwi += _loc1_.sunafepo;
-         _loc5_.zepoci += _loc1_.sunafepo;
-         return _loc5_;
+         var matrix:Matrix4 = null;
+         matrix = transform;
+         var _loc2_:Number = matrix.ma < 0 ? -matrix.ma : matrix.ma;
+         var _loc3_:Number = matrix.mb < 0 ? -matrix.mb : matrix.mb;
+         var _loc4_:Number = matrix.mc < 0 ? -matrix.mc : matrix.mc;
+         var bounds:AABB = this.aabb;
+         bounds.maxX = this.halfSize.x * _loc2_ + this.halfSize.y * _loc3_ + EPSILON * _loc4_;
+         bounds.minX = -bounds.maxX;
+         _loc2_ = matrix.me < 0 ? -matrix.me : matrix.me;
+         _loc3_ = matrix.mf < 0 ? -matrix.mf : matrix.mf;
+         _loc4_ = matrix.mg < 0 ? -matrix.mg : matrix.mg;
+         bounds.maxY = this.halfSize.x * _loc2_ + this.halfSize.y * _loc3_ + EPSILON * _loc4_;
+         bounds.minY = -bounds.maxY;
+         _loc2_ = matrix.mi < 0 ? -matrix.mi : matrix.mi;
+         _loc3_ = matrix.mj < 0 ? -matrix.mj : matrix.mj;
+         _loc4_ = matrix.mk < 0 ? -matrix.mk : matrix.mk;
+         bounds.maxZ = this.halfSize.x * _loc2_ + this.halfSize.y * _loc3_ + EPSILON * _loc4_;
+         bounds.minZ = -bounds.maxZ;
+         bounds.minX += matrix.md;
+         bounds.maxX += matrix.md;
+         bounds.minY += matrix.mh;
+         bounds.maxY += matrix.mh;
+         bounds.minZ += matrix.ml;
+         bounds.maxZ += matrix.ml;
+         return bounds;
       }
       
-      override public function copyFrom(param1:CollisionShape) : CollisionShape
+      override public function copyFrom(source:CollisionShape) : CollisionShape
       {
-         var _loc2_:CollisionRect = param1 as CollisionRect;
-         if(_loc2_ == null)
+         var rect:CollisionRect = source as CollisionRect;
+         if(rect == null)
          {
             return this;
          }
-         super.copyFrom(_loc2_);
-         this.nezav.copy(_loc2_.nezav);
+         super.copyFrom(rect);
+         this.halfSize.copy(rect.halfSize);
          return this;
       }
       
       override protected function createPrimitive() : CollisionShape
       {
-         return new CollisionRect(this.nezav,nute,material);
+         return new CollisionRect(this.halfSize,collisionGroup,material);
       }
       
-      override public function raycast(param1:Vector3, param2:Vector3, param3:Number, param4:Vector3) : Number
+      override public function raycast(origin:Vector3, direction:Vector3, epsilon:Number, normal:Vector3) : Number
       {
-         var _loc5_:Matrix4 = null;
-         _loc5_ = this.wet;
-         var _loc6_:Number = param1.x - _loc5_.kyvuru;
-         var _loc7_:Number = param1.y - _loc5_.zumidynip;
-         var _loc8_:Number = param1.z - _loc5_.sunafepo;
-         var _loc9_:Number = _loc5_.gusat * _loc6_ + _loc5_.sig * _loc7_ + _loc5_.vug * _loc8_;
-         var _loc10_:Number = _loc5_.cydop * _loc6_ + _loc5_.qanezycap * _loc7_ + _loc5_.luwym * _loc8_;
-         var _loc11_:Number = _loc5_.sivy * _loc6_ + _loc5_.wyvukog * _loc7_ + _loc5_.tari * _loc8_;
-         _loc6_ = _loc5_.gusat * param2.x + _loc5_.sig * param2.y + _loc5_.vug * param2.z;
-         _loc7_ = _loc5_.cydop * param2.x + _loc5_.qanezycap * param2.y + _loc5_.luwym * param2.z;
-         _loc8_ = _loc5_.sivy * param2.x + _loc5_.wyvukog * param2.y + _loc5_.tari * param2.z;
-         if(_loc8_ > -param3 && _loc8_ < param3)
+         var matrix:Matrix4 = null;
+         matrix = this.transform;
+         var dx:Number = origin.x - matrix.md;
+         var dy:Number = origin.y - matrix.mh;
+         var dz:Number = origin.z - matrix.ml;
+         var ox:Number = matrix.ma * dx + matrix.me * dy + matrix.mi * dz;
+         var oy:Number = matrix.mb * dx + matrix.mf * dy + matrix.mj * dz;
+         var oz:Number = matrix.mc * dx + matrix.mg * dy + matrix.mk * dz;
+         dx = matrix.ma * direction.x + matrix.me * direction.y + matrix.mi * direction.z;
+         dy = matrix.mb * direction.x + matrix.mf * direction.y + matrix.mj * direction.z;
+         dz = matrix.mc * direction.x + matrix.mg * direction.y + matrix.mk * direction.z;
+         if(dz > -epsilon && dz < epsilon)
          {
             return -1;
          }
-         var _loc12_:Number = -_loc11_ / _loc8_;
-         if(_loc12_ < 0)
+         var t:Number = -oz / dz;
+         if(t < 0)
          {
             return -1;
          }
-         _loc9_ += _loc6_ * _loc12_;
-         _loc10_ += _loc7_ * _loc12_;
-         _loc11_ = 0;
-         if(_loc9_ < -this.nezav.x - param3 || _loc9_ > this.nezav.x + param3 || _loc10_ < -this.nezav.y - param3 || _loc10_ > this.nezav.y + param3)
+         ox += dx * t;
+         oy += dy * t;
+         oz = 0;
+         if(ox < -this.halfSize.x - epsilon || ox > this.halfSize.x + epsilon || oy < -this.halfSize.y - epsilon || oy > this.halfSize.y + epsilon)
          {
             return -1;
          }
-         if(param2.x * _loc5_.sivy + param2.y * _loc5_.wyvukog + param2.z * _loc5_.tari > 0)
+         if(direction.x * matrix.mc + direction.y * matrix.mg + direction.z * matrix.mk > 0)
          {
-            param4.x = -_loc5_.sivy;
-            param4.y = -_loc5_.wyvukog;
-            param4.z = -_loc5_.tari;
+            normal.x = -matrix.mc;
+            normal.y = -matrix.mg;
+            normal.z = -matrix.mk;
          }
          else
          {
-            param4.x = _loc5_.sivy;
-            param4.y = _loc5_.wyvukog;
-            param4.z = _loc5_.tari;
+            normal.x = matrix.mc;
+            normal.y = matrix.mg;
+            normal.z = matrix.mk;
          }
-         return _loc12_;
+         return t;
       }
    }
 }

@@ -9,23 +9,23 @@ package alternativa.tanks.sound
    public interface ISoundManager
    {
       
-      function playSound(param1:Sound, param2:int = 0, param3:int = 0, param4:SoundTransform = null) : SoundChannel;
+      function playSound(sound:Sound, startTime:int = 0, loops:int = 0, soundTransform:SoundTransform = null) : SoundChannel;
       
-      function stopSound(param1:SoundChannel) : void;
+      function stopSound(channel:SoundChannel) : void;
       
       function stopAllSounds() : void;
       
-      function addEffect(param1:ISound3DEffect) : Boolean;
+      function addEffect(effect:ISound3DEffect) : Boolean;
       
-      function removeEffect(param1:ISound3DEffect) : void;
+      function removeEffect(effect:ISound3DEffect) : void;
       
       function removeAllEffects() : void;
       
-      function updateSoundEffects(param1:int, param2:GameCamera) : void;
+      function updateSoundEffects(deltaTime:int, camera:GameCamera) : void;
       
-      function set maxDistance(param1:Number) : void;
+      function set maxDistance(value:Number) : void;
       
-      function setMute(param1:Boolean) : void;
+      function setMute(mute:Boolean) : void;
    }
 }
 

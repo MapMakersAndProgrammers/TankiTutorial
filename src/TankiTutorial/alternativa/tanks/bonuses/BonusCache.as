@@ -6,11 +6,11 @@ package alternativa.tanks.bonuses
    public class BonusCache
    {
       
-      private static const qiwozoc:ObjectCache = new ObjectCache();
+      private static const parachuteCache:ObjectCache = new ObjectCache();
       
-      private static const wykyb:ObjectCache = new ObjectCache();
+      private static const cordsCache:ObjectCache = new ObjectCache();
       
-      private static var kudu:Dictionary = new Dictionary();
+      private static var bonusMeshCaches:Dictionary = new Dictionary();
       
       public function BonusCache()
       {
@@ -19,65 +19,65 @@ package alternativa.tanks.bonuses
       
       public static function isParachuteCacheEmpty() : Boolean
       {
-         return qiwozoc.isEmpty();
+         return parachuteCache.isEmpty();
       }
       
       public static function getParachute() : Parachute
       {
-         return Parachute(qiwozoc.get());
+         return Parachute(parachuteCache.get());
       }
       
-      public static function putParachute(param1:Parachute) : void
+      public static function putParachute(parachute:Parachute) : void
       {
-         qiwozoc.put(param1);
+         parachuteCache.put(parachute);
       }
       
       public static function isCordsCacheEmpty() : Boolean
       {
-         return wykyb.isEmpty();
+         return cordsCache.isEmpty();
       }
       
       public static function getCords() : Cords
       {
-         return Cords(wykyb.get());
+         return Cords(cordsCache.get());
       }
       
-      public static function putCords(param1:Cords) : void
+      public static function putCords(cords:Cords) : void
       {
-         wykyb.put(param1);
+         cordsCache.put(cords);
       }
       
-      public static function isBonusMeshCacheEmpty(param1:Long) : Boolean
+      public static function isBonusMeshCacheEmpty(objectId:Long) : Boolean
       {
-         return getBonusMeshCache(param1).isEmpty();
+         return getBonusMeshCache(objectId).isEmpty();
       }
       
-      public static function getBonusMesh(param1:Long) : BonusMesh
+      public static function getBonusMesh(objectId:Long) : BonusMesh
       {
-         return BonusMesh(getBonusMeshCache(param1).get());
+         return BonusMesh(getBonusMeshCache(objectId).get());
       }
       
-      public static function putBonusMesh(param1:BonusMesh) : void
+      public static function putBonusMesh(bonusMesh:BonusMesh) : void
       {
-         getBonusMeshCache(param1.getObjectId()).put(param1);
+         getBonusMeshCache(bonusMesh.getObjectId()).put(bonusMesh);
       }
       
       public static function clear() : void
       {
-         qiwozoc.clear();
-         wykyb.clear();
-         kudu = new Dictionary();
+         parachuteCache.clear();
+         cordsCache.clear();
+         bonusMeshCaches = new Dictionary();
       }
       
-      private static function getBonusMeshCache(param1:Long) : ObjectCache
+      private static function getBonusMeshCache(objectId:Long) : ObjectCache
       {
-         var _loc2_:ObjectCache = kudu[param1];
-         if(_loc2_ == null)
+         var cache:ObjectCache = bonusMeshCaches[objectId];
+         if(cache == null)
          {
-            _loc2_ = new ObjectCache();
-            kudu[param1] = _loc2_;
+            cache = new ObjectCache();
+            bonusMeshCaches[objectId] = cache;
          }
-         return _loc2_;
+         return cache;
       }
    }
 }

@@ -5,13 +5,13 @@ package alternativa.tanks.battle
    public interface BattleScene3D
    {
       
-      function addObject(param1:Object3D) : void;
+      function addObject(object:Object3D) : void;
       
-      function removeObject(param1:Object3D) : void;
+      function removeObject(object:Object3D) : void;
       
-      function addRenderer(param1:Renderer, param2:int) : void;
+      function addRenderer(renderer:Renderer, param2:int) : void;
       
-      function removeRenderer(param1:Renderer, param2:int) : void;
+      function removeRenderer(renderer:Renderer, param2:int) : void;
    }
 }
 

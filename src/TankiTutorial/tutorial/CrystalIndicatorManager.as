@@ -8,131 +8,131 @@ package tutorial
    public class CrystalIndicatorManager
    {
       
-      private static const kiqidevov:int = 20;
+      private static const MARGIN:int = 20;
       
-      public var duqup:CrystalIndicator;
+      public var indicator:CrystalIndicator;
       
       private var stage:Stage;
       
-      private var cinilu:String;
+      private var align:String;
       
-      private var lecopojen:uint;
+      private var time:uint;
       
-      private var wiciqy:Number = 0.6180339882723972;
+      private var speed:Number = 0.6180339882723972;
       
-      private var pov:Boolean = false;
+      private var animating:Boolean = false;
       
-      public function CrystalIndicatorManager(param1:Stage)
+      public function CrystalIndicatorManager(stage:Stage)
       {
          super();
-         this.stage = param1;
-         this.cinilu = StageAlign.TOP_RIGHT;
-         this.duqup = new CrystalIndicator();
-         this.duqup.alpha = 0;
+         this.stage = stage;
+         this.align = StageAlign.TOP_RIGHT;
+         this.indicator = new CrystalIndicator();
+         this.indicator.alpha = 0;
          this.updateAlign();
-         param1.addEventListener(Event.RESIZE,this.updateAlign);
+         stage.addEventListener(Event.RESIZE,this.updateAlign);
       }
       
       public function showIndicator() : void
       {
-         if(this.duqup.parent == null)
+         if(this.indicator.parent == null)
          {
-            this.stage.addChild(this.duqup);
+            this.stage.addChild(this.indicator);
          }
-         if(this.pov)
+         if(this.animating)
          {
             this.stage.removeEventListener(Event.ENTER_FRAME,this.showMotion);
             this.stage.removeEventListener(Event.ENTER_FRAME,this.hideImage);
          }
-         this.pov = true;
+         this.animating = true;
          this.stage.addEventListener(Event.ENTER_FRAME,this.showMotion);
-         this.lecopojen = getTimer();
+         this.time = getTimer();
       }
       
       public function hideIndicator() : void
       {
-         if(this.duqup.parent != null)
+         if(this.indicator.parent != null)
          {
-            if(this.pov)
+            if(this.animating)
             {
                this.stage.removeEventListener(Event.ENTER_FRAME,this.showMotion);
                this.stage.removeEventListener(Event.ENTER_FRAME,this.hideImage);
             }
-            this.pov = true;
+            this.animating = true;
             this.stage.addEventListener(Event.ENTER_FRAME,this.hideImage);
-            this.lecopojen = getTimer();
+            this.time = getTimer();
          }
       }
       
-      private function showMotion(param1:Event = null) : void
+      private function showMotion(e:Event = null) : void
       {
-         var _loc2_:Number = (getTimer() - this.lecopojen) * 0.001;
-         this.lecopojen = getTimer();
-         this.duqup.alpha += _loc2_ * this.wiciqy;
-         if(this.duqup.alpha >= 1)
+         var deltaTime:Number = (getTimer() - this.time) * 0.001;
+         this.time = getTimer();
+         this.indicator.alpha += deltaTime * this.speed;
+         if(this.indicator.alpha >= 1)
          {
-            this.duqup.alpha = 1;
+            this.indicator.alpha = 1;
             this.stage.removeEventListener(Event.ENTER_FRAME,this.showMotion);
-            this.pov = false;
+            this.animating = false;
          }
       }
       
-      private function hideImage(param1:Event) : void
+      private function hideImage(e:Event) : void
       {
-         var _loc2_:Number = (getTimer() - this.lecopojen) * 0.001;
-         this.lecopojen = getTimer();
-         this.duqup.alpha -= _loc2_ * this.wiciqy;
-         if(this.duqup.alpha <= 0)
+         var deltaTime:Number = (getTimer() - this.time) * 0.001;
+         this.time = getTimer();
+         this.indicator.alpha -= deltaTime * this.speed;
+         if(this.indicator.alpha <= 0)
          {
-            this.duqup.alpha = 0;
-            this.pov = false;
+            this.indicator.alpha = 0;
+            this.animating = false;
             this.stage.removeEventListener(Event.ENTER_FRAME,this.hideImage);
-            if(this.duqup.parent != null)
+            if(this.indicator.parent != null)
             {
-               this.stage.removeChild(this.duqup);
+               this.stage.removeChild(this.indicator);
             }
          }
       }
       
-      private function updateAlign(param1:Event = null) : void
+      private function updateAlign(e:Event = null) : void
       {
-         if(this.duqup == null)
+         if(this.indicator == null)
          {
             return;
          }
-         switch(this.cinilu)
+         switch(this.align)
          {
             case StageAlign.BOTTOM:
-               this.duqup.x = (this.stage.stageWidth - this.duqup.width) * 0.5;
-               this.duqup.y = this.stage.stageHeight - this.duqup.height - kiqidevov;
+               this.indicator.x = (this.stage.stageWidth - this.indicator.width) * 0.5;
+               this.indicator.y = this.stage.stageHeight - this.indicator.height - MARGIN;
                break;
             case StageAlign.BOTTOM_LEFT:
-               this.duqup.x = kiqidevov;
-               this.duqup.y = this.stage.stageHeight - this.duqup.height - kiqidevov;
+               this.indicator.x = MARGIN;
+               this.indicator.y = this.stage.stageHeight - this.indicator.height - MARGIN;
                break;
             case StageAlign.BOTTOM_RIGHT:
-               this.duqup.x = this.stage.stageWidth - this.duqup.width - kiqidevov;
-               this.duqup.y = this.stage.stageHeight - this.duqup.height - kiqidevov;
+               this.indicator.x = this.stage.stageWidth - this.indicator.width - MARGIN;
+               this.indicator.y = this.stage.stageHeight - this.indicator.height - MARGIN;
                break;
             case StageAlign.LEFT:
-               this.duqup.x = kiqidevov;
-               this.duqup.y = (this.stage.stageHeight - this.duqup.height) * 0.5;
+               this.indicator.x = MARGIN;
+               this.indicator.y = (this.stage.stageHeight - this.indicator.height) * 0.5;
                break;
             case StageAlign.RIGHT:
-               this.duqup.x = this.stage.stageWidth - this.duqup.width - kiqidevov;
-               this.duqup.y = (this.stage.stageHeight - this.duqup.height) * 0.5;
+               this.indicator.x = this.stage.stageWidth - this.indicator.width - MARGIN;
+               this.indicator.y = (this.stage.stageHeight - this.indicator.height) * 0.5;
                break;
             case StageAlign.TOP:
-               this.duqup.x = (this.stage.stageWidth - this.duqup.width) * 0.5;
-               this.duqup.y = kiqidevov;
+               this.indicator.x = (this.stage.stageWidth - this.indicator.width) * 0.5;
+               this.indicator.y = MARGIN;
                break;
             case StageAlign.TOP_LEFT:
-               this.duqup.x = kiqidevov;
-               this.duqup.y = kiqidevov;
+               this.indicator.x = MARGIN;
+               this.indicator.y = MARGIN;
                break;
             case StageAlign.TOP_RIGHT:
-               this.duqup.x = this.stage.stageWidth - this.duqup.width - kiqidevov;
-               this.duqup.y = kiqidevov;
+               this.indicator.x = this.stage.stageWidth - this.indicator.width - MARGIN;
+               this.indicator.y = MARGIN;
          }
       }
    }

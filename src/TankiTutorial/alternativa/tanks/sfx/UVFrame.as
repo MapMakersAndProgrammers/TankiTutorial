@@ -3,21 +3,21 @@ package alternativa.tanks.sfx
    public class UVFrame
    {
       
-      public var picylyno:Number;
+      public var topLeftU:Number;
       
-      public var lesenac:Number;
+      public var topLeftV:Number;
       
-      public var pusunawy:Number;
+      public var bottomRightU:Number;
       
-      public var salemat:Number;
+      public var bottomRightV:Number;
       
-      public function UVFrame(param1:Number, param2:Number, param3:Number, param4:Number)
+      public function UVFrame(topLeftU:Number, topLeftV:Number, bottomRightU:Number, bottomRightV:Number)
       {
          super();
-         this.picylyno = param1;
-         this.lesenac = param2;
-         this.pusunawy = param3;
-         this.salemat = param4;
+         this.topLeftU = topLeftU;
+         this.topLeftV = topLeftV;
+         this.bottomRightU = bottomRightU;
+         this.bottomRightV = bottomRightV;
       }
    }
 }

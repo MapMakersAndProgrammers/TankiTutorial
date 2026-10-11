@@ -11,26 +11,26 @@ package alternativa.tanks.sfx
       
       private var position:Vector3 = new Vector3();
       
-      public function ExternalObject3DPositionProvider(param1:Pool)
+      public function ExternalObject3DPositionProvider(pool:Pool)
       {
-         super(param1);
+         super(pool);
       }
       
-      public function setPosition(param1:Vector3) : void
+      public function setPosition(position:Vector3) : void
       {
-         this.position.copy(param1);
+         this.position.copy(position);
       }
       
-      public function initPosition(param1:Object3D) : void
+      public function initPosition(object:Object3D) : void
       {
-         param1.x = this.position.x;
-         param1.y = this.position.y;
-         param1.z = this.position.z;
+         object.x = this.position.x;
+         object.y = this.position.y;
+         object.z = this.position.z;
       }
       
-      public function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void
+      public function updateObjectPosition(object:Object3D, camera:GameCamera, deltaTime:int) : void
       {
-         this.initPosition(param1);
+         this.initPosition(object);
       }
       
       public function destroy() : void

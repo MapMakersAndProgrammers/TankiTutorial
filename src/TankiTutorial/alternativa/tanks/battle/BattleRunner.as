@@ -5,17 +5,17 @@ package alternativa.tanks.battle
    public interface BattleRunner
    {
       
-      function addPhysicsController(param1:PhysicsController) : void;
+      function addPhysicsController(controller:PhysicsController) : void;
       
-      function removePhysicsController(param1:PhysicsController) : void;
+      function removePhysicsController(controller:PhysicsController) : void;
       
-      function addPhysicsInterpolator(param1:PhysicsInterpolator) : void;
+      function addPhysicsInterpolator(interpolator:PhysicsInterpolator) : void;
       
-      function removePhysicsInterpolator(param1:PhysicsInterpolator) : void;
+      function removePhysicsInterpolator(interpolator:PhysicsInterpolator) : void;
       
-      function addTrigger(param1:Trigger) : void;
+      function addTrigger(trigger:Trigger) : void;
       
-      function removeTrigger(param1:Trigger) : void;
+      function removeTrigger(trigger:Trigger) : void;
       
       function getCollisionDetector() : CollisionDetector;
    }

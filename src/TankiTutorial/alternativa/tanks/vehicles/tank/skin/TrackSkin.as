@@ -8,78 +8,78 @@ package alternativa.tanks.vehicles.tank.skin
    public class TrackSkin
    {
       
-      private var zakorez:Vector.<Face> = new Vector.<Face>();
+      private var faces:Vector.<Face> = new Vector.<Face>();
       
-      private var redy:Vector.<Vertex>;
+      private var vertices:Vector.<Vertex>;
       
-      private var ryqyfi:Number;
+      private var ratio:Number;
       
       public function TrackSkin()
       {
          super();
       }
       
-      private static function getRatio(param1:Face) : Number
+      private static function getRatio(face:Face) : Number
       {
-         var _loc2_:Vector.<Vertex> = param1.vertices;
-         return getRatioForVertices(_loc2_[0],_loc2_[1]);
+         var faceVertices:Vector.<Vertex> = face.vertices;
+         return getRatioForVertices(faceVertices[0],faceVertices[1]);
       }
       
-      private static function getRatioForVertices(param1:Vertex, param2:Vertex) : Number
+      private static function getRatioForVertices(a:Vertex, b:Vertex) : Number
       {
-         var _loc3_:Number = param1.x - param2.x;
-         var _loc4_:Number = param1.y - param2.y;
-         var _loc5_:Number = param1.z - param2.z;
-         var _loc6_:Number = Math.sqrt(_loc3_ * _loc3_ + _loc4_ * _loc4_ + _loc5_ * _loc5_);
-         var _loc7_:Number = param1.u - param2.u;
-         var _loc8_:Number = param1.v - param2.v;
-         var _loc9_:Number = Math.sqrt(_loc7_ * _loc7_ + _loc8_ * _loc8_);
-         return _loc9_ / _loc6_;
+         var dx:Number = a.x - b.x;
+         var dy:Number = a.y - b.y;
+         var dz:Number = a.z - b.z;
+         var distance:Number = Math.sqrt(dx * dx + dy * dy + dz * dz);
+         var du:Number = a.u - b.u;
+         var dv:Number = a.v - b.v;
+         var uvDistance:Number = Math.sqrt(du * du + dv * dv);
+         return uvDistance / distance;
       }
       
-      public function addFace(param1:Face) : void
+      public function addFace(face:Face) : void
       {
-         this.zakorez.push(param1);
+         this.faces.push(face);
       }
       
       public function init() : void
       {
-         var _loc3_:Face = null;
-         var _loc4_:* = undefined;
-         var _loc5_:Vertex = null;
-         var _loc1_:Number = 0;
-         var _loc2_:Dictionary = new Dictionary();
-         for each(_loc3_ in this.zakorez)
+         var face:Face = null;
+         var key:* = undefined;
+         var vertex:Vertex = null;
+         var ratioSum:Number = 0;
+         var map:Dictionary = new Dictionary();
+         for each(face in this.faces)
          {
-            for each(_loc5_ in _loc3_.vertices)
+            for each(vertex in face.vertices)
             {
-               _loc2_[_loc5_] = true;
+               map[vertex] = true;
             }
-            _loc1_ += getRatio(_loc3_);
+            ratioSum += getRatio(face);
          }
-         this.ryqyfi = _loc1_ / this.zakorez.length;
-         this.redy = new Vector.<Vertex>();
-         for(_loc4_ in _loc2_)
+         this.ratio = ratioSum / this.faces.length;
+         this.vertices = new Vector.<Vertex>();
+         for(key in map)
          {
-            this.redy.push(_loc4_);
-         }
-      }
-      
-      public function move(param1:Number) : void
-      {
-         var _loc2_:Vertex = null;
-         for each(_loc2_ in this.redy)
-         {
-            _loc2_.u += param1 * this.ryqyfi;
+            this.vertices.push(key);
          }
       }
       
-      public function setMaterial(param1:Material) : void
+      public function move(delta:Number) : void
       {
-         var _loc2_:Face = null;
-         for each(_loc2_ in this.zakorez)
+         var vertex:Vertex = null;
+         for each(vertex in this.vertices)
          {
-            _loc2_.material = param1;
+            vertex.u += delta * this.ratio;
+         }
+      }
+      
+      public function setMaterial(material:Material) : void
+      {
+         var face:Face = null;
+         for each(face in this.faces)
+         {
+            face.material = material;
          }
       }
    }

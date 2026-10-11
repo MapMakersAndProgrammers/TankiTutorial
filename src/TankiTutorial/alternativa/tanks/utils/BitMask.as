@@ -3,57 +3,57 @@ package alternativa.tanks.utils
    public class BitMask
    {
       
-      private var cogutirym:int;
+      private var mask:int;
       
       public function BitMask()
       {
          super();
       }
       
-      public function setBits(param1:int) : void
+      public function setBits(bits:int) : void
       {
-         this.cogutirym |= param1;
+         this.mask |= bits;
       }
       
-      public function clearBits(param1:int) : void
+      public function clearBits(bits:int) : void
       {
-         this.cogutirym &= ~param1;
+         this.mask &= ~bits;
       }
       
-      public function setBit(param1:int) : void
+      public function setBit(bitIndex:int) : void
       {
-         this.setBits(1 << param1);
+         this.setBits(1 << bitIndex);
       }
       
-      public function clearBit(param1:int) : void
+      public function clearBit(bitIndex:int) : void
       {
-         this.clearBits(1 << param1);
+         this.clearBits(1 << bitIndex);
       }
       
-      public function getBitValue(param1:int) : int
+      public function getBitValue(bitIndex:int) : int
       {
-         return 1 & this.cogutirym >> param1;
+         return 1 & this.mask >> bitIndex;
       }
       
       public function clear() : void
       {
-         this.cogutirym = 0;
+         this.mask = 0;
       }
       
       public function isEmpty() : Boolean
       {
-         return this.cogutirym == 0;
+         return this.mask == 0;
       }
       
-      public function change(param1:int, param2:Boolean) : void
+      public function change(bits:int, value:Boolean) : void
       {
-         if(param2)
+         if(value)
          {
-            this.setBits(param1);
+            this.setBits(bits);
          }
          else
          {
-            this.clearBits(param1);
+            this.clearBits(bits);
          }
       }
    }

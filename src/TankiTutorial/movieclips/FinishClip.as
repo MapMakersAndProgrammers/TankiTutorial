@@ -54,7 +54,7 @@ package movieclips
          this.redirectTimer = new Timer(DELAY_IN_SECONDS * 1000,this.repeat);
       }
       
-      private function onAddedToStage(param1:Event) : void
+      private function onAddedToStage(e:Event) : void
       {
          removeEventListener(Event.ADDED_TO_STAGE,this.onAddedToStage);
          stage.addEventListener(Event.RESIZE,this.onResize);
@@ -64,7 +64,7 @@ package movieclips
          this.redirectTimer.start();
       }
       
-      private function onTimerTick(param1:TimerEvent) : void
+      private function onTimerTick(timerEvent:TimerEvent) : void
       {
          --this.repeat;
          this.redirectLabel.text = this.getTimeLeftText();
@@ -72,12 +72,12 @@ package movieclips
       
       private function getTimeLeftText() : String
       {
-         var _loc1_:RegExp = /0/i;
-         var _loc2_:String = Lang.getText(LocalizedStrings.REDIRECT_TO_THE_GAME);
-         return _loc2_.replace(_loc1_,(DELAY_IN_SECONDS * this.repeat).toString());
+         var regExp:RegExp = /0/i;
+         var text:String = Lang.getText(LocalizedStrings.REDIRECT_TO_THE_GAME);
+         return text.replace(regExp,(DELAY_IN_SECONDS * this.repeat).toString());
       }
       
-      private function onTimerComplete(param1:TimerEvent) : void
+      private function onTimerComplete(timerEvent:TimerEvent) : void
       {
          Shared.tracker.trackEvent(Shared.TUTORIAL,"registration","");
          if(Shared.navigateMethod != null)
@@ -86,16 +86,16 @@ package movieclips
          }
       }
       
-      private function onResize(param1:Event = null) : void
+      private function onResize(e:Event = null) : void
       {
          this.blur.graphics.clear();
          this.blur.graphics.beginFill(0,0.7);
          this.blur.graphics.drawRect(0,0,stage.stageWidth,stage.stageHeight);
-         var _loc2_:Point = localToGlobal(new Point());
-         this.blur.x = -_loc2_.x;
-         this.blur.y = -_loc2_.y;
-         this.clip.x = (stage.stageWidth - this.clip.width) * 0.5 - _loc2_.x;
-         this.clip.y = (stage.stageHeight - this.clip.height) * 0.5 - 50 - _loc2_.y;
+         var point:Point = localToGlobal(new Point());
+         this.blur.x = -point.x;
+         this.blur.y = -point.y;
+         this.clip.x = (stage.stageWidth - this.clip.width) * 0.5 - point.x;
+         this.clip.y = (stage.stageHeight - this.clip.height) * 0.5 - 50 - point.y;
          this.tf1.x = this.clip.x + (this.clip.width - this.tf1.width) / 2;
          this.tf1.y = this.clip.y - 80 + 40 + 40;
          this.tf2.x = this.clip.x + (this.clip.width - this.tf2.width) / 2;

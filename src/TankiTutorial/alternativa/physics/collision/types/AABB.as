@@ -5,121 +5,121 @@ package alternativa.physics.collision.types
    public class AABB
    {
       
-      public var cubegyw:Number = 1e+308;
+      public var minX:Number = 1e+308;
       
-      public var nicomosa:Number = 1e+308;
+      public var minY:Number = 1e+308;
       
-      public var gesuwi:Number = 1e+308;
+      public var minZ:Number = 1e+308;
       
-      public var jys:Number = -1e+308;
+      public var maxX:Number = -1e+308;
       
-      public var juri:Number = -1e+308;
+      public var maxY:Number = -1e+308;
       
-      public var zepoci:Number = -1e+308;
+      public var maxZ:Number = -1e+308;
       
       public function AABB()
       {
          super();
       }
       
-      public function setSize(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number) : void
+      public function setSize(minX:Number, minY:Number, minZ:Number, maxX:Number, maxY:Number, maxZ:Number) : void
       {
-         this.cubegyw = param1;
-         this.nicomosa = param2;
-         this.gesuwi = param3;
-         this.jys = param4;
-         this.juri = param5;
-         this.zepoci = param6;
+         this.minX = minX;
+         this.minY = minY;
+         this.minZ = minZ;
+         this.maxX = maxX;
+         this.maxY = maxY;
+         this.maxZ = maxZ;
       }
       
-      public function addBoundBox(param1:AABB) : void
+      public function addBoundBox(boundBox:AABB) : void
       {
-         this.cubegyw = param1.cubegyw < this.cubegyw ? param1.cubegyw : this.cubegyw;
-         this.nicomosa = param1.nicomosa < this.nicomosa ? param1.nicomosa : this.nicomosa;
-         this.gesuwi = param1.gesuwi < this.gesuwi ? param1.gesuwi : this.gesuwi;
-         this.jys = param1.jys > this.jys ? param1.jys : this.jys;
-         this.juri = param1.juri > this.juri ? param1.juri : this.juri;
-         this.zepoci = param1.zepoci > this.zepoci ? param1.zepoci : this.zepoci;
+         this.minX = boundBox.minX < this.minX ? boundBox.minX : this.minX;
+         this.minY = boundBox.minY < this.minY ? boundBox.minY : this.minY;
+         this.minZ = boundBox.minZ < this.minZ ? boundBox.minZ : this.minZ;
+         this.maxX = boundBox.maxX > this.maxX ? boundBox.maxX : this.maxX;
+         this.maxY = boundBox.maxY > this.maxY ? boundBox.maxY : this.maxY;
+         this.maxZ = boundBox.maxZ > this.maxZ ? boundBox.maxZ : this.maxZ;
       }
       
-      public function addPoint(param1:Number, param2:Number, param3:Number) : void
+      public function addPoint(x:Number, y:Number, z:Number) : void
       {
-         if(param1 < this.cubegyw)
+         if(x < this.minX)
          {
-            this.cubegyw = param1;
+            this.minX = x;
          }
-         if(param1 > this.jys)
+         if(x > this.maxX)
          {
-            this.jys = param1;
+            this.maxX = x;
          }
-         if(param2 < this.nicomosa)
+         if(y < this.minY)
          {
-            this.nicomosa = param2;
+            this.minY = y;
          }
-         if(param2 > this.juri)
+         if(y > this.maxY)
          {
-            this.juri = param2;
+            this.maxY = y;
          }
-         if(param3 < this.gesuwi)
+         if(z < this.minZ)
          {
-            this.gesuwi = param3;
+            this.minZ = z;
          }
-         if(param3 > this.zepoci)
+         if(z > this.maxZ)
          {
-            this.zepoci = param3;
+            this.maxZ = z;
          }
       }
       
       public function infinity() : void
       {
-         this.cubegyw = 1e+308;
-         this.nicomosa = 1e+308;
-         this.gesuwi = 1e+308;
-         this.jys = -1e+308;
-         this.juri = -1e+308;
-         this.zepoci = -1e+308;
+         this.minX = 1e+308;
+         this.minY = 1e+308;
+         this.minZ = 1e+308;
+         this.maxX = -1e+308;
+         this.maxY = -1e+308;
+         this.maxZ = -1e+308;
       }
       
-      public function intersects(param1:AABB, param2:Number) : Boolean
+      public function intersects(aabb:AABB, epsilon:Number) : Boolean
       {
-         return !(this.cubegyw > param1.jys + param2 || this.jys < param1.cubegyw - param2 || this.nicomosa > param1.juri + param2 || this.juri < param1.nicomosa - param2 || this.gesuwi > param1.zepoci + param2 || this.zepoci < param1.gesuwi - param2);
+         return !(this.minX > aabb.maxX + epsilon || this.maxX < aabb.minX - epsilon || this.minY > aabb.maxY + epsilon || this.maxY < aabb.minY - epsilon || this.minZ > aabb.maxZ + epsilon || this.maxZ < aabb.minZ - epsilon);
       }
       
-      public function copyFrom(param1:AABB) : void
+      public function copyFrom(aabb:AABB) : void
       {
-         this.cubegyw = param1.cubegyw;
-         this.nicomosa = param1.nicomosa;
-         this.gesuwi = param1.gesuwi;
-         this.jys = param1.jys;
-         this.juri = param1.juri;
-         this.zepoci = param1.zepoci;
+         this.minX = aabb.minX;
+         this.minY = aabb.minY;
+         this.minZ = aabb.minZ;
+         this.maxX = aabb.maxX;
+         this.maxY = aabb.maxY;
+         this.maxZ = aabb.maxZ;
       }
       
       public function clone() : AABB
       {
-         var _loc1_:AABB = new AABB();
-         _loc1_.copyFrom(this);
-         return _loc1_;
+         var aabb:AABB = new AABB();
+         aabb.copyFrom(this);
+         return aabb;
       }
       
       public function getSizeX() : Number
       {
-         return this.jys - this.cubegyw;
+         return this.maxX - this.minX;
       }
       
       public function getSizeY() : Number
       {
-         return this.juri - this.nicomosa;
+         return this.maxY - this.minY;
       }
       
       public function getSizeZ() : Number
       {
-         return this.zepoci - this.gesuwi;
+         return this.maxZ - this.minZ;
       }
       
       public function toString() : String
       {
-         return getQualifiedClassName(this) + "(" + this.cubegyw.toFixed(3) + ", " + this.nicomosa.toFixed(3) + ", " + this.gesuwi.toFixed(3) + ": " + this.jys.toFixed(3) + ", " + this.juri.toFixed(3) + ", " + this.zepoci.toFixed(3) + ")";
+         return getQualifiedClassName(this) + "(" + this.minX.toFixed(3) + ", " + this.minY.toFixed(3) + ", " + this.minZ.toFixed(3) + ": " + this.maxX.toFixed(3) + ", " + this.maxY.toFixed(3) + ", " + this.maxZ.toFixed(3) + ")";
       }
    }
 }

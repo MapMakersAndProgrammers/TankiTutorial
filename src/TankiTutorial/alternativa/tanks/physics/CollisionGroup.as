@@ -9,11 +9,11 @@ package alternativa.tanks.physics
       
       public static const fut:int = 4;
       
-      public static const deli:int = 8;
+      public static const WEAPON:int = 8;
       
-      public static const neli:int = 16;
+      public static const STATIC:int = 16;
       
-      public static const nuqa:int = 64;
+      public static const BONUS:int = 64;
       
       public function CollisionGroup()
       {

@@ -20,49 +20,49 @@ package tutorial.commons
          super();
       }
       
-      public static function saveData(param1:String, param2:*, param3:Class) : void
+      public static function saveData(name:String, data:*, type:Class) : void
       {
-         var _loc4_:Object = registries[param3];
-         if(_loc4_ == null)
+         var registry:Object = registries[type];
+         if(registry == null)
          {
-            _loc4_ = registries[param3] = {};
+            registry = registries[type] = {};
          }
-         if(_loc4_[param1] != null)
+         if(registry[name] != null)
          {
-            throw new ArgumentError("Assets.as: already registred " + param1);
+            throw new ArgumentError("Assets.as: already registred " + name);
          }
-         _loc4_[param1] = param2;
+         registry[name] = data;
       }
       
-      public static function getData(param1:String, param2:Class) : *
+      public static function getData(name:String, type:Class) : *
       {
-         var _loc3_:Object = registries[param2];
-         if(_loc3_ == null)
+         var registry:Object = registries[type];
+         if(registry == null)
          {
-            if(param2 != Sound)
+            if(type != Sound)
             {
-               throw new ArgumentError("Assets.as: no such registry " + getQualifiedClassName(param2));
+               throw new ArgumentError("Assets.as: no such registry " + getQualifiedClassName(type));
             }
             return null;
          }
-         if(param2 != Sound)
+         if(type != Sound)
          {
-            if(_loc3_[param1] == null)
+            if(registry[name] == null)
             {
-               throw new ArgumentError("Assets.as: not registred " + param1);
+               throw new ArgumentError("Assets.as: not registred " + name);
             }
          }
-         return _loc3_[param1];
+         return registry[name];
       }
       
-      public static function hasData(param1:String, param2:Class) : Boolean
+      public static function hasData(name:String, type:Class) : Boolean
       {
-         var _loc3_:Object = registries[param2];
-         if(_loc3_ == null)
+         var registry:Object = registries[type];
+         if(registry == null)
          {
             return false;
          }
-         return _loc3_[param1] != null;
+         return registry[name] != null;
       }
    }
 }

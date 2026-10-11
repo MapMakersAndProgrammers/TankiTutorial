@@ -3,15 +3,15 @@ package alternativa.physics
    public class BodyContact
    {
       
-      private static var bagid:BodyContact;
+      private static var pool:BodyContact;
       
-      public var rukowicyp:Body;
+      public var body1:Body;
       
-      public var zata:Body;
+      public var body2:Body;
       
-      public var pupicic:Vector.<ShapeContact> = new Vector.<ShapeContact>();
+      public var shapeContacts:Vector.<ShapeContact> = new Vector.<ShapeContact>();
       
-      private var qesyqeno:BodyContact;
+      private var next:BodyContact;
       
       public function BodyContact()
       {
@@ -20,56 +20,56 @@ package alternativa.physics
       
       public static function create() : BodyContact
       {
-         if(bagid == null)
+         if(pool == null)
          {
             return new BodyContact();
          }
-         var _loc1_:BodyContact = bagid;
-         bagid = bagid.qesyqeno;
-         _loc1_.qesyqeno = null;
-         return _loc1_;
+         var contact:BodyContact = pool;
+         pool = pool.next;
+         contact.next = null;
+         return contact;
       }
       
       public function dispose() : void
       {
-         var _loc3_:ShapeContact = null;
-         this.rukowicyp = null;
-         this.zata = null;
-         var _loc1_:uint = this.pupicic.length;
-         var _loc2_:int = 0;
-         while(_loc2_ < _loc1_)
+         var shapeContact:ShapeContact = null;
+         this.body1 = null;
+         this.body2 = null;
+         var len:uint = this.shapeContacts.length;
+         var i:int = 0;
+         while(i < len)
          {
-            _loc3_ = this.pupicic[_loc2_];
-            _loc3_.dispose();
-            _loc2_++;
+            shapeContact = this.shapeContacts[i];
+            shapeContact.dispose();
+            i++;
          }
-         this.pupicic.length = 0;
-         this.qesyqeno = bagid;
-         bagid = this;
+         this.shapeContacts.length = 0;
+         this.next = pool;
+         pool = this;
       }
       
-      public function copy(param1:BodyContact) : void
+      public function copy(contact:BodyContact) : void
       {
-         this.rukowicyp = param1.rukowicyp;
-         this.zata = param1.zata;
-         var _loc2_:Vector.<ShapeContact> = param1.pupicic;
-         var _loc3_:uint = _loc2_.length;
-         var _loc4_:int = 0;
-         while(_loc4_ < _loc3_)
+         this.body1 = contact.body1;
+         this.body2 = contact.body2;
+         var contacts:Vector.<ShapeContact> = contact.shapeContacts;
+         var len:uint = contacts.length;
+         var i:int = 0;
+         while(i < len)
          {
-            this.pupicic[this.pupicic.length] = _loc2_[_loc4_];
-            _loc4_++;
+            this.shapeContacts[this.shapeContacts.length] = contacts[i];
+            i++;
          }
       }
       
-      public function setShapeContacts(param1:Vector.<ShapeContact>) : void
+      public function setShapeContacts(contacts:Vector.<ShapeContact>) : void
       {
-         var _loc2_:int = int(param1.length);
-         var _loc3_:int = 0;
-         while(_loc3_ < _loc2_)
+         var len:int = int(contacts.length);
+         var i:int = 0;
+         while(i < len)
          {
-            this.pupicic[_loc3_] = param1[_loc3_];
-            _loc3_++;
+            this.shapeContacts[i] = contacts[i];
+            i++;
          }
       }
    }

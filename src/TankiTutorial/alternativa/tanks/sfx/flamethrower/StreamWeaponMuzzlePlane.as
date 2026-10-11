@@ -7,11 +7,11 @@ package alternativa.tanks.sfx.flamethrower
    internal class StreamWeaponMuzzlePlane extends SimplePlane
    {
       
-      private var gepoky:Vector.<UVFrame>;
+      private var frames:Vector.<UVFrame>;
       
-      private var nomupiz:int;
+      private var numFrames:int;
       
-      private var tyfu:Number;
+      private var frameIndex:Number;
       
       public function StreamWeaponMuzzlePlane()
       {
@@ -22,42 +22,42 @@ package alternativa.tanks.sfx.flamethrower
          useLight = false;
       }
       
-      public function init(param1:TextureAnimation) : void
+      public function init(animation:TextureAnimation) : void
       {
-         setMaterialToAllFaces(param1.material);
-         this.gepoky = param1.qyvoladeg;
-         this.nomupiz = this.gepoky.length;
-         this.tyfu = 0;
-         this.setFrame(this.gepoky[0]);
+         setMaterialToAllFaces(animation.material);
+         this.frames = animation.frames;
+         this.numFrames = this.frames.length;
+         this.frameIndex = 0;
+         this.setFrame(this.frames[0]);
       }
       
       public function clear() : void
       {
          setMaterialToAllFaces(null);
-         this.gepoky = null;
-         this.nomupiz = 0;
+         this.frames = null;
+         this.numFrames = 0;
       }
       
-      public function update(param1:Number, param2:Number) : void
+      public function update(dt:Number, fps:Number) : void
       {
-         this.tyfu += param1 * param2;
-         if(this.tyfu >= this.nomupiz)
+         this.frameIndex += dt * fps;
+         if(this.frameIndex >= this.numFrames)
          {
-            this.tyfu = 0;
+            this.frameIndex = 0;
          }
-         this.setFrame(this.gepoky[int(this.tyfu)]);
+         this.setFrame(this.frames[int(this.frameIndex)]);
       }
       
-      private function setFrame(param1:UVFrame) : void
+      private function setFrame(frame:UVFrame) : void
       {
-         gar.u = param1.picylyno;
-         gar.v = param1.lesenac;
-         nityt.u = param1.picylyno;
-         nityt.v = param1.salemat;
-         fysu.u = param1.pusunawy;
-         fysu.v = param1.salemat;
-         rok.u = param1.pusunawy;
-         rok.v = param1.lesenac;
+         a.u = frame.topLeftU;
+         a.v = frame.topLeftV;
+         b.u = frame.topLeftU;
+         b.v = frame.bottomRightV;
+         c.u = frame.bottomRightU;
+         c.v = frame.bottomRightV;
+         d.u = frame.bottomRightU;
+         d.v = frame.topLeftV;
       }
    }
 }

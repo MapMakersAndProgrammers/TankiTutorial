@@ -6,56 +6,56 @@ package
    public class CameraControllerBase
    {
       
-      protected var butefu:GameCamera;
+      protected var camera:GameCamera;
       
-      public function CameraControllerBase(param1:GameCamera)
+      public function CameraControllerBase(camera:GameCamera)
       {
          super();
-         if(param1 == null)
+         if(camera == null)
          {
             throw new ArgumentError("Parameter camera cannot be null");
          }
-         this.butefu = param1;
+         this.camera = camera;
       }
       
-      public function setCamera(param1:GameCamera) : void
+      public function setCamera(camera:GameCamera) : void
       {
-         this.butefu = param1;
+         this.camera = camera;
       }
       
-      protected function setPosition(param1:Vector3) : void
+      protected function setPosition(position:Vector3) : void
       {
-         this.butefu.x = param1.x;
-         this.butefu.y = param1.y;
-         this.butefu.z = param1.z;
+         this.camera.x = position.x;
+         this.camera.y = position.y;
+         this.camera.z = position.z;
       }
       
-      protected function setOrientation(param1:Vector3) : void
+      protected function setOrientation(rotation:Vector3) : void
       {
-         this.butefu.rotationX = param1.x;
-         this.butefu.rotationY = param1.y;
-         this.butefu.rotationZ = param1.z;
+         this.camera.rotationX = rotation.x;
+         this.camera.rotationY = rotation.y;
+         this.camera.rotationZ = rotation.z;
       }
       
-      protected function setOrientationXYZ(param1:Number, param2:Number, param3:Number) : void
+      protected function setOrientationXYZ(rotationX:Number, rotationY:Number, rotationZ:Number) : void
       {
-         this.butefu.rotationX = param1;
-         this.butefu.rotationY = param2;
-         this.butefu.rotationZ = param3;
+         this.camera.rotationX = rotationX;
+         this.camera.rotationY = rotationY;
+         this.camera.rotationZ = rotationZ;
       }
       
-      protected function moveBy(param1:Number, param2:Number, param3:Number) : void
+      protected function moveBy(dx:Number, dy:Number, dz:Number) : void
       {
-         this.butefu.x += param1;
-         this.butefu.y += param2;
-         this.butefu.z += param3;
+         this.camera.x += dx;
+         this.camera.y += dy;
+         this.camera.z += dz;
       }
       
       protected function rotateBy(param1:Number, param2:Number, param3:Number) : void
       {
-         this.butefu.rotationX += param1;
-         this.butefu.rotationY += param2;
-         this.butefu.rotationZ += param3;
+         this.camera.rotationX += param1;
+         this.camera.rotationY += param2;
+         this.camera.rotationZ += param3;
       }
    }
 }

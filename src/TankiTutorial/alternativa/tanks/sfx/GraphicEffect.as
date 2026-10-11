@@ -6,9 +6,9 @@ package alternativa.tanks.sfx
    public interface GraphicEffect
    {
       
-      function addedToScene(param1:Object3DContainer) : void;
+      function addedToScene(container:Object3DContainer) : void;
       
-      function play(param1:int, param2:GameCamera) : Boolean;
+      function play(deltaTime:int, camera:GameCamera) : Boolean;
       
       function destroy() : void;
       

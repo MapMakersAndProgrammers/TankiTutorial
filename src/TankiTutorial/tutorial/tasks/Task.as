@@ -3,9 +3,9 @@ package tutorial.tasks
    public class Task
    {
       
-      internal var tomi:Task;
+      internal var prev:Task;
       
-      internal var suzasevot:Task;
+      internal var next:Task;
       
       public function Task()
       {

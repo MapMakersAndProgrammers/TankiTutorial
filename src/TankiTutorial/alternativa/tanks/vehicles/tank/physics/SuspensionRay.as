@@ -8,142 +8,142 @@ package alternativa.tanks.vehicles.tank.physics
    public class SuspensionRay
    {
       
-      public var nute:int;
+      public var collisionGroup:int;
       
-      public var vivi:Boolean = false;
+      public var colliding:Boolean = false;
       
-      public var wonuhig:RayHit = new RayHit();
+      public var rayHit:RayHit = new RayHit();
       
-      public var vys:Number = 0;
+      public var springForce:Number = 0;
       
-      public const poseze:Vector3 = new Vector3();
+      public const contactVelocity:Vector3 = new Vector3();
       
-      public var wiciqy:Number = 0;
+      public var speed:Number = 0;
       
       private var body:Body;
       
-      private var vyhomopog:Vector3 = new Vector3();
+      private var origin:Vector3 = new Vector3();
       
-      private var ruda:Vector3 = new Vector3();
+      private var direction:Vector3 = new Vector3();
       
-      private var gobo:SuspensionParams;
+      private var suspensionParams:SuspensionParams;
       
-      private var ralowano:Vector3 = new Vector3();
+      private var globalOrigin:Vector3 = new Vector3();
       
-      private var dozykamu:Vector3 = new Vector3();
+      private var globalDirection:Vector3 = new Vector3();
       
-      private var zife:Number = 0;
+      private var prevCompression:Number = 0;
       
-      private var woz:RayCollisionFilter;
+      private var collisionFilter:RayCollisionFilter;
       
-      public function SuspensionRay(param1:Body, param2:Vector3, param3:Vector3, param4:SuspensionParams)
+      public function SuspensionRay(body:Body, origin:Vector3, direction:Vector3, suspensionParams:SuspensionParams)
       {
          super();
-         this.body = param1;
-         this.vyhomopog.copy(param2);
-         this.ruda.copy(param3);
-         this.gobo = param4;
-         this.woz = new RayCollisionFilter(param1);
+         this.body = body;
+         this.origin.copy(origin);
+         this.direction.copy(direction);
+         this.suspensionParams = suspensionParams;
+         this.collisionFilter = new RayCollisionFilter(body);
       }
       
-      public function update(param1:Number) : void
+      public function update(dt:Number) : void
       {
          this.raycast();
-         if(this.vivi)
+         if(this.colliding)
          {
-            this.calculateSpringForce(param1);
+            this.calculateSpringForce(dt);
             this.calculateContactVelocity();
          }
       }
       
       private function raycast() : void
       {
-         var _loc1_:Matrix3 = this.body.jefe;
-         this.dozykamu.x = _loc1_.gusat * this.ruda.x + _loc1_.cydop * this.ruda.y + _loc1_.sivy * this.ruda.z;
-         this.dozykamu.y = _loc1_.sig * this.ruda.x + _loc1_.qanezycap * this.ruda.y + _loc1_.wyvukog * this.ruda.z;
-         this.dozykamu.z = _loc1_.vug * this.ruda.x + _loc1_.luwym * this.ruda.y + _loc1_.tari * this.ruda.z;
-         var _loc2_:Vector3 = this.body.kejo.position;
-         this.ralowano.x = _loc1_.gusat * this.vyhomopog.x + _loc1_.cydop * this.vyhomopog.y + _loc1_.sivy * this.vyhomopog.z;
-         this.ralowano.y = _loc1_.sig * this.vyhomopog.x + _loc1_.qanezycap * this.vyhomopog.y + _loc1_.wyvukog * this.vyhomopog.z;
-         this.ralowano.z = _loc1_.vug * this.vyhomopog.x + _loc1_.luwym * this.vyhomopog.y + _loc1_.tari * this.vyhomopog.z;
-         this.ralowano.x += _loc2_.x;
-         this.ralowano.y += _loc2_.y;
-         this.ralowano.z += _loc2_.z;
-         if(this.vivi)
+         var matrix:Matrix3 = this.body.orientationMatrix;
+         this.globalDirection.x = matrix.ma * this.direction.x + matrix.mb * this.direction.y + matrix.mc * this.direction.z;
+         this.globalDirection.y = matrix.me * this.direction.x + matrix.mf * this.direction.y + matrix.mg * this.direction.z;
+         this.globalDirection.z = matrix.mi * this.direction.x + matrix.mj * this.direction.y + matrix.mk * this.direction.z;
+         var position:Vector3 = this.body.state.position;
+         this.globalOrigin.x = matrix.ma * this.origin.x + matrix.mb * this.origin.y + matrix.mc * this.origin.z;
+         this.globalOrigin.y = matrix.me * this.origin.x + matrix.mf * this.origin.y + matrix.mg * this.origin.z;
+         this.globalOrigin.z = matrix.mi * this.origin.x + matrix.mj * this.origin.y + matrix.mk * this.origin.z;
+         this.globalOrigin.x += position.x;
+         this.globalOrigin.y += position.y;
+         this.globalOrigin.z += position.z;
+         if(this.colliding)
          {
-            this.zife = this.gobo.tovudov - this.wonuhig.jomuc;
+            this.prevCompression = this.suspensionParams.rayLength - this.rayHit.time;
          }
-         this.vivi = this.body.tuce.kymaqos.raycast(this.ralowano,this.dozykamu,this.nute,this.gobo.tovudov,this.woz,this.wonuhig);
+         this.colliding = this.body.scene.collisionDetector.raycast(this.globalOrigin,this.globalDirection,this.collisionGroup,this.suspensionParams.rayLength,this.collisionFilter,this.rayHit);
       }
       
-      public function calculateSpringForce(param1:Number) : void
+      public function calculateSpringForce(dt:Number) : void
       {
-         var _loc2_:Number = this.gobo.tovudov - this.wonuhig.jomuc;
-         this.vys = this.gobo.jakopunu * _loc2_;
-         var _loc3_:Number = (_loc2_ - this.zife) / param1;
-         this.vys += _loc3_ * this.gobo.miqelina;
-         if(this.vys < 0)
+         var compression:Number = this.suspensionParams.rayLength - this.rayHit.time;
+         this.springForce = this.suspensionParams.springCoeff * compression;
+         var compressionSpeed:Number = (compression - this.prevCompression) / dt;
+         this.springForce += compressionSpeed * this.suspensionParams.dampingCoeff;
+         if(this.springForce < 0)
          {
-            this.vys = 0;
+            this.springForce = 0;
          }
       }
       
       private function calculateContactVelocity() : void
       {
-         var _loc2_:Vector3 = null;
-         var _loc3_:Vector3 = null;
-         var _loc4_:Vector3 = null;
-         var _loc5_:Vector3 = null;
-         var _loc6_:Number = NaN;
-         var _loc7_:Number = NaN;
-         var _loc8_:Number = NaN;
-         var _loc1_:Body = this.wonuhig.vetudozi.body;
-         if(_loc1_.katuf != null)
+         var position:Vector3 = null;
+         var velocity:Vector3 = null;
+         var rotation:Vector3 = null;
+         var hitPosition:Vector3 = null;
+         var dx:Number = NaN;
+         var dy:Number = NaN;
+         var dz:Number = NaN;
+         var hitBody:Body = this.rayHit.shape.body;
+         if(hitBody.data != null)
          {
-            _loc2_ = _loc1_.kejo.position;
-            _loc3_ = _loc1_.kejo.zerus;
-            _loc4_ = _loc1_.kejo.fev;
-            _loc5_ = this.wonuhig.position;
-            _loc6_ = _loc5_.x - _loc2_.x;
-            _loc7_ = _loc5_.y - _loc2_.y;
-            _loc8_ = _loc5_.z - _loc2_.z;
-            this.poseze.x = _loc4_.y * _loc8_ - _loc4_.z * _loc7_;
-            this.poseze.y = _loc4_.z * _loc6_ - _loc4_.x * _loc8_;
-            this.poseze.z = _loc4_.x * _loc7_ - _loc4_.y * _loc6_;
-            this.poseze.x += _loc3_.x;
-            this.poseze.y += _loc3_.y;
-            this.poseze.z += _loc3_.z;
+            position = hitBody.state.position;
+            velocity = hitBody.state.velocity;
+            rotation = hitBody.state.rotation;
+            hitPosition = this.rayHit.position;
+            dx = hitPosition.x - position.x;
+            dy = hitPosition.y - position.y;
+            dz = hitPosition.z - position.z;
+            this.contactVelocity.x = rotation.y * dz - rotation.z * dy;
+            this.contactVelocity.y = rotation.z * dx - rotation.x * dz;
+            this.contactVelocity.z = rotation.x * dy - rotation.y * dx;
+            this.contactVelocity.x += velocity.x;
+            this.contactVelocity.y += velocity.y;
+            this.contactVelocity.z += velocity.z;
          }
          else
          {
-            this.poseze.x = 0;
-            this.poseze.y = 0;
-            this.poseze.z = 0;
+            this.contactVelocity.x = 0;
+            this.contactVelocity.y = 0;
+            this.contactVelocity.z = 0;
          }
       }
       
       public function getGlobalOrigin() : Vector3
       {
-         return this.ralowano;
+         return this.globalOrigin;
       }
       
       public function getGlobalDirection() : Vector3
       {
-         return this.dozykamu;
+         return this.globalDirection;
       }
       
       public function getOrigin() : Vector3
       {
-         return this.vyhomopog;
+         return this.origin;
       }
       
       public function getActualLength() : Number
       {
-         if(this.vivi)
+         if(this.colliding)
          {
-            return this.wonuhig.jomuc;
+            return this.rayHit.time;
          }
-         return this.gobo.tovudov;
+         return this.suspensionParams.rayLength;
       }
    }
 }

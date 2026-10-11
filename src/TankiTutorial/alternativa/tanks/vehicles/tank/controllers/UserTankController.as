@@ -12,116 +12,116 @@ package alternativa.tanks.vehicles.tank.controllers
    public class UserTankController extends CommonTankController
    {
       
-      private var ridima:Dictionary;
+      private var handlers:Dictionary;
       
-      public function UserTankController(param1:IEventDispatcher, param2:Tank)
+      public function UserTankController(eventSource:IEventDispatcher, tank:Tank)
       {
-         super(param2);
+         super(tank);
          this.initKeyHandlers();
-         param1.addEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
-         param1.addEventListener(KeyboardEvent.KEY_UP,this.onKey);
-         param1.addEventListener(MouseEvent.MOUSE_DOWN,this.onMouse);
-         param1.addEventListener(MouseEvent.MOUSE_UP,this.onMouse);
-         param1.addEventListener(ControlModeChangeEvent.somyvigir,this.onMouseModeChanged);
-         param1.addEventListener(FullScreenEvent.FULL_SCREEN,this.onFullScreen);
+         eventSource.addEventListener(KeyboardEvent.KEY_DOWN,this.onKey);
+         eventSource.addEventListener(KeyboardEvent.KEY_UP,this.onKey);
+         eventSource.addEventListener(MouseEvent.MOUSE_DOWN,this.onMouse);
+         eventSource.addEventListener(MouseEvent.MOUSE_UP,this.onMouse);
+         eventSource.addEventListener(ControlModeChangeEvent.CONTROL_MODE_CHANGED,this.onMouseModeChanged);
+         eventSource.addEventListener(FullScreenEvent.FULL_SCREEN,this.onFullScreen);
       }
       
-      private function onFullScreen(param1:FullScreenEvent) : void
+      private function onFullScreen(fullScreenEvent:FullScreenEvent) : void
       {
          setAction(0);
       }
       
-      private function onMouseModeChanged(param1:ControlModeChangeEvent) : void
+      private function onMouseModeChanged(controlModeChangeEvent:ControlModeChangeEvent) : void
       {
-         var _loc2_:int = this.onKeyFire(false);
-         if(_loc2_ != ses)
+         var state:int = this.onKeyFire(false);
+         if(state != controlState)
          {
-            setAction(_loc2_);
+            setAction(state);
          }
       }
       
-      private function onMouse(param1:MouseEvent) : void
+      private function onMouse(mouseEvent:MouseEvent) : void
       {
-         var _loc2_:int = 0;
-         if(GameData.kumiteva && Boolean(Tank(citacir).turretController.isNotLocked()))
+         var state:int = 0;
+         if(GameData.mouseModeEnabled && Boolean(Tank(tank).turretController.isNotLocked()))
          {
-            _loc2_ = this.onKeyFire(param1.type == MouseEvent.MOUSE_DOWN);
-            if(_loc2_ != ses)
+            state = this.onKeyFire(mouseEvent.type == MouseEvent.MOUSE_DOWN);
+            if(state != controlState)
             {
-               setAction(_loc2_);
+               setAction(state);
             }
          }
       }
       
       private function initKeyHandlers() : void
       {
-         this.ridima = new Dictionary();
-         this.setHandlers(ChassisControlKeyMap.zutetegyv,this.onKeyForward);
-         this.setHandlers(ChassisControlKeyMap.huwumuly,this.onKeyBack);
-         this.setHandlers(ChassisControlKeyMap.hatu,this.onKeyLeft);
-         this.setHandlers(ChassisControlKeyMap.baric,this.onKeyRight);
-         this.setHandlers(ChassisControlKeyMap.bacifaq,this.onKeyFire);
+         this.handlers = new Dictionary();
+         this.setHandlers(ChassisControlKeyMap.forwardKeys,this.onKeyForward);
+         this.setHandlers(ChassisControlKeyMap.backKeys,this.onKeyBack);
+         this.setHandlers(ChassisControlKeyMap.leftKeys,this.onKeyLeft);
+         this.setHandlers(ChassisControlKeyMap.rightKeys,this.onKeyRight);
+         this.setHandlers(ChassisControlKeyMap.fireKeys,this.onKeyFire);
       }
       
-      override public function update(param1:int, param2:int, param3:Number) : void
+      override public function update(time:int, deltaTime:int, dt:Number) : void
       {
-         if(!dalipaz)
+         if(!_enabled)
          {
-            ses = 0;
+            controlState = 0;
          }
-         var _loc4_:Tank = citacir;
-         if(_loc4_.kakow == null || !Tank(citacir).turretController.isNotLocked())
+         var _loc4_:Tank = tank;
+         if(_loc4_.userTitle == null || !Tank(tank).turretController.isNotLocked())
          {
-            ses &= ~(1 << syfysu);
+            controlState &= ~(1 << FIRE);
          }
-         super.update(param1,param2,param3);
+         super.update(time,deltaTime,dt);
       }
       
-      private function onKey(param1:KeyboardEvent) : void
+      private function onKey(keyboardEvent:KeyboardEvent) : void
       {
-         var _loc3_:int = 0;
-         var _loc2_:Function = this.ridima[param1.keyCode];
-         if(_loc2_ != null)
+         var state:int = 0;
+         var handler:Function = this.handlers[keyboardEvent.keyCode];
+         if(handler != null)
          {
-            _loc3_ = _loc2_(param1.type == KeyboardEvent.KEY_DOWN);
-            if(_loc3_ != ses)
+            state = handler(keyboardEvent.type == KeyboardEvent.KEY_DOWN);
+            if(state != controlState)
             {
-               setAction(_loc3_);
+               setAction(state);
             }
          }
       }
       
-      private function onKeyForward(param1:Boolean) : int
+      private function onKeyForward(pressed:Boolean) : int
       {
-         return MathUtils.changeBitValue(ses,cyjeruqa,param1);
+         return MathUtils.changeBitValue(controlState,FORWARD,pressed);
       }
       
-      private function onKeyBack(param1:Boolean) : int
+      private function onKeyBack(pressed:Boolean) : int
       {
-         return MathUtils.changeBitValue(ses,pycyje,param1);
+         return MathUtils.changeBitValue(controlState,BACKWARD,pressed);
       }
       
-      private function onKeyLeft(param1:Boolean) : int
+      private function onKeyLeft(pressed:Boolean) : int
       {
-         return MathUtils.changeBitValue(ses,dudazodol,param1);
+         return MathUtils.changeBitValue(controlState,LEFT,pressed);
       }
       
-      private function onKeyRight(param1:Boolean) : int
+      private function onKeyRight(pressed:Boolean) : int
       {
-         return MathUtils.changeBitValue(ses,qij,param1);
+         return MathUtils.changeBitValue(controlState,RIGHT,pressed);
       }
       
-      private function onKeyFire(param1:Boolean) : int
+      private function onKeyFire(pressed:Boolean) : int
       {
-         return MathUtils.changeBitValue(ses,syfysu,param1);
+         return MathUtils.changeBitValue(controlState,FIRE,pressed);
       }
       
-      private function setHandlers(param1:Vector.<uint>, param2:Function) : void
+      private function setHandlers(keyCodes:Vector.<uint>, handler:Function) : void
       {
-         var _loc3_:uint = 0;
-         for each(_loc3_ in param1)
+         var keyCode:uint = 0;
+         for each(keyCode in keyCodes)
          {
-            this.ridima[_loc3_] = param2;
+            this.handlers[keyCode] = handler;
          }
       }
    }

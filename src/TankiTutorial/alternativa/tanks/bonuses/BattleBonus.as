@@ -22,13 +22,13 @@ package alternativa.tanks.bonuses
    public class BattleBonus extends PooledObject implements PhysicsController, PhysicsInterpolator, Renderer, Bonus
    {
       
-      private static const manytaq:Number = 10000000000;
+      private static const MAX_RAY_TIME:Number = 10000000000;
       
-      private static const peveco:Vector3 = new Vector3();
+      private static const groundNormal:Vector3 = new Vector3();
       
-      private static const docyqy:Vector3 = new Vector3();
+      private static const groundPoint:Vector3 = new Vector3();
       
-      private static const nuk:Vector3 = new Vector3();
+      private static const landingPoint:Vector3 = new Vector3();
       
       private static const jarunazyk:Vector3 = new Vector3();
       
@@ -36,47 +36,47 @@ package alternativa.tanks.bonuses
       
       private static const cokis:Vector3 = new Vector3();
       
-      private static const vyhomopog:Vector3 = new Vector3();
+      private static const rayOrigin:Vector3 = new Vector3();
       
-      private static const tet:RayHit = new RayHit();
+      private static const rayHit:RayHit = new RayHit();
       
-      private static const run:Matrix3 = new Matrix3();
+      private static const matrix:Matrix3 = new Matrix3();
       
       private static const qopo:Matrix3 = new Matrix3();
       
-      private static const zekos:Vector3 = new Vector3();
+      private static const axis:Vector3 = new Vector3();
       
-      private static const fyqynyfy:Vector3 = new Vector3();
+      private static const eulerAngles:Vector3 = new Vector3();
       
-      private static const divogyvo:Vector3 = new Vector3();
+      private static const offset:Vector3 = new Vector3();
       
-      private var giqo:BonusMesh;
+      private var bonusMesh:BonusMesh;
       
-      private var kyvedu:Parachute;
+      private var parachute:Parachute;
       
-      private var til:Cords;
+      private var cords:Cords;
       
-      private var mij:BattleService;
+      private var battleService:BattleService;
       
-      private var pobano:Number = 0;
+      private var fallSpeed:Number = 0;
       
-      private var luk:Long;
+      private var objectId:Long;
       
-      private var katuf:BattleBonusData;
+      private var bonusData:BattleBonusData;
       
-      private var nimulul:Long;
+      private var _bonusId:Long;
       
-      private var ledijym:Boolean;
+      private var active:Boolean;
       
-      private var wyqitywi:BonusTrigger;
+      private var trigger:BonusTrigger;
       
-      private var lywajoqa:Vector.<BonusController> = new Vector.<BonusController>();
+      private var controllers:Vector.<BonusController> = new Vector.<BonusController>();
       
-      private var syligatyl:BonusController;
+      private var currentController:BonusController;
       
-      private var kewi:FallController;
+      private var fallController:FallController;
       
-      private var lyge:LandingController;
+      private var landingController:LandingController;
       
       public const nuziged:ISignal = new Signal();
       
@@ -86,175 +86,175 @@ package alternativa.tanks.bonuses
       
       private const hery:ISignal = new Signal();
       
-      public function BattleBonus(param1:Pool)
+      public function BattleBonus(pool:Pool)
       {
-         super(param1);
-         this.wyqitywi = new BonusTrigger(this);
-         this.kewi = new FallController(this);
-         this.lyge = new LandingController(this);
+         super(pool);
+         this.trigger = new BonusTrigger(this);
+         this.fallController = new FallController(this);
+         this.landingController = new LandingController(this);
       }
       
-      private static function isFlatSurface(param1:Vector3) : Boolean
+      private static function isFlatSurface(normal:Vector3) : Boolean
       {
-         return param1.z > BonusConst.bepy;
+         return normal.z > BonusConst.bepy;
       }
       
-      public function init(param1:Long, param2:Long, param3:BattleBonusData, param4:BattleService) : void
+      public function init(objectId:Long, bonusId:Long, bonusData:BattleBonusData, battleService:BattleService) : void
       {
-         this.luk = param1;
-         this.nimulul = param2;
-         this.katuf = param3;
-         this.mij = param4;
-         this.lywajoqa.length = 0;
+         this.objectId = objectId;
+         this._bonusId = bonusId;
+         this.bonusData = bonusData;
+         this.battleService = battleService;
+         this.controllers.length = 0;
       }
       
-      public function spawn(param1:Vector3, param2:int, param3:Number, param4:Function) : void
+      public function spawn(position:Vector3, param2:int, fallSpeed:Number, callback:Function) : void
       {
-         var _loc5_:int = 0;
-         this.pobano = param3;
-         this.hery.add(param4);
+         var fallTime:int = 0;
+         this.fallSpeed = fallSpeed;
+         this.hery.add(callback);
          this.initBonusMesh();
-         this.ledijym = false;
-         this.lywajoqa.length = 0;
-         this.getGroundPointAndNormal(param1,docyqy,peveco);
-         if(this.isUnderCeil(param1))
+         this.active = false;
+         this.controllers.length = 0;
+         this.getGroundPointAndNormal(position,groundPoint,groundNormal);
+         if(this.isUnderCeil(position))
          {
-            this.initOnGround(docyqy,peveco);
+            this.initOnGround(groundPoint,groundNormal);
          }
          else
          {
-            this.initAirborne(param1,docyqy,peveco,param2);
-            this.wyqitywi.enable(this.mij.getBattleRunner());
-            _loc5_ = (docyqy.distanceTo(param1) - BonusConst.numij) / param3 * 1000;
+            this.initAirborne(position,groundPoint,groundNormal,param2);
+            this.trigger.enable(this.battleService.getBattleRunner());
+            fallTime = (groundPoint.distanceTo(position) - BonusConst.BONUS_HALF_SIZE) / fallSpeed * 1000;
          }
-         this.initRemovalAnimation(_loc5_ + this.katuf.wym - param2);
+         this.initRemovalAnimation(fallTime + this.bonusData.lifeTime - param2);
          if(this.runNextController())
          {
             this.activateRendererAndPhysicsController();
          }
       }
       
-      private function initOnGround(param1:Vector3, param2:Vector3) : void
+      private function initOnGround(point:Vector3, normal:Vector3) : void
       {
-         var _loc3_:Number = NaN;
-         divogyvo.reset(0,0,BonusConst.numij);
-         if(isFlatSurface(param2))
+         var angle:Number = NaN;
+         offset.reset(0,0,BonusConst.BONUS_HALF_SIZE);
+         if(isFlatSurface(normal))
          {
-            fyqynyfy.reset(0,0,this.getStartingAngleZ());
+            eulerAngles.reset(0,0,this.getStartingAngleZ());
          }
          else
          {
-            zekos.cross2(Vector3.nesicuryn,param2);
-            zekos.normalize();
-            _loc3_ = Math.acos(param2.z);
-            run.fromAxisAngle(zekos,_loc3_);
+            axis.cross2(Vector3.zAxis,normal);
+            axis.normalize();
+            angle = Math.acos(normal.z);
+            matrix.fromAxisAngle(axis,angle);
             qopo.setRotationMatrix(0,0,this.getStartingAngleZ());
-            qopo.append(run);
-            qopo.getEulerAngles(fyqynyfy);
-            divogyvo.transform3(run);
+            qopo.append(matrix);
+            qopo.getEulerAngles(eulerAngles);
+            offset.transform3(matrix);
          }
-         this.giqo.rotationX = fyqynyfy.x;
-         this.giqo.rotationY = fyqynyfy.y;
-         this.giqo.rotationZ = fyqynyfy.z;
-         this.giqo.x = param1.x + divogyvo.x;
-         this.giqo.y = param1.y + divogyvo.y;
-         this.giqo.z = param1.z + divogyvo.z;
+         this.bonusMesh.rotationX = eulerAngles.x;
+         this.bonusMesh.rotationY = eulerAngles.y;
+         this.bonusMesh.rotationZ = eulerAngles.z;
+         this.bonusMesh.x = point.x + offset.x;
+         this.bonusMesh.y = point.y + offset.y;
+         this.bonusMesh.z = point.z + offset.z;
          this.updateTriggerFromMesh();
-         this.mij.getBattleScene3D().addObject(this.giqo);
+         this.battleService.getBattleScene3D().addObject(this.bonusMesh);
          this.startGroundSpawnAnimation();
       }
       
       private function startGroundSpawnAnimation() : void
       {
-         var _loc1_:GroundSpawnRenderer = GroundSpawnRenderer(this.mij.getObjectPool().getObject(GroundSpawnRenderer));
-         _loc1_.start(this,this.mij);
+         var groundSpawnRenderer:GroundSpawnRenderer = GroundSpawnRenderer(this.battleService.getObjectPool().getObject(GroundSpawnRenderer));
+         groundSpawnRenderer.start(this,this.battleService);
       }
       
       private function updateTriggerFromMesh() : void
       {
-         this.wyqitywi.update(this.giqo.x,this.giqo.y,this.giqo.z,this.giqo.rotationX,this.giqo.rotationY,this.giqo.rotationZ);
+         this.trigger.update(this.bonusMesh.x,this.bonusMesh.y,this.bonusMesh.z,this.bonusMesh.rotationX,this.bonusMesh.rotationY,this.bonusMesh.rotationZ);
       }
       
       private function getStartingAngleZ() : Number
       {
-         return Math.PI * 10 * this.nimulul.low / 180;
+         return Math.PI * 10 * this._bonusId.low / 180;
       }
       
-      private function initAirborne(param1:Vector3, param2:Vector3, param3:Vector3, param4:int) : void
+      private function initAirborne(position:Vector3, point:Vector3, normal:Vector3, param4:int) : void
       {
-         var _loc5_:Number = NaN;
-         if(isFlatSurface(param3))
+         var fallTime:Number = NaN;
+         if(isFlatSurface(normal))
          {
-            _loc5_ = this.calculateFallTime(param1,param2);
-            nuk.copy(param2);
+            fallTime = this.calculateFallTime(position,point);
+            landingPoint.copy(point);
          }
          else
          {
-            jarunazyk.cross2(param3,Vector3.nesicuryn);
+            jarunazyk.cross2(normal,Vector3.zAxis);
             jarunazyk.normalize();
-            natyjy.cross2(param3,jarunazyk);
-            cokis.cross2(Vector3.nesicuryn,jarunazyk);
-            vyhomopog.copy(param1);
-            vyhomopog.addScaled(-BonusConst.numij,cokis);
-            nuk.copy(param2);
-            nuk.addScaled(-BonusConst.numij / param3.z,natyjy);
-            if(this.mij.getBattleRunner().getCollisionDetector().raycastStatic(vyhomopog,Vector3.lasis,CollisionGroup.neli,manytaq,null,tet))
+            natyjy.cross2(normal,jarunazyk);
+            cokis.cross2(Vector3.zAxis,jarunazyk);
+            rayOrigin.copy(position);
+            rayOrigin.addScaled(-BonusConst.BONUS_HALF_SIZE,cokis);
+            landingPoint.copy(point);
+            landingPoint.addScaled(-BonusConst.BONUS_HALF_SIZE / normal.z,natyjy);
+            if(this.battleService.getBattleRunner().getCollisionDetector().raycastStatic(rayOrigin,Vector3.down,CollisionGroup.STATIC,MAX_RAY_TIME,null,rayHit))
             {
-               if(param2.z < tet.position.z && tet.position.z < nuk.z)
+               if(point.z < rayHit.position.z && rayHit.position.z < landingPoint.z)
                {
-                  nuk.addScaled(BonusConst.numij / param3.z * (nuk.z - tet.position.z) / (nuk.z - param2.z),natyjy);
+                  landingPoint.addScaled(BonusConst.BONUS_HALF_SIZE / normal.z * (landingPoint.z - rayHit.position.z) / (landingPoint.z - point.z),natyjy);
                }
             }
-            _loc5_ = this.calculateFallTime(param1,nuk);
-            this.lyge.init(nuk,param3);
-            this.lywajoqa.push(this.lyge);
+            fallTime = this.calculateFallTime(position,landingPoint);
+            this.landingController.init(landingPoint,normal);
+            this.controllers.push(this.landingController);
          }
-         var _loc6_:Number = nuk.z + BonusConst.numij + BonusConst.wucaruw;
-         var _loc7_:Number = this.getStartingAngleZ();
-         if(_loc5_ * 1000 <= param4)
+         var minZ:Number = landingPoint.z + BonusConst.BONUS_HALF_SIZE + BonusConst.wucaruw;
+         var startingAngleZ:Number = this.getStartingAngleZ();
+         if(fallTime * 1000 <= param4)
          {
-            this.giqo.x = param1.x;
-            this.giqo.y = param1.y;
-            this.giqo.z = param2.z + BonusConst.numij;
-            this.giqo.rotationZ = _loc7_ + _loc5_ * BonusConst.myr;
+            this.bonusMesh.x = position.x;
+            this.bonusMesh.y = position.y;
+            this.bonusMesh.z = point.z + BonusConst.BONUS_HALF_SIZE;
+            this.bonusMesh.rotationZ = startingAngleZ + fallTime * BonusConst.ROTATION_SPEED;
             this.updateTriggerFromMesh();
-            this.mij.getBattleScene3D().addObject(this.giqo);
+            this.battleService.getBattleScene3D().addObject(this.bonusMesh);
          }
          else
          {
             this.initParachute();
             this.addAllToScene();
-            this.startSpawnAnimation(this.mij);
-            this.kewi.init(param1,this.pobano,_loc6_,-_loc5_,param4 / 1000,_loc7_);
-            this.lywajoqa.push(this.kewi);
+            this.startSpawnAnimation(this.battleService);
+            this.fallController.init(position,this.fallSpeed,minZ,-fallTime,param4 / 1000,startingAngleZ);
+            this.controllers.push(this.fallController);
          }
       }
       
-      private function isUnderCeil(param1:Vector3) : Boolean
+      private function isUnderCeil(position:Vector3) : Boolean
       {
-         var _loc2_:CollisionDetector = this.mij.getBattleRunner().getCollisionDetector();
-         return _loc2_.hasStaticHit(param1,Vector3.nesicuryn,CollisionGroup.neli,manytaq);
+         var collisionDetector:CollisionDetector = this.battleService.getBattleRunner().getCollisionDetector();
+         return collisionDetector.hasStaticHit(position,Vector3.zAxis,CollisionGroup.STATIC,MAX_RAY_TIME);
       }
       
-      private function getGroundPointAndNormal(param1:Vector3, param2:Vector3, param3:Vector3) : void
+      private function getGroundPointAndNormal(position:Vector3, point:Vector3, normal:Vector3) : void
       {
-         var _loc4_:CollisionDetector = this.mij.getBattleRunner().getCollisionDetector();
-         if(_loc4_.raycastStatic(param1,Vector3.lasis,CollisionGroup.neli,manytaq,null,tet))
+         var collisionDetector:CollisionDetector = this.battleService.getBattleRunner().getCollisionDetector();
+         if(collisionDetector.raycastStatic(position,Vector3.down,CollisionGroup.STATIC,MAX_RAY_TIME,null,rayHit))
          {
-            param3.copy(tet.lefugefo);
-            param2.copy(tet.position);
+            normal.copy(rayHit.normal);
+            point.copy(rayHit.position);
          }
          else
          {
-            param3.copy(Vector3.nesicuryn);
-            param2.copy(param1);
-            param2.z -= 1000;
+            normal.copy(Vector3.zAxis);
+            point.copy(position);
+            point.z -= 1000;
          }
       }
       
       public function get bonusId() : Long
       {
-         return this.nimulul;
+         return this._bonusId;
       }
       
       public function pickup() : void
@@ -268,27 +268,27 @@ package alternativa.tanks.bonuses
       
       private function playPickupSound() : void
       {
-         var _loc1_:Sound3D = null;
-         var _loc2_:Vector3 = null;
-         if(this.katuf.ruzy != null)
+         var sound:Sound3D = null;
+         var position:Vector3 = null;
+         if(this.bonusData.pickupSound != null)
          {
-            _loc1_ = Sound3D.create(this.katuf.ruzy,SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,0.5);
-            _loc2_ = new Vector3(this.giqo.x,this.giqo.y,this.giqo.z);
-            this.mij.addSound3DEffect(Sound3DEffect.create(this.mij.getObjectPool(),_loc2_,_loc1_));
+            sound = Sound3D.create(this.bonusData.pickupSound,SoundOptions.nearRadius,SoundOptions.farRadius,SoundOptions.fyvilyv,0.5);
+            position = new Vector3(this.bonusMesh.x,this.bonusMesh.y,this.bonusMesh.z);
+            this.battleService.addSound3DEffect(Sound3DEffect.create(this.battleService.getObjectPool(),position,sound));
          }
       }
       
       private function startPickupAnimation() : void
       {
-         var _loc1_:BonusPickupAnimation = BonusPickupAnimation(this.mij.getObjectPool().getObject(BonusPickupAnimation));
-         _loc1_.start(this.giqo,this.mij.getBattleScene3D());
-         this.giqo = null;
+         var bonusPickupAnimation:BonusPickupAnimation = BonusPickupAnimation(this.battleService.getObjectPool().getObject(BonusPickupAnimation));
+         bonusPickupAnimation.start(this.bonusMesh,this.battleService.getBattleScene3D());
+         this.bonusMesh = null;
       }
       
       public function remove() : void
       {
          this.lybaluh.dispatch();
-         this.giqo = null;
+         this.bonusMesh = null;
          this.destroy();
       }
       
@@ -301,61 +301,61 @@ package alternativa.tanks.bonuses
          this.destroyBonusMesh();
          this.destroyParachute();
          this.deactivateRendererAndPhysicsController();
-         this.wyqitywi.disable();
+         this.trigger.disable();
          this.hery.removeAll();
-         this.mij = null;
-         this.katuf = null;
+         this.battleService = null;
+         this.bonusData = null;
          recycle();
       }
       
       private function destroyBonusMesh() : void
       {
-         if(this.giqo != null)
+         if(this.bonusMesh != null)
          {
-            this.mij.getBattleScene3D().removeObject(this.giqo);
-            this.giqo.recycle();
-            this.giqo = null;
+            this.battleService.getBattleScene3D().removeObject(this.bonusMesh);
+            this.bonusMesh.recycle();
+            this.bonusMesh = null;
          }
       }
       
       private function destroyParachute() : void
       {
-         if(this.kyvedu != null)
+         if(this.parachute != null)
          {
-            this.mij.getBattleScene3D().removeObject(this.kyvedu);
-            this.kyvedu.recycle();
-            this.kyvedu = null;
-            this.mij.getBattleScene3D().removeObject(this.til);
-            this.til.recycle();
-            this.til = null;
+            this.battleService.getBattleScene3D().removeObject(this.parachute);
+            this.parachute.recycle();
+            this.parachute = null;
+            this.battleService.getBattleScene3D().removeObject(this.cords);
+            this.cords.recycle();
+            this.cords = null;
          }
       }
       
-      private function calculateFallTime(param1:Vector3, param2:Vector3) : Number
+      private function calculateFallTime(position:Vector3, point:Vector3) : Number
       {
-         return (param1.z - param2.z - BonusConst.numij) / this.pobano;
+         return (position.z - point.z - BonusConst.BONUS_HALF_SIZE) / this.fallSpeed;
       }
       
-      private function initRemovalAnimation(param1:int) : void
+      private function initRemovalAnimation(lifeTime:int) : void
       {
-         var _loc2_:RemovalAnimation = RemovalAnimation(this.mij.getObjectPool().getObject(RemovalAnimation));
-         _loc2_.init(this.mij.getBattleScene3D(),this,param1);
+         var removalAnimation:RemovalAnimation = RemovalAnimation(this.battleService.getObjectPool().getObject(RemovalAnimation));
+         removalAnimation.init(this.battleService.getBattleScene3D(),this,lifeTime);
       }
       
       private function startSpawnAnimation(param1:BattleService) : void
       {
-         var _loc2_:SpawnAnimation = SpawnAnimation(param1.getObjectPool().getObject(SpawnAnimation));
-         _loc2_.start(this,param1.getBattleScene3D());
+         var spawnAnimation:SpawnAnimation = SpawnAnimation(param1.getObjectPool().getObject(SpawnAnimation));
+         spawnAnimation.start(this,param1.getBattleScene3D());
       }
       
       private function activateRendererAndPhysicsController() : void
       {
-         if(!this.ledijym)
+         if(!this.active)
          {
-            this.ledijym = true;
-            this.mij.getBattleRunner().addPhysicsController(this);
-            this.mij.getBattleRunner().addPhysicsInterpolator(this);
-            this.mij.getBattleScene3D().addRenderer(this,0);
+            this.active = true;
+            this.battleService.getBattleRunner().addPhysicsController(this);
+            this.battleService.getBattleRunner().addPhysicsInterpolator(this);
+            this.battleService.getBattleScene3D().addRenderer(this,0);
          }
       }
       
@@ -363,94 +363,94 @@ package alternativa.tanks.bonuses
       {
          if(BonusCache.isParachuteCacheEmpty())
          {
-            this.kyvedu = new Parachute(this.katuf.vukuzub,this.katuf.berav);
+            this.parachute = new Parachute(this.bonusData.parachuteMesh,this.bonusData.parachuteInnerMesh);
          }
          else
          {
-            this.kyvedu = BonusCache.getParachute();
+            this.parachute = BonusCache.getParachute();
          }
          if(BonusCache.isCordsCacheEmpty())
          {
-            this.til = new Cords(Parachute.jonoga,BonusConst.numij,Parachute.lapocar,this.katuf.zerow);
+            this.cords = new Cords(Parachute.RADIUS,BonusConst.BONUS_HALF_SIZE,Parachute.NUM_CORDS,this.bonusData.cordsMaterial);
          }
          else
          {
-            this.til = BonusCache.getCords();
+            this.cords = BonusCache.getCords();
          }
-         this.til.init(this.giqo,this.kyvedu);
+         this.cords.init(this.bonusMesh,this.parachute);
       }
       
       private function initBonusMesh() : void
       {
-         if(BonusCache.isBonusMeshCacheEmpty(this.luk))
+         if(BonusCache.isBonusMeshCacheEmpty(this.objectId))
          {
-            this.giqo = new BonusMesh(this.luk,this.katuf.tipi);
+            this.bonusMesh = new BonusMesh(this.objectId,this.bonusData.bonusMesh);
          }
          else
          {
-            this.giqo = BonusCache.getBonusMesh(this.luk);
+            this.bonusMesh = BonusCache.getBonusMesh(this.objectId);
          }
-         this.giqo.init();
+         this.bonusMesh.init();
       }
       
       private function addAllToScene() : void
       {
-         this.mij.getBattleScene3D().addObject(this.kyvedu);
-         this.mij.getBattleScene3D().addObject(this.giqo);
-         this.mij.getBattleScene3D().addObject(this.til);
+         this.battleService.getBattleScene3D().addObject(this.parachute);
+         this.battleService.getBattleScene3D().addObject(this.bonusMesh);
+         this.battleService.getBattleScene3D().addObject(this.cords);
       }
       
-      public function runBeforePhysicsUpdate(param1:Number) : void
+      public function runBeforePhysicsUpdate(dt:Number) : void
       {
-         this.syligatyl.runBeforePhysicsUpdate(param1);
+         this.currentController.runBeforePhysicsUpdate(dt);
       }
       
       private function deactivateRendererAndPhysicsController() : void
       {
-         if(this.ledijym)
+         if(this.active)
          {
-            this.ledijym = false;
-            this.mij.getBattleRunner().removePhysicsController(this);
-            this.mij.getBattleRunner().removePhysicsInterpolator(this);
-            this.mij.getBattleScene3D().removeRenderer(this,0);
+            this.active = false;
+            this.battleService.getBattleRunner().removePhysicsController(this);
+            this.battleService.getBattleRunner().removePhysicsInterpolator(this);
+            this.battleService.getBattleScene3D().removeRenderer(this,0);
          }
       }
       
       private function detachParachute() : void
       {
-         var _loc1_:ParachuteDetachAnimation = null;
-         if(this.kyvedu != null)
+         var parachuteDetachAnimation:ParachuteDetachAnimation = null;
+         if(this.parachute != null)
          {
-            _loc1_ = ParachuteDetachAnimation(this.mij.getObjectPool().getObject(ParachuteDetachAnimation));
-            _loc1_.start(this.mij.getBattleScene3D(),this.kyvedu,this.til,this.pobano / 2);
-            this.kyvedu = null;
-            this.til = null;
+            parachuteDetachAnimation = ParachuteDetachAnimation(this.battleService.getObjectPool().getObject(ParachuteDetachAnimation));
+            parachuteDetachAnimation.start(this.battleService.getBattleScene3D(),this.parachute,this.cords,this.fallSpeed / 2);
+            this.parachute = null;
+            this.cords = null;
          }
       }
       
-      public function interpolatePhysicsState(param1:Number) : void
+      public function interpolatePhysicsState(t:Number) : void
       {
-         this.syligatyl.interpolatePhysicsState(param1);
+         this.currentController.interpolatePhysicsState(t);
       }
       
-      public function render(param1:int, param2:int) : void
+      public function render(time:int, deltaTime:int) : void
       {
-         this.syligatyl.render();
+         this.currentController.render();
       }
       
-      public function setAlpha(param1:Number) : void
+      public function setAlpha(value:Number) : void
       {
-         this.giqo.setAlpha(param1);
-         if(this.kyvedu != null)
+         this.bonusMesh.setAlpha(value);
+         if(this.parachute != null)
          {
-            this.kyvedu.setAlpha(param1);
-            this.til.setAlpha(param1);
+            this.parachute.setAlpha(value);
+            this.cords.setAlpha(value);
          }
       }
       
       public function onTriggerActivated() : void
       {
-         this.wyqitywi.disable();
+         this.trigger.disable();
          this.hery.dispatch(this);
       }
       
@@ -475,38 +475,38 @@ package alternativa.tanks.bonuses
       
       public function getBonusMesh() : BonusMesh
       {
-         return this.giqo;
+         return this.bonusMesh;
       }
       
       private function runNextController() : Boolean
       {
-         this.syligatyl = this.lywajoqa.pop();
-         if(this.syligatyl == null)
+         this.currentController = this.controllers.pop();
+         if(this.currentController == null)
          {
             return false;
          }
-         this.syligatyl.start();
+         this.currentController.start();
          return true;
       }
       
       public function getParachute() : Object3D
       {
-         return this.kyvedu;
+         return this.parachute;
       }
       
       public function getCords() : Cords
       {
-         return this.til;
+         return this.cords;
       }
       
       public function getTrigger() : BonusTrigger
       {
-         return this.wyqitywi;
+         return this.trigger;
       }
       
       public function enableTrigger() : void
       {
-         this.wyqitywi.enable(this.mij.getBattleRunner());
+         this.trigger.enable(this.battleService.getBattleRunner());
       }
    }
 }

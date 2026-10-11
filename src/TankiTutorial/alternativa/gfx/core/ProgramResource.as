@@ -10,27 +10,27 @@ package alternativa.gfx.core
    public class ProgramResource extends Resource
    {
       
-      alternativagfx var tecemyl:Vector.<Program3D> = new Vector.<Program3D>(4);
+      alternativagfx var programs:Vector.<Program3D> = new Vector.<Program3D>(4);
       
-      private var lugak:ByteArray;
+      private var _vertexProgram:ByteArray;
       
-      private var cajaq:ByteArray;
+      private var _fragmentProgram:ByteArray;
       
       public function ProgramResource(vertexProgram:ByteArray, fragmentProgram:ByteArray)
       {
          super();
-         this.lugak = vertexProgram;
-         this.cajaq = fragmentProgram;
+         this._vertexProgram = vertexProgram;
+         this._fragmentProgram = fragmentProgram;
       }
       
       public function get vertexProgram() : ByteArray
       {
-         return this.lugak;
+         return this._vertexProgram;
       }
       
       public function get fragmentProgram() : ByteArray
       {
-         return this.cajaq;
+         return this._fragmentProgram;
       }
       
       override public function dispose() : void
@@ -38,14 +38,14 @@ package alternativa.gfx.core
          super.dispose();
          for(var i:int = 0; i < 4; i++)
          {
-            if(this.tecemyl[i] != null)
+            if(this.programs[i] != null)
             {
-               this.tecemyl[i].dispose();
-               this.tecemyl[i] = null;
+               this.programs[i].dispose();
+               this.programs[i] = null;
             }
          }
-         this.lugak = null;
-         this.cajaq = null;
+         this._vertexProgram = null;
+         this._fragmentProgram = null;
       }
       
       override public function reset() : void
@@ -53,29 +53,29 @@ package alternativa.gfx.core
          super.reset();
          for(var i:int = 0; i < 4; i++)
          {
-            if(this.tecemyl[i] != null)
+            if(this.programs[i] != null)
             {
-               this.tecemyl[i].dispose();
-               this.tecemyl[i] = null;
+               this.programs[i].dispose();
+               this.programs[i] = null;
             }
          }
       }
       
       override public function get available() : Boolean
       {
-         return this.lugak != null && this.cajaq != null;
+         return this._vertexProgram != null && this._fragmentProgram != null;
       }
       
       override alternativagfx function create(context:Context3D, stage3DIndex:int) : void
       {
          super.create(context,stage3DIndex);
-         this.tecemyl[stage3DIndex] = context.createProgram();
+         this.programs[stage3DIndex] = context.createProgram();
       }
       
       override alternativagfx function upload(stage3DIndex:int) : void
       {
          super.upload(stage3DIndex);
-         Program3D(this.tecemyl[stage3DIndex]).upload(this.vertexProgram,this.fragmentProgram);
+         Program3D(this.programs[stage3DIndex]).upload(this.vertexProgram,this.fragmentProgram);
       }
    }
 }

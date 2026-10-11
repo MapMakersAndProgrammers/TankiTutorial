@@ -16,22 +16,22 @@ package tutorial
       
       public function getBattleRunner() : BattleRunner
       {
-         return GameData.zepymy;
+         return GameData.battleRunner;
       }
       
       public function getBattleScene3D() : BattleScene3D
       {
-         return GameData.hyfecypi;
+         return GameData.battleScene;
       }
       
       public function getObjectPool() : ObjectPool
       {
-         return GameData.murow;
+         return GameData.objectPool;
       }
       
-      public function addSound3DEffect(param1:ISound3DEffect) : void
+      public function addSound3DEffect(effect:ISound3DEffect) : void
       {
-         GameData.bijatil.addEffect(param1);
+         GameData.soundManager.addEffect(effect);
       }
    }
 }
