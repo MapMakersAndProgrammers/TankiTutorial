@@ -70,7 +70,7 @@ package alternativa.tanks.vehicles.tank.weapons.twins
          {
             if(vimub.body != null)
             {
-               return vimub.body.katuf as Tank;
+               return vimub.body.data as Tank;
             }
          }
          return null;

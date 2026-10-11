@@ -189,13 +189,13 @@ package alternativa.tanks.sfx.flamethrower
             dizecoca.x = _loc5_.x;
             dizecoca.y = _loc5_.y;
             dizecoca.z = _loc5_.z;
-            if(_loc5_.hyn > this.judawohof || Boolean(this.collisionDetector.raycastStatic(dizecoca,_loc5_.zerus,CollisionGroup.WEAPON,_loc3_,null,tefydiw)))
+            if(_loc5_.hyn > this.judawohof || Boolean(this.collisionDetector.raycastStatic(dizecoca,_loc5_.velocity,CollisionGroup.WEAPON,_loc3_,null,tefydiw)))
             {
                this.removeParticle(_loc4_--);
             }
             else
             {
-               _loc6_ = _loc5_.zerus;
+               _loc6_ = _loc5_.velocity;
                _loc5_.x += _loc6_.x * _loc3_;
                _loc5_.y += _loc6_.y * _loc3_;
                _loc5_.z += _loc6_.z * _loc3_;
@@ -262,10 +262,10 @@ package alternativa.tanks.sfx.flamethrower
          _loc2_.rotation = Math.random() * Math.PI * 2;
          _loc2_.tyfu = Math.random() * _loc2_.getNumFrames();
          this.getParticleFlightDirection(direction);
-         _loc2_.zerus.x = this.niq * direction.x;
-         _loc2_.zerus.y = this.niq * direction.y;
-         _loc2_.zerus.z = this.niq * direction.z;
-         _loc2_.zerus.add(this.taramuty.state.zerus);
+         _loc2_.velocity.x = this.niq * direction.x;
+         _loc2_.velocity.y = this.niq * direction.y;
+         _loc2_.velocity.z = this.niq * direction.z;
+         _loc2_.velocity.add(this.taramuty.state.velocity);
          _loc2_.hyn = _loc1_;
          _loc2_.x = rinego.x + _loc1_ * direction.x;
          _loc2_.y = rinego.y + _loc1_ * direction.y;

@@ -81,13 +81,13 @@ package tutorial.tasks
             this.direction.z = 0;
             distanceSqr = this.direction.x * this.direction.x + this.direction.y * this.direction.y;
             this.direction.normalize();
-            matrix = enemyTank.body.jefe;
+            matrix = enemyTank.body.orientationMatrix;
             forward.x = matrix.mb;
             forward.y = matrix.mf;
             forward.normalize();
             cross = forward.x * this.direction.y - forward.y * this.direction.x;
             angle = Math.asin(cross);
-            angularVelocityZ = Number(enemyTank.body.state.fev.z);
+            angularVelocityZ = Number(enemyTank.body.state.rotation.z);
             predictedAngle = angle + angularVelocityZ * GameData.time.deltaTime;
             if(Math.cos(predictedAngle) > veco)
             {

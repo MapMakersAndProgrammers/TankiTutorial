@@ -105,7 +105,7 @@ package alternativa.tanks.sfx
             {
                _loc5_ *= (_loc3_ - wonuhig.jomuc) / (_loc3_ - _loc6_);
             }
-            _loc7_ = wonuhig.lefugefo;
+            _loc7_ = wonuhig.normal;
             _loc8_ = Math.acos(_loc7_.z);
             zekos.x = -_loc7_.y;
             zekos.y = _loc7_.x;

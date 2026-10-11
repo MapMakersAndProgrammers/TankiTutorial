@@ -52,7 +52,7 @@ package alternativa.tanks.bonuses
          this.zekos.normalize();
          this.angle = Math.acos(this.lefugefo.z);
          this.hezataw.position.reset(_loc1_.x,_loc1_.y,_loc1_.z);
-         this.hezataw.bej.setFromEulerAnglesXYZ(_loc1_.rotationX,_loc1_.rotationY,_loc1_.rotationZ);
+         this.hezataw.orientation.setFromEulerAnglesXYZ(_loc1_.rotationX,_loc1_.rotationY,_loc1_.rotationZ);
          this.nusipysav.copy(this.hezataw);
       }
       
@@ -72,7 +72,7 @@ package alternativa.tanks.bonuses
          run.fromAxisAngle(this.zekos,_loc2_);
          this.cozude.transform3(run);
          this.hezataw.position.copy(this.vale).add(this.cozude);
-         this.hezataw.bej.addScaledVector(this.zekos,_loc2_);
+         this.hezataw.orientation.addScaledVector(this.zekos,_loc2_);
          this.updateTrigger();
          if(this.angle == 0)
          {
@@ -84,7 +84,7 @@ package alternativa.tanks.bonuses
       
       private function updateTrigger() : void
       {
-         this.hezataw.bej.toMatrix3(run);
+         this.hezataw.orientation.toMatrix3(run);
          this.nasybugo.getTrigger().setTransform(this.hezataw.position,run);
       }
       
@@ -99,7 +99,7 @@ package alternativa.tanks.bonuses
          _loc1_.x = this.sitozov.position.x;
          _loc1_.y = this.sitozov.position.y;
          _loc1_.z = this.sitozov.position.z;
-         this.sitozov.bej.getEulerAngles(fyqynyfy);
+         this.sitozov.orientation.getEulerAngles(fyqynyfy);
          _loc1_.rotationX = fyqynyfy.x;
          _loc1_.rotationY = fyqynyfy.y;
          _loc1_.rotationZ = fyqynyfy.z;

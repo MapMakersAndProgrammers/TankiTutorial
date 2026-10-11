@@ -5,7 +5,7 @@ package alternativa.physics.collision
    public interface BodyCollisionFilter
    {
       
-      function considerBodies(param1:Body, param2:Body) : Boolean;
+      function considerBodies(body1:Body, body2:Body) : Boolean;
    }
 }
 

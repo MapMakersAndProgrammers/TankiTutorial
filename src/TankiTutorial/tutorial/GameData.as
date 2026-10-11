@@ -158,11 +158,11 @@ package tutorial
          soundManager = new SoundManager();
          taskGroup = new TaskGroup();
          physicsScene = new TanksPhysicsScene();
-         physicsScene.gyge = 5;
-         var gravity:Vector3 = physicsScene.tem;
+         physicsScene.allowedPenetration = 5;
+         var gravity:Vector3 = physicsScene.gravity;
          gravity.reset(0,0,-1000);
          physicsScene.time = getTimer();
-         collisionDetector = physicsScene.secakesem;
+         collisionDetector = physicsScene.tanksCollisionDetector;
          TurretControlKeyMap.initDefaultKeyMap(Lang.language);
          playerTank = new Tank();
          recordTankController = new RecordTankController(stage,playerTank);

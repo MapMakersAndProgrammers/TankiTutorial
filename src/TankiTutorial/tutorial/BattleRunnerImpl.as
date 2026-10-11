@@ -36,12 +36,12 @@ package tutorial
       
       public function addTrigger(trigger:Trigger) : void
       {
-         GameData.physicsScene.nykoto.add(trigger);
+         GameData.physicsScene.triggers.add(trigger);
       }
       
       public function removeTrigger(trigger:Trigger) : void
       {
-         GameData.physicsScene.nykoto.remove(trigger);
+         GameData.physicsScene.triggers.remove(trigger);
       }
       
       public function getCollisionDetector() : CollisionDetector

@@ -241,7 +241,7 @@ package alternativa.tanks.bonuses
          var _loc4_:CollisionDetector = this.battleService.getBattleRunner().getCollisionDetector();
          if(_loc4_.raycastStatic(param1,Vector3.down,CollisionGroup.neli,manytaq,null,tet))
          {
-            param3.copy(tet.lefugefo);
+            param3.copy(tet.normal);
             param2.copy(tet.position);
          }
          else

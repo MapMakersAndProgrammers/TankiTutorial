@@ -9,211 +9,211 @@ package alternativa.physics.collision.colliders
    public class PolygonsIntersectionUtils
    {
       
-      private static const mody:Vector.<Point> = Vector.<Point>([new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point()]);
+      private static const points1:Vector.<Point> = Vector.<Point>([new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point()]);
       
-      private static const sojubyfi:Vector.<Point> = Vector.<Point>([new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point()]);
+      private static const points2:Vector.<Point> = Vector.<Point>([new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point()]);
       
-      private static const tefydiw:Vector.<Point> = Vector.<Point>([new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point()]);
+      private static const intersectionPoints:Vector.<Point> = Vector.<Point>([new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point()]);
       
-      private static var henijolyj:Vector.<Point> = Vector.<Point>([new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point()]);
+      private static var buffer1:Vector.<Point> = Vector.<Point>([new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point()]);
       
-      private static var zolynofa:Vector.<Point> = Vector.<Point>([new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point()]);
+      private static var buffer2:Vector.<Point> = Vector.<Point>([new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point(),new Point()]);
       
-      private static const rotybuc:Point = new Point();
+      private static const intersection:Point = new Point();
       
-      private static const cokymy:Vector3 = new Vector3();
+      private static const faceNormal1:Vector3 = new Vector3();
       
-      private static const hedyqy:Vector3 = new Vector3();
+      private static const faceNormal2:Vector3 = new Vector3();
       
       public function PolygonsIntersectionUtils()
       {
          super();
       }
       
-      public static function findContacts(param1:CollisionShape, param2:Vector.<Vertex>, param3:int, param4:CollisionShape, param5:Vector.<Vertex>, param6:int, param7:Matrix4, param8:Vector.<ShapeContact>) : void
+      public static function findContacts(primitive1:CollisionShape, vertices1:Vector.<Vertex>, numVertices1:int, primitive2:CollisionShape, vertices2:Vector.<Vertex>, numVertices2:int, basis:Matrix4, contacts:Vector.<ShapeContact>) : void
       {
-         var _loc11_:Point = null;
-         var _loc12_:Number = NaN;
-         var _loc13_:Number = NaN;
-         var _loc14_:ShapeContact = null;
-         var _loc15_:Vector3 = null;
-         calculateFaceNormal(param2,cokymy);
-         calculateFaceNormal(param5,hedyqy);
-         fillProjectedPoints(param2,param3,mody);
-         fillProjectedPoints(param5,param6,sojubyfi);
-         var _loc9_:int = findPolygonsIntersection(mody,param3,sojubyfi,param6,tefydiw);
-         var _loc10_:int = 0;
-         while(_loc10_ < _loc9_)
+         var point:Point = null;
+         var z1:Number = NaN;
+         var z2:Number = NaN;
+         var contact:ShapeContact = null;
+         var position:Vector3 = null;
+         calculateFaceNormal(vertices1,faceNormal1);
+         calculateFaceNormal(vertices2,faceNormal2);
+         fillProjectedPoints(vertices1,numVertices1,points1);
+         fillProjectedPoints(vertices2,numVertices2,points2);
+         var numPoints:int = findPolygonsIntersection(points1,numVertices1,points2,numVertices2,intersectionPoints);
+         var i:int = 0;
+         while(i < numPoints)
          {
-            _loc11_ = tefydiw[_loc10_];
-            _loc12_ = getFaceZ(_loc11_,Vertex(param2[0]).cujeqo,cokymy);
-            _loc13_ = getFaceZ(_loc11_,Vertex(param5[0]).cujeqo,hedyqy);
-            if(_loc13_ > _loc12_)
+            point = intersectionPoints[i];
+            z1 = getFaceZ(point,Vertex(vertices1[0]).referencePosition,faceNormal1);
+            z2 = getFaceZ(point,Vertex(vertices2[0]).referencePosition,faceNormal2);
+            if(z2 > z1)
             {
-               _loc14_ = ShapeContact.create();
-               _loc14_.ciqymaciv = param1;
-               _loc14_.dizad = param4;
-               _loc15_ = _loc14_.position;
-               _loc15_.x = _loc11_.x;
-               _loc15_.y = _loc11_.y;
-               _loc15_.z = 0.5 * (_loc12_ + _loc13_);
-               _loc15_.transform4(param7);
-               _loc14_.pefavo = _loc13_ - _loc12_;
-               _loc14_.lefugefo.x = param7.mc;
-               _loc14_.lefugefo.y = param7.mg;
-               _loc14_.lefugefo.z = param7.mk;
-               param8[param8.length] = _loc14_;
+               contact = ShapeContact.create();
+               contact.shape1 = primitive1;
+               contact.shape2 = primitive2;
+               position = contact.position;
+               position.x = point.x;
+               position.y = point.y;
+               position.z = 0.5 * (z1 + z2);
+               position.transform4(basis);
+               contact.penetration = z2 - z1;
+               contact.normal.x = basis.mc;
+               contact.normal.y = basis.mg;
+               contact.normal.z = basis.mk;
+               contacts[contacts.length] = contact;
             }
-            _loc10_++;
+            i++;
          }
       }
       
-      private static function calculateFaceNormal(param1:Vector.<Vertex>, param2:Vector3) : void
+      private static function calculateFaceNormal(vertices:Vector.<Vertex>, normal:Vector3) : void
       {
-         var _loc9_:Number = NaN;
-         var _loc11_:Number = NaN;
-         var _loc12_:Number = NaN;
-         var _loc14_:Number = NaN;
-         var _loc3_:Vertex = param1[0];
-         var _loc4_:Vertex = param1[1];
-         var _loc5_:Vertex = param1[2];
-         var _loc6_:Vector3 = _loc3_.cujeqo;
-         var _loc7_:Vector3 = _loc4_.cujeqo;
-         var _loc8_:Vector3 = _loc5_.cujeqo;
-         _loc9_ = _loc7_.x - _loc6_.x;
-         var _loc10_:Number = _loc7_.y - _loc6_.y;
-         _loc11_ = _loc7_.z - _loc6_.z;
-         _loc12_ = _loc8_.x - _loc6_.x;
-         var _loc13_:Number = _loc8_.y - _loc6_.y;
-         _loc14_ = _loc8_.z - _loc6_.z;
-         param2.x = _loc10_ * _loc14_ - _loc11_ * _loc13_;
-         param2.y = _loc11_ * _loc12_ - _loc9_ * _loc14_;
-         param2.z = _loc9_ * _loc13_ - _loc10_ * _loc12_;
-         param2.normalize();
+         var abx:Number = NaN;
+         var abz:Number = NaN;
+         var acx:Number = NaN;
+         var acz:Number = NaN;
+         var v0:Vertex = vertices[0];
+         var v1:Vertex = vertices[1];
+         var v2:Vertex = vertices[2];
+         var a:Vector3 = v0.referencePosition;
+         var b:Vector3 = v1.referencePosition;
+         var c:Vector3 = v2.referencePosition;
+         abx = b.x - a.x;
+         var aby:Number = b.y - a.y;
+         abz = b.z - a.z;
+         acx = c.x - a.x;
+         var acy:Number = c.y - a.y;
+         acz = c.z - a.z;
+         normal.x = aby * acz - abz * acy;
+         normal.y = abz * acx - abx * acz;
+         normal.z = abx * acy - aby * acx;
+         normal.normalize();
       }
       
-      private static function fillProjectedPoints(param1:Vector.<Vertex>, param2:int, param3:Vector.<Point>) : void
+      private static function fillProjectedPoints(vertices:Vector.<Vertex>, numVertices:int, points:Vector.<Point>) : void
       {
-         var _loc5_:Vertex = null;
-         var _loc6_:Point = null;
-         var _loc4_:int = 0;
-         while(_loc4_ < param2)
+         var vertex:Vertex = null;
+         var point:Point = null;
+         var i:int = 0;
+         while(i < numVertices)
          {
-            _loc5_ = param1[_loc4_];
-            _loc6_ = param3[_loc4_];
-            _loc6_.x = _loc5_.cujeqo.x;
-            _loc6_.y = _loc5_.cujeqo.y;
-            _loc4_++;
+            vertex = vertices[i];
+            point = points[i];
+            point.x = vertex.referencePosition.x;
+            point.y = vertex.referencePosition.y;
+            i++;
          }
       }
       
-      private static function findPolygonsIntersection(param1:Vector.<Point>, param2:int, param3:Vector.<Point>, param4:int, param5:Vector.<Point>) : int
+      private static function findPolygonsIntersection(polygon1:Vector.<Point>, numPoints1:int, polygon2:Vector.<Point>, numPoints2:int, result:Vector.<Point>) : int
       {
-         var _loc9_:Point = null;
-         var _loc10_:Vector.<Point> = null;
-         copyPoints(param3,henijolyj,param4);
-         var _loc6_:int = param4;
-         var _loc7_:Point = param1[param2 - 1];
-         var _loc8_:int = 0;
-         while(_loc8_ < param2)
+         var edgeEnd:Point = null;
+         var tmp:Vector.<Point> = null;
+         copyPoints(polygon2,buffer1,numPoints2);
+         var numPoints:int = numPoints2;
+         var edgeStart:Point = polygon1[numPoints1 - 1];
+         var i:int = 0;
+         while(i < numPoints1)
          {
-            _loc9_ = param1[_loc8_];
-            _loc6_ = clip(_loc7_,_loc9_,henijolyj,zolynofa,_loc6_);
-            if(_loc6_ == 0)
+            edgeEnd = polygon1[i];
+            numPoints = clip(edgeStart,edgeEnd,buffer1,buffer2,numPoints);
+            if(numPoints == 0)
             {
                break;
             }
-            _loc7_ = _loc9_;
-            _loc10_ = henijolyj;
-            henijolyj = zolynofa;
-            zolynofa = _loc10_;
-            _loc8_++;
+            edgeStart = edgeEnd;
+            tmp = buffer1;
+            buffer1 = buffer2;
+            buffer2 = tmp;
+            i++;
          }
-         copyPoints(henijolyj,param5,_loc6_);
-         return _loc6_;
+         copyPoints(buffer1,result,numPoints);
+         return numPoints;
       }
       
-      private static function copyPoints(param1:Vector.<Point>, param2:Vector.<Point>, param3:int) : void
+      private static function copyPoints(src:Vector.<Point>, dst:Vector.<Point>, count:int) : void
       {
-         var _loc5_:Point = null;
-         var _loc6_:Point = null;
-         var _loc4_:int = 0;
-         while(_loc4_ < param3)
+         var srcPoint:Point = null;
+         var dstPoint:Point = null;
+         var i:int = 0;
+         while(i < count)
          {
-            _loc5_ = param1[_loc4_];
-            _loc6_ = param2[_loc4_];
-            _loc6_.x = _loc5_.x;
-            _loc6_.y = _loc5_.y;
-            _loc4_++;
+            srcPoint = src[i];
+            dstPoint = dst[i];
+            dstPoint.x = srcPoint.x;
+            dstPoint.y = srcPoint.y;
+            i++;
          }
       }
       
-      private static function clip(param1:Point, param2:Point, param3:Vector.<Point>, param4:Vector.<Point>, param5:int) : int
+      private static function clip(edgeStart:Point, edgeEnd:Point, points:Vector.<Point>, result:Vector.<Point>, numPoints:int) : int
       {
-         var _loc10_:Point = null;
-         var _loc11_:Boolean = false;
-         var _loc6_:Point = param3[param5 - 1];
-         var _loc7_:Boolean = arePointsCCW(param1,param2,_loc6_);
-         var _loc8_:int = 0;
-         var _loc9_:int = 0;
-         while(_loc9_ < param5)
+         var point:Point = null;
+         var inside:Boolean = false;
+         var prevPoint:Point = points[numPoints - 1];
+         var prevInside:Boolean = arePointsCCW(edgeStart,edgeEnd,prevPoint);
+         var numResult:int = 0;
+         var i:int = 0;
+         while(i < numPoints)
          {
-            _loc10_ = param3[_loc9_];
-            _loc11_ = arePointsCCW(param1,param2,_loc10_);
-            if(_loc11_)
+            point = points[i];
+            inside = arePointsCCW(edgeStart,edgeEnd,point);
+            if(inside)
             {
-               if(!_loc7_)
+               if(!prevInside)
                {
-                  calculateIntersection(param1,param2,_loc6_,_loc10_,rotybuc);
-                  setPoint(rotybuc,param4,_loc8_++);
+                  calculateIntersection(edgeStart,edgeEnd,prevPoint,point,intersection);
+                  setPoint(intersection,result,numResult++);
                }
-               setPoint(_loc10_,param4,_loc8_++);
+               setPoint(point,result,numResult++);
             }
-            else if(_loc7_)
+            else if(prevInside)
             {
-               calculateIntersection(param1,param2,_loc6_,_loc10_,rotybuc);
-               setPoint(rotybuc,param4,_loc8_++);
+               calculateIntersection(edgeStart,edgeEnd,prevPoint,point,intersection);
+               setPoint(intersection,result,numResult++);
             }
-            _loc7_ = _loc11_;
-            _loc6_ = _loc10_;
-            _loc9_++;
+            prevInside = inside;
+            prevPoint = point;
+            i++;
          }
-         return _loc8_;
+         return numResult;
       }
       
-      private static function setPoint(param1:Point, param2:Vector.<Point>, param3:int) : void
+      private static function setPoint(point:Point, points:Vector.<Point>, index:int) : void
       {
-         var _loc4_:Point = param2[param3];
-         _loc4_.x = param1.x;
-         _loc4_.y = param1.y;
+         var dst:Point = points[index];
+         dst.x = point.x;
+         dst.y = point.y;
       }
       
-      private static function arePointsCCW(param1:Point, param2:Point, param3:Point) : Boolean
+      private static function arePointsCCW(a:Point, b:Point, c:Point) : Boolean
       {
-         var _loc4_:Number = param2.x - param1.x;
-         var _loc5_:Number = param2.y - param1.y;
-         var _loc6_:Number = param3.x - param1.x;
-         var _loc7_:Number = param3.y - param1.y;
-         return _loc4_ * _loc7_ - _loc5_ * _loc6_ > 0;
+         var abx:Number = b.x - a.x;
+         var aby:Number = b.y - a.y;
+         var acx:Number = c.x - a.x;
+         var acy:Number = c.y - a.y;
+         return abx * acy - aby * acx > 0;
       }
       
-      private static function calculateIntersection(param1:Point, param2:Point, param3:Point, param4:Point, param5:Point) : void
+      private static function calculateIntersection(a:Point, b:Point, c:Point, d:Point, result:Point) : void
       {
-         var _loc6_:Number = param2.x - param1.x;
-         var _loc7_:Number = param2.y - param1.y;
-         var _loc8_:Number = param4.x - param3.x;
-         var _loc9_:Number = param4.y - param3.y;
-         var _loc10_:Number = param3.x - param1.x;
-         var _loc11_:Number = param3.y - param1.y;
-         var _loc12_:Number = (_loc6_ * _loc11_ - _loc7_ * _loc10_) / (_loc7_ * _loc8_ - _loc6_ * _loc9_);
-         param5.x = param3.x + _loc12_ * _loc8_;
-         param5.y = param3.y + _loc12_ * _loc9_;
+         var abx:Number = b.x - a.x;
+         var aby:Number = b.y - a.y;
+         var cdx:Number = d.x - c.x;
+         var cdy:Number = d.y - c.y;
+         var acx:Number = c.x - a.x;
+         var acy:Number = c.y - a.y;
+         var t:Number = (abx * acy - aby * acx) / (aby * cdx - abx * cdy);
+         result.x = c.x + t * cdx;
+         result.y = c.y + t * cdy;
       }
       
-      private static function getFaceZ(param1:Point, param2:Vector3, param3:Vector3) : Number
+      private static function getFaceZ(point:Point, facePoint:Vector3, normal:Vector3) : Number
       {
-         var _loc4_:Number = param2.dot(param3);
-         return (_loc4_ - param1.x * param3.x - param1.y * param3.y) / param3.z;
+         var d:Number = facePoint.dot(normal);
+         return (d - point.x * normal.x - point.y * normal.y) / normal.z;
       }
    }
 }

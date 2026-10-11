@@ -8,254 +8,254 @@ package alternativa.physics
    public class PhysicsScene
    {
       
-      public var dikaruly:Number = 0.7;
+      public var penetrationCorrectionFactor:Number = 0.7;
       
-      public var finybyle:Number = 10;
+      public var maxPenetrationCorrection:Number = 10;
       
-      public var gyge:Number = 0.01;
+      public var allowedPenetration:Number = 0.01;
       
-      public var lenemudap:int = 4;
+      public var collisionIterations:int = 4;
       
-      public var dynen:int = 4;
+      public var contactIterations:int = 4;
       
-      public var guwacawe:int = 10;
+      public var freezeSteps:int = 10;
       
-      public var zol:Number = 5;
+      public var linearFreezeThreshold:Number = 5;
       
-      public var davemapo:Number = 0.05;
+      public var rotationFreezeThreshold:Number = 0.05;
       
-      public const tem:Vector3 = new Vector3(0,0,-9.8);
+      public const gravity:Vector3 = new Vector3(0,0,-9.8);
       
       public var collisionDetector:CollisionDetector;
       
-      public var cemyda:Vector.<Body> = new Vector.<Body>();
+      public var bodies:Vector.<Body> = new Vector.<Body>();
       
-      public var lubyp:int;
+      public var frame:int;
       
       public var time:int;
       
-      public var favobyfum:Number;
+      public var timeStep:Number;
       
-      private const hikocos:Vector.<BodyContact> = new Vector.<BodyContact>();
+      private const bodyContacts:Vector.<BodyContact> = new Vector.<BodyContact>();
       
-      private var dypyh:IslandsGenerator;
+      private var islandsGenerator:IslandsGenerator;
       
       public function PhysicsScene()
       {
          super();
-         this.dypyh = new IslandsGenerator(this);
+         this.islandsGenerator = new IslandsGenerator(this);
       }
       
-      public function addBody(param1:Body) : void
+      public function addBody(body:Body) : void
       {
-         param1.scene = this;
-         param1.wucejydy = this.cemyda.length;
-         this.cemyda.push(param1);
+         body.scene = this;
+         body.id = this.bodies.length;
+         this.bodies.push(body);
       }
       
-      public function removeBody(param1:Body) : void
+      public function removeBody(body:Body) : void
       {
-         var _loc3_:int = 0;
-         var _loc4_:Body = null;
-         var _loc2_:int = this.cemyda.indexOf(param1);
-         if(_loc2_ > -1)
+         var lastIndex:int = 0;
+         var lastBody:Body = null;
+         var index:int = this.bodies.indexOf(body);
+         if(index > -1)
          {
-            _loc3_ = this.cemyda.length - 1;
-            _loc4_ = this.cemyda[_loc3_];
-            this.cemyda[_loc2_] = _loc4_;
-            _loc4_.wucejydy = _loc2_;
-            this.cemyda.length = _loc3_;
-            param1.scene = null;
+            lastIndex = this.bodies.length - 1;
+            lastBody = this.bodies[lastIndex];
+            this.bodies[index] = lastBody;
+            lastBody.id = index;
+            this.bodies.length = lastIndex;
+            body.scene = null;
          }
       }
       
-      public function update(param1:int) : void
+      public function update(delta:int) : void
       {
-         ++this.lubyp;
-         this.time += param1;
-         this.favobyfum = param1 / 1000;
+         ++this.frame;
+         this.time += delta;
+         this.timeStep = delta / 1000;
          this.applyForces();
          this.detectCollisions();
-         this.prepareBodyContacts(this.hikocos,this.favobyfum);
-         this.dypyh.generate(this.hikocos,this.cemyda.length);
-         this.resolveCollisions(this.dypyh.nuwyge);
-         this.intergateVelocities(this.favobyfum);
-         this.resolveContacts(this.dypyh.nuwyge);
-         this.dypyh.clear();
-         this.disposeBodyContacts(this.hikocos);
-         this.integratePositions(this.favobyfum);
+         this.prepareBodyContacts(this.bodyContacts,this.timeStep);
+         this.islandsGenerator.generate(this.bodyContacts,this.bodies.length);
+         this.resolveCollisions(this.islandsGenerator.islands);
+         this.intergateVelocities(this.timeStep);
+         this.resolveContacts(this.islandsGenerator.islands);
+         this.islandsGenerator.clear();
+         this.disposeBodyContacts(this.bodyContacts);
+         this.integratePositions(this.timeStep);
          this.postPhysics();
       }
       
       private function applyForces() : void
       {
-         var _loc3_:Body = null;
-         var _loc1_:int = int(this.cemyda.length);
-         var _loc2_:int = 0;
-         while(_loc2_ < _loc1_)
+         var body:Body = null;
+         var len:int = int(this.bodies.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc3_ = this.cemyda[_loc2_];
-            _loc3_.calcAccelerations();
-            if(_loc3_.midorofic && !_loc3_.vowymov)
+            body = this.bodies[i];
+            body.calcAccelerations();
+            if(body.movable && !body.frozen)
             {
-               _loc3_.cozo.x += this.tem.x;
-               _loc3_.cozo.y += this.tem.y;
-               _loc3_.cozo.z += this.tem.z;
+               body.acceleration.x += this.gravity.x;
+               body.acceleration.y += this.gravity.y;
+               body.acceleration.z += this.gravity.z;
             }
-            _loc2_++;
+            i++;
          }
       }
       
       private function detectCollisions() : void
       {
          this.calculateBodiesDerivedData();
-         this.collisionDetector.getBodyContacts(this.hikocos);
+         this.collisionDetector.getBodyContacts(this.bodyContacts);
       }
       
       private function calculateBodiesDerivedData() : void
       {
-         var _loc3_:Body = null;
-         var _loc1_:int = int(this.cemyda.length);
-         var _loc2_:int = 0;
-         while(_loc2_ < _loc1_)
+         var body:Body = null;
+         var len:int = int(this.bodies.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc3_ = this.cemyda[_loc2_];
-            if(!_loc3_.vowymov)
+            body = this.bodies[i];
+            if(!body.frozen)
             {
-               _loc3_.saveState();
-               _loc3_.calcDerivedData();
+               body.saveState();
+               body.calcDerivedData();
             }
-            _loc2_++;
+            i++;
          }
       }
       
-      private function prepareBodyContacts(param1:Vector.<BodyContact>, param2:Number) : void
+      private function prepareBodyContacts(contacts:Vector.<BodyContact>, dt:Number) : void
       {
-         var _loc5_:BodyContact = null;
-         var _loc3_:int = int(param1.length);
-         var _loc4_:int = 0;
-         while(_loc4_ < _loc3_)
+         var bodyContact:BodyContact = null;
+         var len:int = int(contacts.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc5_ = param1[_loc4_];
-            this.prepareShapeContacts(_loc5_.pupicic,param2);
-            _loc4_++;
+            bodyContact = contacts[i];
+            this.prepareShapeContacts(bodyContact.shapeContacts,dt);
+            i++;
          }
       }
       
-      private function prepareShapeContacts(param1:Vector.<ShapeContact>, param2:Number) : void
+      private function prepareShapeContacts(contacts:Vector.<ShapeContact>, dt:Number) : void
       {
-         var _loc5_:ShapeContact = null;
-         var _loc3_:int = int(param1.length);
-         var _loc4_:int = 0;
-         while(_loc4_ < _loc3_)
+         var shapeContact:ShapeContact = null;
+         var len:int = int(contacts.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc5_ = param1[_loc4_];
-            _loc5_.calculatePersistentFrameData();
-            _loc5_.calcualteDynamicFrameData(this.gyge,this.dikaruly,this.finybyle,param2);
-            _loc4_++;
+            shapeContact = contacts[i];
+            shapeContact.calculatePersistentFrameData();
+            shapeContact.calcualteDynamicFrameData(this.allowedPenetration,this.penetrationCorrectionFactor,this.maxPenetrationCorrection,dt);
+            i++;
          }
       }
       
-      private function resolveCollisions(param1:Vector.<ContactIsland>) : void
+      private function resolveCollisions(islands:Vector.<ContactIsland>) : void
       {
-         var _loc4_:ContactIsland = null;
-         var _loc2_:int = int(param1.length);
-         var _loc3_:int = 0;
-         while(_loc3_ < _loc2_)
+         var island:ContactIsland = null;
+         var len:int = int(islands.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc4_ = param1[_loc3_];
-            _loc4_.collisionPhase(this.lenemudap);
-            _loc3_++;
+            island = islands[i];
+            island.collisionPhase(this.collisionIterations);
+            i++;
          }
       }
       
-      private function resolveContacts(param1:Vector.<ContactIsland>) : void
+      private function resolveContacts(islands:Vector.<ContactIsland>) : void
       {
-         var _loc4_:ContactIsland = null;
-         var _loc2_:int = int(param1.length);
-         var _loc3_:int = 0;
-         while(_loc3_ < _loc2_)
+         var island:ContactIsland = null;
+         var len:int = int(islands.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc4_ = param1[_loc3_];
-            _loc4_.contactPhase(this.dynen);
-            _loc3_++;
+            island = islands[i];
+            island.contactPhase(this.contactIterations);
+            i++;
          }
       }
       
-      private function intergateVelocities(param1:Number) : void
+      private function intergateVelocities(dt:Number) : void
       {
-         var _loc4_:Body = null;
-         var _loc2_:int = int(this.cemyda.length);
-         var _loc3_:int = 0;
-         while(_loc3_ < _loc2_)
+         var body:Body = null;
+         var len:int = int(this.bodies.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc4_ = this.cemyda[_loc3_];
-            _loc4_.integrateVelocity(param1);
-            _loc3_++;
+            body = this.bodies[i];
+            body.integrateVelocity(dt);
+            i++;
          }
       }
       
-      private function integratePositions(param1:Number) : void
+      private function integratePositions(dt:Number) : void
       {
-         var _loc4_:Body = null;
-         var _loc2_:int = int(this.cemyda.length);
-         var _loc3_:int = 0;
-         while(_loc3_ < _loc2_)
+         var body:Body = null;
+         var len:int = int(this.bodies.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc4_ = this.cemyda[_loc3_];
-            if(_loc4_.midorofic && !_loc4_.vowymov)
+            body = this.bodies[i];
+            if(body.movable && !body.frozen)
             {
-               _loc4_.integratePosition(param1);
-               _loc4_.integratePseudoVelocity(param1);
+               body.integratePosition(dt);
+               body.integratePseudoVelocity(dt);
             }
-            _loc3_++;
+            i++;
          }
       }
       
       private function postPhysics() : void
       {
-         var _loc3_:Body = null;
-         var _loc4_:BodyState = null;
-         var _loc1_:int = int(this.cemyda.length);
-         var _loc2_:int = 0;
-         while(_loc2_ < _loc1_)
+         var body:Body = null;
+         var state:BodyState = null;
+         var len:int = int(this.bodies.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc3_ = this.cemyda[_loc2_];
-            _loc3_.clearAccumulators();
-            _loc3_.calcDerivedData();
-            if(_loc3_.reze && !_loc3_.vowymov)
+            body = this.bodies[i];
+            body.clearAccumulators();
+            body.calcDerivedData();
+            if(body.freezable && !body.frozen)
             {
-               _loc4_ = _loc3_.state;
-               if(_loc4_.zerus.length() < this.zol && _loc4_.fev.length() < this.davemapo)
+               state = body.state;
+               if(state.velocity.length() < this.linearFreezeThreshold && state.rotation.length() < this.rotationFreezeThreshold)
                {
-                  ++_loc3_.qiryk;
-                  if(_loc3_.qiryk >= this.guwacawe)
+                  ++body.freezeCounter;
+                  if(body.freezeCounter >= this.freezeSteps)
                   {
-                     _loc3_.vowymov = true;
+                     body.frozen = true;
                   }
                }
                else
                {
-                  _loc3_.qiryk = 0;
-                  _loc3_.vowymov = false;
+                  body.freezeCounter = 0;
+                  body.frozen = false;
                }
             }
-            _loc2_++;
+            i++;
          }
       }
       
-      private function disposeBodyContacts(param1:Vector.<BodyContact>) : void
+      private function disposeBodyContacts(contacts:Vector.<BodyContact>) : void
       {
-         var _loc4_:BodyContact = null;
-         var _loc2_:int = int(param1.length);
-         var _loc3_:int = 0;
-         while(_loc3_ < _loc2_)
+         var bodyContact:BodyContact = null;
+         var len:int = int(contacts.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc4_ = param1[_loc3_];
-            _loc4_.dispose();
-            _loc3_++;
+            bodyContact = contacts[i];
+            bodyContact.dispose();
+            i++;
          }
-         param1.length = 0;
+         contacts.length = 0;
       }
    }
 }

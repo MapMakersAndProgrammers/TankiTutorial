@@ -9,213 +9,213 @@ package alternativa.physics.collision.primitives
    public class CollisionBox extends CollisionShape
    {
       
-      public var nezav:Vector3 = new Vector3();
+      public var halfSize:Vector3 = new Vector3();
       
-      public function CollisionBox(param1:Vector3, param2:int, param3:PhysicsMaterial)
+      public function CollisionBox(halfSize:Vector3, collisionGroup:int, material:PhysicsMaterial)
       {
-         super(jupod,param2,param3);
-         this.nezav.copy(param1);
+         super(BOX,collisionGroup,material);
+         this.halfSize.copy(halfSize);
       }
       
       override public function calculateAABB() : AABB
       {
-         var _loc1_:Matrix4 = null;
-         var _loc2_:AABB = null;
+         var matrix:Matrix4 = null;
+         var bounds:AABB = null;
          var _loc3_:Number = NaN;
          var _loc4_:Number = NaN;
          var _loc5_:Number = NaN;
-         _loc1_ = wet;
-         _loc2_ = this.raruluk;
-         _loc3_ = _loc1_.ma < 0 ? -_loc1_.ma : Number(_loc1_.ma);
-         _loc4_ = _loc1_.mb < 0 ? -_loc1_.mb : Number(_loc1_.mb);
-         _loc5_ = _loc1_.mc < 0 ? -_loc1_.mc : Number(_loc1_.mc);
-         _loc2_.jys = this.nezav.x * _loc3_ + this.nezav.y * _loc4_ + this.nezav.z * _loc5_;
-         _loc2_.cubegyw = -_loc2_.jys;
-         _loc3_ = _loc1_.me < 0 ? -_loc1_.me : Number(_loc1_.me);
-         _loc4_ = _loc1_.mf < 0 ? -_loc1_.mf : Number(_loc1_.mf);
-         _loc5_ = _loc1_.mg < 0 ? -_loc1_.mg : Number(_loc1_.mg);
-         _loc2_.juri = this.nezav.x * _loc3_ + this.nezav.y * _loc4_ + this.nezav.z * _loc5_;
-         _loc2_.nicomosa = -_loc2_.juri;
-         _loc3_ = _loc1_.mi < 0 ? -_loc1_.mi : Number(_loc1_.mi);
-         _loc4_ = _loc1_.mj < 0 ? -_loc1_.mj : Number(_loc1_.mj);
-         _loc5_ = _loc1_.mk < 0 ? -_loc1_.mk : Number(_loc1_.mk);
-         _loc2_.zepoci = this.nezav.x * _loc3_ + this.nezav.y * _loc4_ + this.nezav.z * _loc5_;
-         _loc2_.gesuwi = -_loc2_.zepoci;
-         _loc2_.cubegyw += _loc1_.md;
-         _loc2_.jys += _loc1_.md;
-         _loc2_.nicomosa += _loc1_.mh;
-         _loc2_.juri += _loc1_.mh;
-         _loc2_.gesuwi += _loc1_.ml;
-         _loc2_.zepoci += _loc1_.ml;
-         return _loc2_;
+         matrix = transform;
+         bounds = this.aabb;
+         _loc3_ = matrix.ma < 0 ? -matrix.ma : Number(matrix.ma);
+         _loc4_ = matrix.mb < 0 ? -matrix.mb : Number(matrix.mb);
+         _loc5_ = matrix.mc < 0 ? -matrix.mc : Number(matrix.mc);
+         bounds.maxX = this.halfSize.x * _loc3_ + this.halfSize.y * _loc4_ + this.halfSize.z * _loc5_;
+         bounds.minX = -bounds.maxX;
+         _loc3_ = matrix.me < 0 ? -matrix.me : Number(matrix.me);
+         _loc4_ = matrix.mf < 0 ? -matrix.mf : Number(matrix.mf);
+         _loc5_ = matrix.mg < 0 ? -matrix.mg : Number(matrix.mg);
+         bounds.maxY = this.halfSize.x * _loc3_ + this.halfSize.y * _loc4_ + this.halfSize.z * _loc5_;
+         bounds.minY = -bounds.maxY;
+         _loc3_ = matrix.mi < 0 ? -matrix.mi : Number(matrix.mi);
+         _loc4_ = matrix.mj < 0 ? -matrix.mj : Number(matrix.mj);
+         _loc5_ = matrix.mk < 0 ? -matrix.mk : Number(matrix.mk);
+         bounds.maxZ = this.halfSize.x * _loc3_ + this.halfSize.y * _loc4_ + this.halfSize.z * _loc5_;
+         bounds.minZ = -bounds.maxZ;
+         bounds.minX += matrix.md;
+         bounds.maxX += matrix.md;
+         bounds.minY += matrix.mh;
+         bounds.maxY += matrix.mh;
+         bounds.minZ += matrix.ml;
+         bounds.maxZ += matrix.ml;
+         return bounds;
       }
       
-      override public function copyFrom(param1:CollisionShape) : CollisionShape
+      override public function copyFrom(source:CollisionShape) : CollisionShape
       {
-         var _loc2_:CollisionBox = param1 as CollisionBox;
-         if(_loc2_ == null)
+         var box:CollisionBox = source as CollisionBox;
+         if(box == null)
          {
             return this;
          }
-         super.copyFrom(_loc2_);
-         this.nezav.copy(_loc2_.nezav);
+         super.copyFrom(box);
+         this.halfSize.copy(box.halfSize);
          return this;
       }
       
       override protected function createPrimitive() : CollisionShape
       {
-         return new CollisionBox(this.nezav,nute,material);
+         return new CollisionBox(this.halfSize,collisionGroup,material);
       }
       
-      override public function raycast(param1:Vector3, param2:Vector3, param3:Number, param4:Vector3) : Number
+      override public function raycast(origin:Vector3, direction:Vector3, epsilon:Number, normal:Vector3) : Number
       {
-         var _loc8_:Number = NaN;
-         var _loc9_:Number = NaN;
-         var _loc5_:Matrix4 = this.wet;
-         var _loc6_:Number = -1;
-         var _loc7_:Number = 1e+308;
-         var _loc10_:Number = param1.x - _loc5_.md;
-         var _loc11_:Number = param1.y - _loc5_.mh;
-         var _loc12_:Number = param1.z - _loc5_.ml;
-         var _loc13_:Number = _loc5_.ma * _loc10_ + _loc5_.me * _loc11_ + _loc5_.mi * _loc12_;
-         var _loc14_:Number = _loc5_.mb * _loc10_ + _loc5_.mf * _loc11_ + _loc5_.mj * _loc12_;
-         var _loc15_:Number = _loc5_.mc * _loc10_ + _loc5_.mg * _loc11_ + _loc5_.mk * _loc12_;
-         _loc10_ = _loc5_.ma * param2.x + _loc5_.me * param2.y + _loc5_.mi * param2.z;
-         _loc11_ = _loc5_.mb * param2.x + _loc5_.mf * param2.y + _loc5_.mj * param2.z;
-         _loc12_ = _loc5_.mc * param2.x + _loc5_.mg * param2.y + _loc5_.mk * param2.z;
-         if(_loc10_ < param3 && _loc10_ > -param3)
+         var t1:Number = NaN;
+         var t2:Number = NaN;
+         var matrix:Matrix4 = this.transform;
+         var tMin:Number = -1;
+         var tMax:Number = 1e+308;
+         var dx:Number = origin.x - matrix.md;
+         var dy:Number = origin.y - matrix.mh;
+         var dz:Number = origin.z - matrix.ml;
+         var ox:Number = matrix.ma * dx + matrix.me * dy + matrix.mi * dz;
+         var oy:Number = matrix.mb * dx + matrix.mf * dy + matrix.mj * dz;
+         var oz:Number = matrix.mc * dx + matrix.mg * dy + matrix.mk * dz;
+         dx = matrix.ma * direction.x + matrix.me * direction.y + matrix.mi * direction.z;
+         dy = matrix.mb * direction.x + matrix.mf * direction.y + matrix.mj * direction.z;
+         dz = matrix.mc * direction.x + matrix.mg * direction.y + matrix.mk * direction.z;
+         if(dx < epsilon && dx > -epsilon)
          {
-            if(_loc13_ < -this.nezav.x || _loc13_ > this.nezav.x)
+            if(ox < -this.halfSize.x || ox > this.halfSize.x)
             {
                return -1;
             }
          }
          else
          {
-            _loc8_ = (-this.nezav.x - _loc13_) / _loc10_;
-            _loc9_ = (this.nezav.x - _loc13_) / _loc10_;
-            if(_loc8_ < _loc9_)
+            t1 = (-this.halfSize.x - ox) / dx;
+            t2 = (this.halfSize.x - ox) / dx;
+            if(t1 < t2)
             {
-               if(_loc8_ > _loc6_)
+               if(t1 > tMin)
                {
-                  _loc6_ = _loc8_;
-                  param4.x = -1;
-                  param4.y = param4.z = 0;
+                  tMin = t1;
+                  normal.x = -1;
+                  normal.y = normal.z = 0;
                }
-               if(_loc9_ < _loc7_)
+               if(t2 < tMax)
                {
-                  _loc7_ = _loc9_;
+                  tMax = t2;
                }
             }
             else
             {
-               if(_loc9_ > _loc6_)
+               if(t2 > tMin)
                {
-                  _loc6_ = _loc9_;
-                  param4.x = 1;
-                  param4.y = param4.z = 0;
+                  tMin = t2;
+                  normal.x = 1;
+                  normal.y = normal.z = 0;
                }
-               if(_loc8_ < _loc7_)
+               if(t1 < tMax)
                {
-                  _loc7_ = _loc8_;
+                  tMax = t1;
                }
             }
-            if(_loc7_ < _loc6_)
+            if(tMax < tMin)
             {
                return -1;
             }
          }
-         if(_loc11_ < param3 && _loc11_ > -param3)
+         if(dy < epsilon && dy > -epsilon)
          {
-            if(_loc14_ < -this.nezav.y || _loc14_ > this.nezav.y)
+            if(oy < -this.halfSize.y || oy > this.halfSize.y)
             {
                return -1;
             }
          }
          else
          {
-            _loc8_ = (-this.nezav.y - _loc14_) / _loc11_;
-            _loc9_ = (this.nezav.y - _loc14_) / _loc11_;
-            if(_loc8_ < _loc9_)
+            t1 = (-this.halfSize.y - oy) / dy;
+            t2 = (this.halfSize.y - oy) / dy;
+            if(t1 < t2)
             {
-               if(_loc8_ > _loc6_)
+               if(t1 > tMin)
                {
-                  _loc6_ = _loc8_;
-                  param4.y = -1;
-                  param4.x = param4.z = 0;
+                  tMin = t1;
+                  normal.y = -1;
+                  normal.x = normal.z = 0;
                }
-               if(_loc9_ < _loc7_)
+               if(t2 < tMax)
                {
-                  _loc7_ = _loc9_;
+                  tMax = t2;
                }
             }
             else
             {
-               if(_loc9_ > _loc6_)
+               if(t2 > tMin)
                {
-                  _loc6_ = _loc9_;
-                  param4.y = 1;
-                  param4.x = param4.z = 0;
+                  tMin = t2;
+                  normal.y = 1;
+                  normal.x = normal.z = 0;
                }
-               if(_loc8_ < _loc7_)
+               if(t1 < tMax)
                {
-                  _loc7_ = _loc8_;
+                  tMax = t1;
                }
             }
-            if(_loc7_ < _loc6_)
+            if(tMax < tMin)
             {
                return -1;
             }
          }
-         if(_loc12_ < param3 && _loc12_ > -param3)
+         if(dz < epsilon && dz > -epsilon)
          {
-            if(_loc15_ < -this.nezav.z || _loc15_ > this.nezav.z)
+            if(oz < -this.halfSize.z || oz > this.halfSize.z)
             {
                return -1;
             }
          }
          else
          {
-            _loc8_ = (-this.nezav.z - _loc15_) / _loc12_;
-            _loc9_ = (this.nezav.z - _loc15_) / _loc12_;
-            if(_loc8_ < _loc9_)
+            t1 = (-this.halfSize.z - oz) / dz;
+            t2 = (this.halfSize.z - oz) / dz;
+            if(t1 < t2)
             {
-               if(_loc8_ > _loc6_)
+               if(t1 > tMin)
                {
-                  _loc6_ = _loc8_;
-                  param4.z = -1;
-                  param4.x = param4.y = 0;
+                  tMin = t1;
+                  normal.z = -1;
+                  normal.x = normal.y = 0;
                }
-               if(_loc9_ < _loc7_)
+               if(t2 < tMax)
                {
-                  _loc7_ = _loc9_;
+                  tMax = t2;
                }
             }
             else
             {
-               if(_loc9_ > _loc6_)
+               if(t2 > tMin)
                {
-                  _loc6_ = _loc9_;
-                  param4.z = 1;
-                  param4.x = param4.y = 0;
+                  tMin = t2;
+                  normal.z = 1;
+                  normal.x = normal.y = 0;
                }
-               if(_loc8_ < _loc7_)
+               if(t1 < tMax)
                {
-                  _loc7_ = _loc8_;
+                  tMax = t1;
                }
             }
-            if(_loc7_ < _loc6_)
+            if(tMax < tMin)
             {
                return -1;
             }
          }
-         _loc10_ = Number(param4.x);
-         _loc11_ = Number(param4.y);
-         _loc12_ = Number(param4.z);
-         param4.x = _loc5_.ma * _loc10_ + _loc5_.mb * _loc11_ + _loc5_.mc * _loc12_;
-         param4.y = _loc5_.me * _loc10_ + _loc5_.mf * _loc11_ + _loc5_.mg * _loc12_;
-         param4.z = _loc5_.mi * _loc10_ + _loc5_.mj * _loc11_ + _loc5_.mk * _loc12_;
-         return _loc6_;
+         dx = Number(normal.x);
+         dy = Number(normal.y);
+         dz = Number(normal.z);
+         normal.x = matrix.ma * dx + matrix.mb * dy + matrix.mc * dz;
+         normal.y = matrix.me * dx + matrix.mf * dy + matrix.mg * dz;
+         normal.z = matrix.mi * dx + matrix.mj * dy + matrix.mk * dz;
+         return tMin;
       }
    }
 }

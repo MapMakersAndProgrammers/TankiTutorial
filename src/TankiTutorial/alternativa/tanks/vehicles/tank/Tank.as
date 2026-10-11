@@ -221,7 +221,7 @@ package alternativa.tanks.vehicles.tank
             this.setMaxHealth(this.momomafoj > 0 ? this.momomafoj : Number(_loc2_.quj));
             this.nariw = _loc2_;
             this.kuca.setHull(_loc2_);
-            this.tuwykus = _loc2_.tuwykus;
+            this.tuwykus = _loc2_.mass;
             this.setMaxSpeed(_loc2_.speed,true);
             this.setMaxTurnSpeed(_loc2_.pyfika,true);
             _loc3_ = _loc2_.kuca;
@@ -241,14 +241,14 @@ package alternativa.tanks.vehicles.tank
          if(this.hogys == null)
          {
             _loc4_ = new Body(param1,Matrix3.identity);
-            _loc4_.katuf = this;
+            _loc4_.data = this;
             this.hogys = new TankBody(_loc4_);
          }
          var _loc3_:Vector3 = param2.clone();
          _loc3_.scale(0.5);
-         PhysicsUtils.setBoxInvInertia(param1,_loc3_,this.hogys.body.wofurys);
-         this.hogys.body.tuwykus = param1;
-         this.hogys.body.jutelycu = 1 / param1;
+         PhysicsUtils.setBoxInvInertia(param1,_loc3_,this.hogys.body.invInertia);
+         this.hogys.body.mass = param1;
+         this.hogys.body.invMass = 1 / param1;
          this.createCollisionPrimitives(_loc3_);
          this.createVisibilityPoints(_loc3_);
       }
@@ -265,7 +265,7 @@ package alternativa.tanks.vehicles.tank
       private function setBoundSphereRadius(param1:Vector3, param2:Number) : void
       {
          var _loc3_:Vector3 = new Vector3(param1.x,param1.y,param2 / 2);
-         var _loc4_:Matrix4 = this.hogys.kyripama.koma;
+         var _loc4_:Matrix4 = this.hogys.kyripama.localTransform;
          this.fysa = _loc3_.length() + Math.abs(_loc4_.ml);
       }
       
@@ -279,7 +279,7 @@ package alternativa.tanks.vehicles.tank
       private function createChassis(param1:Vector3, param2:TankHull) : void
       {
          this.hag = new TrackedChassis(this.hogys.body,this.gobo,this.jifav,param1);
-         this.hag.setAcceleration(param2.cozo);
+         this.hag.setAcceleration(param2.acceleration);
          this.hag.setReverseAcceleration(param2.qezuw);
          this.hag.setSideAcceleration(param2.wito);
          this.hag.setTurnAcceleration(param2.qupi);
@@ -356,7 +356,7 @@ package alternativa.tanks.vehicles.tank
          this.zywanywy.copy(this.faqes);
          this.josi.copy(this.wykuc);
          this.faqes.copy(this.hogys.body.state.position);
-         this.wykuc.copy(this.hogys.body.state.bej);
+         this.wykuc.copy(this.hogys.body.state.orientation);
       }
       
       public function setColormap(param1:String) : void
@@ -379,8 +379,8 @@ package alternativa.tanks.vehicles.tank
          {
             this.kakow.hide();
          }
-         this.hogys.body.state.zerus.z += 500;
-         this.hogys.body.state.fev.reset(2,2,2);
+         this.hogys.body.state.velocity.z += 500;
+         this.hogys.body.state.rotation.reset(2,2,2);
          var _loc1_:Sound3D = Sound3D.create(Assets.getData("tank_explosion",Sound),SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,radanigys);
          this.soundManager.addEffect(Sound3DEffect.create(this.objectPool,this.hogys.body.state.position,_loc1_,0,0));
       }
@@ -584,13 +584,13 @@ package alternativa.tanks.vehicles.tank
       
       public function considerBodies(param1:Body, param2:Body) : Boolean
       {
-         if(param1.fosa != null && param2.fosa == null)
+         if(param1.collisionFilter != null && param2.collisionFilter == null)
          {
-            ++Tank(param1.katuf).fusisywa;
+            ++Tank(param1.data).fusisywa;
          }
-         else if(param1.fosa == null && param2.fosa != null)
+         else if(param1.collisionFilter == null && param2.collisionFilter != null)
          {
-            ++Tank(param2.katuf).fusisywa;
+            ++Tank(param2.data).fusisywa;
          }
          return false;
       }
@@ -602,7 +602,7 @@ package alternativa.tanks.vehicles.tank
       
       public function setBodyCollisionGroup(param1:int) : void
       {
-         this.hogys.kyripama.nute = param1;
+         this.hogys.kyripama.collisionGroup = param1;
       }
       
       public function get turretController() : TurretController

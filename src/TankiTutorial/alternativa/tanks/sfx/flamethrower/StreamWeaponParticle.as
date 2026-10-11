@@ -17,7 +17,7 @@ package alternativa.tanks.sfx.flamethrower
       
       private static var byqe:int = -1;
       
-      public var zerus:Vector3 = new Vector3();
+      public var velocity:Vector3 = new Vector3();
       
       public var hyn:Number = 0;
       

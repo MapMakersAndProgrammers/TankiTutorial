@@ -210,7 +210,7 @@ package alternativa.tanks.sfx.twins
       public function runBeforePhysicsUpdate(param1:Number) : void
       {
          var _loc5_:Vector3 = null;
-         var _loc2_:CollisionDetector = physicsScene.secakesem;
+         var _loc2_:CollisionDetector = physicsScene.tanksCollisionDetector;
          if(this.jac)
          {
             if(this.processFirstTick(_loc2_))
@@ -228,7 +228,7 @@ package alternativa.tanks.sfx.twins
          this.ruv += _loc3_;
          if(_loc2_.raycast(this.guripovec,this.kovi,CollisionGroup.pisyse,_loc3_,this,wonuhig))
          {
-            this.applyImpact(wonuhig.vetudozi.body,wonuhig.position,this.kovi,this.ruv);
+            this.applyImpact(wonuhig.shape.body,wonuhig.position,this.kovi,this.ruv);
             this.destroy();
             return;
          }
@@ -239,9 +239,9 @@ package alternativa.tanks.sfx.twins
             _loc5_ = this.cekyno[_loc4_];
             if(_loc2_.raycast(_loc5_,this.kovi,CollisionGroup.pisyse,_loc3_,this,wonuhig))
             {
-               if(wonuhig.vetudozi.body != null)
+               if(wonuhig.shape.body != null)
                {
-                  this.applyImpact(wonuhig.vetudozi.body,wonuhig.position,this.kovi,this.ruv);
+                  this.applyImpact(wonuhig.shape.body,wonuhig.position,this.kovi,this.ruv);
                   this.destroy();
                   return;
                }
@@ -344,7 +344,7 @@ package alternativa.tanks.sfx.twins
          this.createExplosionEffect(param2,1);
          if(param1 != null)
          {
-            _loc5_ = param1.katuf as Tank;
+            _loc5_ = param1.data as Tank;
             if(_loc5_ != null)
             {
                param1.addWorldForceScaled(param2,param3,this.vedebuweb);
@@ -373,7 +373,7 @@ package alternativa.tanks.sfx.twins
          if(param1.raycast(this.fybumu,_loc3_,CollisionGroup.WEAPON,_loc4_,this,wonuhig))
          {
             this.fybumu.addScaled(wonuhig.jomuc,_loc3_);
-            this.applyImpact(wonuhig.vetudozi.body,this.fybumu,_loc3_,0);
+            this.applyImpact(wonuhig.shape.body,this.fybumu,_loc3_,0);
             this.destroy();
             return true;
          }
@@ -384,7 +384,7 @@ package alternativa.tanks.sfx.twins
             _loc6_ = this.cekyno[_loc5_];
             if(param1.raycast(_loc6_,this.kovi,CollisionGroup.WEAPON,_loc4_,this,wonuhig))
             {
-               _loc7_ = wonuhig.vetudozi.body;
+               _loc7_ = wonuhig.shape.body;
                if(_loc7_ != null)
                {
                   this.fybumu.addScaled(wonuhig.jomuc,_loc3_);

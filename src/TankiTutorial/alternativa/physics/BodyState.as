@@ -6,11 +6,11 @@ package alternativa.physics
    public class BodyState
    {
       
-      public var zerus:Vector3 = new Vector3();
+      public var velocity:Vector3 = new Vector3();
       
-      public var bej:Quaternion = new Quaternion();
+      public var orientation:Quaternion = new Quaternion();
       
-      public var fev:Vector3 = new Vector3();
+      public var rotation:Vector3 = new Vector3();
       
       public var position:Vector3 = new Vector3();
       
@@ -19,17 +19,17 @@ package alternativa.physics
          super();
       }
       
-      public function copy(param1:BodyState) : void
+      public function copy(state:BodyState) : void
       {
-         this.position.copy(param1.position);
-         this.bej.copy(param1.bej);
-         this.zerus.copy(param1.zerus);
-         this.fev.copy(param1.fev);
+         this.position.copy(state.position);
+         this.orientation.copy(state.orientation);
+         this.velocity.copy(state.velocity);
+         this.rotation.copy(state.rotation);
       }
       
       public function isValid() : Boolean
       {
-         return this.zerus.isFiniteVector() && this.fev.isFiniteVector() && this.position.isFiniteVector() && this.bej.isFiniteQuaternion();
+         return this.velocity.isFiniteVector() && this.rotation.isFiniteVector() && this.position.isFiniteVector() && this.orientation.isFiniteQuaternion();
       }
    }
 }

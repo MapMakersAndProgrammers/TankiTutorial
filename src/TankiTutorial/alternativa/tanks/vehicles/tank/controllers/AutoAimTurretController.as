@@ -36,7 +36,7 @@ package alternativa.tanks.vehicles.tank.controllers
          lyje.x = _loc3_.x - _loc2_.x;
          lyje.y = _loc3_.y - _loc2_.y;
          lyje.z = _loc3_.z - _loc2_.z;
-         this.tank.hogys.body.state.bej.toMatrix4(rinal);
+         this.tank.hogys.body.state.orientation.toMatrix4(rinal);
          rinal.deltaTransformVector(Vector3.yAxis,pedake);
          pedake.normalize();
          lyje.normalize();

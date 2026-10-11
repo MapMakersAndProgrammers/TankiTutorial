@@ -68,10 +68,10 @@ package alternativa.tanks.vehicles.tank.weapons
          var _loc7_:Number = this.kerahe > this.cahyv ? this.kerahe : this.cahyv;
          if(this.collisionDetector.raycast(param1,param2,sowe,this.maxDistance,this.woz,wonuhig))
          {
-            this.lefugefo.copy(wonuhig.lefugefo);
+            this.lefugefo.copy(wonuhig.normal);
             this.hywyvi.copy(param2);
             this.qesaput = wonuhig.jomuc;
-            _loc8_ = wonuhig.vetudozi.body;
+            _loc8_ = wonuhig.shape.body;
             if(_loc8_ != null)
             {
                this.sapywevis = _loc8_;
@@ -118,7 +118,7 @@ package alternativa.tanks.vehicles.tank.weapons
             gijalatyt.transformVector(sudak,zewufyg);
             if(this.collisionDetector.raycast(param1,zewufyg,sowe,this.maxDistance,this.woz,wonuhig))
             {
-               _loc10_ = wonuhig.vetudozi.body;
+               _loc10_ = wonuhig.shape.body;
                if(_loc10_ != null)
                {
                   _loc11_ = this.ryzodu.getTargetPriority(_loc10_,wonuhig.jomuc,_loc8_,param6,param7);

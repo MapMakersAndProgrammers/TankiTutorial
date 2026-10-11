@@ -13,7 +13,7 @@ package alternativa.tanks.vehicles.tank.weapons
       
       public function isValidTarget(param1:Body) : Boolean
       {
-         var _loc2_:Tank = param1.katuf as Tank;
+         var _loc2_:Tank = param1.data as Tank;
          return _loc2_ != null && _loc2_.currentHealth > 0;
       }
    }

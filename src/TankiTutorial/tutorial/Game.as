@@ -342,7 +342,7 @@ package tutorial
          {
             Shared.clientLog.addLine("start recording");
             this.position = tank.body.state.position.clone();
-            this.orientation = tank.body.state.bej.clone();
+            this.orientation = tank.body.state.orientation.clone();
             controller.startRecording();
          }
       }
@@ -353,7 +353,7 @@ package tutorial
          if(tank.inGame)
          {
             this.position = tank.body.state.position.clone();
-            this.orientation = tank.body.state.bej.clone();
+            this.orientation = tank.body.state.orientation.clone();
             this.setText("<player.spawn hull=\"" + tank.nariw.name + "\" turret=\"" + tank.firaqe.name + "\" color=\"green\" position=\"" + this.position.x.toFixed(4) + " " + this.position.y.toFixed(4) + " " + this.position.z.toFixed(4) + "\" orientation=\"" + this.orientation.w.toFixed(4) + " " + this.orientation.x.toFixed(4) + " " + this.orientation.y.toFixed(4) + " " + this.orientation.z.toFixed(4) + "\"/>");
          }
       }

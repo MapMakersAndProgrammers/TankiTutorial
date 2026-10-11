@@ -6,130 +6,130 @@ package alternativa.physics.contactislands
    public class ContactLevels
    {
       
-      private const duby:Vector.<BodyContact> = new Vector.<BodyContact>();
+      private const contacts:Vector.<BodyContact> = new Vector.<BodyContact>();
       
       public function ContactLevels()
       {
          super();
       }
       
-      public function init(param1:Vector.<BodyContact>) : void
+      public function init(bodyContacts:Vector.<BodyContact>) : void
       {
-         var _loc2_:int = int(param1.length);
-         this.duby.length = _loc2_;
-         var _loc3_:int = 0;
-         while(_loc3_ < _loc2_)
+         var len:int = int(bodyContacts.length);
+         this.contacts.length = len;
+         var i:int = 0;
+         while(i < len)
          {
-            this.duby[_loc3_] = param1[_loc3_];
-            _loc3_++;
+            this.contacts[i] = bodyContacts[i];
+            i++;
          }
       }
       
       public function clear() : void
       {
-         this.duby.length = 0;
+         this.contacts.length = 0;
       }
       
-      public function getStaticLevel(param1:Vector.<BodyContact>, param2:Vector.<Body>) : void
+      public function getStaticLevel(levelContacts:Vector.<BodyContact>, levelBodies:Vector.<Body>) : void
       {
-         var _loc3_:int = 0;
-         var _loc4_:BodyContact = null;
-         _loc3_ = 0;
-         while(_loc3_ < this.duby.length)
+         var i:int = 0;
+         var contact:BodyContact = null;
+         i = 0;
+         while(i < this.contacts.length)
          {
-            _loc4_ = this.duby[_loc3_];
-            if(this.isStaticContact(_loc4_))
+            contact = this.contacts[i];
+            if(this.isStaticContact(contact))
             {
-               param1[param1.length] = _loc4_;
-               param2[param2.length] = this.getNonStaticBody(_loc4_);
-               this.removeContact(_loc3_);
-               _loc3_--;
+               levelContacts[levelContacts.length] = contact;
+               levelBodies[levelBodies.length] = this.getNonStaticBody(contact);
+               this.removeContact(i);
+               i--;
             }
-            _loc3_++;
+            i++;
          }
-         _loc3_ = 0;
-         while(_loc3_ < this.duby.length)
+         i = 0;
+         while(i < this.contacts.length)
          {
-            _loc4_ = this.duby[_loc3_];
-            if(param2.indexOf(_loc4_.rukowicyp) >= 0 && param2.indexOf(_loc4_.zata) >= 0)
+            contact = this.contacts[i];
+            if(levelBodies.indexOf(contact.body1) >= 0 && levelBodies.indexOf(contact.body2) >= 0)
             {
-               param1[param1.length] = _loc4_;
-               this.removeContact(_loc3_);
-               _loc3_--;
+               levelContacts[levelContacts.length] = contact;
+               this.removeContact(i);
+               i--;
             }
-            _loc3_++;
+            i++;
          }
       }
       
-      private function isStaticContact(param1:BodyContact) : Boolean
+      private function isStaticContact(contact:BodyContact) : Boolean
       {
-         return !(Boolean(param1.rukowicyp.midorofic) && Boolean(param1.zata.midorofic));
+         return !(Boolean(contact.body1.movable) && Boolean(contact.body2.movable));
       }
       
-      private function getNonStaticBody(param1:BodyContact) : Body
+      private function getNonStaticBody(contact:BodyContact) : Body
       {
-         if(param1.rukowicyp.midorofic)
+         if(contact.body1.movable)
          {
-            return param1.rukowicyp;
+            return contact.body1;
          }
-         return param1.zata;
+         return contact.body2;
       }
       
-      private function removeContact(param1:int) : void
+      private function removeContact(index:int) : void
       {
-         var _loc2_:int = this.duby.length - 1;
-         this.duby[param1] = this.duby[_loc2_];
-         this.duby.length = _loc2_;
+         var lastIndex:int = this.contacts.length - 1;
+         this.contacts[index] = this.contacts[lastIndex];
+         this.contacts.length = lastIndex;
       }
       
-      public function getNextLevel(param1:Vector.<Body>, param2:Vector.<BodyContact>, param3:Vector.<Body>) : void
+      public function getNextLevel(bodies:Vector.<Body>, levelContacts:Vector.<BodyContact>, levelBodies:Vector.<Body>) : void
       {
-         var _loc4_:int = 0;
-         var _loc5_:BodyContact = null;
-         _loc4_ = 0;
-         while(_loc4_ < this.duby.length)
+         var i:int = 0;
+         var contact:BodyContact = null;
+         i = 0;
+         while(i < this.contacts.length)
          {
-            _loc5_ = this.duby[_loc4_];
-            if(this.isInContactWith(param1,_loc5_))
+            contact = this.contacts[i];
+            if(this.isInContactWith(bodies,contact))
             {
-               param2[param2.length] = _loc5_;
-               param3[param3.length] = this.getNextLevelBody(_loc5_,param1);
-               this.removeContact(_loc4_);
-               _loc4_--;
+               levelContacts[levelContacts.length] = contact;
+               levelBodies[levelBodies.length] = this.getNextLevelBody(contact,bodies);
+               this.removeContact(i);
+               i--;
             }
-            _loc4_++;
+            i++;
          }
-         _loc4_ = 0;
-         while(_loc4_ < this.duby.length)
+         i = 0;
+         while(i < this.contacts.length)
          {
-            _loc5_ = this.duby[_loc4_];
-            if(param3.indexOf(_loc5_.rukowicyp) >= 0 && param3.indexOf(_loc5_.zata) >= 0)
+            contact = this.contacts[i];
+            if(levelBodies.indexOf(contact.body1) >= 0 && levelBodies.indexOf(contact.body2) >= 0)
             {
-               param2[param2.length] = _loc5_;
-               this.removeContact(_loc4_);
-               _loc4_--;
+               levelContacts[levelContacts.length] = contact;
+               this.removeContact(i);
+               i--;
             }
-            _loc4_++;
+            i++;
          }
       }
       
-      private function isInContactWith(param1:Vector.<Body>, param2:BodyContact) : Boolean
+      private function isInContactWith(bodies:Vector.<Body>, contact:BodyContact) : Boolean
       {
-         return param1.indexOf(param2.rukowicyp) >= 0 || param1.indexOf(param2.zata) >= 0;
+         return bodies.indexOf(contact.body1) >= 0 || bodies.indexOf(contact.body2) >= 0;
       }
       
-      private function getNextLevelBody(param1:BodyContact, param2:Vector.<Body>) : Body
+      private function getNextLevelBody(contact:BodyContact, bodies:Vector.<Body>) : Body
       {
-         if(param2.indexOf(param1.rukowicyp) < 0)
+         if(bodies.indexOf(contact.body1) < 0)
          {
-            return param1.rukowicyp;
+            return contact.body1;
          }
-         return param1.zata;
+         return contact.body2;
       }
       
       public function hasContacts() : Boolean
       {
-         return this.duby.length > 0;
+         return this.contacts.length > 0;
       }
    }
 }

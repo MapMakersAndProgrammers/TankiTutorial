@@ -103,7 +103,7 @@ package alternativa.tanks.battle
          {
             param2 = 5;
          }
-         _loc7_ = param1.body.jefe;
+         _loc7_ = param1.body.orientationMatrix;
          lesu.x *= -1;
          _loc7_.transformVector(lesu,mazilynu);
          this.addTrackDust(_loc5_,_loc4_,mazilynu,param2,param3);

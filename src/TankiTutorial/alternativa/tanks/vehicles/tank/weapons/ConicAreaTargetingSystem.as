@@ -62,7 +62,7 @@ package alternativa.tanks.vehicles.tank.weapons
          this.pezacu = new Dictionary();
          var _loc9_:Number = param3 * param2;
          var _loc10_:Number = param2 - _loc9_;
-         if(this.collisionDetector.raycast(param4,param5,sowe,param2,this.woz,this.wonuhig) && this.wonuhig.vetudozi.body == null)
+         if(this.collisionDetector.raycast(param4,param5,sowe,param2,this.woz,this.wonuhig) && this.wonuhig.shape.body == null)
          {
             return;
          }
@@ -125,7 +125,7 @@ package alternativa.tanks.vehicles.tank.weapons
             {
                break;
             }
-            _loc5_ = this.wonuhig.vetudozi.body;
+            _loc5_ = this.wonuhig.shape.body;
             if(_loc5_ == null)
             {
                break;

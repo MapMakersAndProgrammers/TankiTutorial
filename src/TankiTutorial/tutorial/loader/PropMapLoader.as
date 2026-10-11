@@ -262,11 +262,11 @@ package tutorial.loader
          this.scene.addDynamic(object);
          var body:Body = new Body(1,Matrix3.identity);
          body.name = prop.name;
-         body.midorofic = false;
+         body.movable = false;
          for each(shape in prop.collisionShapes)
          {
             newShape = shape.clone();
-            body.addCollisionShape(newShape,newShape.wet.clone());
+            body.addCollisionShape(newShape,newShape.transform.clone());
          }
          body.setPositionXYZ(object.x,object.y,object.z);
          this.physicsScene.addKinematicBody(body);
@@ -284,8 +284,8 @@ package tutorial.loader
          {
             matrix4.setMatrix(position.x,position.y,position.z,0,0,rotationZ);
             newShape = shape.clone();
-            newShape.nute = collisionGroup;
-            newShape.wet.append(matrix4);
+            newShape.collisionGroup = collisionGroup;
+            newShape.transform.append(matrix4);
             this.physicsScene.addCollisionPrimitive(newShape);
          }
       }

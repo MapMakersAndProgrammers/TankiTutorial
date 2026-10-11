@@ -8,7 +8,7 @@ package alternativa.tanks.bonuses
       
       public const position:Vector3 = new Vector3();
       
-      public const bej:Quaternion = new Quaternion();
+      public const orientation:Quaternion = new Quaternion();
       
       public function LandingState()
       {
@@ -18,13 +18,13 @@ package alternativa.tanks.bonuses
       public function interpolate(param1:LandingState, param2:LandingState, param3:Number) : void
       {
          this.position.interpolate(param3,param1.position,param2.position);
-         this.bej.slerp(param1.bej,param2.bej,param3);
+         this.orientation.slerp(param1.orientation,param2.orientation,param3);
       }
       
       public function copy(param1:LandingState) : void
       {
          this.position.copy(param1.position);
-         this.bej.copy(param1.bej);
+         this.orientation.copy(param1.orientation);
       }
    }
 }

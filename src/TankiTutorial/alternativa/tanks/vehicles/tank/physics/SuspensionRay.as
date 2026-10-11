@@ -8,7 +8,7 @@ package alternativa.tanks.vehicles.tank.physics
    public class SuspensionRay
    {
       
-      public var nute:int;
+      public var collisionGroup:int;
       
       public var vivi:Boolean = false;
       
@@ -58,7 +58,7 @@ package alternativa.tanks.vehicles.tank.physics
       
       private function raycast() : void
       {
-         var _loc1_:Matrix3 = this.body.jefe;
+         var _loc1_:Matrix3 = this.body.orientationMatrix;
          this.dozykamu.x = _loc1_.ma * this.direction.x + _loc1_.mb * this.direction.y + _loc1_.mc * this.direction.z;
          this.dozykamu.y = _loc1_.me * this.direction.x + _loc1_.mf * this.direction.y + _loc1_.mg * this.direction.z;
          this.dozykamu.z = _loc1_.mi * this.direction.x + _loc1_.mj * this.direction.y + _loc1_.mk * this.direction.z;
@@ -73,7 +73,7 @@ package alternativa.tanks.vehicles.tank.physics
          {
             this.zife = this.gobo.tovudov - this.wonuhig.jomuc;
          }
-         this.vivi = this.body.scene.collisionDetector.raycast(this.ralowano,this.dozykamu,this.nute,this.gobo.tovudov,this.woz,this.wonuhig);
+         this.vivi = this.body.scene.collisionDetector.raycast(this.ralowano,this.dozykamu,this.collisionGroup,this.gobo.tovudov,this.woz,this.wonuhig);
       }
       
       public function calculateSpringForce(param1:Number) : void
@@ -97,12 +97,12 @@ package alternativa.tanks.vehicles.tank.physics
          var _loc6_:Number = NaN;
          var _loc7_:Number = NaN;
          var _loc8_:Number = NaN;
-         var _loc1_:Body = this.wonuhig.vetudozi.body;
-         if(_loc1_.katuf != null)
+         var _loc1_:Body = this.wonuhig.shape.body;
+         if(_loc1_.data != null)
          {
             _loc2_ = _loc1_.state.position;
-            _loc3_ = _loc1_.state.zerus;
-            _loc4_ = _loc1_.state.fev;
+            _loc3_ = _loc1_.state.velocity;
+            _loc4_ = _loc1_.state.rotation;
             _loc5_ = this.wonuhig.position;
             _loc6_ = _loc5_.x - _loc2_.x;
             _loc7_ = _loc5_.y - _loc2_.y;

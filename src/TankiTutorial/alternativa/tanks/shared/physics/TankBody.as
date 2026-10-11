@@ -7,7 +7,7 @@ package alternativa.tanks.shared.physics
    public class TankBody
    {
       
-      public var wucejydy:int;
+      public var id:int;
       
       public var body:Body;
       

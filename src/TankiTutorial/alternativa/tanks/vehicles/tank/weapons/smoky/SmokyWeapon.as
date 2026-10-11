@@ -52,7 +52,7 @@ package alternativa.tanks.vehicles.tank.weapons.smoky
          {
             if(this.vimub.body != null)
             {
-               return this.vimub.body.katuf as Tank;
+               return this.vimub.body.data as Tank;
             }
          }
          return null;
@@ -70,7 +70,7 @@ package alternativa.tanks.vehicles.tank.weapons.smoky
             this.effects.createExplosionEffects(this.vimub.wimybu,1);
             if(this.vimub.body != null)
             {
-               _loc3_ = this.vimub.body.katuf as Tank;
+               _loc3_ = this.vimub.body.data as Tank;
                if(_loc3_ != null)
                {
                   this.vimub.body.addWorldForceScaled(this.vimub.wimybu,this.vimub.bec,this.syli.myd);

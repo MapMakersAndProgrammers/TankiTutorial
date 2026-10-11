@@ -25,7 +25,7 @@ package alternativa.tanks.bonuses
          super();
          this.nasybugo = param1;
          var _loc2_:Number = BonusConst.numij;
-         this.pyp = new CollisionBox(new Vector3(_loc2_,_loc2_,_loc2_),CollisionGroup.nuqa,PhysicsMaterial.gec);
+         this.pyp = new CollisionBox(new Vector3(_loc2_,_loc2_,_loc2_),CollisionGroup.nuqa,PhysicsMaterial.defaultMaterial);
       }
       
       public function enable(param1:BattleRunner) : void
@@ -48,14 +48,14 @@ package alternativa.tanks.bonuses
       
       public function update(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number) : void
       {
-         var _loc7_:Matrix4 = this.pyp.wet;
+         var _loc7_:Matrix4 = this.pyp.transform;
          _loc7_.setMatrix(param1,param2,param3,param4,param5,param6);
          this.pyp.calculateAABB();
       }
       
       public function setTransform(param1:Vector3, param2:Matrix3) : void
       {
-         var _loc3_:Matrix4 = this.pyp.wet;
+         var _loc3_:Matrix4 = this.pyp.transform;
          _loc3_.setFromMatrix3(param2,param1);
          this.pyp.calculateAABB();
       }
@@ -64,9 +64,9 @@ package alternativa.tanks.bonuses
       {
          var _loc3_:CollisionShape = null;
          var _loc2_:int = 0;
-         while(_loc2_ < param1.kizuvam)
+         while(_loc2_ < param1.numCollisionShapes)
          {
-            _loc3_ = param1.hebevy[_loc2_];
+            _loc3_ = param1.collisionShapes[_loc2_];
             if(this.battleRunner.getCollisionDetector().testCollision(_loc3_,this.pyp))
             {
                this.nasybugo.onTriggerActivated();

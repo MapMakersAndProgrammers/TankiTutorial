@@ -199,7 +199,7 @@ package alternativa.tanks.vehicles.tank.weapons
             while(_loc5_ < _loc3_)
             {
                _loc6_ = befin[_loc5_];
-               _loc7_ = _loc6_.katuf as Tank;
+               _loc7_ = _loc6_.data as Tank;
                if(_loc7_ == GameData.playerTank)
                {
                   _loc4_ = _loc7_;
@@ -228,7 +228,7 @@ package alternativa.tanks.vehicles.tank.weapons
          while(_loc5_ < _loc4_)
          {
             _loc6_ = befin[_loc5_];
-            _loc7_ = _loc6_.katuf as Tank;
+            _loc7_ = _loc6_.data as Tank;
             if(_loc7_ != null)
             {
                _loc7_.substructHealth(this.beryfitu * kuqy);

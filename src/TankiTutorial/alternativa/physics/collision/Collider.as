@@ -5,9 +5,9 @@ package alternativa.physics.collision
    public interface Collider
    {
       
-      function getContacts(param1:CollisionShape, param2:CollisionShape, param3:Vector.<ShapeContact>) : void;
+      function getContacts(shape1:CollisionShape, shape2:CollisionShape, contacts:Vector.<ShapeContact>) : void;
       
-      function haveCollision(param1:CollisionShape, param2:CollisionShape) : Boolean;
+      function haveCollision(shape1:CollisionShape, shape2:CollisionShape) : Boolean;
    }
 }
 

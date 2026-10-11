@@ -52,9 +52,9 @@ package alternativa.tanks.shared.physics
       {
          super();
          var _loc1_:Number = 0.000001;
-         this.setCollider(CollisionShape.jupod,CollisionShape.jupod,new BoxBoxCollider(_loc1_));
-         this.setCollider(CollisionShape.jupod,CollisionShape.hosomubeb,new BoxRectCollider(_loc1_));
-         this.setCollider(CollisionShape.jupod,CollisionShape.miluvo,new BoxTriangleCollider(_loc1_));
+         this.setCollider(CollisionShape.BOX,CollisionShape.BOX,new BoxBoxCollider(_loc1_));
+         this.setCollider(CollisionShape.BOX,CollisionShape.RECT,new BoxRectCollider(_loc1_));
+         this.setCollider(CollisionShape.BOX,CollisionShape.TRIANGLE,new BoxTriangleCollider(_loc1_));
          this.createStaticBody();
       }
       
@@ -66,7 +66,7 @@ package alternativa.tanks.shared.physics
       private function createStaticBody() : void
       {
          this.kobet = new Body(1,new Matrix3());
-         this.kobet.midorofic = false;
+         this.kobet.movable = false;
       }
       
       public function buildKdTree(param1:Vector.<CollisionShape>, param2:AABB = null) : void
@@ -146,20 +146,20 @@ package alternativa.tanks.shared.physics
          var _loc3_:int = 0;
          var _loc4_:int = 0;
          var _loc5_:BodyContact = null;
-         if(!param1.body.vowymov)
+         if(!param1.body.frozen)
          {
             _loc3_ = int(param1.kodasy.length);
             _loc4_ = 0;
             while(_loc4_ < _loc3_)
             {
-               this.getShapeNodeCollisions(this.nyseh.wymyhujoq,param1.kodasy[_loc4_],this.pupicic);
+               this.getShapeNodeCollisions(this.nyseh.rootNode,param1.kodasy[_loc4_],this.pupicic);
                _loc4_++;
             }
             if(this.pupicic.length > 0)
             {
                _loc5_ = BodyContact.create();
-               _loc5_.rukowicyp = param1.body;
-               _loc5_.zata = this.kobet;
+               _loc5_.body1 = param1.body;
+               _loc5_.body2 = this.kobet;
                _loc5_.setShapeContacts(this.pupicic);
                this.pupicic.length = 0;
                param2[param2.length] = _loc5_;
@@ -185,19 +185,19 @@ package alternativa.tanks.shared.physics
             _loc6_ = this.cubajedid[_loc5_];
             _loc7_ = param1.body;
             _loc8_ = _loc6_.body;
-            if(!(Boolean(_loc7_.vowymov) && Boolean(_loc8_.vowymov)) && Boolean(_loc7_.raruluk.intersects(_loc8_.raruluk,luculeqa)))
+            if(!(Boolean(_loc7_.frozen) && Boolean(_loc8_.frozen)) && Boolean(_loc7_.aabb.intersects(_loc8_.aabb,luculeqa)))
             {
                this.getContacts(param1.kyripama,_loc6_.kyripama,this.pupicic);
                _loc9_ = int(this.pupicic.length);
                if(_loc9_ > 0)
                {
-                  _loc10_ = _loc7_.fosa == null || Boolean(_loc7_.fosa.considerBodies(_loc7_,_loc8_));
-                  _loc11_ = _loc8_.fosa == null || Boolean(_loc8_.fosa.considerBodies(_loc8_,_loc7_));
+                  _loc10_ = _loc7_.collisionFilter == null || Boolean(_loc7_.collisionFilter.considerBodies(_loc7_,_loc8_));
+                  _loc11_ = _loc8_.collisionFilter == null || Boolean(_loc8_.collisionFilter.considerBodies(_loc8_,_loc7_));
                   if(_loc10_ && _loc11_)
                   {
                      _loc12_ = BodyContact.create();
-                     _loc12_.rukowicyp = _loc7_;
-                     _loc12_.zata = _loc8_;
+                     _loc12_.body1 = _loc7_;
+                     _loc12_.body2 = _loc8_;
                      _loc12_.setShapeContacts(this.pupicic);
                      param3[param3.length] = _loc12_;
                   }
@@ -241,12 +241,12 @@ package alternativa.tanks.shared.physics
          var _loc9_:CollisionShape = null;
          var _loc10_:int = 0;
          var _loc11_:BodyContact = null;
-         if(param1.raruluk.intersects(param2.raruluk,luculeqa))
+         if(param1.aabb.intersects(param2.aabb,luculeqa))
          {
-            _loc4_ = int(param1.kizuvam);
-            _loc5_ = param1.hebevy;
-            _loc6_ = int(param2.kizuvam);
-            _loc7_ = param2.hebevy;
+            _loc4_ = int(param1.numCollisionShapes);
+            _loc5_ = param1.collisionShapes;
+            _loc6_ = int(param2.numCollisionShapes);
+            _loc7_ = param2.collisionShapes;
             _loc8_ = 0;
             while(_loc8_ < _loc4_)
             {
@@ -262,8 +262,8 @@ package alternativa.tanks.shared.physics
             if(this.pupicic.length > 0)
             {
                _loc11_ = BodyContact.create();
-               _loc11_.rukowicyp = param1;
-               _loc11_.zata = param2;
+               _loc11_.body1 = param1;
+               _loc11_.body2 = param2;
                _loc11_.setShapeContacts(this.pupicic);
                param3[param3.length] = _loc11_;
                this.pupicic.length = 0;
@@ -273,7 +273,7 @@ package alternativa.tanks.shared.physics
       
       public function getContacts(param1:CollisionShape, param2:CollisionShape, param3:Vector.<ShapeContact>) : void
       {
-         if((param1.nute & param2.nute) == 0)
+         if((param1.collisionGroup & param2.collisionGroup) == 0)
          {
             return;
          }
@@ -281,17 +281,17 @@ package alternativa.tanks.shared.physics
          {
             return;
          }
-         if(!param1.raruluk.intersects(param2.raruluk,luculeqa))
+         if(!param1.aabb.intersects(param2.aabb,luculeqa))
          {
             return;
          }
-         var _loc4_:Collider = this.pusuc[param1.huvozage | param2.huvozage];
+         var _loc4_:Collider = this.pusuc[param1.type | param2.type];
          _loc4_.getContacts(param1,param2,param3);
       }
       
       public function testCollision(param1:CollisionShape, param2:CollisionShape) : Boolean
       {
-         if((param1.nute & param2.nute) == 0)
+         if((param1.collisionGroup & param2.collisionGroup) == 0)
          {
             return false;
          }
@@ -299,11 +299,11 @@ package alternativa.tanks.shared.physics
          {
             return false;
          }
-         if(!param1.raruluk.intersects(param2.raruluk,luculeqa))
+         if(!param1.aabb.intersects(param2.aabb,luculeqa))
          {
             return false;
          }
-         var _loc3_:Collider = this.pusuc[param1.huvozage | param2.huvozage];
+         var _loc3_:Collider = this.pusuc[param1.type | param2.type];
          return _loc3_.haveCollision(param1,param2);
       }
       
@@ -336,7 +336,7 @@ package alternativa.tanks.shared.physics
       
       public function raycastStatic(param1:Vector3, param2:Vector3, param3:int, param4:Number, param5:IRayCollisionFilter, param6:RayHit) : Boolean
       {
-         if(!this.getRayBoundBoxIntersection(param1,param2,this.nyseh.wymyhujoq.taqa,this.bilaw))
+         if(!this.getRayBoundBoxIntersection(param1,param2,this.nyseh.rootNode.boundBox,this.bilaw))
          {
             return false;
          }
@@ -361,7 +361,7 @@ package alternativa.tanks.shared.physics
          {
             this.bilaw.rekycave = param4;
          }
-         var _loc7_:Boolean = this.testRayAgainstNode(this.nyseh.wymyhujoq,param1,this.zidihyw,param2,param3,this.bilaw.rylegyqa,this.bilaw.rekycave,param5,param6);
+         var _loc7_:Boolean = this.testRayAgainstNode(this.nyseh.rootNode,param1,this.zidihyw,param2,param3,this.bilaw.rylegyqa,this.bilaw.rekycave,param5,param6);
          return _loc7_ ? param6.jomuc <= param4 : false;
       }
       
@@ -382,7 +382,7 @@ package alternativa.tanks.shared.physics
          var _loc9_:int = 0;
          if(param1.indices != null)
          {
-            _loc6_ = this.nyseh.gogoq;
+            _loc6_ = this.nyseh.primitives;
             _loc7_ = param1.indices;
             _loc8_ = int(_loc7_.length);
             _loc9_ = 0;
@@ -392,35 +392,35 @@ package alternativa.tanks.shared.physics
                _loc9_++;
             }
          }
-         if(param1.zekos == -1)
+         if(param1.axis == -1)
          {
             return;
          }
-         switch(param1.zekos)
+         switch(param1.axis)
          {
             case 0:
-               _loc4_ = Number(param2.raruluk.cubegyw);
-               _loc5_ = Number(param2.raruluk.jys);
+               _loc4_ = Number(param2.aabb.minX);
+               _loc5_ = Number(param2.aabb.maxX);
                break;
             case 1:
-               _loc4_ = Number(param2.raruluk.nicomosa);
-               _loc5_ = Number(param2.raruluk.juri);
+               _loc4_ = Number(param2.aabb.minY);
+               _loc5_ = Number(param2.aabb.maxY);
                break;
             case 2:
-               _loc4_ = Number(param2.raruluk.gesuwi);
-               _loc5_ = Number(param2.raruluk.zepoci);
+               _loc4_ = Number(param2.aabb.minZ);
+               _loc5_ = Number(param2.aabb.maxZ);
          }
-         if(_loc4_ < param1.retycel)
+         if(_loc4_ < param1.coord)
          {
-            this.getShapeNodeCollisions(param1.hab,param2,param3);
+            this.getShapeNodeCollisions(param1.negative,param2,param3);
          }
-         if(_loc5_ > param1.retycel)
+         if(_loc5_ > param1.coord)
          {
-            this.getShapeNodeCollisions(param1.gumipiw,param2,param3);
+            this.getShapeNodeCollisions(param1.positive,param2,param3);
          }
-         if(param1.tuz != null && _loc4_ < param1.retycel && _loc5_ > param1.retycel)
+         if(param1.splitTree != null && _loc4_ < param1.coord && _loc5_ > param1.coord)
          {
-            this.getShapeNodeCollisions(param1.tuz.wymyhujoq,param2,param3);
+            this.getShapeNodeCollisions(param1.splitTree.rootNode,param2,param3);
          }
       }
       
@@ -434,7 +434,7 @@ package alternativa.tanks.shared.physics
          var _loc8_:int = 0;
          if(param2.indices != null)
          {
-            _loc5_ = this.nyseh.gogoq;
+            _loc5_ = this.nyseh.primitives;
             _loc6_ = param2.indices;
             _loc7_ = int(_loc6_.length);
             _loc8_ = 0;
@@ -447,41 +447,41 @@ package alternativa.tanks.shared.physics
                _loc8_++;
             }
          }
-         if(param2.zekos == -1)
+         if(param2.axis == -1)
          {
             return false;
          }
-         switch(param2.zekos)
+         switch(param2.axis)
          {
             case 0:
-               _loc3_ = Number(param1.raruluk.cubegyw);
-               _loc4_ = Number(param1.raruluk.jys);
+               _loc3_ = Number(param1.aabb.minX);
+               _loc4_ = Number(param1.aabb.maxX);
                break;
             case 1:
-               _loc3_ = Number(param1.raruluk.nicomosa);
-               _loc4_ = Number(param1.raruluk.juri);
+               _loc3_ = Number(param1.aabb.minY);
+               _loc4_ = Number(param1.aabb.maxY);
                break;
             case 2:
-               _loc3_ = Number(param1.raruluk.gesuwi);
-               _loc4_ = Number(param1.raruluk.zepoci);
+               _loc3_ = Number(param1.aabb.minZ);
+               _loc4_ = Number(param1.aabb.maxZ);
          }
-         if(param2.tuz != null && _loc3_ < param2.retycel && _loc4_ > param2.retycel)
+         if(param2.splitTree != null && _loc3_ < param2.coord && _loc4_ > param2.coord)
          {
-            if(this.testShapeNodeCollision(param1,param2.tuz.wymyhujoq))
+            if(this.testShapeNodeCollision(param1,param2.splitTree.rootNode))
             {
                return true;
             }
          }
-         if(_loc3_ < param2.retycel)
+         if(_loc3_ < param2.coord)
          {
-            if(this.testShapeNodeCollision(param1,param2.hab))
+            if(this.testShapeNodeCollision(param1,param2.negative))
             {
                return true;
             }
          }
-         if(_loc4_ > param2.retycel)
+         if(_loc4_ > param2.coord)
          {
-            if(this.testShapeNodeCollision(param1,param2.gumipiw))
+            if(this.testShapeNodeCollision(param1,param2.positive))
             {
                return true;
             }
@@ -502,33 +502,33 @@ package alternativa.tanks.shared.physics
          var _loc9_:Number = param1.z + param2.z * param4;
          if(_loc7_ < param1.x)
          {
-            this.lukej.cubegyw = _loc7_;
-            this.lukej.jys = param1.x;
+            this.lukej.minX = _loc7_;
+            this.lukej.maxX = param1.x;
          }
          else
          {
-            this.lukej.cubegyw = param1.x;
-            this.lukej.jys = _loc7_;
+            this.lukej.minX = param1.x;
+            this.lukej.maxX = _loc7_;
          }
          if(_loc8_ < param1.y)
          {
-            this.lukej.nicomosa = _loc8_;
-            this.lukej.juri = param1.y;
+            this.lukej.minY = _loc8_;
+            this.lukej.maxY = param1.y;
          }
          else
          {
-            this.lukej.nicomosa = param1.y;
-            this.lukej.juri = _loc8_;
+            this.lukej.minY = param1.y;
+            this.lukej.maxY = _loc8_;
          }
          if(_loc9_ < param1.z)
          {
-            this.lukej.gesuwi = _loc9_;
-            this.lukej.zepoci = param1.z;
+            this.lukej.minZ = _loc9_;
+            this.lukej.maxZ = param1.z;
          }
          else
          {
-            this.lukej.gesuwi = param1.z;
-            this.lukej.zepoci = _loc9_;
+            this.lukej.minZ = param1.z;
+            this.lukej.maxZ = _loc9_;
          }
          var _loc10_:Number = param4 + 1;
          var _loc11_:int = int(this.cubajedid.length);
@@ -537,17 +537,17 @@ package alternativa.tanks.shared.physics
          {
             _loc13_ = this.cubajedid[_loc12_];
             _loc14_ = _loc13_.body;
-            _loc15_ = _loc14_.raruluk;
-            if(!(this.lukej.jys < _loc15_.cubegyw || this.lukej.cubegyw > _loc15_.jys || this.lukej.juri < _loc15_.nicomosa || this.lukej.nicomosa > _loc15_.juri || this.lukej.zepoci < _loc15_.gesuwi || this.lukej.gesuwi > _loc15_.zepoci))
+            _loc15_ = _loc14_.aabb;
+            if(!(this.lukej.maxX < _loc15_.minX || this.lukej.minX > _loc15_.maxX || this.lukej.maxY < _loc15_.minY || this.lukej.minY > _loc15_.maxY || this.lukej.maxZ < _loc15_.minZ || this.lukej.minZ > _loc15_.maxZ))
             {
                _loc16_ = 0;
-               while(_loc16_ < _loc14_.kizuvam)
+               while(_loc16_ < _loc14_.numCollisionShapes)
                {
-                  _loc17_ = _loc14_.hebevy[_loc16_];
-                  if((_loc17_.nute & param3) != 0)
+                  _loc17_ = _loc14_.collisionShapes[_loc16_];
+                  if((_loc17_.collisionGroup & param3) != 0)
                   {
-                     _loc15_ = _loc17_.raruluk;
-                     if(!(this.lukej.jys < _loc15_.cubegyw || this.lukej.cubegyw > _loc15_.jys || this.lukej.juri < _loc15_.nicomosa || this.lukej.nicomosa > _loc15_.juri || this.lukej.zepoci < _loc15_.gesuwi || this.lukej.gesuwi > _loc15_.zepoci))
+                     _loc15_ = _loc17_.aabb;
+                     if(!(this.lukej.maxX < _loc15_.minX || this.lukej.minX > _loc15_.maxX || this.lukej.maxY < _loc15_.minY || this.lukej.minY > _loc15_.maxY || this.lukej.maxZ < _loc15_.minZ || this.lukej.minZ > _loc15_.maxZ))
                      {
                         if(!(param5 != null && !param5.considerBody(_loc14_)))
                         {
@@ -555,10 +555,10 @@ package alternativa.tanks.shared.physics
                            if(_loc18_ >= 0 && _loc18_ < _loc10_)
                            {
                               _loc10_ = _loc18_;
-                              param6.vetudozi = _loc17_;
-                              param6.lefugefo.x = this.wawuse.x;
-                              param6.lefugefo.y = this.wawuse.y;
-                              param6.lefugefo.z = this.wawuse.z;
+                              param6.shape = _loc17_;
+                              param6.normal.x = this.wawuse.x;
+                              param6.normal.y = this.wawuse.y;
+                              param6.normal.z = this.wawuse.z;
                            }
                         }
                      }
@@ -593,11 +593,11 @@ package alternativa.tanks.shared.physics
                case 0:
                   if(!(param2.x < this.threshold && param2.x > -this.threshold))
                   {
-                     _loc5_ = (param3.cubegyw - param1.x) / param2.x;
-                     _loc6_ = (param3.jys - param1.x) / param2.x;
+                     _loc5_ = (param3.minX - param1.x) / param2.x;
+                     _loc6_ = (param3.maxX - param1.x) / param2.x;
                      break;
                   }
-                  if(param1.x < param3.cubegyw || param1.x > param3.jys)
+                  if(param1.x < param3.minX || param1.x > param3.maxX)
                   {
                      return false;
                   }
@@ -605,11 +605,11 @@ package alternativa.tanks.shared.physics
                case 1:
                   if(!(param2.y < this.threshold && param2.y > -this.threshold))
                   {
-                     _loc5_ = (param3.nicomosa - param1.y) / param2.y;
-                     _loc6_ = (param3.juri - param1.y) / param2.y;
+                     _loc5_ = (param3.minY - param1.y) / param2.y;
+                     _loc6_ = (param3.maxY - param1.y) / param2.y;
                      break;
                   }
-                  if(param1.y < param3.nicomosa || param1.y > param3.juri)
+                  if(param1.y < param3.minY || param1.y > param3.maxY)
                   {
                      return false;
                   }
@@ -617,11 +617,11 @@ package alternativa.tanks.shared.physics
                case 2:
                   if(!(param2.z < this.threshold && param2.z > -this.threshold))
                   {
-                     _loc5_ = (param3.gesuwi - param1.z) / param2.z;
-                     _loc6_ = (param3.zepoci - param1.z) / param2.z;
+                     _loc5_ = (param3.minZ - param1.z) / param2.z;
+                     _loc6_ = (param3.maxZ - param1.z) / param2.z;
                      break;
                   }
-                  if(param1.z < param3.gesuwi || param1.z > param3.zepoci)
+                  if(param1.z < param3.minZ || param1.z > param3.maxZ)
                   {
                      return false;
                   }
@@ -666,15 +666,15 @@ package alternativa.tanks.shared.physics
          var _loc14_:int = 0;
          var _loc15_:int = 0;
          var _loc16_:CollisionShape = null;
-         if(param1.indices != null && this.getRayNodeIntersection(param2,param4,param5,this.nyseh.gogoq,param1.indices,param8,param9))
+         if(param1.indices != null && this.getRayNodeIntersection(param2,param4,param5,this.nyseh.primitives,param1.indices,param8,param9))
          {
             return true;
          }
-         if(param1.zekos == -1)
+         if(param1.axis == -1)
          {
             return false;
          }
-         switch(param1.zekos)
+         switch(param1.axis)
          {
             case 0:
                if(param4.x > -this.threshold && param4.x < this.threshold)
@@ -683,9 +683,9 @@ package alternativa.tanks.shared.physics
                }
                else
                {
-                  _loc10_ = (param1.retycel - param2.x) / param4.x;
+                  _loc10_ = (param1.coord - param2.x) / param4.x;
                }
-               _loc11_ = param3.x < param1.retycel ? param1.hab : param1.gumipiw;
+               _loc11_ = param3.x < param1.coord ? param1.negative : param1.positive;
                break;
             case 1:
                if(param4.y > -this.threshold && param4.y < this.threshold)
@@ -694,9 +694,9 @@ package alternativa.tanks.shared.physics
                }
                else
                {
-                  _loc10_ = (param1.retycel - param2.y) / param4.y;
+                  _loc10_ = (param1.coord - param2.y) / param4.y;
                }
-               _loc11_ = param3.y < param1.retycel ? param1.hab : param1.gumipiw;
+               _loc11_ = param3.y < param1.coord ? param1.negative : param1.positive;
                break;
             case 2:
                if(param4.z > -this.threshold && param4.z < this.threshold)
@@ -705,9 +705,9 @@ package alternativa.tanks.shared.physics
                }
                else
                {
-                  _loc10_ = (param1.retycel - param2.z) / param4.z;
+                  _loc10_ = (param1.coord - param2.z) / param4.z;
                }
-               _loc11_ = param3.z < param1.retycel ? param1.hab : param1.gumipiw;
+               _loc11_ = param3.z < param1.coord ? param1.negative : param1.positive;
          }
          if(_loc10_ < param6 || _loc10_ > param7)
          {
@@ -721,21 +721,21 @@ package alternativa.tanks.shared.physics
          this.zidihyw.x = param2.x + _loc10_ * param4.x;
          this.zidihyw.y = param2.y + _loc10_ * param4.y;
          this.zidihyw.z = param2.z + _loc10_ * param4.z;
-         if(param1.tuz != null)
+         if(param1.splitTree != null)
          {
-            _loc13_ = param1.tuz.wymyhujoq;
-            while(_loc13_ != null && _loc13_.zekos != -1)
+            _loc13_ = param1.splitTree.rootNode;
+            while(_loc13_ != null && _loc13_.axis != -1)
             {
-               switch(_loc13_.zekos)
+               switch(_loc13_.axis)
                {
                   case 0:
-                     _loc13_ = this.zidihyw.x < _loc13_.retycel ? _loc13_.hab : _loc13_.gumipiw;
+                     _loc13_ = this.zidihyw.x < _loc13_.coord ? _loc13_.negative : _loc13_.positive;
                      break;
                   case 1:
-                     _loc13_ = this.zidihyw.y < _loc13_.retycel ? _loc13_.hab : _loc13_.gumipiw;
+                     _loc13_ = this.zidihyw.y < _loc13_.coord ? _loc13_.negative : _loc13_.positive;
                      break;
                   case 2:
-                     _loc13_ = this.zidihyw.z < _loc13_.retycel ? _loc13_.hab : _loc13_.gumipiw;
+                     _loc13_ = this.zidihyw.z < _loc13_.coord ? _loc13_.negative : _loc13_.positive;
                }
             }
             if(_loc13_ != null && _loc13_.indices != null)
@@ -744,16 +744,16 @@ package alternativa.tanks.shared.physics
                _loc15_ = 0;
                while(_loc15_ < _loc14_)
                {
-                  _loc16_ = this.nyseh.gogoq[_loc13_.indices[_loc15_]];
-                  if((_loc16_.nute & param5) != 0)
+                  _loc16_ = this.nyseh.primitives[_loc13_.indices[_loc15_]];
+                  if((_loc16_.collisionGroup & param5) != 0)
                   {
                      if(!(param8 != null && !param8.considerBody(_loc16_.body)))
                      {
-                        param9.jomuc = _loc16_.raycast(param2,param4,this.threshold,param9.lefugefo);
+                        param9.jomuc = _loc16_.raycast(param2,param4,this.threshold,param9.normal);
                         if(param9.jomuc >= 0)
                         {
                            param9.position.copy(this.zidihyw);
-                           param9.vetudozi = _loc16_;
+                           param9.shape = _loc16_;
                            return true;
                         }
                      }
@@ -762,7 +762,7 @@ package alternativa.tanks.shared.physics
                }
             }
          }
-         return this.testRayAgainstNode(_loc11_ == param1.hab ? param1.gumipiw : param1.hab,param2,this.zidihyw,param4,param5,_loc10_,param7,param8,param9);
+         return this.testRayAgainstNode(_loc11_ == param1.negative ? param1.positive : param1.negative,param2,this.zidihyw,param4,param5,_loc10_,param7,param8,param9);
       }
       
       private function getRayNodeIntersection(param1:Vector3, param2:Vector3, param3:int, param4:Vector.<CollisionShape>, param5:Vector.<int>, param6:IRayCollisionFilter, param7:RayHit) : Boolean
@@ -775,7 +775,7 @@ package alternativa.tanks.shared.physics
          while(_loc10_ < _loc8_)
          {
             _loc11_ = param4[param5[_loc10_]];
-            if((_loc11_.nute & param3) != 0)
+            if((_loc11_.collisionGroup & param3) != 0)
             {
                if(!(param6 != null && !param6.considerBody(_loc11_.body)))
                {
@@ -783,10 +783,10 @@ package alternativa.tanks.shared.physics
                   if(_loc12_ > 0 && _loc12_ < _loc9_)
                   {
                      _loc9_ = _loc12_;
-                     param7.vetudozi = _loc11_;
-                     param7.lefugefo.x = this.wawuse.x;
-                     param7.lefugefo.y = this.wawuse.y;
-                     param7.lefugefo.z = this.wawuse.z;
+                     param7.shape = _loc11_;
+                     param7.normal.x = this.wawuse.x;
+                     param7.normal.y = this.wawuse.y;
+                     param7.normal.z = this.wawuse.z;
                   }
                }
             }
@@ -805,7 +805,7 @@ package alternativa.tanks.shared.physics
       
       public function testStaticCollision(param1:CollisionShape) : Boolean
       {
-         return this.testShapeNodeCollision(param1,this.nyseh.wymyhujoq);
+         return this.testShapeNodeCollision(param1,this.nyseh.rootNode);
       }
    }
 }

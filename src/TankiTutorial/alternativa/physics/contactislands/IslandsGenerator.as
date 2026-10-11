@@ -9,94 +9,94 @@ package alternativa.physics.contactislands
    public class IslandsGenerator
    {
       
-      public const nuwyge:Vector.<ContactIsland> = new Vector.<ContactIsland>();
+      public const islands:Vector.<ContactIsland> = new Vector.<ContactIsland>();
       
-      private const zabuvaroq:Dictionary = new Dictionary();
+      private const islandsByRoot:Dictionary = new Dictionary();
       
-      private const byrokeby:QuickUnionFind = new QuickUnionFind();
+      private const unionFind:QuickUnionFind = new QuickUnionFind();
       
       private var physicsScene:PhysicsScene;
       
-      public function IslandsGenerator(param1:PhysicsScene)
+      public function IslandsGenerator(physicsScene:PhysicsScene)
       {
          super();
-         this.physicsScene = param1;
+         this.physicsScene = physicsScene;
       }
       
-      public function generate(param1:Vector.<BodyContact>, param2:int) : void
+      public function generate(contacts:Vector.<BodyContact>, numBodies:int) : void
       {
-         this.createUnions(param1,param2);
-         this.createIslands(param1);
+         this.createUnions(contacts,numBodies);
+         this.createIslands(contacts);
       }
       
-      private function createUnions(param1:Vector.<BodyContact>, param2:int) : void
+      private function createUnions(contacts:Vector.<BodyContact>, numBodies:int) : void
       {
-         var _loc5_:BodyContact = null;
-         this.byrokeby.init(param2);
-         var _loc3_:int = int(param1.length);
-         var _loc4_:int = 0;
-         while(_loc4_ < _loc3_)
+         var contact:BodyContact = null;
+         this.unionFind.init(numBodies);
+         var len:int = int(contacts.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc5_ = param1[_loc4_];
-            if(_loc5_.rukowicyp.midorofic && _loc5_.zata.midorofic)
+            contact = contacts[i];
+            if(contact.body1.movable && contact.body2.movable)
             {
-               this.byrokeby.union(_loc5_.rukowicyp.wucejydy,_loc5_.zata.wucejydy);
+               this.unionFind.union(contact.body1.id,contact.body2.id);
             }
-            _loc4_++;
+            i++;
          }
       }
       
-      private function createIslands(param1:Vector.<BodyContact>) : void
+      private function createIslands(contacts:Vector.<BodyContact>) : void
       {
-         var _loc6_:BodyContact = null;
-         var _loc7_:int = 0;
-         var _loc8_:ContactIsland = null;
-         var _loc2_:int = int(param1.length);
-         var _loc3_:int = 0;
-         while(_loc3_ < _loc2_)
+         var contact:BodyContact = null;
+         var root:int = 0;
+         var island:ContactIsland = null;
+         var len:int = int(contacts.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc6_ = param1[_loc3_];
-            if(_loc6_.rukowicyp.midorofic)
+            contact = contacts[i];
+            if(contact.body1.movable)
             {
-               _loc7_ = int(this.byrokeby.root(_loc6_.rukowicyp.wucejydy));
+               root = int(this.unionFind.root(contact.body1.id));
             }
             else
             {
-               _loc7_ = int(this.byrokeby.root(_loc6_.zata.wucejydy));
+               root = int(this.unionFind.root(contact.body2.id));
             }
-            _loc8_ = this.zabuvaroq[_loc7_];
-            if(_loc8_ == null)
+            island = this.islandsByRoot[root];
+            if(island == null)
             {
-               _loc8_ = ContactIsland.create();
-               this.nuwyge[this.nuwyge.length] = _loc8_;
-               this.zabuvaroq[_loc7_] = _loc8_;
+               island = ContactIsland.create();
+               this.islands[this.islands.length] = island;
+               this.islandsByRoot[root] = island;
             }
-            _loc8_.hikocos[_loc8_.hikocos.length] = _loc6_;
-            _loc3_++;
+            island.bodyContacts[island.bodyContacts.length] = contact;
+            i++;
          }
-         var _loc4_:int = int(this.nuwyge.length);
-         var _loc5_:int = 0;
-         while(_loc5_ < _loc4_)
+         var numIslands:int = int(this.islands.length);
+         var j:int = 0;
+         while(j < numIslands)
          {
-            _loc8_ = this.nuwyge[_loc5_];
-            _loc8_.init(this.physicsScene);
-            _loc5_++;
+            island = this.islands[j];
+            island.init(this.physicsScene);
+            j++;
          }
-         clearDictionary(this.zabuvaroq);
+         clearDictionary(this.islandsByRoot);
       }
       
       public function clear() : void
       {
-         var _loc3_:ContactIsland = null;
-         var _loc1_:int = int(this.nuwyge.length);
-         var _loc2_:int = 0;
-         while(_loc2_ < _loc1_)
+         var island:ContactIsland = null;
+         var len:int = int(this.islands.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc3_ = this.nuwyge[_loc2_];
-            _loc3_.dispose();
-            _loc2_++;
+            island = this.islands[i];
+            island.dispose();
+            i++;
          }
-         this.nuwyge.length = 0;
+         this.islands.length = 0;
       }
    }
 }

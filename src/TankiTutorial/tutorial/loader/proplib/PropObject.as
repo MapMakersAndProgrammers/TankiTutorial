@@ -107,7 +107,7 @@ package tutorial.loader.proplib
                angles.z = XMLUtils.getAttributeAsNumber(elements[i].elements("angles")[0],"z",0);
                shape = new CollisionTriangle(v0,v1,v2,collisionGroup,physicsMaterial);
                matrix.setRotationMatrix(angles.x,angles.y,angles.z);
-               shape.wet.setFromMatrix3(matrix,position);
+               shape.transform.setFromMatrix3(matrix,position);
                this.collisionShapes.push(shape);
             }
             i++;
@@ -129,7 +129,7 @@ package tutorial.loader.proplib
             angles.z = XMLUtils.getAttributeAsNumber(elements[i].elements("angles")[0],"z",0);
             shape = new CollisionRect(halfSize,collisionGroup,physicsMaterial);
             matrix.setRotationMatrix(angles.x,angles.y,angles.z);
-            shape.wet.setFromMatrix3(matrix,position);
+            shape.transform.setFromMatrix3(matrix,position);
             this.collisionShapes.push(shape);
             i++;
          }
@@ -151,7 +151,7 @@ package tutorial.loader.proplib
                angles.z = XMLUtils.getAttributeAsNumber(elements[i].elements("angles")[0],"z",0);
                shape = new CollisionBox(halfSize,collisionGroup,physicsMaterial);
                matrix.setRotationMatrix(angles.x,angles.y,angles.z);
-               shape.wet.setFromMatrix3(matrix,position);
+               shape.transform.setFromMatrix3(matrix,position);
                this.collisionShapes.push(shape);
             }
             i++;

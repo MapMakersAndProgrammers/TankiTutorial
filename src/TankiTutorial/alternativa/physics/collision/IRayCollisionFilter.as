@@ -5,7 +5,7 @@ package alternativa.physics.collision
    public interface IRayCollisionFilter
    {
       
-      function considerBody(param1:Body) : Boolean;
+      function considerBody(body:Body) : Boolean;
    }
 }
 

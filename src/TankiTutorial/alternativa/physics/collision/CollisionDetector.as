@@ -8,17 +8,17 @@ package alternativa.physics.collision
    public interface CollisionDetector
    {
       
-      function getBodyContacts(param1:Vector.<BodyContact>) : void;
+      function getBodyContacts(contacts:Vector.<BodyContact>) : void;
       
-      function raycast(param1:Vector3, param2:Vector3, param3:int, param4:Number, param5:IRayCollisionFilter, param6:RayHit) : Boolean;
+      function raycast(origin:Vector3, direction:Vector3, collisionGroup:int, maxTime:Number, filter:IRayCollisionFilter, result:RayHit) : Boolean;
       
-      function raycastStatic(param1:Vector3, param2:Vector3, param3:int, param4:Number, param5:IRayCollisionFilter, param6:RayHit) : Boolean;
+      function raycastStatic(origin:Vector3, direction:Vector3, collisionGroup:int, maxTime:Number, filter:IRayCollisionFilter, result:RayHit) : Boolean;
       
-      function hasStaticHit(param1:Vector3, param2:Vector3, param3:int, param4:Number, param5:IRayCollisionFilter = null) : Boolean;
+      function hasStaticHit(origin:Vector3, direction:Vector3, collisionGroup:int, maxTime:Number, filter:IRayCollisionFilter = null) : Boolean;
       
-      function getContacts(param1:CollisionShape, param2:CollisionShape, param3:Vector.<ShapeContact>) : void;
+      function getContacts(shape1:CollisionShape, shape2:CollisionShape, contacts:Vector.<ShapeContact>) : void;
       
-      function testCollision(param1:CollisionShape, param2:CollisionShape) : Boolean;
+      function testCollision(shape1:CollisionShape, shape2:CollisionShape) : Boolean;
    }
 }
 

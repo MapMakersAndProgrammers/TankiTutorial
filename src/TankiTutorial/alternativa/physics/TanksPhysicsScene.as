@@ -14,175 +14,175 @@ package alternativa.physics
    public class TanksPhysicsScene extends PhysicsScene
    {
       
-      private var qywy:Vector.<PhysicsController> = new Vector.<PhysicsController>();
+      private var physicsControllers:Vector.<PhysicsController> = new Vector.<PhysicsController>();
       
-      private var mete:Vector.<PhysicsController> = new Vector.<PhysicsController>();
+      private var controllersToAdd:Vector.<PhysicsController> = new Vector.<PhysicsController>();
       
-      private var lepebeso:Vector.<PhysicsController> = new Vector.<PhysicsController>();
+      private var controllersToRemove:Vector.<PhysicsController> = new Vector.<PhysicsController>();
       
-      private var dytoc:Vector.<PhysicsInterpolator> = new Vector.<PhysicsInterpolator>();
+      private var physicsInterpolators:Vector.<PhysicsInterpolator> = new Vector.<PhysicsInterpolator>();
       
-      public var secakesem:TanksCollisionDetector;
+      public var tanksCollisionDetector:TanksCollisionDetector;
       
-      private var juzote:Boolean = false;
+      private var primitivesChanged:Boolean = false;
       
-      private var kodasy:Vector.<CollisionShape>;
+      private var collisionPrimitives:Vector.<CollisionShape>;
       
-      private var kagehi:Object = {};
+      private var namedBodies:Object = {};
       
-      private var guziwod:Mesh;
+      private var _physicsVisualization:Mesh;
       
-      private var cotyripyc:Boolean;
+      private var controllersRunning:Boolean;
       
-      public const nykoto:Triggers = new Triggers();
+      public const triggers:Triggers = new Triggers();
       
       public function TanksPhysicsScene()
       {
          super();
-         this.secakesem = new TanksCollisionDetector();
-         collisionDetector = this.secakesem;
-         this.kodasy = new Vector.<CollisionShape>();
+         this.tanksCollisionDetector = new TanksCollisionDetector();
+         collisionDetector = this.tanksCollisionDetector;
+         this.collisionPrimitives = new Vector.<CollisionShape>();
       }
       
-      public function addTankBody(param1:TankBody) : void
+      public function addTankBody(tankBody:TankBody) : void
       {
-         this.addBody(param1.body);
-         this.secakesem.addTankBody(param1);
+         this.addBody(tankBody.body);
+         this.tanksCollisionDetector.addTankBody(tankBody);
       }
       
-      public function removeTankBody(param1:TankBody) : void
+      public function removeTankBody(tankBody:TankBody) : void
       {
-         this.removeBody(param1.body);
-         this.secakesem.removeTankBody(param1);
+         this.removeBody(tankBody.body);
+         this.tanksCollisionDetector.removeTankBody(tankBody);
       }
       
-      public function addKinematicBody(param1:Body) : void
+      public function addKinematicBody(body:Body) : void
       {
-         this.addBody(param1);
-         this.secakesem.addKineamticBody(param1);
+         this.addBody(body);
+         this.tanksCollisionDetector.addKineamticBody(body);
       }
       
-      public function removeDynamicBody(param1:Body) : void
+      public function removeDynamicBody(body:Body) : void
       {
-         this.removeBody(param1);
-         this.secakesem.removeKinematicBody(param1);
+         this.removeBody(body);
+         this.tanksCollisionDetector.removeKinematicBody(body);
       }
       
-      override public function addBody(param1:Body) : void
+      override public function addBody(body:Body) : void
       {
-         super.addBody(param1);
-         if(param1.name != null)
+         super.addBody(body);
+         if(body.name != null)
          {
-            this.kagehi[param1.name] = param1;
+            this.namedBodies[body.name] = body;
          }
       }
       
-      override public function removeBody(param1:Body) : void
+      override public function removeBody(body:Body) : void
       {
-         super.removeBody(param1);
-         if(param1.name != null)
+         super.removeBody(body);
+         if(body.name != null)
          {
-            delete this.kagehi[param1.name];
+            delete this.namedBodies[body.name];
          }
       }
       
-      public function getBody(param1:String) : Body
+      public function getBody(name:String) : Body
       {
-         return this.kagehi[param1];
+         return this.namedBodies[name];
       }
       
-      public function addCollisionPrimitive(param1:CollisionShape) : void
+      public function addCollisionPrimitive(primitive:CollisionShape) : void
       {
-         this.kodasy.push(param1);
-         this.juzote = true;
+         this.collisionPrimitives.push(primitive);
+         this.primitivesChanged = true;
       }
       
       public function build() : void
       {
-         var _loc1_:AABB = null;
-         var _loc2_:Number = NaN;
-         if(this.juzote)
+         var boundBox:AABB = null;
+         var size:Number = NaN;
+         if(this.primitivesChanged)
          {
-            _loc1_ = new AABB();
-            _loc2_ = 200000;
-            _loc1_.setSize(-_loc2_,-_loc2_,-_loc2_,_loc2_,_loc2_,_loc2_);
-            this.secakesem.buildKdTree(this.kodasy,_loc1_);
-            this.juzote = false;
+            boundBox = new AABB();
+            size = 200000;
+            boundBox.setSize(-size,-size,-size,size,size,size);
+            this.tanksCollisionDetector.buildKdTree(this.collisionPrimitives,boundBox);
+            this.primitivesChanged = false;
          }
       }
       
-      public function addPhysicsController(param1:PhysicsController) : void
+      public function addPhysicsController(controller:PhysicsController) : void
       {
-         if(this.cotyripyc)
+         if(this.controllersRunning)
          {
-            this.mete.push(param1);
+            this.controllersToAdd.push(controller);
          }
-         else if(this.qywy.indexOf(param1) < 0)
+         else if(this.physicsControllers.indexOf(controller) < 0)
          {
-            this.qywy.push(param1);
+            this.physicsControllers.push(controller);
          }
       }
       
-      public function removePhysicsController(param1:PhysicsController) : void
+      public function removePhysicsController(controller:PhysicsController) : void
       {
-         var _loc2_:int = 0;
-         if(this.cotyripyc)
+         var index:int = 0;
+         if(this.controllersRunning)
          {
-            this.lepebeso.push(param1);
+            this.controllersToRemove.push(controller);
          }
          else
          {
-            _loc2_ = this.qywy.indexOf(param1);
-            if(_loc2_ >= 0)
+            index = this.physicsControllers.indexOf(controller);
+            if(index >= 0)
             {
-               this.qywy.splice(_loc2_,1);
+               this.physicsControllers.splice(index,1);
             }
          }
       }
       
-      public function runPhysicsInterpolators(param1:Number) : void
+      public function runPhysicsInterpolators(t:Number) : void
       {
-         var _loc4_:PhysicsInterpolator = null;
-         var _loc2_:int = int(this.dytoc.length);
-         var _loc3_:int = 0;
-         while(_loc3_ < _loc2_)
+         var interpolator:PhysicsInterpolator = null;
+         var len:int = int(this.physicsInterpolators.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc4_ = this.dytoc[_loc3_];
-            _loc4_.interpolatePhysicsState(param1);
-            _loc3_++;
+            interpolator = this.physicsInterpolators[i];
+            interpolator.interpolatePhysicsState(t);
+            i++;
          }
       }
       
-      public function addPhysicsInterpolator(param1:PhysicsInterpolator) : void
+      public function addPhysicsInterpolator(interpolator:PhysicsInterpolator) : void
       {
-         if(this.dytoc.indexOf(param1) < 0)
+         if(this.physicsInterpolators.indexOf(interpolator) < 0)
          {
-            this.dytoc.push(param1);
+            this.physicsInterpolators.push(interpolator);
          }
       }
       
-      public function removePhysicsInterpolator(param1:PhysicsInterpolator) : void
+      public function removePhysicsInterpolator(interpolator:PhysicsInterpolator) : void
       {
-         var _loc3_:int = 0;
-         var _loc2_:int = int(this.dytoc.length);
-         if(_loc2_ > 0)
+         var index:int = 0;
+         var len:int = int(this.physicsInterpolators.length);
+         if(len > 0)
          {
-            _loc3_ = this.dytoc.indexOf(param1);
-            if(_loc3_ >= 0)
+            index = this.physicsInterpolators.indexOf(interpolator);
+            if(index >= 0)
             {
-               this.dytoc[_loc3_] = this.dytoc[--_loc2_];
-               this.dytoc.length = _loc2_;
+               this.physicsInterpolators[index] = this.physicsInterpolators[--len];
+               this.physicsInterpolators.length = len;
             }
          }
       }
       
-      override public function update(param1:int) : void
+      override public function update(delta:int) : void
       {
-         this.runPhysicsControllers(param1 * 0.001);
-         super.update(param1);
+         this.runPhysicsControllers(delta * 0.001);
+         super.update(delta);
          if(this.isPlayerTankAlive())
          {
-            this.nykoto.check(GameData.playerTank.hogys.body);
+            this.triggers.check(GameData.playerTank.hogys.body);
          }
       }
       
@@ -191,42 +191,42 @@ package alternativa.physics
          return Boolean(GameData.playerTank) && Boolean(GameData.playerTank.hogys) && Boolean(GameData.playerTank.kat);
       }
       
-      private function runPhysicsControllers(param1:Number) : void
+      private function runPhysicsControllers(dt:Number) : void
       {
-         var _loc2_:PhysicsController = null;
-         this.cotyripyc = true;
-         for each(_loc2_ in this.qywy)
+         var controller:PhysicsController = null;
+         this.controllersRunning = true;
+         for each(controller in this.physicsControllers)
          {
-            _loc2_.runBeforePhysicsUpdate(param1);
+            controller.runBeforePhysicsUpdate(dt);
          }
-         this.cotyripyc = false;
+         this.controllersRunning = false;
          this.addNewControllers();
          this.deleteRemovedControllers();
       }
       
       private function addNewControllers() : void
       {
-         var _loc1_:PhysicsController = null;
-         for each(_loc1_ in this.mete)
+         var controller:PhysicsController = null;
+         for each(controller in this.controllersToAdd)
          {
-            this.addPhysicsController(_loc1_);
+            this.addPhysicsController(controller);
          }
-         this.mete.length = 0;
+         this.controllersToAdd.length = 0;
       }
       
       private function deleteRemovedControllers() : void
       {
-         var _loc1_:PhysicsController = null;
-         for each(_loc1_ in this.lepebeso)
+         var controller:PhysicsController = null;
+         for each(controller in this.controllersToRemove)
          {
-            this.removePhysicsController(_loc1_);
+            this.removePhysicsController(controller);
          }
-         this.lepebeso.length = 0;
+         this.controllersToRemove.length = 0;
       }
       
       public function get physicsVisualization() : Object3D
       {
-         return this.guziwod;
+         return this._physicsVisualization;
       }
    }
 }

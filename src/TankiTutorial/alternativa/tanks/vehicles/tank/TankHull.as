@@ -7,13 +7,13 @@ package alternativa.tanks.vehicles.tank
       
       public var sih:Vector3 = new Vector3();
       
-      public var tuwykus:Number;
+      public var mass:Number;
       
       public var sasi:Number;
       
       public var speed:Number;
       
-      public var cozo:Number;
+      public var acceleration:Number;
       
       public var qezuw:Number;
       

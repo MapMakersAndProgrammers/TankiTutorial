@@ -6,11 +6,11 @@ package alternativa.physics.collision.types
    public class RayHit
    {
       
-      public var vetudozi:CollisionShape;
+      public var shape:CollisionShape;
       
       public var position:Vector3 = new Vector3();
       
-      public var lefugefo:Vector3 = new Vector3();
+      public var normal:Vector3 = new Vector3();
       
       public var jomuc:Number = 0;
       
@@ -19,17 +19,17 @@ package alternativa.physics.collision.types
          super();
       }
       
-      public function copy(param1:RayHit) : void
+      public function copy(src:RayHit) : void
       {
-         this.vetudozi = param1.vetudozi;
-         this.position.copy(param1.position);
-         this.lefugefo.copy(param1.lefugefo);
-         this.jomuc = param1.jomuc;
+         this.shape = src.shape;
+         this.position.copy(src.position);
+         this.normal.copy(src.normal);
+         this.jomuc = src.jomuc;
       }
       
       public function clear() : void
       {
-         this.vetudozi = null;
+         this.shape = null;
       }
    }
 }

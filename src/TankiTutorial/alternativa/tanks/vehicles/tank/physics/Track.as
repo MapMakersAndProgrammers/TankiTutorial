@@ -51,7 +51,7 @@ package alternativa.tanks.vehicles.tank.physics
          var _loc2_:int = 0;
          while(_loc2_ < this.wavi)
          {
-            SuspensionRay(this.mofovoti[_loc2_]).nute = param1;
+            SuspensionRay(this.mofovoti[_loc2_]).collisionGroup = param1;
             _loc2_++;
          }
       }
@@ -67,7 +67,7 @@ package alternativa.tanks.vehicles.tank.physics
          this.hetofefu.x = 0;
          this.hetofefu.y = 0;
          this.hetofefu.z = 0;
-         _loc2_ = this.body.state.zerus;
+         _loc2_ = this.body.state.velocity;
          var _loc3_:int = 0;
          while(_loc3_ < this.wavi)
          {

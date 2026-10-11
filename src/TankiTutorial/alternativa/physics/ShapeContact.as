@@ -7,61 +7,61 @@ package alternativa.physics
    public class ShapeContact
    {
       
-      private static var hem:int;
+      private static var poolSize:int;
       
-      private static const hybuhy:Vector.<ShapeContact> = new Vector.<ShapeContact>();
+      private static const pool:Vector.<ShapeContact> = new Vector.<ShapeContact>();
       
       public var position:Vector3 = new Vector3();
       
-      public var pefavo:Number;
+      public var penetration:Number;
       
-      public var lefugefo:Vector3 = new Vector3();
+      public var normal:Vector3 = new Vector3();
       
-      public var cabuhyjyp:Vector3 = new Vector3();
+      public var tangent:Vector3 = new Vector3();
       
-      public var tufumiti:Vector3 = new Vector3();
+      public var binormal:Vector3 = new Vector3();
       
-      public var pisiryq:Number;
+      public var targetNormalVelocity:Number;
       
-      public var dozusa:Number;
+      public var targetPseudoVelocity:Number;
       
-      public var juqakilu:Number;
+      public var normalInvMass:Number;
       
-      public var cywy:Number;
+      public var tangentInvMass:Number;
       
-      public var kybifos:Number;
+      public var binormalInvMass:Number;
       
-      public var vud:Number;
+      public var normalAngularTerm1:Number;
       
-      public var jis:Number;
+      public var normalAngularTerm2:Number;
       
-      public var lyfolihu:Number;
+      public var tangentAngularTerm1:Number;
       
-      public var bafa:Number;
+      public var binormalAngularTerm1:Number;
       
-      public var kymi:Number;
+      public var tangentAngularTerm2:Number;
       
-      public var satubowin:Number;
+      public var binormalAngularTerm2:Number;
       
       public var divute:Vector3 = new Vector3();
       
       public var bamod:Vector3 = new Vector3();
       
-      public var lasowicup:Number;
+      public var normalImpulse:Number;
       
-      public var desesu:Number;
+      public var tangentImpulse:Number;
       
-      public var mejaj:Number;
+      public var binormalImpulse:Number;
       
       public var caduk:Boolean;
       
-      public var biwywo:Number;
+      public var restitution:Number;
       
-      public var cyloviqu:Number;
+      public var friction:Number;
       
-      public var ciqymaciv:CollisionShape;
+      public var shape1:CollisionShape;
       
-      public var dizad:CollisionShape;
+      public var shape2:CollisionShape;
       
       public function ShapeContact()
       {
@@ -70,156 +70,156 @@ package alternativa.physics
       
       public static function create() : ShapeContact
       {
-         if(hem == 0)
+         if(poolSize == 0)
          {
             return new ShapeContact();
          }
-         --hem;
-         var _loc1_:ShapeContact = hybuhy[hem];
-         hybuhy[hem] = null;
-         return _loc1_;
+         --poolSize;
+         var contact:ShapeContact = pool[poolSize];
+         pool[poolSize] = null;
+         return contact;
       }
       
       public function dispose() : void
       {
-         this.ciqymaciv = null;
-         this.dizad = null;
-         hybuhy[hem] = this;
-         ++hem;
+         this.shape1 = null;
+         this.shape2 = null;
+         pool[poolSize] = this;
+         ++poolSize;
       }
       
       public function calculatePersistentFrameData() : void
       {
-         var _loc5_:Vector3 = null;
-         var _loc1_:Body = this.ciqymaciv.body;
-         var _loc2_:Body = this.dizad.body;
-         this.biwywo = this.ciqymaciv.material.biwywo;
-         var _loc3_:Number = this.dizad.material.biwywo;
-         if(_loc3_ < this.biwywo)
+         var bodyPosition:Vector3 = null;
+         var body1:Body = this.shape1.body;
+         var body2:Body = this.shape2.body;
+         this.restitution = this.shape1.material.restitution;
+         var restitution2:Number = this.shape2.material.restitution;
+         if(restitution2 < this.restitution)
          {
-            this.biwywo = _loc3_;
+            this.restitution = restitution2;
          }
-         this.cyloviqu = this.ciqymaciv.material.cyloviqu;
-         var _loc4_:Number = this.dizad.material.cyloviqu;
-         if(_loc4_ < this.cyloviqu)
+         this.friction = this.shape1.material.friction;
+         var friction2:Number = this.shape2.material.friction;
+         if(friction2 < this.friction)
          {
-            this.cyloviqu = _loc4_;
+            this.friction = friction2;
          }
-         _loc5_ = this.ciqymaciv.body.state.position;
-         this.divute.x = this.position.x - _loc5_.x;
-         this.divute.y = this.position.y - _loc5_.y;
-         this.divute.z = this.position.z - _loc5_.z;
-         _loc5_ = this.dizad.body.state.position;
-         this.bamod.x = this.position.x - _loc5_.x;
-         this.bamod.y = this.position.y - _loc5_.y;
-         this.bamod.z = this.position.z - _loc5_.z;
-         if(Math.abs(this.lefugefo.x) < Math.abs(this.lefugefo.y))
+         bodyPosition = this.shape1.body.state.position;
+         this.divute.x = this.position.x - bodyPosition.x;
+         this.divute.y = this.position.y - bodyPosition.y;
+         this.divute.z = this.position.z - bodyPosition.z;
+         bodyPosition = this.shape2.body.state.position;
+         this.bamod.x = this.position.x - bodyPosition.x;
+         this.bamod.y = this.position.y - bodyPosition.y;
+         this.bamod.z = this.position.z - bodyPosition.z;
+         if(Math.abs(this.normal.x) < Math.abs(this.normal.y))
          {
-            this.cabuhyjyp.cross2(this.lefugefo,Vector3.xAxis).normalize();
+            this.tangent.cross2(this.normal,Vector3.xAxis).normalize();
          }
          else
          {
-            this.cabuhyjyp.cross2(this.lefugefo,Vector3.yAxis).normalize();
+            this.tangent.cross2(this.normal,Vector3.yAxis).normalize();
          }
-         this.tufumiti.cross2(this.lefugefo,this.cabuhyjyp);
-         this.lasowicup = 0;
-         this.desesu = 0;
-         this.mejaj = 0;
-         this.juqakilu = 0;
-         this.cywy = 0;
-         this.kybifos = 0;
-         if(_loc1_.midorofic)
+         this.binormal.cross2(this.normal,this.tangent);
+         this.normalImpulse = 0;
+         this.tangentImpulse = 0;
+         this.binormalImpulse = 0;
+         this.normalInvMass = 0;
+         this.tangentInvMass = 0;
+         this.binormalInvMass = 0;
+         if(body1.movable)
          {
-            this.vud = this.calculateAngularInertiaTerm(this.lefugefo,this.divute,_loc1_.cobugihyh);
-            this.lyfolihu = this.calculateAngularInertiaTerm(this.cabuhyjyp,this.divute,_loc1_.cobugihyh);
-            this.bafa = this.calculateAngularInertiaTerm(this.tufumiti,this.divute,_loc1_.cobugihyh);
-            this.juqakilu += _loc1_.jutelycu + this.vud;
-            this.cywy += _loc1_.jutelycu + this.lyfolihu;
-            this.kybifos += _loc1_.jutelycu + this.bafa;
+            this.normalAngularTerm1 = this.calculateAngularInertiaTerm(this.normal,this.divute,body1.invInertiaWorld);
+            this.tangentAngularTerm1 = this.calculateAngularInertiaTerm(this.tangent,this.divute,body1.invInertiaWorld);
+            this.binormalAngularTerm1 = this.calculateAngularInertiaTerm(this.binormal,this.divute,body1.invInertiaWorld);
+            this.normalInvMass += body1.invMass + this.normalAngularTerm1;
+            this.tangentInvMass += body1.invMass + this.tangentAngularTerm1;
+            this.binormalInvMass += body1.invMass + this.binormalAngularTerm1;
          }
-         if(_loc2_.midorofic)
+         if(body2.movable)
          {
-            this.jis = this.calculateAngularInertiaTerm(this.lefugefo,this.bamod,_loc2_.cobugihyh);
-            this.kymi = this.calculateAngularInertiaTerm(this.cabuhyjyp,this.bamod,_loc2_.cobugihyh);
-            this.satubowin = this.calculateAngularInertiaTerm(this.tufumiti,this.bamod,_loc2_.cobugihyh);
-            this.juqakilu += _loc2_.jutelycu + this.jis;
-            this.cywy += _loc2_.jutelycu + this.kymi;
-            this.kybifos += _loc2_.jutelycu + this.satubowin;
+            this.normalAngularTerm2 = this.calculateAngularInertiaTerm(this.normal,this.bamod,body2.invInertiaWorld);
+            this.tangentAngularTerm2 = this.calculateAngularInertiaTerm(this.tangent,this.bamod,body2.invInertiaWorld);
+            this.binormalAngularTerm2 = this.calculateAngularInertiaTerm(this.binormal,this.bamod,body2.invInertiaWorld);
+            this.normalInvMass += body2.invMass + this.normalAngularTerm2;
+            this.tangentInvMass += body2.invMass + this.tangentAngularTerm2;
+            this.binormalInvMass += body2.invMass + this.binormalAngularTerm2;
          }
-         this.pisiryq = this.getSeparationVelocity();
-         if(this.pisiryq < 0)
+         this.targetNormalVelocity = this.getSeparationVelocity();
+         if(this.targetNormalVelocity < 0)
          {
-            this.pisiryq = -this.biwywo * this.pisiryq;
+            this.targetNormalVelocity = -this.restitution * this.targetNormalVelocity;
          }
       }
       
-      private function calculateAngularInertiaTerm(param1:Vector3, param2:Vector3, param3:Matrix3) : Number
+      private function calculateAngularInertiaTerm(axis:Vector3, r:Vector3, invInertia:Matrix3) : Number
       {
-         var _loc4_:Number = param2.y * param1.z - param2.z * param1.y;
-         var _loc5_:Number = param2.z * param1.x - param2.x * param1.z;
-         var _loc6_:Number = param2.x * param1.y - param2.y * param1.x;
-         var _loc7_:Number = param3.ma * _loc4_ + param3.mb * _loc5_ + param3.mc * _loc6_;
-         var _loc8_:Number = param3.me * _loc4_ + param3.mf * _loc5_ + param3.mg * _loc6_;
-         var _loc9_:Number = param3.mi * _loc4_ + param3.mj * _loc5_ + param3.mk * _loc6_;
-         _loc4_ = _loc8_ * param2.z - _loc9_ * param2.y;
-         _loc5_ = _loc9_ * param2.x - _loc7_ * param2.z;
-         _loc6_ = _loc7_ * param2.y - _loc8_ * param2.x;
-         return _loc4_ * param1.x + _loc5_ * param1.y + _loc6_ * param1.z;
+         var cx:Number = r.y * axis.z - r.z * axis.y;
+         var cy:Number = r.z * axis.x - r.x * axis.z;
+         var cz:Number = r.x * axis.y - r.y * axis.x;
+         var ix:Number = invInertia.ma * cx + invInertia.mb * cy + invInertia.mc * cz;
+         var iy:Number = invInertia.me * cx + invInertia.mf * cy + invInertia.mg * cz;
+         var iz:Number = invInertia.mi * cx + invInertia.mj * cy + invInertia.mk * cz;
+         cx = iy * r.z - iz * r.y;
+         cy = iz * r.x - ix * r.z;
+         cz = ix * r.y - iy * r.x;
+         return cx * axis.x + cy * axis.y + cz * axis.z;
       }
       
       public function getSeparationVelocity() : Number
       {
-         var _loc1_:Vector3 = this.ciqymaciv.body.state.fev;
-         var _loc2_:Number = _loc1_.y * this.divute.z - _loc1_.z * this.divute.y;
-         var _loc3_:Number = _loc1_.z * this.divute.x - _loc1_.x * this.divute.z;
-         var _loc4_:Number = _loc1_.x * this.divute.y - _loc1_.y * this.divute.x;
-         var _loc5_:Vector3 = this.ciqymaciv.body.state.zerus;
-         var _loc6_:Number = _loc5_.x + _loc2_;
-         var _loc7_:Number = _loc5_.y + _loc3_;
-         var _loc8_:Number = _loc5_.z + _loc4_;
-         _loc1_ = this.dizad.body.state.fev;
-         _loc2_ = _loc1_.y * this.bamod.z - _loc1_.z * this.bamod.y;
-         _loc3_ = _loc1_.z * this.bamod.x - _loc1_.x * this.bamod.z;
-         _loc4_ = _loc1_.x * this.bamod.y - _loc1_.y * this.bamod.x;
-         _loc5_ = this.dizad.body.state.zerus;
-         _loc6_ -= _loc5_.x + _loc2_;
-         _loc7_ -= _loc5_.y + _loc3_;
-         _loc8_ -= _loc5_.z + _loc4_;
-         return _loc6_ * this.lefugefo.x + _loc7_ * this.lefugefo.y + _loc8_ * this.lefugefo.z;
+         var angularVelocity:Vector3 = this.shape1.body.state.rotation;
+         var cx:Number = angularVelocity.y * this.divute.z - angularVelocity.z * this.divute.y;
+         var cy:Number = angularVelocity.z * this.divute.x - angularVelocity.x * this.divute.z;
+         var cz:Number = angularVelocity.x * this.divute.y - angularVelocity.y * this.divute.x;
+         var v:Vector3 = this.shape1.body.state.velocity;
+         var vx:Number = v.x + cx;
+         var vy:Number = v.y + cy;
+         var vz:Number = v.z + cz;
+         angularVelocity = this.shape2.body.state.rotation;
+         cx = angularVelocity.y * this.bamod.z - angularVelocity.z * this.bamod.y;
+         cy = angularVelocity.z * this.bamod.x - angularVelocity.x * this.bamod.z;
+         cz = angularVelocity.x * this.bamod.y - angularVelocity.y * this.bamod.x;
+         v = this.shape2.body.state.velocity;
+         vx -= v.x + cx;
+         vy -= v.y + cy;
+         vz -= v.z + cz;
+         return vx * this.normal.x + vy * this.normal.y + vz * this.normal.z;
       }
       
-      public function calcualteDynamicFrameData(param1:Number, param2:Number, param3:Number, param4:Number) : void
+      public function calcualteDynamicFrameData(allowedPenetration:Number, penetrationCorrectionFactor:Number, maxPenetrationCorrection:Number, dt:Number) : void
       {
-         var _loc7_:Number = NaN;
-         var _loc5_:Body = this.ciqymaciv.body;
-         var _loc6_:Body = this.dizad.body;
-         this.juqakilu = 0;
-         this.cywy = 0;
-         this.kybifos = 0;
-         if(_loc5_.midorofic)
+         var depth:Number = NaN;
+         var body1:Body = this.shape1.body;
+         var body2:Body = this.shape2.body;
+         this.normalInvMass = 0;
+         this.tangentInvMass = 0;
+         this.binormalInvMass = 0;
+         if(body1.movable)
          {
-            this.juqakilu += _loc5_.jutelycu + this.vud;
-            this.cywy += _loc5_.jutelycu + this.lyfolihu;
-            this.kybifos += _loc5_.jutelycu + this.bafa;
+            this.normalInvMass += body1.invMass + this.normalAngularTerm1;
+            this.tangentInvMass += body1.invMass + this.tangentAngularTerm1;
+            this.binormalInvMass += body1.invMass + this.binormalAngularTerm1;
          }
-         if(_loc6_.midorofic)
+         if(body2.movable)
          {
-            this.juqakilu += _loc6_.jutelycu + this.jis;
-            this.cywy += _loc6_.jutelycu + this.kymi;
-            this.kybifos += _loc6_.jutelycu + this.satubowin;
+            this.normalInvMass += body2.invMass + this.normalAngularTerm2;
+            this.tangentInvMass += body2.invMass + this.tangentAngularTerm2;
+            this.binormalInvMass += body2.invMass + this.binormalAngularTerm2;
          }
-         if(this.pefavo > param1)
+         if(this.penetration > allowedPenetration)
          {
-            _loc7_ = this.pefavo - param1;
-            if(_loc7_ > param3)
+            depth = this.penetration - allowedPenetration;
+            if(depth > maxPenetrationCorrection)
             {
-               _loc7_ = param3;
+               depth = maxPenetrationCorrection;
             }
-            this.dozusa = param2 * _loc7_ / param4;
+            this.targetPseudoVelocity = penetrationCorrectionFactor * depth / dt;
          }
          else
          {
-            this.dozusa = 0;
+            this.targetPseudoVelocity = 0;
          }
       }
    }

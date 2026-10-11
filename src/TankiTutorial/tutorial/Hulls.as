@@ -19,11 +19,11 @@ package tutorial
       
       public static function applyProfile(xml:XML, hull:TankHull) : void
       {
-         hull.tuwykus = xml.@mass;
+         hull.mass = xml.@mass;
          hull.sasi = xml.@damping;
          hull.quj = xml.@health;
          hull.speed = xml.@speed;
-         hull.cozo = xml.@acceleration;
+         hull.acceleration = xml.@acceleration;
          hull.qezuw = xml.@reverseAcceleration;
          hull.wito = xml.@sideAcceleration;
          hull.pyfika = MathUtils.toRadians(xml.@turnSpeed);

@@ -132,7 +132,7 @@ package alternativa.tanks.vehicles.tank
       
       private function adjustSuspensionSpringCoeff() : void
       {
-         var _loc1_:Number = this.body.scene.tem.length() * this.body.tuwykus;
+         var _loc1_:Number = this.body.scene.gravity.length() * this.body.mass;
          this.gobo.jakopunu = _loc1_ / (2 * TankConst.nybi * (this.gobo.tovudov - this.gobo.vocuqih));
       }
       
@@ -173,9 +173,9 @@ package alternativa.tanks.vehicles.tank
          var _loc35_:Number = NaN;
          var _loc4_:int = this.dajy ? 0 : this.rucumopak;
          var _loc5_:int = this.dajy ? 0 : this.wuzyvodew;
-         var _loc6_:Vector3 = this.body.state.zerus;
-         _loc7_ = this.body.state.fev;
-         _loc8_ = this.body.jefe;
+         var _loc6_:Vector3 = this.body.state.velocity;
+         _loc7_ = this.body.state.rotation;
+         _loc8_ = this.body.orientationMatrix;
          dibi.x = _loc8_.ma;
          dibi.y = _loc8_.me;
          dibi.z = _loc8_.mi;
@@ -272,7 +272,7 @@ package alternativa.tanks.vehicles.tank
             {
                _loc25_ = MathUtils.numberSign(_loc25_,0.1) * tyqufisen;
             }
-            _loc26_ = _loc25_ * this.body.tuwykus;
+            _loc26_ = _loc25_ * this.body.mass;
             _loc27_ = _loc16_ + _loc17_;
             _loc28_ = _loc26_ * (_loc27_ + 0.42 * (10 - _loc16_)) / 10;
             _loc29_ = _loc28_ / _loc27_;
@@ -435,7 +435,7 @@ package alternativa.tanks.vehicles.tank
             _loc9_ = _loc6_ * _loc6_ + _loc7_ * _loc7_ + _loc8_ * _loc8_;
             if(_loc9_ > 0.00001)
             {
-               _loc10_ = Math.acos(param1.wonuhig.lefugefo.z);
+               _loc10_ = Math.acos(param1.wonuhig.normal.z);
                if(_loc10_ < 0)
                {
                   _loc10_ = -_loc10_;
@@ -468,16 +468,16 @@ package alternativa.tanks.vehicles.tank
          var _loc8_:Number = NaN;
          if(this.mof.jim >= this.mof.wavi >> 1 || this.vapal.jim >= this.vapal.wavi >> 1)
          {
-            _loc1_ = this.body.jefe;
-            _loc2_ = this.body.scene.tem;
+            _loc1_ = this.body.orientationMatrix;
+            _loc2_ = this.body.scene.gravity;
             _loc3_ = _loc2_.x * _loc1_.mc + _loc2_.y * _loc1_.mg + _loc2_.z * _loc1_.mk;
             _loc4_ = _loc2_.length();
             _loc5_ = Math.SQRT1_2 * _loc4_;
             if(_loc3_ < -_loc5_ || _loc3_ > _loc5_)
             {
-               _loc6_ = (_loc1_.mc * _loc3_ - _loc2_.x) * this.body.tuwykus;
-               _loc7_ = (_loc1_.mg * _loc3_ - _loc2_.y) * this.body.tuwykus;
-               _loc8_ = (_loc1_.mk * _loc3_ - _loc2_.z) * this.body.tuwykus;
+               _loc6_ = (_loc1_.mc * _loc3_ - _loc2_.x) * this.body.mass;
+               _loc7_ = (_loc1_.mg * _loc3_ - _loc2_.y) * this.body.mass;
+               _loc8_ = (_loc1_.mk * _loc3_ - _loc2_.z) * this.body.mass;
                this.body.addForceXYZ(_loc6_,_loc7_,_loc8_);
             }
          }
