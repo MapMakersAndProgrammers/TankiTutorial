@@ -29,7 +29,7 @@ package alternativa.tanks.bonuses
       
       private var wipegyzy:Number;
       
-      private var lecopojen:Number;
+      private var time:Number;
       
       private var pobano:Number;
       
@@ -55,7 +55,7 @@ package alternativa.tanks.bonuses
          this.pobano = param2;
          this.wipegyzy = param3;
          this.wimehyw = param4;
-         this.lecopojen = param5;
+         this.time = param5;
          this.nusipysav.copy(this.hezataw);
          this.interpolatePhysicsState(1);
       }
@@ -67,9 +67,9 @@ package alternativa.tanks.bonuses
       public function runBeforePhysicsUpdate(param1:Number) : void
       {
          this.nusipysav.copy(this.hezataw);
-         this.lecopojen += param1;
+         this.time += param1;
          this.hezataw.fitepil -= this.pobano * param1;
-         this.hezataw.peze = vegut * Math.sin(paliged * (this.wimehyw + this.lecopojen));
+         this.hezataw.peze = vegut * Math.sin(paliged * (this.wimehyw + this.time));
          this.hezataw.zywojehu += BonusConst.myr * param1;
          if(this.hezataw.fitepil <= this.wipegyzy)
          {

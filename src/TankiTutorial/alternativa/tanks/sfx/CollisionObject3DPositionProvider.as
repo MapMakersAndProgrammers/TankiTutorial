@@ -17,7 +17,7 @@ package alternativa.tanks.sfx
       
       private static const fybumu:Vector3 = new Vector3();
       
-      private static const ruda:Vector3 = new Vector3();
+      private static const direction:Vector3 = new Vector3();
       
       private static const rygapyv:Vector3 = new Vector3();
       
@@ -31,7 +31,7 @@ package alternativa.tanks.sfx
       
       private var gog:Number;
       
-      private var kymaqos:CollisionDetector;
+      private var collisionDetector:CollisionDetector;
       
       private var toqumyc:Vector3 = new Vector3();
       
@@ -52,21 +52,21 @@ package alternativa.tanks.sfx
          rygapyv.x = bul.gusat;
          rygapyv.y = bul.sig;
          rygapyv.z = bul.vug;
-         ruda.x = bul.cydop;
-         ruda.y = bul.qanezycap;
-         ruda.z = bul.luwym;
+         direction.x = bul.cydop;
+         direction.y = bul.qanezycap;
+         direction.z = bul.luwym;
          bul.transformVector(this.toqumyc,rinego);
          var _loc1_:Number = Number(this.toqumyc.y);
-         fybumu.x = rinego.x - _loc1_ * ruda.x;
-         fybumu.y = rinego.y - _loc1_ * ruda.y;
-         fybumu.z = rinego.z - _loc1_ * ruda.z;
+         fybumu.x = rinego.x - _loc1_ * direction.x;
+         fybumu.y = rinego.y - _loc1_ * direction.y;
+         fybumu.z = rinego.z - _loc1_ * direction.z;
       }
       
       public function init(param1:Object3D, param2:Vector3, param3:CollisionDetector, param4:Number, param5:Number = 0.5) : void
       {
          this.firaqe = param1;
          this.toqumyc = param2;
-         this.kymaqos = param3;
+         this.collisionDetector = param3;
          this.gog = param4;
          this.cyrare = param5;
          this.dypudecoz = 0;
@@ -76,7 +76,7 @@ package alternativa.tanks.sfx
       {
          this.calculateParameters();
          var _loc2_:Number = this.gog * this.cyrare;
-         if(this.kymaqos.raycastStatic(fybumu,ruda,CollisionGroup.neli,this.gog,null,tefydiw))
+         if(this.collisionDetector.raycastStatic(fybumu,direction,CollisionGroup.neli,this.gog,null,tefydiw))
          {
             _loc2_ = Vector3.distanceBetween(fybumu,tefydiw.position) * this.cyrare;
          }
@@ -89,9 +89,9 @@ package alternativa.tanks.sfx
          {
             this.dypudecoz += _loc3_ * kab;
          }
-         param1.x = fybumu.x + ruda.x * this.dypudecoz;
-         param1.y = fybumu.y + ruda.y * this.dypudecoz;
-         param1.z = fybumu.z + ruda.z * this.dypudecoz;
+         param1.x = fybumu.x + direction.x * this.dypudecoz;
+         param1.y = fybumu.y + direction.y * this.dypudecoz;
+         param1.z = fybumu.z + direction.z * this.dypudecoz;
       }
       
       public function updateObjectPosition(param1:Object3D, param2:GameCamera, param3:int) : void
@@ -102,7 +102,7 @@ package alternativa.tanks.sfx
       public function destroy() : void
       {
          this.firaqe = null;
-         this.kymaqos = null;
+         this.collisionDetector = null;
          recycle();
       }
    }

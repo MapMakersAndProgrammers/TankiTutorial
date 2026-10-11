@@ -10,36 +10,36 @@ package tutorial
    public class ScreenBitmapManager
    {
       
-      private static const kiqidevov:int = 20;
+      private static const MARGIN:int = 20;
       
-      private var vuwo:Bitmap;
+      private var bitmap:Bitmap;
       
-      private var cinilu:String;
+      private var align:String;
       
       private var stage:Stage;
       
-      private var lecopojen:uint;
+      private var time:uint;
       
-      private var wiciqy:Number = 1;
+      private var speed:Number = 1;
       
       private var bitmapData:BitmapData;
       
-      public function ScreenBitmapManager(param1:Stage)
+      public function ScreenBitmapManager(stage:Stage)
       {
          super();
-         this.stage = param1;
-         param1.addEventListener(Event.RESIZE,this.updateAlign);
-         this.vuwo = new Bitmap();
+         this.stage = stage;
+         stage.addEventListener(Event.RESIZE,this.updateAlign);
+         this.bitmap = new Bitmap();
       }
       
-      public function showBitmap(param1:BitmapData, param2:String) : void
+      public function showBitmap(bitmapData:BitmapData, align:String) : void
       {
-         this.bitmapData = param1;
-         this.cinilu = param2;
-         if(this.vuwo.bitmapData != null)
+         this.bitmapData = bitmapData;
+         this.align = align;
+         if(this.bitmap.bitmapData != null)
          {
             this.stage.addEventListener(Event.ENTER_FRAME,this.hideImage);
-            this.lecopojen = getTimer();
+            this.time = getTimer();
          }
          else
          {
@@ -50,46 +50,46 @@ package tutorial
       public function hideBimap() : void
       {
          this.stage.addEventListener(Event.ENTER_FRAME,this.hideImage);
-         this.lecopojen = getTimer();
+         this.time = getTimer();
          this.bitmapData = null;
       }
       
       private function initImage() : void
       {
-         if(this.vuwo.parent != null)
+         if(this.bitmap.parent != null)
          {
-            this.stage.removeChild(this.vuwo);
+            this.stage.removeChild(this.bitmap);
          }
-         this.stage.addChild(this.vuwo);
-         this.vuwo.alpha = 0;
-         this.vuwo.bitmapData = this.bitmapData;
+         this.stage.addChild(this.bitmap);
+         this.bitmap.alpha = 0;
+         this.bitmap.bitmapData = this.bitmapData;
          this.updateAlign();
          this.stage.addEventListener(Event.ENTER_FRAME,this.showImage);
-         this.lecopojen = getTimer();
+         this.time = getTimer();
       }
       
-      private function showImage(param1:Event) : void
+      private function showImage(e:Event) : void
       {
-         var _loc2_:Number = (getTimer() - this.lecopojen) * 0.001;
-         this.lecopojen = getTimer();
-         this.vuwo.alpha += _loc2_ * this.wiciqy;
-         if(this.vuwo.alpha >= 1)
+         var deltaTime:Number = (getTimer() - this.time) * 0.001;
+         this.time = getTimer();
+         this.bitmap.alpha += deltaTime * this.speed;
+         if(this.bitmap.alpha >= 1)
          {
-            this.vuwo.alpha = 1;
+            this.bitmap.alpha = 1;
             this.stage.removeEventListener(Event.ENTER_FRAME,this.showImage);
          }
       }
       
-      private function hideImage(param1:Event) : void
+      private function hideImage(e:Event) : void
       {
-         var _loc2_:Number = (getTimer() - this.lecopojen) * 0.001;
-         this.lecopojen = getTimer();
-         this.vuwo.alpha -= _loc2_ * this.wiciqy;
-         if(this.vuwo.alpha <= 0)
+         var deltaTime:Number = (getTimer() - this.time) * 0.001;
+         this.time = getTimer();
+         this.bitmap.alpha -= deltaTime * this.speed;
+         if(this.bitmap.alpha <= 0)
          {
-            this.vuwo.alpha = 0;
+            this.bitmap.alpha = 0;
             this.stage.removeEventListener(Event.ENTER_FRAME,this.hideImage);
-            this.vuwo.bitmapData = null;
+            this.bitmap.bitmapData = null;
             if(this.bitmapData != null)
             {
                this.initImage();
@@ -97,45 +97,45 @@ package tutorial
          }
       }
       
-      private function updateAlign(param1:Event = null) : void
+      private function updateAlign(e:Event = null) : void
       {
          if(this.bitmapData == null)
          {
             return;
          }
-         switch(this.cinilu)
+         switch(this.align)
          {
             case StageAlign.BOTTOM:
-               this.vuwo.x = (this.stage.stageWidth - this.vuwo.bitmapData.width) * 0.5;
-               this.vuwo.y = this.stage.stageHeight - this.vuwo.bitmapData.height - kiqidevov;
+               this.bitmap.x = (this.stage.stageWidth - this.bitmap.bitmapData.width) * 0.5;
+               this.bitmap.y = this.stage.stageHeight - this.bitmap.bitmapData.height - MARGIN;
                break;
             case StageAlign.BOTTOM_LEFT:
-               this.vuwo.x = kiqidevov;
-               this.vuwo.y = this.stage.stageHeight - this.vuwo.bitmapData.height - kiqidevov;
+               this.bitmap.x = MARGIN;
+               this.bitmap.y = this.stage.stageHeight - this.bitmap.bitmapData.height - MARGIN;
                break;
             case StageAlign.BOTTOM_RIGHT:
-               this.vuwo.x = this.stage.stageWidth - this.vuwo.bitmapData.width - kiqidevov;
-               this.vuwo.y = this.stage.stageHeight - this.vuwo.bitmapData.height - kiqidevov;
+               this.bitmap.x = this.stage.stageWidth - this.bitmap.bitmapData.width - MARGIN;
+               this.bitmap.y = this.stage.stageHeight - this.bitmap.bitmapData.height - MARGIN;
                break;
             case StageAlign.LEFT:
-               this.vuwo.x = kiqidevov;
-               this.vuwo.y = (this.stage.stageHeight - this.vuwo.bitmapData.height) * 0.5;
+               this.bitmap.x = MARGIN;
+               this.bitmap.y = (this.stage.stageHeight - this.bitmap.bitmapData.height) * 0.5;
                break;
             case StageAlign.RIGHT:
-               this.vuwo.x = this.stage.stageWidth - this.vuwo.bitmapData.width - kiqidevov;
-               this.vuwo.y = (this.stage.stageHeight - this.vuwo.bitmapData.height) * 0.5;
+               this.bitmap.x = this.stage.stageWidth - this.bitmap.bitmapData.width - MARGIN;
+               this.bitmap.y = (this.stage.stageHeight - this.bitmap.bitmapData.height) * 0.5;
                break;
             case StageAlign.TOP:
-               this.vuwo.x = (this.stage.stageWidth - this.vuwo.bitmapData.width) * 0.5;
-               this.vuwo.y = kiqidevov;
+               this.bitmap.x = (this.stage.stageWidth - this.bitmap.bitmapData.width) * 0.5;
+               this.bitmap.y = MARGIN;
                break;
             case StageAlign.TOP_LEFT:
-               this.vuwo.x = kiqidevov;
-               this.vuwo.y = kiqidevov;
+               this.bitmap.x = MARGIN;
+               this.bitmap.y = MARGIN;
                break;
             case StageAlign.TOP_RIGHT:
-               this.vuwo.x = this.stage.stageWidth - this.vuwo.bitmapData.width - kiqidevov;
-               this.vuwo.y = kiqidevov;
+               this.bitmap.x = this.stage.stageWidth - this.bitmap.bitmapData.width - MARGIN;
+               this.bitmap.y = MARGIN;
          }
       }
    }

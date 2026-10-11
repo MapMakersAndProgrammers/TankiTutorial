@@ -5,7 +5,7 @@ package alternativa.tanks.bonuses
       
       private var jiso:int;
       
-      private var leqib:Vector.<Object> = new Vector.<Object>();
+      private var objects:Vector.<Object> = new Vector.<Object>();
       
       public function ObjectCache()
       {
@@ -14,7 +14,7 @@ package alternativa.tanks.bonuses
       
       public function put(param1:Object) : void
       {
-         this.leqib[this.jiso++] = param1;
+         this.objects[this.jiso++] = param1;
       }
       
       public function get() : Object
@@ -24,8 +24,8 @@ package alternativa.tanks.bonuses
             throw new Error();
          }
          --this.jiso;
-         var _loc1_:Object = this.leqib[this.jiso];
-         this.leqib[this.jiso] = null;
+         var _loc1_:Object = this.objects[this.jiso];
+         this.objects[this.jiso] = null;
          return _loc1_;
       }
       
@@ -36,7 +36,7 @@ package alternativa.tanks.bonuses
       
       public function clear() : void
       {
-         this.leqib.length = 0;
+         this.objects.length = 0;
          this.jiso = 0;
       }
    }

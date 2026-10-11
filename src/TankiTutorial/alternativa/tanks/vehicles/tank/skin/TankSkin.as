@@ -45,7 +45,7 @@ package alternativa.tanks.vehicles.tank.skin
       
       private var kimiwacun:Mesh;
       
-      private var danewazam:Object3DContainer;
+      private var container:Object3DContainer;
       
       private var rehyzomi:TrackSkin;
       
@@ -96,7 +96,7 @@ package alternativa.tanks.vehicles.tank.skin
       
       public function addToContainer(param1:Object3DContainer, param2:Camera3D) : void
       {
-         this.danewazam = param1;
+         this.container = param1;
          if(this.mema != null)
          {
             param1.addChild(this.mema);
@@ -109,7 +109,7 @@ package alternativa.tanks.vehicles.tank.skin
          this.shadow = new Shadow(128,8,100,5000,10000,516,0.95);
          this.shadow.offset = 100;
          this.shadow.backFadeRange = 100;
-         this.shadow.direction = GameData.ruda;
+         this.shadow.direction = GameData.direction;
          if(this.mema != null)
          {
             this.shadow.addCaster(this.mema);
@@ -123,15 +123,15 @@ package alternativa.tanks.vehicles.tank.skin
       
       public function removeFromContainer() : void
       {
-         if(this.danewazam != null)
+         if(this.container != null)
          {
             if(this.mema != null)
             {
-               this.danewazam.removeChild(this.mema);
+               this.container.removeChild(this.mema);
             }
             if(this.kimiwacun != null)
             {
-               this.danewazam.removeChild(this.kimiwacun);
+               this.container.removeChild(this.kimiwacun);
             }
          }
          if(this.camera != null)
@@ -160,9 +160,9 @@ package alternativa.tanks.vehicles.tank.skin
       
       public function setHull(param1:TankHull) : void
       {
-         if(this.cocehi != null && this.danewazam != null)
+         if(this.cocehi != null && this.container != null)
          {
-            this.danewazam.removeChild(this.mema);
+            this.container.removeChild(this.mema);
          }
          this.cocehi = param1;
          if(this.cocehi != null)
@@ -170,9 +170,9 @@ package alternativa.tanks.vehicles.tank.skin
             this.mema = Mesh(this.cocehi.kuca.clone());
             this.mema.sorting = Sorting.DYNAMIC_BSP;
             this.parseTrackSkins(this.mema);
-            if(this.danewazam != null)
+            if(this.container != null)
             {
-               this.danewazam.addChild(this.mema);
+               this.container.addChild(this.mema);
             }
          }
          this.updatePartTexture(this.cocehi,this.mema);

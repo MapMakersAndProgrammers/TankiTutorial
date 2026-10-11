@@ -17,7 +17,7 @@ package alternativa.physics.collision
       
       private static const pekeryf:Vector.<Number> = new Vector.<Number>(6);
       
-      public var hevarer:Number = 0.1;
+      public var threshold:Number = 0.1;
       
       public var cihi:int = 1;
       
@@ -78,13 +78,13 @@ package alternativa.physics.collision
             return;
          }
          _loc4_ = param1.taqa;
-         tyvak.cubegyw = _loc4_.cubegyw + this.hevarer;
-         tyvak.nicomosa = _loc4_.nicomosa + this.hevarer;
-         tyvak.gesuwi = _loc4_.gesuwi + this.hevarer;
-         tyvak.jys = _loc4_.jys - this.hevarer;
-         tyvak.juri = _loc4_.juri - this.hevarer;
-         tyvak.zepoci = _loc4_.zepoci - this.hevarer;
-         var _loc5_:Number = this.hevarer * 2;
+         tyvak.cubegyw = _loc4_.cubegyw + this.threshold;
+         tyvak.nicomosa = _loc4_.nicomosa + this.threshold;
+         tyvak.gesuwi = _loc4_.gesuwi + this.threshold;
+         tyvak.jys = _loc4_.jys - this.threshold;
+         tyvak.juri = _loc4_.juri - this.threshold;
+         tyvak.zepoci = _loc4_.zepoci - this.threshold;
+         var _loc5_:Number = this.threshold * 2;
          var _loc8_:int = 0;
          var _loc9_:int = 0;
          var _loc10_:int = 0;
@@ -209,8 +209,8 @@ package alternativa.physics.collision
          {
             param1.hab.taqa.zepoci = param1.gumipiw.taqa.gesuwi = this.qijysa;
          }
-         var _loc13_:Number = this.qijysa - this.hevarer;
-         var _loc14_:Number = this.qijysa + this.hevarer;
+         var _loc13_:Number = this.qijysa - this.threshold;
+         var _loc14_:Number = this.qijysa + this.threshold;
          _loc6_ = 0;
          while(_loc6_ < _loc3_)
          {
@@ -305,8 +305,8 @@ package alternativa.physics.collision
             _loc10_ = param4[_loc9_];
             if(!isNaN(_loc10_))
             {
-               _loc11_ = _loc10_ - this.hevarer;
-               _loc12_ = _loc10_ + this.hevarer;
+               _loc11_ = _loc10_ - this.threshold;
+               _loc12_ = _loc10_ + this.threshold;
                _loc13_ = _loc8_ * (_loc10_ - param5[param2]);
                _loc14_ = _loc8_ * (param5[int(param2 + 3)] - _loc10_);
                _loc15_ = 0;
@@ -351,7 +351,7 @@ package alternativa.physics.collision
                _loc19_ = _loc9_ + 1;
                while(_loc19_ < param3)
                {
-                  if(param4[_loc19_] >= _loc10_ - this.hevarer && param4[_loc19_] <= _loc10_ + this.hevarer)
+                  if(param4[_loc19_] >= _loc10_ - this.threshold && param4[_loc19_] <= _loc10_ + this.threshold)
                   {
                      param4[_loc19_] = NaN;
                   }

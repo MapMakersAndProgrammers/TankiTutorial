@@ -56,7 +56,7 @@ package alternativa.tanks.bonuses
       
       private var til:Cords;
       
-      private var mij:BattleService;
+      private var battleService:BattleService;
       
       private var pobano:Number = 0;
       
@@ -104,7 +104,7 @@ package alternativa.tanks.bonuses
          this.luk = param1;
          this.nimulul = param2;
          this.katuf = param3;
-         this.mij = param4;
+         this.battleService = param4;
          this.lywajoqa.length = 0;
       }
       
@@ -124,7 +124,7 @@ package alternativa.tanks.bonuses
          else
          {
             this.initAirborne(param1,docyqy,peveco,param2);
-            this.wyqitywi.enable(this.mij.getBattleRunner());
+            this.wyqitywi.enable(this.battleService.getBattleRunner());
             _loc5_ = (docyqy.distanceTo(param1) - BonusConst.numij) / param3 * 1000;
          }
          this.initRemovalAnimation(_loc5_ + this.katuf.wym - param2);
@@ -160,14 +160,14 @@ package alternativa.tanks.bonuses
          this.giqo.y = param1.y + divogyvo.y;
          this.giqo.z = param1.z + divogyvo.z;
          this.updateTriggerFromMesh();
-         this.mij.getBattleScene3D().addObject(this.giqo);
+         this.battleService.getBattleScene3D().addObject(this.giqo);
          this.startGroundSpawnAnimation();
       }
       
       private function startGroundSpawnAnimation() : void
       {
-         var _loc1_:GroundSpawnRenderer = GroundSpawnRenderer(this.mij.getObjectPool().getObject(GroundSpawnRenderer));
-         _loc1_.start(this,this.mij);
+         var _loc1_:GroundSpawnRenderer = GroundSpawnRenderer(this.battleService.getObjectPool().getObject(GroundSpawnRenderer));
+         _loc1_.start(this,this.battleService);
       }
       
       private function updateTriggerFromMesh() : void
@@ -198,7 +198,7 @@ package alternativa.tanks.bonuses
             vyhomopog.addScaled(-BonusConst.numij,cokis);
             nuk.copy(param2);
             nuk.addScaled(-BonusConst.numij / param3.z,natyjy);
-            if(this.mij.getBattleRunner().getCollisionDetector().raycastStatic(vyhomopog,Vector3.lasis,CollisionGroup.neli,manytaq,null,tet))
+            if(this.battleService.getBattleRunner().getCollisionDetector().raycastStatic(vyhomopog,Vector3.lasis,CollisionGroup.neli,manytaq,null,tet))
             {
                if(param2.z < tet.position.z && tet.position.z < nuk.z)
                {
@@ -218,13 +218,13 @@ package alternativa.tanks.bonuses
             this.giqo.z = param2.z + BonusConst.numij;
             this.giqo.rotationZ = _loc7_ + _loc5_ * BonusConst.myr;
             this.updateTriggerFromMesh();
-            this.mij.getBattleScene3D().addObject(this.giqo);
+            this.battleService.getBattleScene3D().addObject(this.giqo);
          }
          else
          {
             this.initParachute();
             this.addAllToScene();
-            this.startSpawnAnimation(this.mij);
+            this.startSpawnAnimation(this.battleService);
             this.kewi.init(param1,this.pobano,_loc6_,-_loc5_,param4 / 1000,_loc7_);
             this.lywajoqa.push(this.kewi);
          }
@@ -232,13 +232,13 @@ package alternativa.tanks.bonuses
       
       private function isUnderCeil(param1:Vector3) : Boolean
       {
-         var _loc2_:CollisionDetector = this.mij.getBattleRunner().getCollisionDetector();
+         var _loc2_:CollisionDetector = this.battleService.getBattleRunner().getCollisionDetector();
          return _loc2_.hasStaticHit(param1,Vector3.nesicuryn,CollisionGroup.neli,manytaq);
       }
       
       private function getGroundPointAndNormal(param1:Vector3, param2:Vector3, param3:Vector3) : void
       {
-         var _loc4_:CollisionDetector = this.mij.getBattleRunner().getCollisionDetector();
+         var _loc4_:CollisionDetector = this.battleService.getBattleRunner().getCollisionDetector();
          if(_loc4_.raycastStatic(param1,Vector3.lasis,CollisionGroup.neli,manytaq,null,tet))
          {
             param3.copy(tet.lefugefo);
@@ -274,14 +274,14 @@ package alternativa.tanks.bonuses
          {
             _loc1_ = Sound3D.create(this.katuf.ruzy,SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,0.5);
             _loc2_ = new Vector3(this.giqo.x,this.giqo.y,this.giqo.z);
-            this.mij.addSound3DEffect(Sound3DEffect.create(this.mij.getObjectPool(),_loc2_,_loc1_));
+            this.battleService.addSound3DEffect(Sound3DEffect.create(this.battleService.getObjectPool(),_loc2_,_loc1_));
          }
       }
       
       private function startPickupAnimation() : void
       {
-         var _loc1_:BonusPickupAnimation = BonusPickupAnimation(this.mij.getObjectPool().getObject(BonusPickupAnimation));
-         _loc1_.start(this.giqo,this.mij.getBattleScene3D());
+         var _loc1_:BonusPickupAnimation = BonusPickupAnimation(this.battleService.getObjectPool().getObject(BonusPickupAnimation));
+         _loc1_.start(this.giqo,this.battleService.getBattleScene3D());
          this.giqo = null;
       }
       
@@ -303,7 +303,7 @@ package alternativa.tanks.bonuses
          this.deactivateRendererAndPhysicsController();
          this.wyqitywi.disable();
          this.hery.removeAll();
-         this.mij = null;
+         this.battleService = null;
          this.katuf = null;
          recycle();
       }
@@ -312,7 +312,7 @@ package alternativa.tanks.bonuses
       {
          if(this.giqo != null)
          {
-            this.mij.getBattleScene3D().removeObject(this.giqo);
+            this.battleService.getBattleScene3D().removeObject(this.giqo);
             this.giqo.recycle();
             this.giqo = null;
          }
@@ -322,10 +322,10 @@ package alternativa.tanks.bonuses
       {
          if(this.kyvedu != null)
          {
-            this.mij.getBattleScene3D().removeObject(this.kyvedu);
+            this.battleService.getBattleScene3D().removeObject(this.kyvedu);
             this.kyvedu.recycle();
             this.kyvedu = null;
-            this.mij.getBattleScene3D().removeObject(this.til);
+            this.battleService.getBattleScene3D().removeObject(this.til);
             this.til.recycle();
             this.til = null;
          }
@@ -338,8 +338,8 @@ package alternativa.tanks.bonuses
       
       private function initRemovalAnimation(param1:int) : void
       {
-         var _loc2_:RemovalAnimation = RemovalAnimation(this.mij.getObjectPool().getObject(RemovalAnimation));
-         _loc2_.init(this.mij.getBattleScene3D(),this,param1);
+         var _loc2_:RemovalAnimation = RemovalAnimation(this.battleService.getObjectPool().getObject(RemovalAnimation));
+         _loc2_.init(this.battleService.getBattleScene3D(),this,param1);
       }
       
       private function startSpawnAnimation(param1:BattleService) : void
@@ -353,9 +353,9 @@ package alternativa.tanks.bonuses
          if(!this.ledijym)
          {
             this.ledijym = true;
-            this.mij.getBattleRunner().addPhysicsController(this);
-            this.mij.getBattleRunner().addPhysicsInterpolator(this);
-            this.mij.getBattleScene3D().addRenderer(this,0);
+            this.battleService.getBattleRunner().addPhysicsController(this);
+            this.battleService.getBattleRunner().addPhysicsInterpolator(this);
+            this.battleService.getBattleScene3D().addRenderer(this,0);
          }
       }
       
@@ -395,9 +395,9 @@ package alternativa.tanks.bonuses
       
       private function addAllToScene() : void
       {
-         this.mij.getBattleScene3D().addObject(this.kyvedu);
-         this.mij.getBattleScene3D().addObject(this.giqo);
-         this.mij.getBattleScene3D().addObject(this.til);
+         this.battleService.getBattleScene3D().addObject(this.kyvedu);
+         this.battleService.getBattleScene3D().addObject(this.giqo);
+         this.battleService.getBattleScene3D().addObject(this.til);
       }
       
       public function runBeforePhysicsUpdate(param1:Number) : void
@@ -410,9 +410,9 @@ package alternativa.tanks.bonuses
          if(this.ledijym)
          {
             this.ledijym = false;
-            this.mij.getBattleRunner().removePhysicsController(this);
-            this.mij.getBattleRunner().removePhysicsInterpolator(this);
-            this.mij.getBattleScene3D().removeRenderer(this,0);
+            this.battleService.getBattleRunner().removePhysicsController(this);
+            this.battleService.getBattleRunner().removePhysicsInterpolator(this);
+            this.battleService.getBattleScene3D().removeRenderer(this,0);
          }
       }
       
@@ -421,8 +421,8 @@ package alternativa.tanks.bonuses
          var _loc1_:ParachuteDetachAnimation = null;
          if(this.kyvedu != null)
          {
-            _loc1_ = ParachuteDetachAnimation(this.mij.getObjectPool().getObject(ParachuteDetachAnimation));
-            _loc1_.start(this.mij.getBattleScene3D(),this.kyvedu,this.til,this.pobano / 2);
+            _loc1_ = ParachuteDetachAnimation(this.battleService.getObjectPool().getObject(ParachuteDetachAnimation));
+            _loc1_.start(this.battleService.getBattleScene3D(),this.kyvedu,this.til,this.pobano / 2);
             this.kyvedu = null;
             this.til = null;
          }
@@ -506,7 +506,7 @@ package alternativa.tanks.bonuses
       
       public function enableTrigger() : void
       {
-         this.wyqitywi.enable(this.mij.getBattleRunner());
+         this.wyqitywi.enable(this.battleService.getBattleRunner());
       }
    }
 }

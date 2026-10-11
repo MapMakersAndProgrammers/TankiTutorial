@@ -67,15 +67,15 @@ package alternativa.tanks.sfx.twins
       
       public static const japycepef:Number = 50;
       
-      private static const gov:TanksPhysicsScene = GameData.gov;
+      private static const physicsScene:TanksPhysicsScene = GameData.physicsScene;
       
-      private static const guzinizub:KDContainer = GameData.guzinizub;
+      private static const kdContainer:KDContainer = GameData.kdContainer;
       
-      private static const murow:ObjectPool = GameData.murow;
+      private static const objectPool:ObjectPool = GameData.objectPool;
       
-      private static const hobuna:EffectsManager = GameData.hobuna;
+      private static const effects:EffectsManager = GameData.effects;
       
-      private static const jypadif:RenderGroup = GameData.jypadif;
+      private static const renderers:RenderGroup = GameData.renderers;
       
       private static const neputi:Vector3 = new Vector3();
       
@@ -197,20 +197,20 @@ package alternativa.tanks.sfx.twins
          this.wahy.z = param2.z;
          this.kovi.copy(param3);
          this.taramuty = param4;
-         this.veliqe = AnimatedLightEffect(murow.getObject(AnimatedLightEffect));
-         this.kig = ExternalObject3DPositionProvider(murow.getObject(ExternalObject3DPositionProvider));
+         this.veliqe = AnimatedLightEffect(objectPool.getObject(AnimatedLightEffect));
+         this.kig = ExternalObject3DPositionProvider(objectPool.getObject(ExternalObject3DPositionProvider));
          this.kig.setPosition(param2);
          this.veliqe.init(this.kig,this.bogepulah,AnimatedLightEffect.nimowu,true);
-         hobuna.addEffect(this.veliqe);
-         gov.addPhysicsController(this);
-         gov.addPhysicsInterpolator(this);
-         jypadif.addRenderer(this);
+         effects.addEffect(this.veliqe);
+         physicsScene.addPhysicsController(this);
+         physicsScene.addPhysicsInterpolator(this);
+         renderers.addRenderer(this);
       }
       
       public function runBeforePhysicsUpdate(param1:Number) : void
       {
          var _loc5_:Vector3 = null;
-         var _loc2_:CollisionDetector = gov.secakesem;
+         var _loc2_:CollisionDetector = physicsScene.secakesem;
          if(this.jac)
          {
             if(this.processFirstTick(_loc2_))
@@ -257,7 +257,7 @@ package alternativa.tanks.sfx.twins
       {
          if(!this.jac && this.wahy._parent == null)
          {
-            guzinizub.addChild(this.wahy);
+            kdContainer.addChild(this.wahy);
          }
          var _loc3_:Number = param2 / zily;
          this.wahy.setFrameIndex(this.lamutameq);
@@ -282,9 +282,9 @@ package alternativa.tanks.sfx.twins
          this.taramuty = null;
          this.wahy.material = null;
          this.wahy.colorTransform = null;
-         gov.removePhysicsController(this);
-         gov.removePhysicsInterpolator(this);
-         jypadif.removeRenderer(this);
+         physicsScene.removePhysicsController(this);
+         physicsScene.removePhysicsInterpolator(this);
+         renderers.removeRenderer(this);
          this.veliqe.kill();
          this.veliqe = null;
          this.kig = null;
@@ -318,24 +318,24 @@ package alternativa.tanks.sfx.twins
             fid = Assets.getData("plasma_exp",TextureAnimation);
          }
          var _loc3_:int = 50 + boker * 0.5;
-         var _loc4_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(murow.getObject(StaticObject3DPositionProvider));
+         var _loc4_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(objectPool.getObject(StaticObject3DPositionProvider));
          _loc4_.init(param1,_loc3_);
          var _loc5_:Number = boker * (1 + param2) / 2;
-         var _loc6_:AnimatedSpriteEffect = AnimatedSpriteEffect(murow.getObject(AnimatedSpriteEffect));
+         var _loc6_:AnimatedSpriteEffect = AnimatedSpriteEffect(objectPool.getObject(AnimatedSpriteEffect));
          var _loc7_:int = 20;
          _loc6_.init(_loc5_,_loc5_,fid,MathUtils.qubabyby * Math.random(),_loc7_,_loc4_,0.5,0.5,null);
-         hobuna.addEffect(_loc6_);
+         effects.addEffect(_loc6_);
          this.createExplsionLightEffect(param1);
       }
       
       private function createExplsionLightEffect(param1:Vector3) : void
       {
          var _loc2_:int = 50 + boker * 0.5;
-         var _loc3_:AnimatedLightEffect = AnimatedLightEffect(murow.getObject(AnimatedLightEffect));
-         var _loc4_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(murow.getObject(StaticObject3DPositionProvider));
+         var _loc3_:AnimatedLightEffect = AnimatedLightEffect(objectPool.getObject(AnimatedLightEffect));
+         var _loc4_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(objectPool.getObject(StaticObject3DPositionProvider));
          _loc4_.init(param1,_loc2_);
          _loc3_.init(_loc4_,this.cilug);
-         hobuna.addEffect(_loc3_);
+         effects.addEffect(_loc3_);
       }
       
       private function applyImpact(param1:Body, param2:Vector3, param3:Vector3, param4:Number) : void

@@ -11,42 +11,42 @@ package tutorial.tasks
       
       private var stage:Stage = GameData.stage;
       
-      private var racefom:uint;
+      private var startTime:uint;
       
       private var sprite:Sprite;
       
-      private var lecopojen:uint;
+      private var time:uint;
       
-      private var hon:Function;
+      private var callback:Function;
       
-      public function FadeOutTask(param1:uint, param2:Function = null)
+      public function FadeOutTask(time:uint, callback:Function = null)
       {
          super();
-         this.lecopojen = param1;
-         this.hon = param2;
+         this.time = time;
+         this.callback = callback;
          this.sprite = new Sprite();
          this.stage.addEventListener(Event.RESIZE,this.onResize);
          this.onResize();
       }
       
-      private function onResize(param1:Event = null) : void
+      private function onResize(e:Event = null) : void
       {
       }
       
       override public function process() : Boolean
       {
-         if(this.racefom == 0)
+         if(this.startTime == 0)
          {
-            this.racefom = getTimer();
-            GameData.danewazam.addChild(this.sprite);
+            this.startTime = getTimer();
+            GameData.container.addChild(this.sprite);
          }
-         var _loc1_:Number = 1 - (getTimer() - this.racefom) / this.lecopojen;
-         this.sprite.alpha = _loc1_;
-         if(_loc1_ <= 0)
+         var alpha:Number = 1 - (getTimer() - this.startTime) / this.time;
+         this.sprite.alpha = alpha;
+         if(alpha <= 0)
          {
-            GameData.danewazam.removeChild(this.sprite);
+            GameData.container.removeChild(this.sprite);
             this.stage.removeEventListener(Event.RESIZE,this.onResize);
-            this.hon();
+            this.callback();
             return true;
          }
          return false;

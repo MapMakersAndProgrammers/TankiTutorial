@@ -12,23 +12,23 @@ package tutorial.tasks
    public class FrameRateTask extends Task
    {
       
-      private static const hes:Number = 60;
+      private static const GPU_MAX_FRAME_RATE:Number = 60;
       
-      private static const vypofamo:Number = 40;
+      private static const CPU_MAX_FRAME_RATE:Number = 40;
       
-      private static const dak:int = 10;
+      private static const MIN_FRAME_RATE:int = 10;
       
-      private static const benysaqoq:int = 5;
+      private static const CHECK_PERIOD:int = 5;
       
       private var stage:Stage = GameData.stage;
       
-      private var peqiru:int;
+      private var maxFrameRate:int;
       
-      private var kycakone:int;
+      private var frameCounter:int;
       
-      private var foha:Number;
+      private var savedFrameRate:Number;
       
-      private var zyzif:String;
+      private var savedQuality:String;
       
       public function FrameRateTask()
       {
@@ -49,13 +49,13 @@ package tutorial.tasks
       
       private function saveStageParams() : void
       {
-         this.foha = this.stage.frameRate;
-         this.zyzif = this.stage.quality;
+         this.savedFrameRate = this.stage.frameRate;
+         this.savedQuality = this.stage.quality;
       }
       
       private function setInitialStageParams() : void
       {
-         this.stage.frameRate = this.peqiru;
+         this.stage.frameRate = this.maxFrameRate;
          if(Alternativa3D.version == "7.11.0")
          {
             this.stage.quality = StageQuality.MEDIUM;
@@ -68,28 +68,28 @@ package tutorial.tasks
       
       public function restoreStageParams() : void
       {
-         this.stage.frameRate = this.foha;
-         this.stage.quality = this.zyzif;
+         this.stage.frameRate = this.savedFrameRate;
+         this.stage.quality = this.savedQuality;
       }
       
       private function setMaxFrameRate() : void
       {
          if(Alternativa3D.version == "7.11.0")
          {
-            this.peqiru = hes;
+            this.maxFrameRate = GPU_MAX_FRAME_RATE;
          }
          else
          {
-            this.peqiru = vypofamo;
+            this.maxFrameRate = CPU_MAX_FRAME_RATE;
          }
       }
       
       override public function process() : Boolean
       {
-         ++this.kycakone;
-         if(this.kycakone == benysaqoq)
+         ++this.frameCounter;
+         if(this.frameCounter == CHECK_PERIOD)
          {
-            this.kycakone = 0;
+            this.frameCounter = 0;
             if(this.currentFpsIsTooLow())
             {
                this.decreaseStageFrameRate();
@@ -104,20 +104,20 @@ package tutorial.tasks
       
       private function currentFpsIsTooLow() : Boolean
       {
-         var _loc1_:TimeData = GameData.lecopojen;
-         return _loc1_.fps < this.stage.frameRate - 4;
+         var timeData:TimeData = GameData.time;
+         return timeData.fps < this.stage.frameRate - 4;
       }
       
       private function decreaseStageFrameRate() : void
       {
-         var _loc1_:TimeData = GameData.lecopojen;
-         this.stage.frameRate = _loc1_.fps < dak ? dak : _loc1_.fps;
+         var timeData:TimeData = GameData.time;
+         this.stage.frameRate = timeData.fps < MIN_FRAME_RATE ? MIN_FRAME_RATE : timeData.fps;
       }
       
       private function increaseStageFrameRate() : void
       {
-         var _loc1_:Number = this.stage.frameRate + 1;
-         this.stage.frameRate = _loc1_ > this.peqiru ? this.peqiru : _loc1_;
+         var frameRate:Number = this.stage.frameRate + 1;
+         this.stage.frameRate = frameRate > this.maxFrameRate ? this.maxFrameRate : frameRate;
       }
    }
 }

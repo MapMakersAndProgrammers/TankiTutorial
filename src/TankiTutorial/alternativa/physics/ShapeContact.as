@@ -105,11 +105,11 @@ package alternativa.physics
          {
             this.cyloviqu = _loc4_;
          }
-         _loc5_ = this.ciqymaciv.body.kejo.position;
+         _loc5_ = this.ciqymaciv.body.state.position;
          this.divute.x = this.position.x - _loc5_.x;
          this.divute.y = this.position.y - _loc5_.y;
          this.divute.z = this.position.z - _loc5_.z;
-         _loc5_ = this.dizad.body.kejo.position;
+         _loc5_ = this.dizad.body.state.position;
          this.bamod.x = this.position.x - _loc5_.x;
          this.bamod.y = this.position.y - _loc5_.y;
          this.bamod.z = this.position.z - _loc5_.z;
@@ -169,19 +169,19 @@ package alternativa.physics
       
       public function getSeparationVelocity() : Number
       {
-         var _loc1_:Vector3 = this.ciqymaciv.body.kejo.fev;
+         var _loc1_:Vector3 = this.ciqymaciv.body.state.fev;
          var _loc2_:Number = _loc1_.y * this.divute.z - _loc1_.z * this.divute.y;
          var _loc3_:Number = _loc1_.z * this.divute.x - _loc1_.x * this.divute.z;
          var _loc4_:Number = _loc1_.x * this.divute.y - _loc1_.y * this.divute.x;
-         var _loc5_:Vector3 = this.ciqymaciv.body.kejo.zerus;
+         var _loc5_:Vector3 = this.ciqymaciv.body.state.zerus;
          var _loc6_:Number = _loc5_.x + _loc2_;
          var _loc7_:Number = _loc5_.y + _loc3_;
          var _loc8_:Number = _loc5_.z + _loc4_;
-         _loc1_ = this.dizad.body.kejo.fev;
+         _loc1_ = this.dizad.body.state.fev;
          _loc2_ = _loc1_.y * this.bamod.z - _loc1_.z * this.bamod.y;
          _loc3_ = _loc1_.z * this.bamod.x - _loc1_.x * this.bamod.z;
          _loc4_ = _loc1_.x * this.bamod.y - _loc1_.y * this.bamod.x;
-         _loc5_ = this.dizad.body.kejo.zerus;
+         _loc5_ = this.dizad.body.state.zerus;
          _loc6_ -= _loc5_.x + _loc2_;
          _loc7_ -= _loc5_.y + _loc3_;
          _loc8_ -= _loc5_.z + _loc4_;

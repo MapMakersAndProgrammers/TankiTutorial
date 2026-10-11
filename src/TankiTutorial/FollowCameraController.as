@@ -77,7 +77,7 @@ package
       
       public var nis:Boolean;
       
-      public var qusejov:Number = 0;
+      public var angle:Number = 0;
       
       public var heightOffset:Number = 0;
       
@@ -322,7 +322,7 @@ package
          bec.x = this.targetDirection.x;
          bec.y = this.targetDirection.y;
          bec.z = this.targetDirection.z;
-         this.run.fromAxisAngle(Vector3.nesicuryn,this.qusejov);
+         this.run.fromAxisAngle(Vector3.nesicuryn,this.angle);
          bec.transform3(this.run);
          this.getCameraPositionData(this.targetPosition,bec,this.cameraPositionData);
          if(isNaN(this.cameraPositionData.position.x))

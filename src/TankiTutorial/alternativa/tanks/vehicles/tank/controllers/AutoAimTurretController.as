@@ -14,29 +14,29 @@ package alternativa.tanks.vehicles.tank.controllers
       
       private static const lyje:Vector3 = new Vector3();
       
-      private var citacir:Tank;
+      private var tank:Tank;
       
       private var jywehybog:Tank;
       
       public function AutoAimTurretController(param1:Tank, param2:Tank)
       {
          super(0,0,false);
-         this.citacir = param1;
+         this.tank = param1;
          this.jywehybog = param2;
       }
       
       override public function rotate(param1:Number) : void
       {
-         if(!this.citacir.kat)
+         if(!this.tank.kat)
          {
             return;
          }
-         var _loc2_:Vector3 = this.citacir.hogys.body.kejo.position;
-         var _loc3_:Vector3 = this.jywehybog.hogys.body.kejo.position;
+         var _loc2_:Vector3 = this.tank.hogys.body.state.position;
+         var _loc3_:Vector3 = this.jywehybog.hogys.body.state.position;
          lyje.x = _loc3_.x - _loc2_.x;
          lyje.y = _loc3_.y - _loc2_.y;
          lyje.z = _loc3_.z - _loc2_.z;
-         this.citacir.hogys.body.kejo.bej.toMatrix4(rinal);
+         this.tank.hogys.body.state.bej.toMatrix4(rinal);
          rinal.deltaTransformVector(Vector3.pypymu,pedake);
          pedake.normalize();
          lyje.normalize();

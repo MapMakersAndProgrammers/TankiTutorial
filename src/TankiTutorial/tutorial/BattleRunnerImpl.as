@@ -14,39 +14,39 @@ package tutorial
          super();
       }
       
-      public function addPhysicsController(param1:PhysicsController) : void
+      public function addPhysicsController(controller:PhysicsController) : void
       {
-         GameData.gov.addPhysicsController(param1);
+         GameData.physicsScene.addPhysicsController(controller);
       }
       
-      public function removePhysicsController(param1:PhysicsController) : void
+      public function removePhysicsController(controller:PhysicsController) : void
       {
-         GameData.gov.removePhysicsController(param1);
+         GameData.physicsScene.removePhysicsController(controller);
       }
       
-      public function addPhysicsInterpolator(param1:PhysicsInterpolator) : void
+      public function addPhysicsInterpolator(interpolator:PhysicsInterpolator) : void
       {
-         GameData.gov.addPhysicsInterpolator(param1);
+         GameData.physicsScene.addPhysicsInterpolator(interpolator);
       }
       
-      public function removePhysicsInterpolator(param1:PhysicsInterpolator) : void
+      public function removePhysicsInterpolator(interpolator:PhysicsInterpolator) : void
       {
-         GameData.gov.removePhysicsInterpolator(param1);
+         GameData.physicsScene.removePhysicsInterpolator(interpolator);
       }
       
-      public function addTrigger(param1:Trigger) : void
+      public function addTrigger(trigger:Trigger) : void
       {
-         GameData.gov.nykoto.add(param1);
+         GameData.physicsScene.nykoto.add(trigger);
       }
       
-      public function removeTrigger(param1:Trigger) : void
+      public function removeTrigger(trigger:Trigger) : void
       {
-         GameData.gov.nykoto.remove(param1);
+         GameData.physicsScene.nykoto.remove(trigger);
       }
       
       public function getCollisionDetector() : CollisionDetector
       {
-         return GameData.gov.kymaqos;
+         return GameData.physicsScene.collisionDetector;
       }
    }
 }

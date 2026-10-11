@@ -12,7 +12,7 @@ package alternativa.tanks.bonuses
       
       private var nasybugo:BattleBonus;
       
-      private var hyfecypi:BattleScene3D;
+      private var battleScene:BattleScene3D;
       
       private var wedebuga:Number = 0;
       
@@ -24,7 +24,7 @@ package alternativa.tanks.bonuses
       public function start(param1:BattleBonus, param2:BattleScene3D) : void
       {
          this.nasybugo = param1;
-         this.hyfecypi = param2;
+         this.battleScene = param2;
          this.wedebuga = 0;
          param1.gave.add(this.destroy);
          param2.addRenderer(this,0);
@@ -46,8 +46,8 @@ package alternativa.tanks.bonuses
       
       private function destroy() : void
       {
-         this.hyfecypi.removeRenderer(this,0);
-         this.hyfecypi = null;
+         this.battleScene.removeRenderer(this,0);
+         this.battleScene = null;
          this.nasybugo.gave.remove(this.destroy);
          this.nasybugo = null;
          recycle();

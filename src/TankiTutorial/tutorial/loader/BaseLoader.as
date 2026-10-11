@@ -6,39 +6,39 @@ package tutorial.loader
    public class BaseLoader
    {
       
-      private var fajo:uint;
+      private var bytesLoaded:uint;
       
-      private var buw:uint;
+      private var bytesTotal:uint;
       
-      private var jin:Object;
+      private var currentTarget:Object;
       
-      protected var julicoj:String;
+      protected var currentURL:String;
       
       public function BaseLoader()
       {
          super();
       }
       
-      protected function onProgress(param1:ProgressEvent) : void
+      protected function onProgress(progressEvent:ProgressEvent) : void
       {
-         if(param1.target != this.jin)
+         if(progressEvent.target != this.currentTarget)
          {
-            this.fajo = 0;
-            this.buw = param1.bytesTotal;
-            this.jin = param1.target;
+            this.bytesLoaded = 0;
+            this.bytesTotal = progressEvent.bytesTotal;
+            this.currentTarget = progressEvent.target;
          }
-         Shared.preloader.addBytes(param1.bytesLoaded - this.fajo);
-         this.fajo = param1.bytesLoaded;
+         Shared.preloader.addBytes(progressEvent.bytesLoaded - this.bytesLoaded);
+         this.bytesLoaded = progressEvent.bytesLoaded;
       }
       
       protected function onFinishLoad() : void
       {
-         if(this.fajo < this.buw)
+         if(this.bytesLoaded < this.bytesTotal)
          {
-            Shared.preloader.addBytes(this.buw - this.fajo);
+            Shared.preloader.addBytes(this.bytesTotal - this.bytesLoaded);
          }
-         this.fajo = 0;
-         this.buw = 0;
+         this.bytesLoaded = 0;
+         this.bytesTotal = 0;
       }
    }
 }

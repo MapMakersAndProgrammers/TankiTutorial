@@ -6,29 +6,29 @@ package tutorial
    public class Hulls
    {
       
-      public static const jopanybi:String = "viking";
+      public static const VIKING:String = "viking";
       
-      public static const zelutabi:String = "hornet";
+      public static const HORNET:String = "hornet";
       
-      public static const leqib:Object = {};
+      public static const objects:Object = {};
       
       public function Hulls()
       {
          super();
       }
       
-      public static function applyProfile(param1:XML, param2:TankHull) : void
+      public static function applyProfile(xml:XML, hull:TankHull) : void
       {
-         param2.tuwykus = param1.@mass;
-         param2.sasi = param1.@damping;
-         param2.quj = param1.@health;
-         param2.wiciqy = param1.@speed;
-         param2.cozo = param1.@acceleration;
-         param2.qezuw = param1.@reverseAcceleration;
-         param2.wito = param1.@sideAcceleration;
-         param2.pyfika = MathUtils.toRadians(param1.@turnSpeed);
-         param2.qupi = MathUtils.toRadians(param1.@turnAcceleration);
-         param2.beg = MathUtils.toRadians(param1.@reverseTurnAcceleration);
+         hull.tuwykus = xml.@mass;
+         hull.sasi = xml.@damping;
+         hull.quj = xml.@health;
+         hull.speed = xml.@speed;
+         hull.cozo = xml.@acceleration;
+         hull.qezuw = xml.@reverseAcceleration;
+         hull.wito = xml.@sideAcceleration;
+         hull.pyfika = MathUtils.toRadians(xml.@turnSpeed);
+         hull.qupi = MathUtils.toRadians(xml.@turnAcceleration);
+         hull.beg = MathUtils.toRadians(xml.@reverseTurnAcceleration);
       }
    }
 }

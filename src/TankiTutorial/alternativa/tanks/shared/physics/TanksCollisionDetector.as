@@ -40,7 +40,7 @@ package alternativa.tanks.shared.physics
       
       private var nyseh:CollisionKdTree = new CollisionKdTree();
       
-      private var hevarer:Number = 0.0001;
+      private var threshold:Number = 0.0001;
       
       private var cubajedid:Vector.<TankBody> = new Vector.<TankBody>();
       
@@ -551,7 +551,7 @@ package alternativa.tanks.shared.physics
                      {
                         if(!(param5 != null && !param5.considerBody(_loc14_)))
                         {
-                           _loc18_ = Number(_loc17_.raycast(param1,param2,this.hevarer,this.wawuse));
+                           _loc18_ = Number(_loc17_.raycast(param1,param2,this.threshold,this.wawuse));
                            if(_loc18_ >= 0 && _loc18_ < _loc10_)
                            {
                               _loc10_ = _loc18_;
@@ -591,7 +591,7 @@ package alternativa.tanks.shared.physics
             switch(_loc7_)
             {
                case 0:
-                  if(!(param2.x < this.hevarer && param2.x > -this.hevarer))
+                  if(!(param2.x < this.threshold && param2.x > -this.threshold))
                   {
                      _loc5_ = (param3.cubegyw - param1.x) / param2.x;
                      _loc6_ = (param3.jys - param1.x) / param2.x;
@@ -603,7 +603,7 @@ package alternativa.tanks.shared.physics
                   }
                   continue;
                case 1:
-                  if(!(param2.y < this.hevarer && param2.y > -this.hevarer))
+                  if(!(param2.y < this.threshold && param2.y > -this.threshold))
                   {
                      _loc5_ = (param3.nicomosa - param1.y) / param2.y;
                      _loc6_ = (param3.juri - param1.y) / param2.y;
@@ -615,7 +615,7 @@ package alternativa.tanks.shared.physics
                   }
                   continue;
                case 2:
-                  if(!(param2.z < this.hevarer && param2.z > -this.hevarer))
+                  if(!(param2.z < this.threshold && param2.z > -this.threshold))
                   {
                      _loc5_ = (param3.gesuwi - param1.z) / param2.z;
                      _loc6_ = (param3.zepoci - param1.z) / param2.z;
@@ -677,7 +677,7 @@ package alternativa.tanks.shared.physics
          switch(param1.zekos)
          {
             case 0:
-               if(param4.x > -this.hevarer && param4.x < this.hevarer)
+               if(param4.x > -this.threshold && param4.x < this.threshold)
                {
                   _loc10_ = param7 + 1;
                }
@@ -688,7 +688,7 @@ package alternativa.tanks.shared.physics
                _loc11_ = param3.x < param1.retycel ? param1.hab : param1.gumipiw;
                break;
             case 1:
-               if(param4.y > -this.hevarer && param4.y < this.hevarer)
+               if(param4.y > -this.threshold && param4.y < this.threshold)
                {
                   _loc10_ = param7 + 1;
                }
@@ -699,7 +699,7 @@ package alternativa.tanks.shared.physics
                _loc11_ = param3.y < param1.retycel ? param1.hab : param1.gumipiw;
                break;
             case 2:
-               if(param4.z > -this.hevarer && param4.z < this.hevarer)
+               if(param4.z > -this.threshold && param4.z < this.threshold)
                {
                   _loc10_ = param7 + 1;
                }
@@ -749,7 +749,7 @@ package alternativa.tanks.shared.physics
                   {
                      if(!(param8 != null && !param8.considerBody(_loc16_.body)))
                      {
-                        param9.jomuc = _loc16_.raycast(param2,param4,this.hevarer,param9.lefugefo);
+                        param9.jomuc = _loc16_.raycast(param2,param4,this.threshold,param9.lefugefo);
                         if(param9.jomuc >= 0)
                         {
                            param9.position.copy(this.zidihyw);
@@ -779,7 +779,7 @@ package alternativa.tanks.shared.physics
             {
                if(!(param6 != null && !param6.considerBody(_loc11_.body)))
                {
-                  _loc12_ = Number(_loc11_.raycast(param1,param2,this.hevarer,this.wawuse));
+                  _loc12_ = Number(_loc11_.raycast(param1,param2,this.threshold,this.wawuse));
                   if(_loc12_ > 0 && _loc12_ < _loc9_)
                   {
                      _loc9_ = _loc12_;

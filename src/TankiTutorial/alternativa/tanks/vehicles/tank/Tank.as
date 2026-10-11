@@ -72,17 +72,17 @@ package alternativa.tanks.vehicles.tank
       
       private var vibewyge:ValueSmoother = new SimpleValueSmoother(0.3,10,0,0);
       
-      private const bijatil:ISoundManager = GameData.bijatil;
+      private const soundManager:ISoundManager = GameData.soundManager;
       
-      private const guzinizub:KDContainer = GameData.guzinizub;
+      private const kdContainer:KDContainer = GameData.kdContainer;
       
       private const camera:GameCamera = GameData.camera;
       
-      private const gov:TanksPhysicsScene = GameData.gov;
+      private const physicsScene:TanksPhysicsScene = GameData.physicsScene;
       
-      private const murow:ObjectPool = GameData.murow;
+      private const objectPool:ObjectPool = GameData.objectPool;
       
-      private const jypadif:RenderGroup = GameData.jypadif;
+      private const renderers:RenderGroup = GameData.renderers;
       
       private var civacofo:Vector.<Vector3>;
       
@@ -171,7 +171,7 @@ package alternativa.tanks.vehicles.tank
       
       public function substructHealth(param1:Number) : void
       {
-         if(this == GameData.jifom && this.quj <= this.wibo * 0.5)
+         if(this == GameData.playerTank && this.quj <= this.wibo * 0.5)
          {
             this.quj -= this.quj / this.wibo * param1;
          }
@@ -210,7 +210,7 @@ package alternativa.tanks.vehicles.tank
       {
          var _loc3_:Mesh = null;
          var _loc4_:Vector3 = null;
-         var _loc2_:TankHull = Hulls.leqib[param1];
+         var _loc2_:TankHull = Hulls.objects[param1];
          if(_loc2_ == null)
          {
             throw new ArgumentError("Hull is null");
@@ -222,7 +222,7 @@ package alternativa.tanks.vehicles.tank
             this.nariw = _loc2_;
             this.kuca.setHull(_loc2_);
             this.tuwykus = _loc2_.tuwykus;
-            this.setMaxSpeed(_loc2_.wiciqy,true);
+            this.setMaxSpeed(_loc2_.speed,true);
             this.setMaxTurnSpeed(_loc2_.pyfika,true);
             _loc3_ = _loc2_.kuca;
             _loc3_.calculateBounds();
@@ -289,7 +289,7 @@ package alternativa.tanks.vehicles.tank
       
       public function setTurret(param1:String) : void
       {
-         var _loc2_:TankTurret = Turrets.leqib[param1];
+         var _loc2_:TankTurret = Turrets.objects[param1];
          if(_loc2_ == null)
          {
             throw new ArgumentError("Turret is null");
@@ -355,8 +355,8 @@ package alternativa.tanks.vehicles.tank
       {
          this.zywanywy.copy(this.faqes);
          this.josi.copy(this.wykuc);
-         this.faqes.copy(this.hogys.body.kejo.position);
-         this.wykuc.copy(this.hogys.body.kejo.bej);
+         this.faqes.copy(this.hogys.body.state.position);
+         this.wykuc.copy(this.hogys.body.state.bej);
       }
       
       public function setColormap(param1:String) : void
@@ -372,17 +372,17 @@ package alternativa.tanks.vehicles.tank
             this.mum.lock(1);
          }
          this.kat = false;
-         this.bijatil.removeEffect(this.lysecof);
+         this.soundManager.removeEffect(this.lysecof);
          TankExplosionFactory.createEffect(this);
          this.setColormap("dead");
          if(this.kakow != null)
          {
             this.kakow.hide();
          }
-         this.hogys.body.kejo.zerus.z += 500;
-         this.hogys.body.kejo.fev.reset(2,2,2);
+         this.hogys.body.state.zerus.z += 500;
+         this.hogys.body.state.fev.reset(2,2,2);
          var _loc1_:Sound3D = Sound3D.create(Assets.getData("tank_explosion",Sound),SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,radanigys);
-         this.bijatil.addEffect(Sound3DEffect.create(this.murow,this.hogys.body.kejo.position,_loc1_,0,0));
+         this.soundManager.addEffect(Sound3DEffect.create(this.objectPool,this.hogys.body.state.position,_loc1_,0,0));
       }
       
       public function respawn() : void
@@ -390,7 +390,7 @@ package alternativa.tanks.vehicles.tank
          this.kuca.turretMesh.visible = false;
          this.kuca.hullMesh.visible = false;
          this.kuca.shadow.alpha = 0;
-         this.bijatil.addEffect(this.lysecof);
+         this.soundManager.addEffect(this.lysecof);
          this.setColormap(this.zafutonaz);
          this.quj = this.wibo;
          this.hogys.body.setVelocityXYZ(0,0,0);
@@ -401,7 +401,7 @@ package alternativa.tanks.vehicles.tank
             this.mum.reset();
             this.mum.unlock(1);
          }
-         GameData.namab.addTask(new ChangeCameraAngleTask(0.2,2));
+         GameData.taskGroup.addTask(new ChangeCameraAngleTask(0.2,2));
          setTimeout(this.showAfterRespawn,1000);
       }
       
@@ -419,13 +419,13 @@ package alternativa.tanks.vehicles.tank
       
       public function addToGame() : void
       {
-         this.gov.addTankBody(this.hogys);
-         this.gov.addPhysicsController(this);
-         this.gov.addPhysicsInterpolator(this);
+         this.physicsScene.addTankBody(this.hogys);
+         this.physicsScene.addPhysicsController(this);
+         this.physicsScene.addPhysicsInterpolator(this);
          this.kat = true;
-         this.jypadif.addRenderer(this);
-         this.kuca.addToContainer(this.guzinizub,this.camera);
-         GameData.gido.addTank(this);
+         this.renderers.addRenderer(this);
+         this.kuca.addToContainer(this.kdContainer,this.camera);
+         GameData.dust.addTank(this);
          this.wom = true;
          this.lysecof = new TankSounds();
          this.lysecof.setTank(this);
@@ -437,19 +437,19 @@ package alternativa.tanks.vehicles.tank
       {
          if(!this.diniqu)
          {
-            this.diniqu = this.bijatil.addEffect(this.lysecof);
+            this.diniqu = this.soundManager.addEffect(this.lysecof);
          }
       }
       
       public function removeFromGame() : void
       {
-         this.bijatil.removeEffect(this.lysecof);
-         this.gov.removeTankBody(this.hogys);
-         this.gov.removePhysicsInterpolator(this);
-         this.gov.removePhysicsController(this);
-         this.jypadif.removeRenderer(this);
+         this.soundManager.removeEffect(this.lysecof);
+         this.physicsScene.removeTankBody(this.hogys);
+         this.physicsScene.removePhysicsInterpolator(this);
+         this.physicsScene.removePhysicsController(this);
+         this.renderers.removeRenderer(this);
          this.kuca.removeFromContainer();
-         GameData.gido.removeTank(this);
+         GameData.dust.removeTank(this);
          this.wom = false;
       }
       

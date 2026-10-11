@@ -35,7 +35,7 @@ package tutorial
    public class Game
    {
       
-      public static var her:Game;
+      public static var instance:Game;
       
       private var stage:Stage = GameData.stage;
       
@@ -43,44 +43,44 @@ package tutorial
       
       private var root:Object3DContainer = GameData.root;
       
-      private var namab:TaskGroup = GameData.namab;
+      private var taskGroup:TaskGroup = GameData.taskGroup;
       
-      private var suvubufi:TimeData = GameData.lecopojen;
+      private var timeData:TimeData = GameData.time;
       
-      private var gov:TanksPhysicsScene = GameData.gov;
+      private var physicsScene:TanksPhysicsScene = GameData.physicsScene;
       
-      private var cyc:Vector.<Tutorial>;
+      private var tutorials:Vector.<Tutorial>;
       
-      private var qumebake:Tutorial;
+      private var currentTutorial:Tutorial;
       
-      private var tudejy:int;
+      private var tutorialIndex:int;
       
-      private var nivekyh:int;
+      private var loadIndex:int;
       
-      private var gujamiq:DependenciesLoader;
+      private var dependenciesLoader:DependenciesLoader;
       
-      private var myzumywi:CameraController;
+      private var spectatorController:CameraController;
       
-      private var motorafo:CameraController;
+      private var previousController:CameraController;
       
-      private var gido:Dust;
+      private var dust:Dust;
       
-      private var hyqirufy:Vector3;
+      private var position:Vector3;
       
-      private var vetawifac:Quaternion;
+      private var orientation:Quaternion;
       
-      private var qap:uint;
+      private var loadStartTime:uint;
       
-      private var newizyqy:uint;
+      private var stepStartTime:uint;
       
-      private var podinipo:uint;
+      private var lastHangTime:uint;
       
-      private var pylyzom:String;
+      private var lastStep:String;
       
       public function Game()
       {
          super();
-         her = this;
+         instance = this;
          this.setupDust();
          this.stage.addEventListener(Event.ENTER_FRAME,this.onEnterFrame);
          this.stage.addEventListener(Event.RESIZE,this.onResize);
@@ -88,46 +88,46 @@ package tutorial
       
       public static function isFinished() : Boolean
       {
-         return her.tudejy >= her.cyc.length;
+         return instance.tutorialIndex >= instance.tutorials.length;
       }
       
       private function setupDust() : void
       {
-         this.gido = new Dust(this.camera);
-         var _loc1_:BitmapData = Assets.getData("dust",BitmapData);
-         var _loc2_:TextureAnimation = new TextureAnimation(new TextureMaterial(_loc1_),GraphicsUtils.getUVFramesFromTexture(_loc1_,32,32,17),30);
-         this.gido.init(_loc2_,9000,7000,200,0.75,0.1);
-         this.gido.enabled = false;
-         GameData.gido = this.gido;
+         this.dust = new Dust(this.camera);
+         var bitmapData:BitmapData = Assets.getData("dust",BitmapData);
+         var animation:TextureAnimation = new TextureAnimation(new TextureMaterial(bitmapData),GraphicsUtils.getUVFramesFromTexture(bitmapData,32,32,17),30);
+         this.dust.init(animation,9000,7000,200,0.75,0.1);
+         this.dust.enabled = false;
+         GameData.dust = this.dust;
       }
       
       public function start() : void
       {
-         var _loc1_:ConfigLoader = new ConfigLoader();
-         _loc1_.load("config.xml",this.onConfigLoaded);
+         var configLoader:ConfigLoader = new ConfigLoader();
+         configLoader.load("config.xml",this.onConfigLoaded);
       }
       
-      private function onConfigLoaded(param1:ConfigLoader) : void
+      private function onConfigLoaded(configLoader:ConfigLoader) : void
       {
-         var _loc2_:XML = null;
-         Assets.config = param1.wytyqinyj;
-         Assets.scripts = param1.dijipyhiv;
-         this.cyc = new Vector.<Tutorial>();
-         for each(_loc2_ in param1.dijipyhiv.script)
+         var scriptXML:XML = null;
+         Assets.config = configLoader.config;
+         Assets.scripts = configLoader.scripts;
+         this.tutorials = new Vector.<Tutorial>();
+         for each(scriptXML in configLoader.scripts.script)
          {
-            this.cyc.push(new ScriptedTutorial(_loc2_));
+            this.tutorials.push(new ScriptedTutorial(scriptXML));
          }
-         this.gujamiq = new DependenciesLoader();
-         this.tudejy = 0;
-         this.nivekyh = 0;
+         this.dependenciesLoader = new DependenciesLoader();
+         this.tutorialIndex = 0;
+         this.loadIndex = 0;
          this.loadDependencies();
-         this.namab.addTask(new TankRolloverCheckerTask());
+         this.taskGroup.addTask(new TankRolloverCheckerTask());
       }
       
       private function loadDependencies() : void
       {
-         this.qap = getTimer();
-         if(this.nivekyh == 0)
+         this.loadStartTime = getTimer();
+         if(this.loadIndex == 0)
          {
             Shared.preloader.reset("LoadHangar");
          }
@@ -135,99 +135,99 @@ package tutorial
          {
             Shared.preloader.reset();
          }
-         var _loc1_:Tutorial = this.cyc[this.nivekyh];
-         this.gujamiq.load(_loc1_.getDependencies(),this.onTutorialReady);
+         var t:Tutorial = this.tutorials[this.loadIndex];
+         this.dependenciesLoader.load(t.getDependencies(),this.onTutorialReady);
       }
       
       private function onTutorialReady() : void
       {
-         var _loc1_:Tutorial = this.cyc[this.nivekyh];
-         _loc1_.feseju = true;
-         if(this.nivekyh == 0)
+         var t:Tutorial = this.tutorials[this.loadIndex];
+         t.loaded = true;
+         if(this.loadIndex == 0)
          {
             Shared.preloader.complete();
          }
-         ++this.nivekyh;
-         if(this.qumebake == null)
+         ++this.loadIndex;
+         if(this.currentTutorial == null)
          {
-            this.qumebake = this.cyc[this.tudejy];
-            this.qumebake.start();
-            this.newizyqy = getTimer();
+            this.currentTutorial = this.tutorials[this.tutorialIndex];
+            this.currentTutorial.start();
+            this.stepStartTime = getTimer();
             Shared.preloader.hideLoaderWindow();
-            GameData.ciqoby.startLoad();
+            GameData.texturesLoader.startLoad();
          }
-         if(this.nivekyh < this.cyc.length)
+         if(this.loadIndex < this.tutorials.length)
          {
             this.loadDependencies();
          }
       }
       
-      private function onEnterFrame(param1:Event = null) : void
+      private function onEnterFrame(e:Event = null) : void
       {
-         var _loc3_:Tank = null;
-         var _loc4_:uint = 0;
-         var _loc5_:uint = 0;
-         this.suvubufi.calculate();
-         if(Boolean(Shared.renderEnabled) && this.qumebake != null)
+         var tank:Tank = null;
+         var time:uint = 0;
+         var deltaTime:uint = 0;
+         this.timeData.calculate();
+         if(Boolean(Shared.renderEnabled) && this.currentTutorial != null)
          {
             this.updateCurrentTutorial();
          }
-         var _loc2_:Vector.<Tank> = GameData.gaz;
-         for each(_loc3_ in _loc2_)
+         var tanks:Vector.<Tank> = GameData.tanks;
+         for each(tank in tanks)
          {
-            _loc3_.addToGame();
+            tank.addToGame();
          }
-         _loc2_.length = 0;
-         this.namab.process();
-         _loc4_ = this.suvubufi.lecopojen;
-         _loc5_ = this.suvubufi.rud;
-         this.updatePhysics(_loc4_);
+         tanks.length = 0;
+         this.taskGroup.process();
+         time = this.timeData.time;
+         deltaTime = this.timeData.deltaTimeMs;
+         this.updatePhysics(time);
          this.camera.startTimer();
          this.camera.calculateAdditionalData();
-         this.camera.controller.update(_loc4_,_loc5_);
-         GameData.bijatil.updateSoundEffects(_loc5_,this.camera);
-         this.gido.update();
-         GameData.jypadif.render(_loc4_,_loc5_);
-         GameData.hobuna.update(_loc5_,this.camera);
+         this.camera.controller.update(time,deltaTime);
+         GameData.soundManager.updateSoundEffects(deltaTime,this.camera);
+         this.dust.update();
+         GameData.renderers.render(time,deltaTime);
+         GameData.effects.update(deltaTime,this.camera);
          this.camera.render();
          this.camera.stopTimer();
       }
       
       private function updateCurrentTutorial() : void
       {
-         var _loc2_:Tutorial = null;
-         var _loc1_:uint = (this.suvubufi.lecopojen - this.newizyqy) / 1000;
-         if(this.qumebake.stepFinished)
+         var t:Tutorial = null;
+         var seconds:uint = (this.timeData.time - this.stepStartTime) / 1000;
+         if(this.currentTutorial.stepFinished)
          {
-            if(this.pylyzom != Shared.currentStep)
+            if(this.lastStep != Shared.currentStep)
             {
-               this.newizyqy = this.suvubufi.lecopojen;
-               this.pylyzom = Shared.currentStep;
-               Shared.tracker.trackEvent(Shared.TUTORIAL,Shared.currentStep + "_total_time",_loc1_.toString());
+               this.stepStartTime = this.timeData.time;
+               this.lastStep = Shared.currentStep;
+               Shared.tracker.trackEvent(Shared.TUTORIAL,Shared.currentStep + "_total_time",seconds.toString());
             }
-            this.qumebake.moveToNextStep();
+            this.currentTutorial.moveToNextStep();
          }
-         else if(_loc1_ % 5 == 0 && _loc1_ > 0 && _loc1_ != this.podinipo)
+         else if(seconds % 5 == 0 && seconds > 0 && seconds != this.lastHangTime)
          {
-            Shared.tracker.trackEvent(Shared.TUTORIAL,Shared.currentStep + "_hang_time",_loc1_.toString());
-            this.podinipo = _loc1_;
+            Shared.tracker.trackEvent(Shared.TUTORIAL,Shared.currentStep + "_hang_time",seconds.toString());
+            this.lastHangTime = seconds;
          }
-         if(this.qumebake.finished)
+         if(this.currentTutorial.finished)
          {
-            ++this.tudejy;
-            this.qumebake = null;
-            if(this.tudejy < this.cyc.length)
+            ++this.tutorialIndex;
+            this.currentTutorial = null;
+            if(this.tutorialIndex < this.tutorials.length)
             {
-               _loc2_ = this.cyc[this.tudejy];
-               if(_loc2_.feseju)
+               t = this.tutorials[this.tutorialIndex];
+               if(t.loaded)
                {
-                  this.qumebake = _loc2_;
-                  this.qumebake.start();
+                  this.currentTutorial = t;
+                  this.currentTutorial.start();
                   Shared.preloader.hideLoaderWindow();
                }
                else
                {
-                  Shared.tracker.trackEvent(Shared.TUTORIAL_LOAD,"preloader_show",_loc2_.gepocivaj);
+                  Shared.tracker.trackEvent(Shared.TUTORIAL_LOAD,"preloader_show",t.name);
                   Shared.preloader.showLoaderWindow();
                }
             }
@@ -241,20 +241,20 @@ package tutorial
       private function finishGame() : void
       {
          Shared.tracker.trackEvent(Shared.TUTORIAL,Shared.TUTORIAL + ":finish","");
-         GameData.qemikoq.enabled = false;
+         GameData.recordTankController.enabled = false;
          GameData.camera.controller = DummyCameraController.degakeh;
-         GameData.jifom.turretController.lock(1);
-         GameData.jifom.turretController.finish();
-         GameData.jifom.kakow.hide();
-         GameData.jifom.kat = false;
-         GameData.jifom.lysecof.setSilentMode();
+         GameData.playerTank.turretController.lock(1);
+         GameData.playerTank.turretController.finish();
+         GameData.playerTank.kakow.hide();
+         GameData.playerTank.kat = false;
+         GameData.playerTank.lysecof.setSilentMode();
          if(Assets.hasData("finish",MovieClip))
          {
-            GameData.hulaf.showMovie(Assets.getData("finish",MovieClip),StageAlign.TOP_LEFT);
+            GameData.screenMovieClipManager.showMovie(Assets.getData("finish",MovieClip),StageAlign.TOP_LEFT);
          }
          else
          {
-            GameData.hulaf.showMovie(new FinishClip(),StageAlign.TOP_LEFT);
+            GameData.screenMovieClipManager.showMovie(new FinishClip(),StageAlign.TOP_LEFT);
          }
          if(Shared.hideSkipButton != null)
          {
@@ -262,18 +262,18 @@ package tutorial
          }
       }
       
-      private function updatePhysics(param1:int) : void
+      private function updatePhysics(time:int) : void
       {
-         var _loc2_:int = 33;
-         while(this.gov.lecopojen < param1)
+         var step:int = 33;
+         while(this.physicsScene.time < time)
          {
-            this.gov.update(_loc2_);
+            this.physicsScene.update(step);
          }
-         var _loc3_:Number = 1 - (this.gov.lecopojen - param1) / _loc2_;
-         this.gov.runPhysicsInterpolators(_loc3_);
+         var t:Number = 1 - (this.physicsScene.time - time) / step;
+         this.physicsScene.runPhysicsInterpolators(t);
       }
       
-      public function onResize(param1:Event = null) : void
+      public function onResize(e:Event = null) : void
       {
          this.camera.view.width = this.stage.stageWidth;
          this.camera.view.height = this.stage.stageHeight;
@@ -289,10 +289,10 @@ package tutorial
          var _loc2_:Number = 16;
          var _loc3_:Number = 9;
          var _loc4_:Number = Math.PI / 2;
-         var _loc5_:Number = Number(this.camera.view.width);
-         var _loc6_:Number = Number(this.camera.view.height);
-         var _loc7_:Number = _loc6_ / _loc3_;
-         var _loc8_:Number = _loc5_ / _loc7_;
+         var width:Number = Number(this.camera.view.width);
+         var height:Number = Number(this.camera.view.height);
+         var _loc7_:Number = height / _loc3_;
+         var _loc8_:Number = width / _loc7_;
          if(_loc8_ <= _loc1_)
          {
             this.camera.fov = _loc4_;
@@ -305,8 +305,8 @@ package tutorial
                _loc9_ = _loc1_;
             }
             _loc10_ = _loc9_ * _loc7_;
-            _loc11_ = Math.sqrt(_loc10_ * _loc10_ + _loc6_ * _loc6_) * 0.5 / Math.tan(_loc4_ * 0.5);
-            this.camera.fov = Math.atan(Math.sqrt(_loc5_ * _loc5_ + _loc6_ * _loc6_) * 0.5 / _loc11_) * 2;
+            _loc11_ = Math.sqrt(_loc10_ * _loc10_ + height * height) * 0.5 / Math.tan(_loc4_ * 0.5);
+            this.camera.fov = Math.atan(Math.sqrt(width * width + height * height) * 0.5 / _loc11_) * 2;
          }
       }
       
@@ -317,65 +317,65 @@ package tutorial
          this.stage.addEventListener(KeyboardEvent.KEY_DOWN,this.onDebugActionKey);
       }
       
-      private function traceWaypoint(param1:MouseEvent) : void
+      private function traceWaypoint(mouseEvent:MouseEvent) : void
       {
       }
       
-      private function onDebugActionKey(param1:KeyboardEvent) : void
+      private function onDebugActionKey(keyboardEvent:KeyboardEvent) : void
       {
       }
       
       private function startStopRecording() : void
       {
-         var _loc3_:String = null;
-         var _loc4_:String = null;
-         var _loc1_:Tank = GameData.jifom;
-         var _loc2_:RecordTankController = GameData.qemikoq;
-         if(_loc2_.isRecording())
+         var record:String = null;
+         var text:String = null;
+         var tank:Tank = GameData.playerTank;
+         var controller:RecordTankController = GameData.recordTankController;
+         if(controller.isRecording())
          {
-            _loc3_ = _loc2_.getRecord();
-            _loc4_ = "<enemy hull=\"" + _loc1_.nariw.gepocivaj + "\" turret=\"" + _loc1_.firaqe.gepocivaj + "\" color=\"red\" position=\"" + this.hyqirufy.x.toFixed(0) + " " + this.hyqirufy.y.toFixed(0) + " " + this.hyqirufy.z.toFixed(0) + "\" orientation=\"" + this.vetawifac.dige.toFixed(4) + " " + this.vetawifac.x.toFixed(4) + " " + this.vetawifac.y.toFixed(4) + " " + this.vetawifac.z.toFixed(6) + "\" data=\"" + _loc3_ + "\">\n</enemy>";
-            _loc2_.stopRecording();
-            this.setText(_loc4_);
+            record = controller.getRecord();
+            text = "<enemy hull=\"" + tank.nariw.name + "\" turret=\"" + tank.firaqe.name + "\" color=\"red\" position=\"" + this.position.x.toFixed(0) + " " + this.position.y.toFixed(0) + " " + this.position.z.toFixed(0) + "\" orientation=\"" + this.orientation.dige.toFixed(4) + " " + this.orientation.x.toFixed(4) + " " + this.orientation.y.toFixed(4) + " " + this.orientation.z.toFixed(6) + "\" data=\"" + record + "\">\n</enemy>";
+            controller.stopRecording();
+            this.setText(text);
          }
          else
          {
             Shared.clientLog.addLine("start recording");
-            this.hyqirufy = _loc1_.body.kejo.position.clone();
-            this.vetawifac = _loc1_.body.kejo.bej.clone();
-            _loc2_.startRecording();
+            this.position = tank.body.state.position.clone();
+            this.orientation = tank.body.state.bej.clone();
+            controller.startRecording();
          }
       }
       
       private function traceSpawnPoint() : void
       {
-         var _loc1_:Tank = GameData.jifom;
-         if(_loc1_.inGame)
+         var tank:Tank = GameData.playerTank;
+         if(tank.inGame)
          {
-            this.hyqirufy = _loc1_.body.kejo.position.clone();
-            this.vetawifac = _loc1_.body.kejo.bej.clone();
-            this.setText("<player.spawn hull=\"" + _loc1_.nariw.gepocivaj + "\" turret=\"" + _loc1_.firaqe.gepocivaj + "\" color=\"green\" position=\"" + this.hyqirufy.x.toFixed(4) + " " + this.hyqirufy.y.toFixed(4) + " " + this.hyqirufy.z.toFixed(4) + "\" orientation=\"" + this.vetawifac.dige.toFixed(4) + " " + this.vetawifac.x.toFixed(4) + " " + this.vetawifac.y.toFixed(4) + " " + this.vetawifac.z.toFixed(4) + "\"/>");
+            this.position = tank.body.state.position.clone();
+            this.orientation = tank.body.state.bej.clone();
+            this.setText("<player.spawn hull=\"" + tank.nariw.name + "\" turret=\"" + tank.firaqe.name + "\" color=\"green\" position=\"" + this.position.x.toFixed(4) + " " + this.position.y.toFixed(4) + " " + this.position.z.toFixed(4) + "\" orientation=\"" + this.orientation.dige.toFixed(4) + " " + this.orientation.x.toFixed(4) + " " + this.orientation.y.toFixed(4) + " " + this.orientation.z.toFixed(4) + "\"/>");
          }
       }
       
       private function switchCameraController() : void
       {
-         if(this.myzumywi == null)
+         if(this.spectatorController == null)
          {
-            this.myzumywi = new SpectatorCameraController(this.stage,this.camera);
+            this.spectatorController = new SpectatorCameraController(this.stage,this.camera);
          }
          if(this.camera.controller != null)
          {
             this.camera.controller.deactivate();
          }
-         if(this.camera.controller == this.myzumywi)
+         if(this.camera.controller == this.spectatorController)
          {
-            this.camera.controller = this.motorafo;
+            this.camera.controller = this.previousController;
          }
          else
          {
-            this.motorafo = this.camera.controller;
-            this.camera.controller = this.myzumywi;
+            this.previousController = this.camera.controller;
+            this.camera.controller = this.spectatorController;
          }
          if(this.camera.controller != null)
          {
@@ -385,23 +385,23 @@ package tutorial
       
       private function togglePhysicsVisualization() : void
       {
-         var _loc1_:KDContainer = GameData.guzinizub;
-         if(_loc1_.visible)
+         var kdContainer:KDContainer = GameData.kdContainer;
+         if(kdContainer.visible)
          {
-            _loc1_.visible = false;
-            this.root.addChild(this.gov.physicsVisualization);
+            kdContainer.visible = false;
+            this.root.addChild(this.physicsScene.physicsVisualization);
          }
          else
          {
-            _loc1_.visible = true;
-            this.root.removeChild(this.gov.physicsVisualization);
+            kdContainer.visible = true;
+            this.root.removeChild(this.physicsScene.physicsVisualization);
          }
       }
       
-      private function setText(param1:String) : void
+      private function setText(text:String) : void
       {
-         Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT,param1);
-         Shared.clientLog.addLine(param1);
+         Clipboard.generalClipboard.setData(ClipboardFormats.TEXT_FORMAT,text);
+         Shared.clientLog.addLine(text);
       }
    }
 }

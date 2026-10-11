@@ -27,7 +27,7 @@ package alternativa.tanks.vehicles.tank.weapons
       
       private var namekazaf:ConicAreaTargetingSystem;
       
-      private var hobuna:FlamethrowerEffects;
+      private var effects:FlamethrowerEffects;
       
       private var kifakazup:int;
       
@@ -50,7 +50,7 @@ package alternativa.tanks.vehicles.tank.weapons
          this.bevy = param4;
          this.lab = param5;
          this.namekazaf = param6;
-         this.hobuna = param7;
+         this.effects = param7;
       }
       
       public function reset() : void
@@ -91,7 +91,7 @@ package alternativa.tanks.vehicles.tank.weapons
       override public function stop() : void
       {
          super.stop();
-         this.hobuna.stopEffects();
+         this.effects.stopEffects();
       }
       
       private function runLogicForShootingMode(param1:int) : void
@@ -162,7 +162,7 @@ package alternativa.tanks.vehicles.tank.weapons
             this.calculateTicksNumber(_loc2_);
             this.kifakazup = param1 + this.lab;
             _loc3_ = getTank();
-            this.hobuna.startEffects(_loc3_.hogys.body,_loc3_.firaqe.jun[0],_loc3_.kuca.turretMesh);
+            this.effects.startEffects(_loc3_.hogys.body,_loc3_.firaqe.jun[0],_loc3_.kuca.turretMesh);
          }
       }
       
@@ -178,7 +178,7 @@ package alternativa.tanks.vehicles.tank.weapons
             this.javoq = false;
             this.nomotan = param1 - this.getCurrentEnergyInShootingMode(param1) / this.bevy * wuvyt;
             this.nykasev = 0;
-            this.hobuna.stopEffects();
+            this.effects.stopEffects();
          }
       }
       
@@ -191,7 +191,7 @@ package alternativa.tanks.vehicles.tank.weapons
          var _loc1_:TurretData = getData();
          var _loc2_:Tank = getTank();
          _loc1_.update(_loc2_,0);
-         this.namekazaf.getTargets(_loc2_.hogys.body,_loc1_.siwowop,qipuji,_loc1_.fybumu,_loc1_.ruda,_loc1_.zequsir,befin,vyla);
+         this.namekazaf.getTargets(_loc2_.hogys.body,_loc1_.siwowop,qipuji,_loc1_.fybumu,_loc1_.direction,_loc1_.zequsir,befin,vyla);
          var _loc3_:int = int(befin.length);
          if(_loc3_ == 1)
          {
@@ -200,7 +200,7 @@ package alternativa.tanks.vehicles.tank.weapons
             {
                _loc6_ = befin[_loc5_];
                _loc7_ = _loc6_.katuf as Tank;
-               if(_loc7_ == GameData.jifom)
+               if(_loc7_ == GameData.playerTank)
                {
                   _loc4_ = _loc7_;
                }
@@ -222,7 +222,7 @@ package alternativa.tanks.vehicles.tank.weapons
          _loc2_.update(_loc3_,0);
          befin.length = 0;
          vyla.length = 0;
-         this.namekazaf.getTargets(_loc3_.hogys.body,_loc2_.siwowop,qipuji,_loc2_.fybumu,_loc2_.ruda,_loc2_.zequsir,befin,vyla);
+         this.namekazaf.getTargets(_loc3_.hogys.body,_loc2_.siwowop,qipuji,_loc2_.fybumu,_loc2_.direction,_loc2_.zequsir,befin,vyla);
          var _loc4_:int = int(befin.length);
          var _loc5_:int = 0;
          while(_loc5_ < _loc4_)

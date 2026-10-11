@@ -21,218 +21,218 @@ package tutorial.loader.proplib
    public class PropMesh extends BaseLoader
    {
       
-      public static var hevarer:Number = 0.01;
+      public static var threshold:Number = 0.01;
       
-      public static var wugej:Number = 0.01;
+      public static var occluderDistanceThreshold:Number = 0.01;
       
-      public static var mykelak:Number = 0.01;
+      public static var occluderAngleThreshold:Number = 0.01;
       
-      public static var cugepumab:Number = 0.01;
+      public static var occluderConvexThreshold:Number = 0.01;
       
-      public static var nadup:int = 1;
+      public static var occluderUVThreshold:int = 1;
       
-      public static var sycym:Number = 0.001;
+      public static var distanceThreshold:Number = 0.001;
       
-      public static var zyqukaqeb:Number = 0.0001;
+      public static var uvThreshold:Number = 0.0001;
       
-      public static var hysiqa:Number = 0.001;
+      public static var angleThreshold:Number = 0.001;
       
-      public static var lylimujab:Number = 0.01;
+      public static var convexThreshold:Number = 0.01;
       
-      public var gepocivaj:String;
+      public var name:String;
       
-      private var zuqu:String;
+      private var url:String;
       
-      private var tylu:Object;
+      private var textures:Object;
       
-      private var cysam:Mesh;
+      private var mesh:Mesh;
       
-      private var hon:Function;
+      private var callback:Function;
       
-      public var lucubegul:Vector.<Occluder>;
+      public var occluders:Vector.<Occluder>;
       
-      private var kose:URLLoader;
+      private var urlLoader:URLLoader;
       
-      private var dekohyze:String;
+      private var textureName:String;
       
-      private var luwuqap:String;
+      private var baseURL:String;
       
-      public function PropMesh(param1:XML, param2:String)
+      public function PropMesh(xml:XML, baseURL:String)
       {
-         var _loc3_:XML = null;
-         var _loc4_:PropTexture = null;
-         this.tylu = new Object();
+         var textureXML:XML = null;
+         var texture:PropTexture = null;
+         this.textures = new Object();
          super();
-         this.luwuqap = param2;
-         this.zuqu = param2 + XMLUtils.getAttributeAsString(param1,"file");
-         for each(_loc3_ in param1.texture)
+         this.baseURL = baseURL;
+         this.url = baseURL + XMLUtils.getAttributeAsString(xml,"file");
+         for each(textureXML in xml.texture)
          {
-            _loc4_ = new PropTexture(_loc3_.@name.toString(),XMLUtils.getAttributeAsString(_loc3_,"diffuse-map"),param2);
-            this.tylu[_loc4_.gepocivaj] = _loc4_;
+            texture = new PropTexture(textureXML.@name.toString(),XMLUtils.getAttributeAsString(textureXML,"diffuse-map"),baseURL);
+            this.textures[texture.name] = texture;
          }
       }
       
-      public function load(param1:String, param2:Function) : void
+      public function load(textureName:String, callback:Function) : void
       {
-         this.dekohyze = param1;
-         if(this.cysam == null)
+         this.textureName = textureName;
+         if(this.mesh == null)
          {
-            this.hon = param2;
-            if(!Assets.hasData(this.zuqu,Parser3DS))
+            this.callback = callback;
+            if(!Assets.hasData(this.url,Parser3DS))
             {
-               julicoj = this.zuqu;
-               this.kose = new URLLoader();
-               this.kose.dataFormat = URLLoaderDataFormat.BINARY;
-               this.kose.addEventListener(ProgressEvent.PROGRESS,onProgress);
-               this.kose.addEventListener(Event.COMPLETE,this.onComplete);
-               this.kose.load(new URLRequest(this.zuqu));
+               currentURL = this.url;
+               this.urlLoader = new URLLoader();
+               this.urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+               this.urlLoader.addEventListener(ProgressEvent.PROGRESS,onProgress);
+               this.urlLoader.addEventListener(Event.COMPLETE,this.onComplete);
+               this.urlLoader.load(new URLRequest(this.url));
             }
-            else if(this.zuqu.indexOf(".3dz") >= 0)
+            else if(this.url.indexOf(".3dz") >= 0)
             {
-               this.parse2(Assets.getData(this.zuqu,Parser3DS));
+               this.parse2(Assets.getData(this.url,Parser3DS));
             }
             else
             {
-               this.parse(Assets.getData(this.zuqu,ByteArray));
+               this.parse(Assets.getData(this.url,ByteArray));
             }
          }
          else
          {
-            param2(this.getMesh(),this.lucubegul);
+            callback(this.getMesh(),this.occluders);
          }
       }
       
-      private function initMesh(param1:Mesh) : void
+      private function initMesh(m:Mesh) : void
       {
-         var _loc3_:TextureMaterial = null;
-         param1.weldVertices(sycym,zyqukaqeb);
-         param1.weldFaces(hysiqa,zyqukaqeb,lylimujab);
-         param1.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
-         param1.threshold = hevarer;
-         var _loc2_:TextureMaterial = param1.faceList.material as TextureMaterial;
-         if(_loc2_ != null)
+         var newMaterial:TextureMaterial = null;
+         m.weldVertices(distanceThreshold,uvThreshold);
+         m.weldFaces(angleThreshold,uvThreshold,convexThreshold);
+         m.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
+         m.threshold = threshold;
+         var material:TextureMaterial = m.faceList.material as TextureMaterial;
+         if(material != null)
          {
-            _loc3_ = new TextureMaterial();
-            _loc3_.diffuseMapURL = this.luwuqap + _loc2_.diffuseMapURL;
-            _loc3_.threshold = _loc2_.threshold;
-            _loc3_.correctUV = _loc2_.correctUV;
-            param1.setMaterialToAllFaces(_loc3_);
+            newMaterial = new TextureMaterial();
+            newMaterial.diffuseMapURL = this.baseURL + material.diffuseMapURL;
+            newMaterial.threshold = material.threshold;
+            newMaterial.correctUV = material.correctUV;
+            m.setMaterialToAllFaces(newMaterial);
          }
       }
       
-      private function initMesh2(param1:Mesh) : void
+      private function initMesh2(m:Mesh) : void
       {
-         var _loc3_:TextureMaterial = null;
-         param1.threshold = hevarer;
-         var _loc2_:TextureMaterial = param1.faceList.material as TextureMaterial;
-         if(_loc2_ != null)
+         var newMaterial:TextureMaterial = null;
+         m.threshold = threshold;
+         var material:TextureMaterial = m.faceList.material as TextureMaterial;
+         if(material != null)
          {
-            _loc3_ = new TextureMaterial();
-            _loc3_.diffuseMapURL = this.luwuqap + _loc2_.diffuseMapURL;
-            _loc3_.threshold = _loc2_.threshold;
-            _loc3_.correctUV = _loc2_.correctUV;
-            param1.setMaterialToAllFaces(_loc3_);
+            newMaterial = new TextureMaterial();
+            newMaterial.diffuseMapURL = this.baseURL + material.diffuseMapURL;
+            newMaterial.threshold = material.threshold;
+            newMaterial.correctUV = material.correctUV;
+            m.setMaterialToAllFaces(newMaterial);
          }
       }
       
-      private function parse(param1:ByteArray) : void
+      private function parse(data:ByteArray) : void
       {
-         var _loc7_:Object3D = null;
-         var _loc8_:String = null;
-         var _loc2_:Parser3DS = new Parser3DS();
-         var _loc3_:ByteArray = new ByteArray();
-         _loc3_.writeBytes(param1);
-         if(this.zuqu.indexOf(".3dz") > 0)
+         var object:Object3D = null;
+         var objectName:String = null;
+         var parser:Parser3DS = new Parser3DS();
+         var bytes:ByteArray = new ByteArray();
+         bytes.writeBytes(data);
+         if(this.url.indexOf(".3dz") > 0)
          {
-            _loc3_.uncompress();
+            bytes.uncompress();
          }
-         _loc3_.position = 0;
-         this.kose = null;
+         bytes.position = 0;
+         this.urlLoader = null;
          onFinishLoad();
-         _loc2_.parse(_loc3_);
-         var _loc4_:Vector.<Object3D> = _loc2_.objects;
-         var _loc5_:int = int(_loc4_.length);
-         var _loc6_:int = 0;
-         while(_loc6_ < _loc5_)
+         parser.parse(bytes);
+         var objects:Vector.<Object3D> = parser.objects;
+         var len:int = int(objects.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc7_ = _loc4_[_loc6_];
-            _loc8_ = _loc7_.name.toLowerCase();
-            if(_loc8_.indexOf("occl") == 0)
+            object = objects[i];
+            objectName = object.name.toLowerCase();
+            if(objectName.indexOf("occl") == 0)
             {
-               this.addOccluder(Mesh(_loc7_));
+               this.addOccluder(Mesh(object));
             }
-            _loc6_++;
+            i++;
          }
-         this.cysam = Mesh(_loc4_[0]);
-         this.initMesh(this.cysam);
-         this.hon(this.getMesh(),this.lucubegul);
-         this.hon = null;
+         this.mesh = Mesh(objects[0]);
+         this.initMesh(this.mesh);
+         this.callback(this.getMesh(),this.occluders);
+         this.callback = null;
       }
       
-      private function parse2(param1:Parser3DS) : void
+      private function parse2(parser:Parser3DS) : void
       {
-         var _loc5_:Object3D = null;
-         var _loc6_:String = null;
-         var _loc2_:Vector.<Object3D> = param1.objects;
-         var _loc3_:int = int(_loc2_.length);
-         var _loc4_:int = 0;
-         while(_loc4_ < _loc3_)
+         var object:Object3D = null;
+         var objectName:String = null;
+         var objects:Vector.<Object3D> = parser.objects;
+         var len:int = int(objects.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc5_ = _loc2_[_loc4_];
-            _loc6_ = _loc5_.name.toLowerCase();
-            if(_loc6_.indexOf("occl") == 0)
+            object = objects[i];
+            objectName = object.name.toLowerCase();
+            if(objectName.indexOf("occl") == 0)
             {
-               this.addOccluder(Mesh(_loc5_.clone()));
+               this.addOccluder(Mesh(object.clone()));
             }
-            _loc4_++;
+            i++;
          }
-         this.cysam = Mesh(_loc2_[0]);
-         this.initMesh2(this.cysam);
-         this.hon(this.getMesh(),this.lucubegul);
-         this.hon = null;
+         this.mesh = Mesh(objects[0]);
+         this.initMesh2(this.mesh);
+         this.callback(this.getMesh(),this.occluders);
+         this.callback = null;
       }
       
-      private function onComplete(param1:Event) : void
+      private function onComplete(e:Event) : void
       {
-         Assets.saveData(this.zuqu,this.kose.data,ByteArray);
-         this.parse(this.kose.data);
+         Assets.saveData(this.url,this.urlLoader.data,ByteArray);
+         this.parse(this.urlLoader.data);
       }
       
       private function getMesh() : Mesh
       {
-         var _loc1_:Mesh = this.cysam.clone() as Mesh;
-         if(this.dekohyze == null)
+         var res:Mesh = this.mesh.clone() as Mesh;
+         if(this.textureName == null)
          {
-            _loc1_.setMaterialToAllFaces(this.cysam.faceList.material);
+            res.setMaterialToAllFaces(this.mesh.faceList.material);
          }
-         else if(this.dekohyze == "invisible")
+         else if(this.textureName == "invisible")
          {
-            _loc1_.setMaterialToAllFaces(null);
+            res.setMaterialToAllFaces(null);
          }
          else
          {
-            _loc1_.setMaterialToAllFaces(PropTexture(this.tylu[this.dekohyze]).material);
+            res.setMaterialToAllFaces(PropTexture(this.textures[this.textureName]).material);
          }
-         return _loc1_;
+         return res;
       }
       
-      private function addOccluder(param1:Mesh) : void
+      private function addOccluder(sourceGeometry:Mesh) : void
       {
-         param1.weldVertices(wugej,nadup);
-         param1.weldFaces(mykelak,nadup,cugepumab);
-         var _loc2_:Occluder = new Occluder();
-         _loc2_.createForm(param1,true);
-         _loc2_.x = param1.x;
-         _loc2_.y = param1.y;
-         _loc2_.z = param1.z;
-         _loc2_.rotationX = param1.rotationX;
-         _loc2_.rotationY = param1.rotationY;
-         _loc2_.rotationZ = param1.rotationZ;
-         if(this.lucubegul == null)
+         sourceGeometry.weldVertices(occluderDistanceThreshold,occluderUVThreshold);
+         sourceGeometry.weldFaces(occluderAngleThreshold,occluderUVThreshold,occluderConvexThreshold);
+         var occluder:Occluder = new Occluder();
+         occluder.createForm(sourceGeometry,true);
+         occluder.x = sourceGeometry.x;
+         occluder.y = sourceGeometry.y;
+         occluder.z = sourceGeometry.z;
+         occluder.rotationX = sourceGeometry.rotationX;
+         occluder.rotationY = sourceGeometry.rotationY;
+         occluder.rotationZ = sourceGeometry.rotationZ;
+         if(this.occluders == null)
          {
-            this.lucubegul = new Vector.<Occluder>();
+            this.occluders = new Vector.<Occluder>();
          }
-         this.lucubegul.push(_loc2_);
+         this.occluders.push(occluder);
       }
    }
 }

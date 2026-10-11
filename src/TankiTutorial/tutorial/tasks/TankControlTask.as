@@ -10,24 +10,24 @@ package tutorial.tasks
       
       private var controller:CommonTankController;
       
-      private var citacir:Tank;
+      private var tank:Tank;
       
-      public function TankControlTask(param1:Tank, param2:CommonTankController)
+      public function TankControlTask(tank:Tank, controller:CommonTankController)
       {
          super();
-         this.citacir = param1;
-         this.controller = param2;
+         this.tank = tank;
+         this.controller = controller;
       }
       
       override public function process() : Boolean
       {
-         var _loc1_:TimeData = GameData.lecopojen;
-         if(this.citacir.inGame)
+         var timeData:TimeData = GameData.time;
+         if(this.tank.inGame)
          {
-            this.controller.update(_loc1_.lecopojen,_loc1_.rud,_loc1_.ziqod);
+            this.controller.update(timeData.time,timeData.deltaTimeMs,timeData.deltaTime);
             return false;
          }
-         return GameData.gaz.indexOf(this.citacir) < 0;
+         return GameData.tanks.indexOf(this.tank) < 0;
       }
    }
 }

@@ -6,7 +6,7 @@ package alternativa.tanks.bonuses
    public class AnimatedColorTransform implements AnimatedValue
    {
       
-      public const fur:ColorTransform = new ColorTransform();
+      public const colorTransform:ColorTransform = new ColorTransform();
       
       public function AnimatedColorTransform()
       {
@@ -15,9 +15,9 @@ package alternativa.tanks.bonuses
       
       public function setAnimatedValue(param1:Number) : void
       {
-         this.fur.redOffset = param1;
-         this.fur.greenOffset = param1;
-         this.fur.blueOffset = param1;
+         this.colorTransform.redOffset = param1;
+         this.colorTransform.greenOffset = param1;
+         this.colorTransform.blueOffset = param1;
       }
    }
 }

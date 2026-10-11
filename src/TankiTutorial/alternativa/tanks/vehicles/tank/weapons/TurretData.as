@@ -20,7 +20,7 @@ package alternativa.tanks.vehicles.tank.weapons
       
       public const zequsir:Vector3 = new Vector3();
       
-      public const ruda:Vector3 = new Vector3();
+      public const direction:Vector3 = new Vector3();
       
       public var siwowop:Number;
       
@@ -47,9 +47,9 @@ package alternativa.tanks.vehicles.tank.weapons
          this.zequsir.x = bul.gusat;
          this.zequsir.y = bul.sig;
          this.zequsir.z = bul.vug;
-         this.ruda.x = bul.cydop;
-         this.ruda.y = bul.qanezycap;
-         this.ruda.z = bul.luwym;
+         this.direction.x = bul.cydop;
+         this.direction.y = bul.qanezycap;
+         this.direction.z = bul.luwym;
       }
    }
 }

@@ -7,7 +7,7 @@ package alternativa.tanks.vehicles.tank
    public class TankPart
    {
       
-      public var gepocivaj:String;
+      public var name:String;
       
       public var kuca:Mesh;
       

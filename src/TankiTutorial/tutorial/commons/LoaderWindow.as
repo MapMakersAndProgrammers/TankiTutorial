@@ -46,10 +46,10 @@ package tutorial.commons
       
       private var progressBrake:Number = 1;
       
-      public function LoaderWindow(param1:DisplayObjectContainer)
+      public function LoaderWindow(layer:DisplayObjectContainer)
       {
          super();
-         this.layer = param1;
+         this.layer = layer;
          this.windowBmp = new Bitmap(Shared.stub);
          addChild(this.windowBmp);
          this.bar.x = 14;
@@ -61,57 +61,57 @@ package tutorial.commons
          this.totalTime = 0;
       }
       
-      public static function createImageFromRGBAndAlpha(param1:BitmapData, param2:BitmapData) : Bitmap
+      public static function createImageFromRGBAndAlpha(rgb:BitmapData, alphaChannel:BitmapData) : Bitmap
       {
-         var _loc3_:Number = param1.width;
-         var _loc4_:Number = param1.height;
-         var _loc5_:BitmapData = new BitmapData(_loc3_,_loc4_,true,0);
-         _loc5_.copyPixels(param1,new Rectangle(0,0,_loc3_,_loc4_),new Point());
-         _loc5_.copyChannel(param2,new Rectangle(0,0,_loc3_,_loc4_),new Point(),1,8);
-         return new Bitmap(_loc5_);
+         var w:Number = rgb.width;
+         var h:Number = rgb.height;
+         var bitmapData:BitmapData = new BitmapData(w,h,true,0);
+         bitmapData.copyPixels(rgb,new Rectangle(0,0,w,h),new Point());
+         bitmapData.copyChannel(alphaChannel,new Rectangle(0,0,w,h),new Point(),1,8);
+         return new Bitmap(bitmapData);
       }
       
-      public function setSize(param1:uint) : void
+      public function setSize(bytesTotal:uint) : void
       {
-         this.bytesTotal = param1;
+         this.bytesTotal = bytesTotal;
       }
       
-      public function reset(param1:String = null) : void
+      public function reset(state:String = null) : void
       {
-         this.state = param1;
+         this.state = state;
          Shared.clientLog.addLine("loaded: " + this.size.toString());
          this.size = 0;
          this.threshold = THRESHOLD_STEP;
-         if(param1 != null)
+         if(state != null)
          {
-            Shared.tracker.trackEvent(Shared.TUTORIAL_LOAD,"Start" + param1,"");
+            Shared.tracker.trackEvent(Shared.TUTORIAL_LOAD,"Start" + state,"");
          }
       }
       
-      public function addBytes(param1:uint) : void
+      public function addBytes(bytes:uint) : void
       {
          if(this.state == null)
          {
             return;
          }
-         this.size += param1;
+         this.size += bytes;
          while(this.size > this.threshold)
          {
             Shared.tracker.trackEvent(Shared.TUTORIAL_LOAD,this.state,int(this.threshold / 1024).toString() + "KB");
             this.threshold += THRESHOLD_STEP;
          }
-         this.bytesLoaded += param1;
+         this.bytesLoaded += bytes;
          this.targetProgress = this.bytesLoaded / this.bytesTotal;
          if(this.targetProgress > 1)
          {
             this.targetProgress = 1;
          }
-         var _loc2_:uint = uint(getTimer());
-         var _loc3_:uint = uint((_loc2_ - this.startLoadTime) / 1000);
-         if(_loc3_ % 5 == 0 && _loc3_ != this.lastDelta)
+         var currentTime:uint = uint(getTimer());
+         var seconds:uint = uint((currentTime - this.startLoadTime) / 1000);
+         if(seconds % 5 == 0 && seconds != this.lastDelta)
          {
-            Shared.tracker.trackEvent(Shared.TUTORIAL_LOAD,this.state + "_loading",_loc3_.toString());
-            this.lastDelta = _loc3_;
+            Shared.tracker.trackEvent(Shared.TUTORIAL_LOAD,this.state + "_loading",seconds.toString());
+            this.lastDelta = seconds;
          }
       }
       
@@ -128,11 +128,11 @@ package tutorial.commons
          return this.size;
       }
       
-      public function showLoaderWindow(param1:Boolean = false) : void
+      public function showLoaderWindow(onTop:Boolean = false) : void
       {
          this.startLoadTime = getTimer();
          this.lastDelta = 0;
-         this.onTop = param1;
+         this.onTop = onTop;
          if(!this.layer.contains(this))
          {
             this.layer.addChild(this);
@@ -143,32 +143,32 @@ package tutorial.commons
          }
       }
       
-      private function onEnterFrame(param1:Event) : void
+      private function onEnterFrame(e:Event) : void
       {
-         var _loc4_:Number = NaN;
-         var _loc5_:Number = NaN;
-         var _loc2_:uint = uint(getTimer());
-         var _loc3_:Number = (_loc2_ - this.time) * 0.001;
-         this.totalTime += _loc3_;
-         this.time = _loc2_;
+         var speed:Number = NaN;
+         var delta:Number = NaN;
+         var currentTime:uint = uint(getTimer());
+         var deltaTime:Number = (currentTime - this.time) * 0.001;
+         this.totalTime += deltaTime;
+         this.time = currentTime;
          if(this.totalTime > 0)
          {
-            _loc4_ = this.targetProgress / this.totalTime;
+            speed = this.targetProgress / this.totalTime;
             if(this.currentProgress > 0.8 && this.currentProgress - this.targetProgress > 0.2)
             {
-               _loc4_ *= this.progressBrake;
+               speed *= this.progressBrake;
                this.progressBrake *= 0.95;
             }
-            _loc5_ = _loc4_ * _loc3_;
-            if(_loc5_ < 0.002 && this.currentProgress < 0.1)
+            delta = speed * deltaTime;
+            if(delta < 0.002 && this.currentProgress < 0.1)
             {
-               _loc5_ = 0.002;
+               delta = 0.002;
             }
             if(this.currentProgress < 0.5)
             {
-               _loc5_ *= 1.5;
+               delta *= 1.5;
             }
-            this.currentProgress += _loc5_;
+            this.currentProgress += delta;
             if(this.currentProgress > 1)
             {
                this.currentProgress = 1;
@@ -179,11 +179,11 @@ package tutorial.commons
       
       public function hideLoaderWindow() : void
       {
-         var _loc1_:uint = 0;
+         var loadTime:uint = 0;
          if(this.layer.contains(this))
          {
-            _loc1_ = uint((getTimer() - this.startLoadTime) / 1000);
-            Shared.tracker.trackEvent(Shared.TUTORIAL_LOAD,this.state + "_loadTime",_loc1_.toString());
+            loadTime = uint((getTimer() - this.startLoadTime) / 1000);
+            Shared.tracker.trackEvent(Shared.TUTORIAL_LOAD,this.state + "_loadTime",loadTime.toString());
             stage.removeEventListener(Event.RESIZE,this.align);
             stage.removeEventListener(Event.ENTER_FRAME,this.onEnterFrame);
             this.layer.removeChild(this);
@@ -191,7 +191,7 @@ package tutorial.commons
          }
       }
       
-      private function align(param1:Event = null) : void
+      private function align(e:Event = null) : void
       {
          this.x = stage.stageWidth - this.windowBmp.width >>> 1;
          if(this.onTop)

@@ -491,8 +491,8 @@ package embed
          var _loc3_:Mesh = Mesh(_loc2_.objects[0]);
          _loc3_.weldVertices(0.001,0.0001);
          _loc3_.weldFaces(0.001,0.0001,0.01);
-         _loc3_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
-         _loc3_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
+         _loc3_.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
+         _loc3_.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
          return _loc2_;
       }
       
@@ -503,8 +503,8 @@ package embed
          var _loc3_:Mesh = Mesh(_loc2_.objects[0]);
          _loc3_.weldVertices(0.001,0.0001);
          _loc3_.weldFaces(0.001,0.0001,0.01);
-         _loc3_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
-         _loc3_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
+         _loc3_.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
+         _loc3_.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
          return _loc2_;
       }
       

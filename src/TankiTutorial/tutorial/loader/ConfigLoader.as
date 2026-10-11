@@ -9,56 +9,56 @@ package tutorial.loader
    public class ConfigLoader
    {
       
-      public var wytyqinyj:XML;
+      public var config:XML;
       
-      public var dijipyhiv:XML;
+      public var scripts:XML;
       
-      private var syji:URLLoader;
+      private var urlLoader:URLLoader;
       
-      private var zuqu:String;
+      private var url:String;
       
-      private var hon:Function;
+      private var callback:Function;
       
       public function ConfigLoader()
       {
          super();
       }
       
-      public function load(param1:String, param2:Function) : Boolean
+      public function load(url:String, callback:Function) : Boolean
       {
-         this.zuqu = param1;
-         this.hon = param2;
-         this.syji = new URLLoader();
-         this.syji.dataFormat = URLLoaderDataFormat.TEXT;
-         this.syji.addEventListener(Event.COMPLETE,this.onConfigLoaded);
-         this.syji.load(new URLRequest(param1));
+         this.url = url;
+         this.callback = callback;
+         this.urlLoader = new URLLoader();
+         this.urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
+         this.urlLoader.addEventListener(Event.COMPLETE,this.onConfigLoaded);
+         this.urlLoader.load(new URLRequest(url));
          return true;
       }
       
-      private function onConfigLoaded(param1:Event) : void
+      private function onConfigLoaded(e:Event) : void
       {
-         this.wytyqinyj = XML(this.syji.data);
-         this.syji.removeEventListener(Event.COMPLETE,this.onConfigLoaded);
-         this.syji = new URLLoader();
-         this.syji.dataFormat = URLLoaderDataFormat.TEXT;
-         this.syji.addEventListener(Event.COMPLETE,this.onScriptsLoaded);
-         this.syji.addEventListener(ErrorEvent.ERROR,this.onError);
-         this.syji.load(new URLRequest(this.wytyqinyj.scripts.@url.toString()));
+         this.config = XML(this.urlLoader.data);
+         this.urlLoader.removeEventListener(Event.COMPLETE,this.onConfigLoaded);
+         this.urlLoader = new URLLoader();
+         this.urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
+         this.urlLoader.addEventListener(Event.COMPLETE,this.onScriptsLoaded);
+         this.urlLoader.addEventListener(ErrorEvent.ERROR,this.onError);
+         this.urlLoader.load(new URLRequest(this.config.scripts.@url.toString()));
       }
       
-      private function onScriptsLoaded(param1:Event) : void
+      private function onScriptsLoaded(e:Event) : void
       {
-         this.syji.removeEventListener(Event.COMPLETE,this.onScriptsLoaded);
-         this.syji.removeEventListener(ErrorEvent.ERROR,this.onError);
-         this.dijipyhiv = XML(this.syji.data);
-         this.syji = null;
-         if(this.hon != null)
+         this.urlLoader.removeEventListener(Event.COMPLETE,this.onScriptsLoaded);
+         this.urlLoader.removeEventListener(ErrorEvent.ERROR,this.onError);
+         this.scripts = XML(this.urlLoader.data);
+         this.urlLoader = null;
+         if(this.callback != null)
          {
-            this.hon(this);
+            this.callback(this);
          }
       }
       
-      private function onError(param1:ErrorEvent) : void
+      private function onError(errorEvent:ErrorEvent) : void
       {
       }
    }

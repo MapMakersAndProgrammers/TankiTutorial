@@ -6,64 +6,64 @@ package tutorial.loader
    public class BitmapsLoader extends TanksLoader
    {
       
-      private var ryv:Vector.<String>;
+      private var urls:Vector.<String>;
       
-      private var besitelob:Vector.<String>;
+      private var ids:Vector.<String>;
       
-      private var dodycoli:int;
+      private var index:int;
       
       public function BitmapsLoader()
       {
          super();
       }
       
-      override public function check(param1:XML) : Boolean
+      override public function check(sceneXML:XML) : Boolean
       {
-         return param1.bitmaps.length() > 0;
+         return sceneXML.bitmaps.length() > 0;
       }
       
-      override public function load(param1:String, param2:XML, param3:Function) : void
+      override public function load(sceneURL:String, sceneXML:XML, completeListener:Function) : void
       {
-         var _loc6_:XML = null;
-         this.pomagu = param2.bitmaps[0];
-         this.hon = param3;
-         this.ryv = new Vector.<String>();
-         this.besitelob = new Vector.<String>();
-         this.dodycoli = 0;
-         var _loc4_:String = param1 + pomagu.@baseURL;
-         var _loc5_:int = 0;
-         for each(_loc6_ in pomagu.elements("bitmap"))
+         var bitmapXML:XML = null;
+         this.xml = sceneXML.bitmaps[0];
+         this.callback = completeListener;
+         this.urls = new Vector.<String>();
+         this.ids = new Vector.<String>();
+         this.index = 0;
+         var baseURL:String = sceneURL + xml.@baseURL;
+         var i:int = 0;
+         for each(bitmapXML in xml.elements("bitmap"))
          {
-            this.besitelob[_loc5_] = _loc6_.@id.toString();
-            this.ryv[_loc5_] = _loc4_ + _loc6_.@url.toString();
-            _loc5_++;
+            this.ids[i] = bitmapXML.@id.toString();
+            this.urls[i] = baseURL + bitmapXML.@url.toString();
+            i++;
          }
          this.loadBitmaps();
       }
       
-      private function loadBitmaps(param1:BitmapData = null) : void
+      private function loadBitmaps(bitmapData:BitmapData = null) : void
       {
-         if(param1 != null)
+         if(bitmapData != null)
          {
-            Assets.saveData(this.besitelob[this.dodycoli],param1,BitmapData);
-            ++this.dodycoli;
+            Assets.saveData(this.ids[this.index],bitmapData,BitmapData);
+            ++this.index;
          }
-         if(this.dodycoli < this.ryv.length)
+         if(this.index < this.urls.length)
          {
-            if(Assets.hasData(this.besitelob[this.dodycoli],BitmapData))
+            if(Assets.hasData(this.ids[this.index],BitmapData))
             {
-               ++this.dodycoli;
+               ++this.index;
                this.loadBitmaps();
             }
             else
             {
-               julicoj = this.ryv[this.dodycoli];
-               bita.load(this.ryv[this.dodycoli],this.loadBitmaps);
+               currentURL = this.urls[this.index];
+               imageLoader.load(this.urls[this.index],this.loadBitmaps);
             }
          }
-         else if(hon != null)
+         else if(callback != null)
          {
-            hon();
+            callback();
          }
       }
    }

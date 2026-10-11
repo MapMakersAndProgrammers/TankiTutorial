@@ -12,7 +12,7 @@ package alternativa.tanks.bonuses
       
       private var nasybugo:BattleBonus;
       
-      private var mij:BattleService;
+      private var battleService:BattleService;
       
       private var lyvoz:Number;
       
@@ -24,7 +24,7 @@ package alternativa.tanks.bonuses
       public function start(param1:BattleBonus, param2:BattleService) : void
       {
          this.nasybugo = param1;
-         this.mij = param2;
+         this.battleService = param2;
          this.lyvoz = 0;
          param1.lybaluh.add(this.destroy);
          param1.nuziged.add(this.destroy);
@@ -53,14 +53,14 @@ package alternativa.tanks.bonuses
       
       private function startFlashAnimation() : void
       {
-         var _loc1_:SpawnFlashRenderer = SpawnFlashRenderer(this.mij.getObjectPool().getObject(SpawnFlashRenderer));
-         _loc1_.start(this.nasybugo,this.mij.getBattleScene3D());
+         var _loc1_:SpawnFlashRenderer = SpawnFlashRenderer(this.battleService.getObjectPool().getObject(SpawnFlashRenderer));
+         _loc1_.start(this.nasybugo,this.battleService.getBattleScene3D());
       }
       
       private function destroy() : void
       {
-         this.mij.getBattleScene3D().removeRenderer(this,0);
-         this.mij = null;
+         this.battleService.getBattleScene3D().removeRenderer(this,0);
+         this.battleService = null;
          this.nasybugo.lybaluh.remove(this.destroy);
          this.nasybugo.nuziged.remove(this.destroy);
          this.nasybugo.gave.remove(this.destroy);

@@ -9,8 +9,8 @@ package tutorial
       public function HelperMesh()
       {
          super();
-         var _loc1_:Plane = new Plane();
-         createTree(_loc1_);
+         var plane:Plane = new Plane();
+         createTree(plane);
          z = -20000;
          name = "static";
          useShadowMap = false;

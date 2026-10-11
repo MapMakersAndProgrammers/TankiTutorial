@@ -14,7 +14,7 @@ package alternativa.tanks.bonuses
       
       private static const wojopyny:Number = 1 / 3000;
       
-      private var hyfecypi:BattleScene3D;
+      private var battleScene:BattleScene3D;
       
       private var kyvedu:Parachute;
       
@@ -29,7 +29,7 @@ package alternativa.tanks.bonuses
       
       public function start(param1:BattleScene3D, param2:Parachute, param3:Cords, param4:Number) : void
       {
-         this.hyfecypi = param1;
+         this.battleScene = param1;
          this.kyvedu = param2;
          this.til = param3;
          this.pobano = param4 / 1000;
@@ -58,14 +58,14 @@ package alternativa.tanks.bonuses
       
       private function destroy() : void
       {
-         this.hyfecypi.removeRenderer(this,0);
-         this.hyfecypi.removeObject(this.kyvedu);
-         this.hyfecypi.removeObject(this.til);
+         this.battleScene.removeRenderer(this,0);
+         this.battleScene.removeObject(this.kyvedu);
+         this.battleScene.removeObject(this.til);
          this.kyvedu.recycle();
          this.kyvedu = null;
          this.til.recycle();
          this.til = null;
-         this.hyfecypi = null;
+         this.battleScene = null;
          recycle();
       }
    }

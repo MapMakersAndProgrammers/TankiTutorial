@@ -121,7 +121,7 @@ package alternativa.tanks.battle
          while(_loc6_ < param1.wavi)
          {
             _loc7_ = param1.mofovoti[_loc6_];
-            _loc8_ = Math.abs(_loc7_.wiciqy);
+            _loc8_ = Math.abs(_loc7_.speed);
             if(_loc8_ > param4 && Math.random() < param5)
             {
                _loc9_ = _loc8_ > 500 ? 1 : 0.3 + _loc8_ / 712;
@@ -143,12 +143,12 @@ package alternativa.tanks.battle
          var _loc5_:Number = this.tywad * param4 * this.camera.softTransparencyStrength;
          if(this.enabled && Boolean(this.camera.softTransparency) && _loc5_ > 0)
          {
-            _loc6_ = ScalingObject3DPositionProvider(GameData.murow.getObject(ScalingObject3DPositionProvider));
+            _loc6_ = ScalingObject3DPositionProvider(GameData.objectPool.getObject(ScalingObject3DPositionProvider));
             _loc6_.init(param2,param3,0.01);
-            _loc7_ = LimitedDistanceAnimatedSpriteEffect(GameData.murow.getObject(LimitedDistanceAnimatedSpriteEffect));
+            _loc7_ = LimitedDistanceAnimatedSpriteEffect(GameData.objectPool.getObject(LimitedDistanceAnimatedSpriteEffect));
             _loc8_ = this.jujygiw * param1 * (1 + pame * Math.random());
             _loc7_.init(_loc8_,_loc8_,this.zeg,Math.random() * 2 * Math.PI,_loc6_,0.5,0.5,null,130,BlendMode.NORMAL,this.kyfyjyril,this.ziqel,_loc5_);
-            GameData.hobuna.addEffect(_loc7_);
+            GameData.effects.addEffect(_loc7_);
          }
       }
    }

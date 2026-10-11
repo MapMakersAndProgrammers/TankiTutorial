@@ -19,14 +19,14 @@ package alternativa.tanks.vehicles.tank.weapons.smoky
       
       private var syli:WeaponSettings;
       
-      private var hobuna:SmokyEffects;
+      private var effects:SmokyEffects;
       
       public function SmokyWeapon(param1:WeaponSettings, param2:CommonTargetingSystem, param3:SmokyEffects)
       {
          super("Smoky Gun");
          this.syli = param1;
          this.namekazaf = param2;
-         this.hobuna = param3;
+         this.effects = param3;
       }
       
       override public function update(param1:int, param2:int) : void
@@ -48,7 +48,7 @@ package alternativa.tanks.vehicles.tank.weapons.smoky
          var _loc1_:TurretData = getData();
          var _loc2_:Tank = getTank();
          _loc1_.update(_loc2_,0);
-         if(this.namekazaf.getTarget(_loc1_.fybumu,_loc1_.ruda,_loc1_.zequsir,_loc2_.body,10000000000,this.vimub))
+         if(this.namekazaf.getTarget(_loc1_.fybumu,_loc1_.direction,_loc1_.zequsir,_loc2_.body,10000000000,this.vimub))
          {
             if(this.vimub.body != null)
             {
@@ -64,10 +64,10 @@ package alternativa.tanks.vehicles.tank.weapons.smoky
          var _loc1_:TurretData = getData();
          var _loc2_:Tank = getTank();
          _loc1_.update(_loc2_,0);
-         this.hobuna.createShotEffects(_loc1_.toqumyc,_loc1_.turretMesh);
-         if(this.namekazaf.getTarget(_loc1_.fybumu,_loc1_.ruda,_loc1_.zequsir,_loc2_.body,10000000000,this.vimub))
+         this.effects.createShotEffects(_loc1_.toqumyc,_loc1_.turretMesh);
+         if(this.namekazaf.getTarget(_loc1_.fybumu,_loc1_.direction,_loc1_.zequsir,_loc2_.body,10000000000,this.vimub))
          {
-            this.hobuna.createExplosionEffects(this.vimub.wimybu,1);
+            this.effects.createExplosionEffects(this.vimub.wimybu,1);
             if(this.vimub.body != null)
             {
                _loc3_ = this.vimub.body.katuf as Tank;
@@ -78,7 +78,7 @@ package alternativa.tanks.vehicles.tank.weapons.smoky
                }
             }
          }
-         _loc2_.body.addWorldForceScaled(_loc1_.fybumu,_loc1_.ruda,-this.syli.pocobyr);
+         _loc2_.body.addWorldForceScaled(_loc1_.fybumu,_loc1_.direction,-this.syli.pocobyr);
       }
    }
 }

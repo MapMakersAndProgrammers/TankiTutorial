@@ -18,127 +18,127 @@ package tutorial.loader
    public class ImageLoader extends BaseLoader
    {
       
-      private static const ryparyg:Object = new Object();
+      private static const cache:Object = new Object();
       
-      private static const mutedog:Point = new Point();
+      private static const point:Point = new Point();
       
-      private var hon:Function;
+      private var callback:Function;
       
-      private var vun:Boolean;
+      private var trackProgress:Boolean;
       
-      private var kiga:Loader;
+      private var loader:Loader;
       
-      private var noni:URLLoader;
+      private var urlLoader:URLLoader;
       
-      private var wutacynid:ByteArray = new ByteArray();
+      private var opaqueBytes:ByteArray = new ByteArray();
       
-      private var jify:ByteArray = new ByteArray();
+      private var alphaBytes:ByteArray = new ByteArray();
       
-      private var qiru:BitmapData;
+      private var bitmapData:BitmapData;
       
-      public function ImageLoader(param1:Boolean = true)
+      public function ImageLoader(trackProgress:Boolean = true)
       {
          super();
-         this.vun = param1;
+         this.trackProgress = trackProgress;
       }
       
-      public function load(param1:String, param2:Function) : void
+      public function load(url:String, callback:Function) : void
       {
-         this.hon = param2;
-         var _loc3_:BitmapData = ryparyg[param1];
-         if(_loc3_ != null)
+         this.callback = callback;
+         var cached:BitmapData = cache[url];
+         if(cached != null)
          {
-            Shared.clientLog.addLine("cached :: " + param1);
-            param2(_loc3_);
+            Shared.clientLog.addLine("cached :: " + url);
+            callback(cached);
          }
-         else if(param1.indexOf(".bin") > 0)
+         else if(url.indexOf(".bin") > 0)
          {
-            this.loadCompressed(param1);
+            this.loadCompressed(url);
          }
          else
          {
-            this.loadUncompressed(param1);
+            this.loadUncompressed(url);
          }
       }
       
-      private function loadUncompressed(param1:String) : void
+      private function loadUncompressed(url:String) : void
       {
-         this.kiga = TanksLoader.createLoader(this.saveUncompressed,this.onError,this.vun ? onProgress : null);
-         julicoj = param1;
-         var _loc2_:LoaderContext = new LoaderContext();
-         if("imageDecodingPolicy" in _loc2_)
+         this.loader = TanksLoader.createLoader(this.saveUncompressed,this.onError,this.trackProgress ? onProgress : null);
+         currentURL = url;
+         var context:LoaderContext = new LoaderContext();
+         if("imageDecodingPolicy" in context)
          {
-            _loc2_.imageDecodingPolicy = "onLoad";
+            context.imageDecodingPolicy = "onLoad";
          }
-         this.kiga.load(new URLRequest(julicoj),_loc2_);
+         this.loader.load(new URLRequest(currentURL),context);
       }
       
-      private function onError(param1:ErrorEvent) : void
+      private function onError(errorEvent:ErrorEvent) : void
       {
-         var _loc2_:BitmapData = null;
-         this.kiga = null;
-         this.noni = null;
-         this.hon(_loc2_);
+         var result:BitmapData = null;
+         this.loader = null;
+         this.urlLoader = null;
+         this.callback(result);
       }
       
-      private function saveUncompressed(param1:Event) : void
+      private function saveUncompressed(e:Event) : void
       {
-         var _loc2_:Bitmap = this.kiga.content as Bitmap;
-         this.kiga = null;
+         var bitmap:Bitmap = this.loader.content as Bitmap;
+         this.loader = null;
          onFinishLoad();
-         ryparyg[julicoj] = _loc2_.bitmapData;
-         GameData.colorize(_loc2_.bitmapData);
-         this.hon(_loc2_.bitmapData);
+         cache[currentURL] = bitmap.bitmapData;
+         GameData.colorize(bitmap.bitmapData);
+         this.callback(bitmap.bitmapData);
       }
       
-      private function loadCompressed(param1:String) : void
+      private function loadCompressed(url:String) : void
       {
-         this.noni = TanksLoader.createURLLoader(this.onCompressedLoaded,this.onError,this.vun ? onProgress : null);
-         this.noni.dataFormat = URLLoaderDataFormat.BINARY;
-         julicoj = param1;
-         this.noni.load(new URLRequest(param1));
+         this.urlLoader = TanksLoader.createURLLoader(this.onCompressedLoaded,this.onError,this.trackProgress ? onProgress : null);
+         this.urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+         currentURL = url;
+         this.urlLoader.load(new URLRequest(url));
       }
       
-      private function onCompressedLoaded(param1:Event) : void
+      private function onCompressedLoaded(e:Event) : void
       {
-         var _loc2_:* = this.noni.data;
-         this.noni = null;
+         var data:* = this.urlLoader.data;
+         this.urlLoader = null;
          onFinishLoad();
-         this.uncompressImage(_loc2_);
+         this.uncompressImage(data);
       }
       
-      private function uncompressImage(param1:ByteArray) : void
+      private function uncompressImage(data:ByteArray) : void
       {
-         param1.uncompress();
-         this.wutacynid.length = 0;
-         this.jify.length = 0;
-         var _loc2_:uint = param1.readUnsignedInt();
-         param1.readBytes(this.wutacynid,0,_loc2_);
-         var _loc3_:uint = param1.readUnsignedInt();
-         param1.readBytes(this.jify,0,_loc3_);
-         this.kiga = TanksLoader.createLoader(this.onOpaueLoaded,this.onError);
-         this.kiga.loadBytes(this.wutacynid);
+         data.uncompress();
+         this.opaqueBytes.length = 0;
+         this.alphaBytes.length = 0;
+         var opaqueSize:uint = data.readUnsignedInt();
+         data.readBytes(this.opaqueBytes,0,opaqueSize);
+         var alphaSize:uint = data.readUnsignedInt();
+         data.readBytes(this.alphaBytes,0,alphaSize);
+         this.loader = TanksLoader.createLoader(this.onOpaueLoaded,this.onError);
+         this.loader.loadBytes(this.opaqueBytes);
       }
       
-      private function onOpaueLoaded(param1:Event) : void
+      private function onOpaueLoaded(e:Event) : void
       {
-         var _loc2_:BitmapData = Bitmap(this.kiga.content).bitmapData;
-         this.qiru = new BitmapData(_loc2_.width,_loc2_.height,true,0);
-         this.qiru.draw(_loc2_);
-         _loc2_.dispose();
-         this.kiga = TanksLoader.createLoader(this.onAlphaLoaded,this.onError);
-         this.kiga.loadBytes(this.jify);
+         var opaque:BitmapData = Bitmap(this.loader.content).bitmapData;
+         this.bitmapData = new BitmapData(opaque.width,opaque.height,true,0);
+         this.bitmapData.draw(opaque);
+         opaque.dispose();
+         this.loader = TanksLoader.createLoader(this.onAlphaLoaded,this.onError);
+         this.loader.loadBytes(this.alphaBytes);
       }
       
-      private function onAlphaLoaded(param1:Event) : void
+      private function onAlphaLoaded(e:Event) : void
       {
-         var _loc2_:BitmapData = Bitmap(this.kiga.content).bitmapData;
-         this.qiru.copyChannel(_loc2_,_loc2_.rect,mutedog,BitmapDataChannel.RED,BitmapDataChannel.ALPHA);
-         _loc2_.dispose();
-         this.kiga = null;
-         ryparyg[julicoj] = this.qiru;
-         GameData.colorize(this.qiru);
-         this.hon(this.qiru);
+         var alpha:BitmapData = Bitmap(this.loader.content).bitmapData;
+         this.bitmapData.copyChannel(alpha,alpha.rect,point,BitmapDataChannel.RED,BitmapDataChannel.ALPHA);
+         alpha.dispose();
+         this.loader = null;
+         cache[currentURL] = this.bitmapData;
+         GameData.colorize(this.bitmapData);
+         this.callback(this.bitmapData);
       }
    }
 }

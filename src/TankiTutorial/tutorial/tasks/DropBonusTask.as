@@ -10,24 +10,24 @@ package tutorial.tasks
    public class DropBonusTask extends Task
    {
       
-      private static const nezeg:int = 1000;
+      private static const DROP_HEIGHT:int = 1000;
       
       protected const position:Vector3 = new Vector3();
       
-      public function DropBonusTask(param1:Vector3)
+      public function DropBonusTask(position:Vector3)
       {
          super();
-         this.position.x = param1.x;
-         this.position.y = param1.y;
-         this.position.z = param1.z + nezeg;
+         this.position.x = position.x;
+         this.position.y = position.y;
+         this.position.z = position.z + DROP_HEIGHT;
       }
       
       override public function process() : Boolean
       {
-         var _loc1_:BattleBonusData = this.getBattleBonusData();
-         var _loc2_:BattleBonus = BattleBonus(GameData.murow.getObject(BattleBonus));
-         _loc2_.init(this.getBonusObjectId(),Long.getNext(),_loc1_,GameData.mij);
-         _loc2_.spawn(this.position,0,BonusData.kudutyje,this.onTankCollision);
+         var bonusData:BattleBonusData = this.getBattleBonusData();
+         var bonus:BattleBonus = BattleBonus(GameData.objectPool.getObject(BattleBonus));
+         bonus.init(this.getBonusObjectId(),Long.getNext(),bonusData,GameData.battleService);
+         bonus.spawn(this.position,0,BonusData.kudutyje,this.onTankCollision);
          return true;
       }
       
@@ -41,9 +41,9 @@ package tutorial.tasks
          throw new Error();
       }
       
-      protected function onTankCollision(param1:BattleBonus) : void
+      protected function onTankCollision(bonus:BattleBonus) : void
       {
-         param1.pickup();
+         bonus.pickup();
       }
    }
 }

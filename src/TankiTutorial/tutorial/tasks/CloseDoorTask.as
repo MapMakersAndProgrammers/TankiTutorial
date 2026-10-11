@@ -7,29 +7,29 @@ package tutorial.tasks
    public class CloseDoorTask extends Task
    {
       
-      private const qecuhygy:Mesh = GameData.tuce.getObject("door") as Mesh;
+      private const door:Mesh = GameData.scene.getObject("door") as Mesh;
       
-      private const body:Body = GameData.gov.getBody("Door");
+      private const body:Body = GameData.physicsScene.getBody("Door");
       
-      private var vylujuha:Number;
+      private var initialZ:Number;
       
       public function CloseDoorTask()
       {
          super();
-         this.vylujuha = this.qecuhygy.z;
+         this.initialZ = this.door.z;
       }
       
       override public function process() : Boolean
       {
-         if(this.qecuhygy.z <= this.vylujuha)
+         if(this.door.z <= this.initialZ)
          {
-            this.qecuhygy.z = this.vylujuha;
+            this.door.z = this.initialZ;
             return true;
          }
-         this.qecuhygy.z -= 5;
+         this.door.z -= 5;
          if(this.body != null)
          {
-            this.body.kejo.position.z -= 5;
+            this.body.state.position.z -= 5;
          }
          return false;
       }

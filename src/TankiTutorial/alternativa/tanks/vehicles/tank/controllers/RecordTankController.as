@@ -14,7 +14,7 @@ package alternativa.tanks.vehicles.tank.controllers
       
       private var fod:String;
       
-      private var lecopojen:uint;
+      private var time:uint;
       
       public function RecordTankController(param1:IEventDispatcher, param2:Tank)
       {
@@ -30,7 +30,7 @@ package alternativa.tanks.vehicles.tank.controllers
       {
          this.ruwi = true;
          this.fod = "";
-         this.lecopojen = getTimer();
+         this.time = getTimer();
       }
       
       public function stopRecording() : void
@@ -84,8 +84,8 @@ package alternativa.tanks.vehicles.tank.controllers
       private function makeRecord() : void
       {
          var _loc1_:uint = uint(getTimer());
-         var _loc2_:uint = _loc1_ - this.lecopojen;
-         this.lecopojen = _loc1_;
+         var _loc2_:uint = _loc1_ - this.time;
+         this.time = _loc1_;
          var _loc3_:String = " " + ses.toString() + " " + _loc2_.toString();
          this.fod += _loc3_;
       }

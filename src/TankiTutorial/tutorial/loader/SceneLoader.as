@@ -9,72 +9,72 @@ package tutorial.loader
    public class SceneLoader
    {
       
-      private static const ripig:Dictionary = new Dictionary();
+      private static const loaders:Dictionary = new Dictionary();
       
-      private var tuce:XML;
+      private var scene:XML;
       
-      private var hon:Function;
+      private var callback:Function;
       
-      private var luwuqap:String;
+      private var baseURL:String;
       
-      private var pamopejus:Vector.<Class>;
+      private var loaderClasses:Vector.<Class>;
       
-      private var zuzecoc:int;
+      private var index:int;
       
       public function SceneLoader()
       {
          super();
       }
       
-      public function load(param1:String, param2:Function) : void
+      public function load(sceneName:String, callback:Function) : void
       {
-         var _loc4_:XML = null;
-         this.hon = param2;
-         var _loc3_:XML = Assets.config;
-         this.pamopejus = Vector.<Class>([PropLibsLoader,PropMapLoader,HullsLoader,TurretsLoader,EffectsLoader,SoundsLoader,BitmapsLoader,MeshesLoader,SWFLoader,SkyboxLoader]);
-         this.luwuqap = _loc3_.@baseURL.toString();
-         for each(_loc4_ in _loc3_.elements("scene"))
+         var sceneXML:XML = null;
+         this.callback = callback;
+         var config:XML = Assets.config;
+         this.loaderClasses = Vector.<Class>([PropLibsLoader,PropMapLoader,HullsLoader,TurretsLoader,EffectsLoader,SoundsLoader,BitmapsLoader,MeshesLoader,SWFLoader,SkyboxLoader]);
+         this.baseURL = config.@baseURL.toString();
+         for each(sceneXML in config.elements("scene"))
          {
-            if(_loc4_.@name.toString() == param1)
+            if(sceneXML.@name.toString() == sceneName)
             {
-               this.tuce = _loc4_;
+               this.scene = sceneXML;
                break;
             }
          }
-         if(this.tuce != null)
+         if(this.scene != null)
          {
-            this.luwuqap += this.tuce.@baseURL.toString();
-            this.zuzecoc = -1;
+            this.baseURL += this.scene.@baseURL.toString();
+            this.index = -1;
             this.loadScene();
          }
       }
       
       private function loadScene() : void
       {
-         var _loc1_:Class = null;
-         var _loc2_:TanksLoader = null;
-         var _loc3_:Function = null;
-         ++this.zuzecoc;
-         if(this.zuzecoc < this.pamopejus.length)
+         var loaderClass:Class = null;
+         var loader:TanksLoader = null;
+         var listener:Function = null;
+         ++this.index;
+         if(this.index < this.loaderClasses.length)
          {
-            _loc1_ = this.pamopejus[this.zuzecoc];
-            _loc2_ = ripig[_loc1_];
-            if(_loc2_ == null)
+            loaderClass = this.loaderClasses[this.index];
+            loader = loaders[loaderClass];
+            if(loader == null)
             {
-               _loc2_ = new _loc1_();
-               ripig[_loc1_] = _loc2_;
+               loader = new loaderClass();
+               loaders[loaderClass] = loader;
             }
-            if(_loc2_.check(this.tuce))
+            if(loader.check(this.scene))
             {
-               if(_loc2_ is SoundsLoader)
+               if(loader is SoundsLoader)
                {
-                  _loc3_ = this.onSoundLoaded;
+                  listener = this.onSoundLoaded;
                }
                else
                {
-                  _loc3_ = this.loadScene;
+                  listener = this.loadScene;
                }
-               _loc2_.load(this.luwuqap,this.tuce,_loc3_);
+               loader.load(this.baseURL,this.scene,listener);
             }
             else
             {
@@ -83,17 +83,17 @@ package tutorial.loader
          }
          else
          {
-            this.hon(this);
+            this.callback(this);
          }
       }
       
       private function onSoundLoaded() : void
       {
-         var _loc1_:Tank = null;
-         GameData.jifom.addSoundToSoundManager();
-         for each(_loc1_ in GameData.gaz)
+         var tank:Tank = null;
+         GameData.playerTank.addSoundToSoundManager();
+         for each(tank in GameData.tanks)
          {
-            _loc1_.addSoundToSoundManager();
+            tank.addSoundToSoundManager();
          }
          SoundManager.wiwoginut = 0.01;
          this.loadScene();

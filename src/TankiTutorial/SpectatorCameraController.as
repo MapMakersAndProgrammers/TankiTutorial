@@ -60,7 +60,7 @@ package
       
       private var sema:Vector3 = new Vector3();
       
-      private var ruda:Vector3 = new Vector3();
+      private var direction:Vector3 = new Vector3();
       
       private var position:Vector3 = new Vector3();
       
@@ -111,36 +111,36 @@ package
                this.sema.x = this.getDirection(RIGHT,LEFT);
                this.sema.y = 0;
                this.sema.z = this.getDirection(FORWARD,BACK);
-               this.camera.getGlobalVector(this.sema,this.ruda);
-               this.ruda.z = 0;
-               if(this.ruda.lengthSqr() > 0)
+               this.camera.getGlobalVector(this.sema,this.direction);
+               this.direction.z = 0;
+               if(this.direction.lengthSqr() > 0)
                {
-                  this.ruda.normalize();
+                  this.direction.normalize();
                }
-               this.ruda.z = -this.getDirection(sulu,desu);
+               this.direction.z = -this.getDirection(sulu,desu);
             }
             else
             {
                this.sema.x = this.getDirection(RIGHT,LEFT);
                this.sema.y = this.getDirection(sulu,desu);
                this.sema.z = this.getDirection(FORWARD,BACK);
-               this.camera.getGlobalVector(this.sema,this.ruda);
+               this.camera.getGlobalVector(this.sema,this.direction);
             }
-            if(this.ruda.lengthSqr() > 0)
+            if(this.direction.lengthSqr() > 0)
             {
-               this.ruda.normalize();
+               this.direction.normalize();
             }
             if(this.ses.getBitValue(ACCELERATE) > 0)
             {
-               this.ruda.scale(camSpeed.value * camAcc.value * _loc3_);
+               this.direction.scale(camSpeed.value * camAcc.value * _loc3_);
             }
             else
             {
-               this.ruda.scale(camSpeed.value * _loc3_);
+               this.direction.scale(camSpeed.value * _loc3_);
             }
-            this.position.x += this.ruda.x;
-            this.position.y += this.ruda.y;
-            this.position.z += this.ruda.z;
+            this.position.x += this.direction.x;
+            this.position.y += this.direction.y;
+            this.position.z += this.direction.z;
             if(this.mousePressed)
             {
                _loc4_ = this.mouseEnabled ? 1 : 0;

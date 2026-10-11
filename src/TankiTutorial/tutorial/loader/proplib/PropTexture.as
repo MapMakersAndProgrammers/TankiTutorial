@@ -5,28 +5,28 @@ package tutorial.loader.proplib
    public class PropTexture
    {
       
-      public var gepocivaj:String;
+      public var name:String;
       
-      private var dibisewo:String;
+      private var diffuseMapURL:String;
       
-      private var qeluziked:TextureMaterial;
+      private var _material:TextureMaterial;
       
-      public function PropTexture(param1:String, param2:String, param3:String)
+      public function PropTexture(name:String, diffuseMap:String, baseURL:String)
       {
          super();
-         this.gepocivaj = param1;
-         this.dibisewo = param3 + param2;
+         this.name = name;
+         this.diffuseMapURL = baseURL + diffuseMap;
       }
       
       public function get material() : TextureMaterial
       {
-         if(this.qeluziked == null)
+         if(this._material == null)
          {
-            this.qeluziked = new TextureMaterial();
-            this.qeluziked.diffuseMapURL = this.dibisewo;
-            this.qeluziked.name = this.gepocivaj;
+            this._material = new TextureMaterial();
+            this._material.diffuseMapURL = this.diffuseMapURL;
+            this._material.name = this.name;
          }
-         return this.qeluziked;
+         return this._material;
       }
    }
 }

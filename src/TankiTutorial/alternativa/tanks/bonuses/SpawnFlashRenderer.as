@@ -16,13 +16,13 @@ package alternativa.tanks.bonuses
       
       private static const cyn:AnimationTrack = new AnimationTrack(mal,maduze);
       
-      private var fur:AnimatedColorTransform = new AnimatedColorTransform();
+      private var colorTransform:AnimatedColorTransform = new AnimatedColorTransform();
       
-      private var zeg:KeyFrameAnimation = new KeyFrameAnimation(cyn,fur);
+      private var zeg:KeyFrameAnimation = new KeyFrameAnimation(cyn,colorTransform);
       
       private var nasybugo:BattleBonus;
       
-      private var hyfecypi:BattleScene3D;
+      private var battleScene:BattleScene3D;
       
       public function SpawnFlashRenderer(param1:Pool)
       {
@@ -32,11 +32,11 @@ package alternativa.tanks.bonuses
       public function start(param1:BattleBonus, param2:BattleScene3D) : void
       {
          this.nasybugo = param1;
-         this.hyfecypi = param2;
+         this.battleScene = param2;
          param1.lybaluh.add(this.destroy);
          param1.nuziged.add(this.destroy);
          param1.gave.add(this.destroy);
-         param1.getBonusMesh().colorTransform = this.fur.fur;
+         param1.getBonusMesh().colorTransform = this.colorTransform.colorTransform;
          param2.addRenderer(this,0);
          this.zeg.start();
       }
@@ -56,8 +56,8 @@ package alternativa.tanks.bonuses
       
       private function destroy() : void
       {
-         this.hyfecypi.removeRenderer(this,0);
-         this.hyfecypi = null;
+         this.battleScene.removeRenderer(this,0);
+         this.battleScene = null;
          this.nasybugo.lybaluh.remove(this.destroy);
          this.nasybugo.nuziged.remove(this.destroy);
          this.nasybugo.gave.remove(this.destroy);

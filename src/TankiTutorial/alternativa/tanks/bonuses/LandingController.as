@@ -20,7 +20,7 @@ package alternativa.tanks.bonuses
       
       private var cozude:Vector3 = new Vector3();
       
-      private var qusejov:Number;
+      private var angle:Number;
       
       private var zekos:Vector3 = new Vector3();
       
@@ -50,7 +50,7 @@ package alternativa.tanks.bonuses
          this.zekos.copy(Vector3.nesicuryn);
          this.zekos.cross(this.lefugefo);
          this.zekos.normalize();
-         this.qusejov = Math.acos(this.lefugefo.z);
+         this.angle = Math.acos(this.lefugefo.z);
          this.hezataw.position.reset(_loc1_.x,_loc1_.y,_loc1_.z);
          this.hezataw.bej.setFromEulerAnglesXYZ(_loc1_.rotationX,_loc1_.rotationY,_loc1_.rotationZ);
          this.nusipysav.copy(this.hezataw);
@@ -60,21 +60,21 @@ package alternativa.tanks.bonuses
       {
          this.nusipysav.copy(this.hezataw);
          var _loc2_:Number = pih * param1;
-         if(_loc2_ > this.qusejov)
+         if(_loc2_ > this.angle)
          {
-            _loc2_ = this.qusejov;
-            this.qusejov = 0;
+            _loc2_ = this.angle;
+            this.angle = 0;
          }
          else
          {
-            this.qusejov -= _loc2_;
+            this.angle -= _loc2_;
          }
          run.fromAxisAngle(this.zekos,_loc2_);
          this.cozude.transform3(run);
          this.hezataw.position.copy(this.vale).add(this.cozude);
          this.hezataw.bej.addScaledVector(this.zekos,_loc2_);
          this.updateTrigger();
-         if(this.qusejov == 0)
+         if(this.angle == 0)
          {
             this.interpolatePhysicsState(1);
             this.render();

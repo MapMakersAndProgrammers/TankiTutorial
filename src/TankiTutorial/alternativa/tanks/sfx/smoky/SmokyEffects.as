@@ -30,11 +30,11 @@ package alternativa.tanks.sfx.smoky
       
       private static const karymo:int = 30;
       
-      private const bijatil:ISoundManager = GameData.bijatil;
+      private const soundManager:ISoundManager = GameData.soundManager;
       
-      private const murow:ObjectPool = GameData.murow;
+      private const objectPool:ObjectPool = GameData.objectPool;
       
-      private const hobuna:EffectsManager = GameData.hobuna;
+      private const effects:EffectsManager = GameData.effects;
       
       private var dymojes:SmokySFXData;
       
@@ -58,23 +58,23 @@ package alternativa.tanks.sfx.smoky
       private function createShotSoundEffect(param1:Mesh) : void
       {
          var _loc2_:Sound3D = Sound3D.create(this.dymojes.kopefus,SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,nydas);
-         this.bijatil.addEffect(Sound3DEffect.create(this.murow,new Vector3(param1.x,param1.y,param1.z),_loc2_));
+         this.soundManager.addEffect(Sound3DEffect.create(this.objectPool,new Vector3(param1.x,param1.y,param1.z),_loc2_));
       }
       
       private function createMuzzleFlashEffect(param1:Vector3, param2:Mesh) : void
       {
-         var _loc3_:SmokyMuzzleFlashEffect = SmokyMuzzleFlashEffect(this.murow.getObject(SmokyMuzzleFlashEffect));
+         var _loc3_:SmokyMuzzleFlashEffect = SmokyMuzzleFlashEffect(this.objectPool.getObject(SmokyMuzzleFlashEffect));
          _loc3_.init(param1,param2,this.dymojes.pasinavuj,podahypoc);
-         this.hobuna.addEffect(_loc3_);
+         this.effects.addEffect(_loc3_);
       }
       
       private function createMuzzleFlashLightEffect(param1:Vector3, param2:Mesh) : void
       {
-         var _loc3_:AnimatedLightEffect = AnimatedLightEffect(this.murow.getObject(AnimatedLightEffect));
-         var _loc4_:MuzzlePositionProvider = MuzzlePositionProvider(this.murow.getObject(MuzzlePositionProvider));
+         var _loc3_:AnimatedLightEffect = AnimatedLightEffect(this.objectPool.getObject(AnimatedLightEffect));
+         var _loc4_:MuzzlePositionProvider = MuzzlePositionProvider(this.objectPool.getObject(MuzzlePositionProvider));
          _loc4_.init(param2,param1,0);
          _loc3_.init(_loc4_,this.dymojes.quf);
-         this.hobuna.addEffect(_loc3_);
+         this.effects.addEffect(_loc3_);
       }
       
       public function createExplosionEffects(param1:Vector3, param2:Number) : void
@@ -87,26 +87,26 @@ package alternativa.tanks.sfx.smoky
       private function createExplosionSoundEffect(param1:Vector3) : void
       {
          var _loc2_:Sound3D = Sound3D.create(this.dymojes.lyrydab,SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,1);
-         this.bijatil.addEffect(Sound3DEffect.create(this.murow,param1,_loc2_,naj));
+         this.soundManager.addEffect(Sound3DEffect.create(this.objectPool,param1,_loc2_,naj));
       }
       
       private function createExplosionGraphicEffect(param1:Vector3, param2:Number) : void
       {
-         var _loc3_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(this.murow.getObject(StaticObject3DPositionProvider));
+         var _loc3_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(this.objectPool.getObject(StaticObject3DPositionProvider));
          _loc3_.init(param1,qalibi);
-         var _loc4_:AnimatedSpriteEffect = AnimatedSpriteEffect(this.murow.getObject(AnimatedSpriteEffect));
+         var _loc4_:AnimatedSpriteEffect = AnimatedSpriteEffect(this.objectPool.getObject(AnimatedSpriteEffect));
          var _loc5_:Number = tilubizy * param2;
          _loc4_.init(_loc5_,_loc5_,this.dymojes.zabe,0,karymo,_loc3_);
-         this.hobuna.addEffect(_loc4_);
+         this.effects.addEffect(_loc4_);
       }
       
       private function createExplosionLightEffect(param1:Vector3) : void
       {
-         var _loc2_:AnimatedLightEffect = AnimatedLightEffect(this.murow.getObject(AnimatedLightEffect));
-         var _loc3_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(this.murow.getObject(StaticObject3DPositionProvider));
+         var _loc2_:AnimatedLightEffect = AnimatedLightEffect(this.objectPool.getObject(AnimatedLightEffect));
+         var _loc3_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(this.objectPool.getObject(StaticObject3DPositionProvider));
          _loc3_.init(param1,qalibi);
          _loc2_.init(_loc3_,this.dymojes.zucezu);
-         this.hobuna.addEffect(_loc2_);
+         this.effects.addEffect(_loc2_);
       }
    }
 }

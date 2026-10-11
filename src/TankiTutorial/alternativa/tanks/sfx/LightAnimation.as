@@ -10,7 +10,7 @@ package alternativa.tanks.sfx
       
       private var qyvoladeg:int;
       
-      private var lecopojen:Vector.<uint>;
+      private var time:Vector.<uint>;
       
       private var tywad:Vector.<Number>;
       
@@ -29,7 +29,7 @@ package alternativa.tanks.sfx
          this.color = new Vector.<uint>(this.qyvoladeg,true);
          this.muwydyzo = new Vector.<Number>(this.qyvoladeg,true);
          this.sej = new Vector.<Number>(this.qyvoladeg,true);
-         this.lecopojen = new Vector.<uint>(this.qyvoladeg,true);
+         this.time = new Vector.<uint>(this.qyvoladeg,true);
          var _loc2_:int = 0;
          while(_loc2_ < this.qyvoladeg)
          {
@@ -38,7 +38,7 @@ package alternativa.tanks.sfx
             this.color[_loc2_] = uint(_loc3_.color);
             this.muwydyzo[_loc2_] = Number(_loc3_.muwydyzo);
             this.sej[_loc2_] = Number(_loc3_.sej);
-            this.lecopojen[_loc2_] = uint(_loc3_.lecopojen);
+            this.time[_loc2_] = uint(_loc3_.time);
             _loc2_++;
          }
       }
@@ -69,13 +69,13 @@ package alternativa.tanks.sfx
          var _loc5_:Number = NaN;
          var _loc6_:Number = NaN;
          var _loc2_:Number = 0;
-         if(param1 < this.lecopojen[this.qyvoladeg - 1])
+         if(param1 < this.time[this.qyvoladeg - 1])
          {
             _loc3_ = 0;
             while(_loc3_ < this.qyvoladeg - 1)
             {
-               _loc4_ = this.lecopojen[_loc3_];
-               _loc5_ = this.lecopojen[_loc3_ + 1];
+               _loc4_ = this.time[_loc3_];
+               _loc5_ = this.time[_loc3_ + 1];
                if(param1 >= _loc4_ && param1 < _loc5_)
                {
                   _loc6_ = (param1 - _loc4_) / (_loc5_ - _loc4_);
@@ -192,7 +192,7 @@ package alternativa.tanks.sfx
          var _loc4_:Number = 1;
          if(param3 > 0 && this.qyvoladeg > 0)
          {
-            _loc4_ = this.lecopojen[this.qyvoladeg - 1] / param3;
+            _loc4_ = this.time[this.qyvoladeg - 1] / param3;
          }
          var _loc5_:Number = this.getFrameByTime(param2 * _loc4_);
          this.updateByFrame(param1,_loc5_);
@@ -200,7 +200,7 @@ package alternativa.tanks.sfx
       
       public function getLiveTime() : int
       {
-         return this.lecopojen[this.qyvoladeg - 1];
+         return this.time[this.qyvoladeg - 1];
       }
    }
 }

@@ -27,9 +27,9 @@ package alternativa.tanks.bonuses
       
       private var giqo:BonusMesh;
       
-      private var hyfecypi:BattleScene3D;
+      private var battleScene:BattleScene3D;
       
-      private var fur:ColorTransform = new ColorTransform();
+      private var colorTransform:ColorTransform = new ColorTransform();
       
       private var hany:int;
       
@@ -43,8 +43,8 @@ package alternativa.tanks.bonuses
       public function start(param1:BonusMesh, param2:BattleScene3D) : void
       {
          this.giqo = param1;
-         this.hyfecypi = param2;
-         this.giqo.colorTransform = this.fur;
+         this.battleScene = param2;
+         this.giqo.colorTransform = this.colorTransform;
          this.hany = zehyki;
          this.pegyj = 0;
          param2.addRenderer(this,0);
@@ -83,9 +83,9 @@ package alternativa.tanks.bonuses
                this.pegyj = 0;
             }
          }
-         this.fur.redOffset = this.pegyj;
-         this.fur.blueOffset = this.pegyj;
-         this.fur.greenOffset = this.pegyj;
+         this.colorTransform.redOffset = this.pegyj;
+         this.colorTransform.blueOffset = this.pegyj;
+         this.colorTransform.greenOffset = this.pegyj;
          if(this.hany < vasegosap)
          {
             this.giqo.setAlpha(this.hany / vasegosap);
@@ -96,11 +96,11 @@ package alternativa.tanks.bonuses
       private function destroy() : void
       {
          this.giqo.colorTransform = null;
-         this.hyfecypi.removeObject(this.giqo);
+         this.battleScene.removeObject(this.giqo);
          this.giqo.recycle();
          this.giqo = null;
-         this.hyfecypi.removeRenderer(this,0);
-         this.hyfecypi = null;
+         this.battleScene.removeRenderer(this,0);
+         this.battleScene = null;
          recycle();
       }
    }

@@ -11,7 +11,7 @@ package alternativa.tanks.sfx
       
       public var tywad:Number;
       
-      public var lecopojen:int;
+      public var time:int;
       
       public function LightingEfectRecord(param1:Number = 0, param2:Number = 0, param3:uint = 0, param4:Number = 0, param5:int = 0)
       {
@@ -20,7 +20,7 @@ package alternativa.tanks.sfx
          this.sej = param2;
          this.color = param3;
          this.tywad = param4;
-         this.lecopojen = param5;
+         this.time = param5;
       }
    }
 }

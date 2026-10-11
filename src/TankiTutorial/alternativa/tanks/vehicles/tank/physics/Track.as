@@ -67,7 +67,7 @@ package alternativa.tanks.vehicles.tank.physics
          this.hetofefu.x = 0;
          this.hetofefu.y = 0;
          this.hetofefu.z = 0;
-         _loc2_ = this.body.kejo.zerus;
+         _loc2_ = this.body.state.zerus;
          var _loc3_:int = 0;
          while(_loc3_ < this.wavi)
          {
@@ -83,11 +83,11 @@ package alternativa.tanks.vehicles.tank.physics
                _loc5_ = _loc2_.x - _loc4_.poseze.x;
                _loc6_ = _loc2_.y - _loc4_.poseze.y;
                _loc7_ = _loc2_.z - _loc4_.poseze.z;
-               _loc4_.wiciqy = Math.sqrt(_loc5_ * _loc5_ + _loc6_ * _loc6_ + _loc7_ * _loc7_);
+               _loc4_.speed = Math.sqrt(_loc5_ * _loc5_ + _loc6_ * _loc6_ + _loc7_ * _loc7_);
             }
             else
             {
-               _loc4_.wiciqy = 0;
+               _loc4_.speed = 0;
             }
             _loc3_++;
          }

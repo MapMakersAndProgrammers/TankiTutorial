@@ -47,73 +47,73 @@ package tutorial
       
       public static var camera:GameCamera;
       
-      public static var guzinizub:KDContainer;
+      public static var kdContainer:KDContainer;
       
-      public static var jifom:Tank;
+      public static var playerTank:Tank;
       
       public static var stage:Stage;
       
-      public static var bijatil:ISoundManager;
+      public static var soundManager:ISoundManager;
       
-      public static var namab:TaskGroup;
+      public static var taskGroup:TaskGroup;
       
-      public static var gov:TanksPhysicsScene;
+      public static var physicsScene:TanksPhysicsScene;
       
-      public static var kymaqos:TanksCollisionDetector;
+      public static var collisionDetector:TanksCollisionDetector;
       
-      public static var dazupuzif:ScreenBitmapManager;
+      public static var screenBitmapManager:ScreenBitmapManager;
       
-      public static var hulaf:ScreenMovieClipManager;
+      public static var screenMovieClipManager:ScreenMovieClipManager;
       
-      public static var maji:CrystalIndicatorManager;
+      public static var crystalIndicatorManager:CrystalIndicatorManager;
       
-      public static var qemikoq:RecordTankController;
+      public static var recordTankController:RecordTankController;
       
-      public static var danewazam:DisplayObjectContainer;
+      public static var container:DisplayObjectContainer;
       
-      public static var gido:Dust;
+      public static var dust:Dust;
       
-      private static var fur:ColorTransform;
+      private static var colorTransform:ColorTransform;
       
-      public static var mij:BattleService;
+      public static var battleService:BattleService;
       
-      public static var zepymy:BattleRunner;
+      public static var battleRunner:BattleRunner;
       
-      public static var hyfecypi:BattleScene3D;
+      public static var battleScene:BattleScene3D;
       
-      public static var jyqoqogy:MarkingManager;
+      public static var markingManager:MarkingManager;
       
-      private static var myzumywi:CameraController;
+      private static var spectatorController:CameraController;
       
-      private static var motorafo:CameraController;
+      private static var previousController:CameraController;
       
       public static var jygukik:String = "RU";
       
-      public static const lecopojen:TimeData = new TimeData();
+      public static const time:TimeData = new TimeData();
       
-      public static const tuce:GameScene = new GameScene();
+      public static const scene:GameScene = new GameScene();
       
-      public static const murow:ObjectPool = new ObjectPool();
+      public static const objectPool:ObjectPool = new ObjectPool();
       
-      public static const jypadif:RenderGroup = new RenderGroup();
+      public static const renderers:RenderGroup = new RenderGroup();
       
-      public static const hobuna:EffectsManager = new EffectsManager();
+      public static const effects:EffectsManager = new EffectsManager();
       
-      public static const ciqoby:TexturesLoader = new TexturesLoader();
+      public static const texturesLoader:TexturesLoader = new TexturesLoader();
       
-      public static const gaz:Vector.<Tank> = new Vector.<Tank>();
+      public static const tanks:Vector.<Tank> = new Vector.<Tank>();
       
-      public static const varezula:BackgroundSprite = new BackgroundSprite();
+      public static const backgroundSprite:BackgroundSprite = new BackgroundSprite();
       
-      public static const qusejov:Number = 70 * Math.PI / 180;
+      public static const angle:Number = 70 * Math.PI / 180;
       
-      public static const hevarer:Number = 0.1;
+      public static const threshold:Number = 0.1;
       
-      public static const ruda:Vector3D = new Vector3D(-0.6,-0.5,-1);
+      public static const direction:Vector3D = new Vector3D(-0.6,-0.5,-1);
       
       public static const version:int = Alternativa3D.version.split(".")[1];
       
-      public static var wuhibota:Vector.<Vector3> = new Vector.<Vector3>();
+      public static var bonusRegions:Vector.<Vector3> = new Vector.<Vector3>();
       
       public static const bisoga:Boolean = true;
       
@@ -128,22 +128,22 @@ package tutorial
          super();
       }
       
-      public static function createGameData(param1:Stage, param2:DisplayObjectContainer) : void
+      public static function createGameData(stage:Stage, container:DisplayObjectContainer) : void
       {
-         var _loc14_:Vector3D = null;
-         GameData.stage = param1;
-         GameData.danewazam = param2;
+         var lightDirection:Vector3D = null;
+         GameData.stage = stage;
+         GameData.container = container;
          if(Shared.tracker == null)
          {
             Shared.tracker = new TrackerService(true);
-            Shared.preloader = new LoaderWindow(param1);
+            Shared.preloader = new LoaderWindow(stage);
          }
          root = new Object3DContainer();
          camera = new GameCamera();
          camera.matrix = new Matrix3D(Vector.<Number>([-0.8589262962341309,-0.5120992064476013,0,0,-0.056438345462083817,0.09466209262609482,-0.9939083456993103,0,0.5089796781539917,-0.8536940217018127,-0.11020979285240173,0,1734.8155517578125,-4618.1220703125,121.45249938964844,1]));
          camera.nearClipping = 100;
          camera.farClipping = 40000;
-         camera.view = new View(param1.stageWidth,param1.stageHeight,Shared.constrained);
+         camera.view = new View(stage.stageWidth,stage.stageHeight,Shared.constrained);
          camera.view.hideLogo();
          camera.view.antiAliasEnabled = false;
          camera.addToDebug(Debug.EDGES,Object3D);
@@ -151,24 +151,24 @@ package tutorial
          camera.timerUpdatePeriod = 30;
          camera.softTransparency = false;
          root.addChild(camera);
-         param1.addChildAt(camera.view,0);
-         guzinizub = new KDContainer();
-         guzinizub.ignoreChildrenInCollider = true;
-         root.addChild(guzinizub);
-         bijatil = new SoundManager();
-         namab = new TaskGroup();
-         gov = new TanksPhysicsScene();
-         gov.gyge = 5;
-         var _loc3_:Vector3 = gov.tem;
-         _loc3_.reset(0,0,-1000);
-         gov.lecopojen = getTimer();
-         kymaqos = gov.secakesem;
+         stage.addChildAt(camera.view,0);
+         kdContainer = new KDContainer();
+         kdContainer.ignoreChildrenInCollider = true;
+         root.addChild(kdContainer);
+         soundManager = new SoundManager();
+         taskGroup = new TaskGroup();
+         physicsScene = new TanksPhysicsScene();
+         physicsScene.gyge = 5;
+         var gravity:Vector3 = physicsScene.tem;
+         gravity.reset(0,0,-1000);
+         physicsScene.time = getTimer();
+         collisionDetector = physicsScene.secakesem;
          TurretControlKeyMap.initDefaultKeyMap(Lang.language);
-         jifom = new Tank();
-         qemikoq = new RecordTankController(param1,jifom);
-         dazupuzif = new ScreenBitmapManager(param1);
-         hulaf = new ScreenMovieClipManager(param1,param2);
-         maji = new CrystalIndicatorManager(param1);
+         playerTank = new Tank();
+         recordTankController = new RecordTankController(stage,playerTank);
+         screenBitmapManager = new ScreenBitmapManager(stage);
+         screenMovieClipManager = new ScreenMovieClipManager(stage,container);
+         crystalIndicatorManager = new CrystalIndicatorManager(stage);
          var _loc4_:int = 150;
          var _loc5_:int = 150;
          var _loc6_:int = 127;
@@ -183,16 +183,16 @@ package tutorial
          _loc7_ = _loc11_ >> 16 & 0xFF;
          _loc8_ = _loc11_ >> 8 & 0xFF;
          _loc9_ = _loc11_ & 0xFF;
-         var _loc12_:int = color(_loc4_ - _loc7_,_loc5_ - _loc8_,_loc6_ - _loc9_);
-         var _loc13_:int = color(_loc7_,_loc8_,_loc9_);
+         var lightColor:int = color(_loc4_ - _loc7_,_loc5_ - _loc8_,_loc6_ - _loc9_);
+         var ambientColor:int = color(_loc7_,_loc8_,_loc9_);
          if(Boolean(Shared.gpu) && version >= 11 && !Shared.constrained && (Shared.navigator != "Chrome" || int(Shared.navigatorVersion.split(".")[0]) > 23))
          {
             camera.fogNear = 0;
             camera.fogFar = 10000;
             camera.fogAlpha = 0;
-            camera.directionalLight = new DirectionalLight(_loc12_);
-            camera.directionalLight.lookAt(ruda.x,ruda.y,ruda.z);
-            camera.ambientColor = _loc13_;
+            camera.directionalLight = new DirectionalLight(lightColor);
+            camera.directionalLight.lookAt(direction.x,direction.y,direction.z);
+            camera.ambientColor = ambientColor;
             camera.shadowMap = new ShadowMap(2048,5000,8000,0.5,4000);
             camera.deferredLighting = false;
             camera.softTransparency = false;
@@ -204,68 +204,68 @@ package tutorial
          }
          else
          {
-            _loc14_ = ruda.clone();
-            _loc14_.normalize();
-            fur = calculateColorTransform(_loc13_,_loc12_,Math.abs(_loc14_.z));
+            lightDirection = direction.clone();
+            lightDirection.normalize();
+            colorTransform = calculateColorTransform(ambientColor,lightColor,Math.abs(lightDirection.z));
          }
-         mij = new BattleServiceImpl();
-         zepymy = new BattleRunnerImpl();
-         hyfecypi = new BattleScene3DImpl();
+         battleService = new BattleServiceImpl();
+         battleRunner = new BattleRunnerImpl();
+         battleScene = new BattleScene3DImpl();
          mouseEnabled = !BrowserBlackList.checkIfMouseDisabled();
       }
       
       public static function initMarking() : void
       {
-         if(jyqoqogy == null)
+         if(markingManager == null)
          {
-            jyqoqogy = new MarkingManager(stage,camera,guzinizub,jifom,false);
+            markingManager = new MarkingManager(stage,camera,kdContainer,playerTank,false);
          }
       }
       
-      public static function colorize(param1:BitmapData) : void
+      public static function colorize(bitmapData:BitmapData) : void
       {
-         if(fur != null && param1 != null)
+         if(colorTransform != null && bitmapData != null)
          {
-            param1.colorTransform(param1.rect,fur);
+            bitmapData.colorTransform(bitmapData.rect,colorTransform);
          }
       }
       
-      private static function onKey(param1:KeyboardEvent) : void
+      private static function onKey(keyboardEvent:KeyboardEvent) : void
       {
-         switch(param1.keyCode)
+         switch(keyboardEvent.keyCode)
          {
             case Keyboard.NUMPAD_4:
-               ruda.x -= 0.1;
+               direction.x -= 0.1;
                break;
             case Keyboard.NUMPAD_6:
-               ruda.x += 0.1;
+               direction.x += 0.1;
                break;
             case Keyboard.NUMPAD_2:
-               ruda.y -= 0.1;
+               direction.y -= 0.1;
                break;
             case Keyboard.NUMPAD_8:
-               ruda.y += 0.1;
+               direction.y += 0.1;
                break;
             case Keyboard.TAB:
                camera.debug = !camera.debug;
                break;
             case Keyboard.F2:
-               if(myzumywi == null)
+               if(spectatorController == null)
                {
-                  myzumywi = new SpectatorCameraController(stage,camera);
+                  spectatorController = new SpectatorCameraController(stage,camera);
                }
                if(camera.controller != null)
                {
                   camera.controller.deactivate();
                }
-               if(camera.controller == myzumywi)
+               if(camera.controller == spectatorController)
                {
-                  camera.controller = motorafo;
+                  camera.controller = previousController;
                }
                else
                {
-                  motorafo = camera.controller;
-                  camera.controller = myzumywi;
+                  previousController = camera.controller;
+                  camera.controller = spectatorController;
                }
                if(camera.controller != null)
                {
@@ -274,36 +274,36 @@ package tutorial
          }
       }
       
-      private static function color(param1:uint, param2:uint, param3:uint) : int
+      private static function color(r:uint, g:uint, b:uint) : int
       {
-         if(param1 > 255)
+         if(r > 255)
          {
-            param1 = 255;
+            r = 255;
          }
-         if(param2 > 255)
+         if(g > 255)
          {
-            param2 = 255;
+            g = 255;
          }
-         if(param3 > 255)
+         if(b > 255)
          {
-            param3 = 255;
+            b = 255;
          }
-         return param1 << 16 | param2 << 8 | param3;
+         return r << 16 | g << 8 | b;
       }
       
-      private static function calculateColorTransform(param1:uint, param2:uint, param3:Number = 1) : ColorTransform
+      private static function calculateColorTransform(ambientColor:uint, lightColor:uint, factor:Number = 1) : ColorTransform
       {
-         var _loc4_:Number = (param1 >> 16 & 0xFF) / 255;
-         var _loc5_:Number = (param1 >> 8 & 0xFF) / 255;
-         var _loc6_:Number = (param1 & 0xFF) / 255;
-         var _loc7_:Number = (param2 >> 16 & 0xFF) / 255;
-         var _loc8_:Number = (param2 >> 8 & 0xFF) / 255;
-         var _loc9_:Number = (param2 & 0xFF) / 255;
-         var _loc10_:ColorTransform = new ColorTransform();
-         _loc10_.redMultiplier = (_loc4_ + _loc7_ * param3) * 2;
-         _loc10_.greenMultiplier = (_loc5_ + _loc8_ * param3) * 2;
-         _loc10_.blueMultiplier = (_loc6_ + _loc9_ * param3) * 2;
-         return _loc10_;
+         var _loc4_:Number = (ambientColor >> 16 & 0xFF) / 255;
+         var _loc5_:Number = (ambientColor >> 8 & 0xFF) / 255;
+         var _loc6_:Number = (ambientColor & 0xFF) / 255;
+         var _loc7_:Number = (lightColor >> 16 & 0xFF) / 255;
+         var _loc8_:Number = (lightColor >> 8 & 0xFF) / 255;
+         var _loc9_:Number = (lightColor & 0xFF) / 255;
+         var result:ColorTransform = new ColorTransform();
+         result.redMultiplier = (_loc4_ + _loc7_ * factor) * 2;
+         result.greenMultiplier = (_loc5_ + _loc8_ * factor) * 2;
+         result.blueMultiplier = (_loc6_ + _loc9_ * factor) * 2;
+         return result;
       }
    }
 }

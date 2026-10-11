@@ -28,7 +28,7 @@ package alternativa.tanks.bonuses
       
       private const duleruve:Blinker = new Blinker(vysil,cygybup,cavogu,myz,1,zuwujedo);
       
-      private var hyfecypi:BattleScene3D;
+      private var battleScene:BattleScene3D;
       
       private var giqo:BonusMesh;
       
@@ -48,7 +48,7 @@ package alternativa.tanks.bonuses
       public function init(param1:BattleScene3D, param2:BattleBonus, param3:int) : void
       {
          var _loc4_:int = getTimer();
-         this.hyfecypi = param1;
+         this.battleScene = param1;
          this.giqo = param2.getBonusMesh();
          this.racefom = _loc4_ + param3 - vac;
          this.mirocy = false;
@@ -141,14 +141,14 @@ package alternativa.tanks.bonuses
       
       private function destroy() : void
       {
-         this.hyfecypi.removeRenderer(this,0);
+         this.battleScene.removeRenderer(this,0);
          if(this.giqo != null)
          {
-            this.hyfecypi.removeObject(this.giqo);
+            this.battleScene.removeObject(this.giqo);
             this.giqo.recycle();
             this.giqo = null;
          }
-         this.hyfecypi = null;
+         this.battleScene = null;
          recycle();
       }
    }

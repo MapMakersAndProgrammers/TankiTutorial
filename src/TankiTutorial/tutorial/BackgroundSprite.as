@@ -12,7 +12,7 @@ package tutorial
          addEventListener(Event.ADDED_TO_STAGE,this.onAddedToStage);
       }
       
-      private function onAddedToStage(param1:Event) : void
+      private function onAddedToStage(e:Event) : void
       {
          removeEventListener(Event.ADDED_TO_STAGE,this.onAddedToStage);
          addEventListener(Event.REMOVED_FROM_STAGE,this.onRemovedFromStage);
@@ -20,14 +20,14 @@ package tutorial
          this.onResize();
       }
       
-      private function onRemovedFromStage(param1:Event) : void
+      private function onRemovedFromStage(e:Event) : void
       {
          removeEventListener(Event.REMOVED_FROM_STAGE,this.onRemovedFromStage);
          addEventListener(Event.ADDED_TO_STAGE,this.onAddedToStage);
          stage.removeEventListener(Event.RESIZE,this.onResize);
       }
       
-      private function onResize(param1:Event = null) : void
+      private function onResize(e:Event = null) : void
       {
       }
    }

@@ -17,113 +17,113 @@ package tutorial.loader
    public class MeshesLoader extends TanksLoader
    {
       
-      private var witobovar:Vector.<XML>;
+      private var meshes:Vector.<XML>;
       
-      private var wucejydy:String;
+      private var id:String;
       
-      private var luwuqap:String;
+      private var baseURL:String;
       
-      private var dodycoli:int;
+      private var index:int;
       
-      private var zewucadiz:Mesh;
+      private var current:Mesh;
       
-      private var wija:URLLoader;
+      private var urlLoader:URLLoader;
       
       public function MeshesLoader()
       {
          super();
       }
       
-      override public function check(param1:XML) : Boolean
+      override public function check(sceneXML:XML) : Boolean
       {
-         return param1.meshes.length() > 0;
+         return sceneXML.meshes.length() > 0;
       }
       
-      override public function load(param1:String, param2:XML, param3:Function) : void
+      override public function load(sceneURL:String, sceneXML:XML, completeListener:Function) : void
       {
-         var _loc5_:XML = null;
-         this.pomagu = param2.meshes[0];
-         this.hon = param3;
-         this.witobovar = new Vector.<XML>();
-         this.dodycoli = 0;
-         this.luwuqap = param1 + pomagu.@baseURL;
-         var _loc4_:int = 0;
-         for each(_loc5_ in pomagu.elements("mesh"))
+         var meshXML:XML = null;
+         this.xml = sceneXML.meshes[0];
+         this.callback = completeListener;
+         this.meshes = new Vector.<XML>();
+         this.index = 0;
+         this.baseURL = sceneURL + xml.@baseURL;
+         var i:int = 0;
+         for each(meshXML in xml.elements("mesh"))
          {
-            this.witobovar[_loc4_] = _loc5_;
-            _loc4_++;
+            this.meshes[i] = meshXML;
+            i++;
          }
          this.loadMesh();
       }
       
-      private function loadMesh(param1:BitmapData = null) : void
+      private function loadMesh(bitmapData:BitmapData = null) : void
       {
-         var _loc2_:XML = null;
-         var _loc3_:ByteArray = null;
-         var _loc4_:BitmapData = null;
-         var _loc5_:Mesh = null;
-         if(param1 != null)
+         var meshXML:XML = null;
+         var data:ByteArray = null;
+         var texture:BitmapData = null;
+         var mesh:Mesh = null;
+         if(bitmapData != null)
          {
-            this.zewucadiz.setMaterialToAllFaces(new TextureMaterial(param1,false,true,MipMapping.PER_PIXEL,2.5));
-            Assets.saveData(this.wucejydy,this.zewucadiz,Mesh);
-            this.zewucadiz = null;
-            ++this.dodycoli;
+            this.current.setMaterialToAllFaces(new TextureMaterial(bitmapData,false,true,MipMapping.PER_PIXEL,2.5));
+            Assets.saveData(this.id,this.current,Mesh);
+            this.current = null;
+            ++this.index;
          }
-         if(this.dodycoli < this.witobovar.length)
+         if(this.index < this.meshes.length)
          {
-            _loc2_ = this.witobovar[this.dodycoli];
-            this.wucejydy = _loc2_.@id.toString();
-            if(Assets.hasData(this.wucejydy,ByteArray))
+            meshXML = this.meshes[this.index];
+            this.id = meshXML.@id.toString();
+            if(Assets.hasData(this.id,ByteArray))
             {
-               _loc3_ = Assets.getData(this.wucejydy,ByteArray);
-               _loc4_ = Assets.getData(this.wucejydy,BitmapData);
-               _loc5_ = this.parseMesh(_loc3_);
-               _loc5_.setMaterialToAllFaces(new TextureMaterial(_loc4_,false,true,MipMapping.PER_PIXEL,2.5));
-               Assets.saveData(this.wucejydy,_loc5_,Mesh);
-               ++this.dodycoli;
+               data = Assets.getData(this.id,ByteArray);
+               texture = Assets.getData(this.id,BitmapData);
+               mesh = this.parseMesh(data);
+               mesh.setMaterialToAllFaces(new TextureMaterial(texture,false,true,MipMapping.PER_PIXEL,2.5));
+               Assets.saveData(this.id,mesh,Mesh);
+               ++this.index;
                this.loadMesh();
             }
             else
             {
-               this.wija = createURLLoader(this.loadTexture,onError,onProgress);
-               this.wija.dataFormat = URLLoaderDataFormat.BINARY;
-               julicoj = this.luwuqap + _loc2_.@url.toString();
-               this.wija.load(new URLRequest(julicoj));
+               this.urlLoader = createURLLoader(this.loadTexture,onError,onProgress);
+               this.urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+               currentURL = this.baseURL + meshXML.@url.toString();
+               this.urlLoader.load(new URLRequest(currentURL));
             }
          }
-         else if(hon != null)
+         else if(callback != null)
          {
-            hon();
+            callback();
          }
       }
       
-      private function loadTexture(param1:Event) : void
+      private function loadTexture(e:Event) : void
       {
-         this.zewucadiz = this.parseMesh(this.wija.data);
-         this.wija = null;
-         var _loc2_:XML = this.witobovar[this.dodycoli];
-         var _loc3_:String = this.luwuqap + _loc2_.@texture.toString();
-         bita.load(_loc3_,this.loadMesh);
+         this.current = this.parseMesh(this.urlLoader.data);
+         this.urlLoader = null;
+         var meshXML:XML = this.meshes[this.index];
+         var textureURL:String = this.baseURL + meshXML.@texture.toString();
+         imageLoader.load(textureURL,this.loadMesh);
       }
       
-      private function parseMesh(param1:ByteArray) : Mesh
+      private function parseMesh(data:ByteArray) : Mesh
       {
-         var _loc5_:Mesh = null;
-         var _loc2_:Parser3DS = new Parser3DS();
-         _loc2_.parse(param1);
-         var _loc3_:int = int(_loc2_.objects.length);
-         var _loc4_:int = 0;
-         while(_loc4_ < _loc3_)
+         var mesh:Mesh = null;
+         var parser:Parser3DS = new Parser3DS();
+         parser.parse(data);
+         var len:int = int(parser.objects.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc5_ = _loc2_.objects[_loc4_] as Mesh;
-            if(_loc5_ != null)
+            mesh = parser.objects[i] as Mesh;
+            if(mesh != null)
             {
-               _loc5_.sorting = Sorting.DYNAMIC_BSP;
-               _loc5_.optimizeForDynamicBSP();
-               _loc5_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
-               return _loc5_;
+               mesh.sorting = Sorting.DYNAMIC_BSP;
+               mesh.optimizeForDynamicBSP();
+               mesh.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
+               return mesh;
             }
-            _loc4_++;
+            i++;
          }
          return null;
       }

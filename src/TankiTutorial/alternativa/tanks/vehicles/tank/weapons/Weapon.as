@@ -5,13 +5,13 @@ package alternativa.tanks.vehicles.tank.weapons
    public class Weapon
    {
       
-      public var gepocivaj:String;
+      public var name:String;
       
       public var kuqy:Number = 1;
       
       private const myfo:TurretData = new TurretData();
       
-      private var citacir:Tank;
+      private var tank:Tank;
       
       protected var zadawe:Boolean;
       
@@ -20,7 +20,7 @@ package alternativa.tanks.vehicles.tank.weapons
       public function Weapon(param1:String)
       {
          super();
-         this.gepocivaj = param1;
+         this.name = param1;
       }
       
       public function getData() : TurretData
@@ -30,12 +30,12 @@ package alternativa.tanks.vehicles.tank.weapons
       
       public function getTank() : Tank
       {
-         return this.citacir;
+         return this.tank;
       }
       
       public function setTank(param1:Tank) : void
       {
-         this.citacir = param1;
+         this.tank = param1;
       }
       
       public function get status() : Number

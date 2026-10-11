@@ -15,12 +15,12 @@ package alternativa.physics.contactislands
       
       private const byrokeby:QuickUnionFind = new QuickUnionFind();
       
-      private var gov:PhysicsScene;
+      private var physicsScene:PhysicsScene;
       
       public function IslandsGenerator(param1:PhysicsScene)
       {
          super();
-         this.gov = param1;
+         this.physicsScene = param1;
       }
       
       public function generate(param1:Vector.<BodyContact>, param2:int) : void
@@ -79,7 +79,7 @@ package alternativa.physics.contactislands
          while(_loc5_ < _loc4_)
          {
             _loc8_ = this.nuwyge[_loc5_];
-            _loc8_.init(this.gov);
+            _loc8_.init(this.physicsScene);
             _loc5_++;
          }
          clearDictionary(this.zabuvaroq);

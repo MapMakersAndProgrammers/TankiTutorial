@@ -3,51 +3,51 @@ package tutorial.tasks
    public class TaskGroup extends Task
    {
       
-      private var riw:Task;
+      private var head:Task;
       
-      private var rysered:Task;
+      private var tail:Task;
       
       public function TaskGroup()
       {
          super();
-         this.riw = new Task();
-         this.rysered = new Task();
-         this.riw.suzasevot = this.rysered;
-         this.rysered.tomi = this.riw;
+         this.head = new Task();
+         this.tail = new Task();
+         this.head.next = this.tail;
+         this.tail.prev = this.head;
       }
       
-      public function addTask(param1:Task) : void
+      public function addTask(task:Task) : void
       {
-         param1.suzasevot = this.rysered;
-         param1.tomi = this.rysered.tomi;
-         this.rysered.tomi.suzasevot = param1;
-         this.rysered.tomi = param1;
+         task.next = this.tail;
+         task.prev = this.tail.prev;
+         this.tail.prev.next = task;
+         this.tail.prev = task;
       }
       
       final override public function process() : Boolean
       {
-         var _loc3_:Boolean = false;
-         var _loc1_:Boolean = true;
-         var _loc2_:Task = this.riw.suzasevot;
-         while(_loc2_ != this.rysered)
+         var done:Boolean = false;
+         var allDone:Boolean = true;
+         var task:Task = this.head.next;
+         while(task != this.tail)
          {
-            _loc3_ = _loc2_.process();
-            _loc1_ &&= _loc3_;
-            _loc2_ = _loc2_.suzasevot;
-            if(_loc3_)
+            done = task.process();
+            allDone &&= done;
+            task = task.next;
+            if(done)
             {
-               this.removeTask(_loc2_.tomi);
+               this.removeTask(task.prev);
             }
          }
-         return _loc1_;
+         return allDone;
       }
       
-      private function removeTask(param1:Task) : void
+      private function removeTask(task:Task) : void
       {
-         param1.tomi.suzasevot = param1.suzasevot;
-         param1.suzasevot.tomi = param1.tomi;
-         param1.suzasevot = null;
-         param1.tomi = null;
+         task.prev.next = task.next;
+         task.next.prev = task.prev;
+         task.next = null;
+         task.prev = null;
       }
    }
 }

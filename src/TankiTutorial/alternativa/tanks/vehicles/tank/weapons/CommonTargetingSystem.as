@@ -30,7 +30,7 @@ package alternativa.tanks.vehicles.tank.weapons
       
       private var mojy:int;
       
-      private var kymaqos:CollisionDetector;
+      private var collisionDetector:CollisionDetector;
       
       private var ryzodu:CommonTargetEvaluator;
       
@@ -54,7 +54,7 @@ package alternativa.tanks.vehicles.tank.weapons
          this.tywoneziw = param3;
          this.cahyv = param4;
          this.mojy = param5;
-         this.kymaqos = param6;
+         this.collisionDetector = param6;
          this.ryzodu = param7;
       }
       
@@ -66,7 +66,7 @@ package alternativa.tanks.vehicles.tank.weapons
          this.sapywevis = null;
          this.woz.bowe = param4;
          var _loc7_:Number = this.kerahe > this.cahyv ? this.kerahe : this.cahyv;
-         if(this.kymaqos.raycast(param1,param2,sowe,this.maxDistance,this.woz,wonuhig))
+         if(this.collisionDetector.raycast(param1,param2,sowe,this.maxDistance,this.woz,wonuhig))
          {
             this.lefugefo.copy(wonuhig.lefugefo);
             this.hywyvi.copy(param2);
@@ -116,7 +116,7 @@ package alternativa.tanks.vehicles.tank.weapons
             _loc8_ += param5;
             sudak.copy(zewufyg);
             gijalatyt.transformVector(sudak,zewufyg);
-            if(this.kymaqos.raycast(param1,zewufyg,sowe,this.maxDistance,this.woz,wonuhig))
+            if(this.collisionDetector.raycast(param1,zewufyg,sowe,this.maxDistance,this.woz,wonuhig))
             {
                _loc10_ = wonuhig.vetudozi.body;
                if(_loc10_ != null)

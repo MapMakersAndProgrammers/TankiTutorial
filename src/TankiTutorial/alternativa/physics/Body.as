@@ -23,11 +23,11 @@ package alternativa.physics
       
       public var wucejydy:int;
       
-      public var gepocivaj:String;
+      public var name:String;
       
       public var katuf:Object;
       
-      public var tuce:PhysicsScene;
+      public var scene:PhysicsScene;
       
       public var midorofic:Boolean = true;
       
@@ -59,7 +59,7 @@ package alternativa.physics
       
       public var hoqu:Vector3 = new Vector3();
       
-      public var kejo:BodyState = new BodyState();
+      public var state:BodyState = new BodyState();
       
       private var qas:Number = 600;
       
@@ -130,48 +130,48 @@ package alternativa.physics
       {
          var _loc4_:Number = NaN;
          _loc4_ = 1 - param1;
-         param2.x = this.gomocyl.position.x * _loc4_ + this.kejo.position.x * param1;
-         param2.y = this.gomocyl.position.y * _loc4_ + this.kejo.position.y * param1;
-         param2.z = this.gomocyl.position.z * _loc4_ + this.kejo.position.z * param1;
-         param3.dige = this.gomocyl.bej.dige * _loc4_ + this.kejo.bej.dige * param1;
-         param3.x = this.gomocyl.bej.x * _loc4_ + this.kejo.bej.x * param1;
-         param3.y = this.gomocyl.bej.y * _loc4_ + this.kejo.bej.y * param1;
-         param3.z = this.gomocyl.bej.z * _loc4_ + this.kejo.bej.z * param1;
+         param2.x = this.gomocyl.position.x * _loc4_ + this.state.position.x * param1;
+         param2.y = this.gomocyl.position.y * _loc4_ + this.state.position.y * param1;
+         param2.z = this.gomocyl.position.z * _loc4_ + this.state.position.z * param1;
+         param3.dige = this.gomocyl.bej.dige * _loc4_ + this.state.bej.dige * param1;
+         param3.x = this.gomocyl.bej.x * _loc4_ + this.state.bej.x * param1;
+         param3.y = this.gomocyl.bej.y * _loc4_ + this.state.bej.y * param1;
+         param3.z = this.gomocyl.bej.z * _loc4_ + this.state.bej.z * param1;
       }
       
       public function setPosition(param1:Vector3) : void
       {
-         this.kejo.position.copy(param1);
+         this.state.position.copy(param1);
       }
       
       public function setPositionXYZ(param1:Number, param2:Number, param3:Number) : void
       {
-         this.kejo.position.reset(param1,param2,param3);
+         this.state.position.reset(param1,param2,param3);
       }
       
       public function setVelocity(param1:Vector3) : void
       {
-         this.kejo.zerus.copy(param1);
+         this.state.zerus.copy(param1);
       }
       
       public function setVelocityXYZ(param1:Number, param2:Number, param3:Number) : void
       {
-         this.kejo.zerus.reset(param1,param2,param3);
+         this.state.zerus.reset(param1,param2,param3);
       }
       
       public function setRotation(param1:Vector3) : void
       {
-         this.kejo.fev.copy(param1);
+         this.state.fev.copy(param1);
       }
       
       public function setRotationXYZ(param1:Number, param2:Number, param3:Number) : void
       {
-         this.kejo.fev.reset(param1,param2,param3);
+         this.state.fev.reset(param1,param2,param3);
       }
       
       public function setOrientation(param1:Quaternion) : void
       {
-         this.kejo.bej.copy(param1);
+         this.state.bej.copy(param1);
       }
       
       public function applyWorldImpulseAtLocalPoint(param1:Vector3, param2:Vector3, param3:Number) : void
@@ -180,15 +180,15 @@ package alternativa.physics
          var _loc5_:Number = NaN;
          var _loc7_:Number = NaN;
          _loc4_ = param3 * this.jutelycu;
-         this.kejo.zerus.x += _loc4_ * param2.x;
-         this.kejo.zerus.y += _loc4_ * param2.y;
-         this.kejo.zerus.z += _loc4_ * param2.z;
+         this.state.zerus.x += _loc4_ * param2.x;
+         this.state.zerus.y += _loc4_ * param2.y;
+         this.state.zerus.z += _loc4_ * param2.z;
          _loc5_ = (param1.y * param2.z - param1.z * param2.y) * param3;
          var _loc6_:Number = (param1.z * param2.x - param1.x * param2.z) * param3;
          _loc7_ = (param1.x * param2.y - param1.y * param2.x) * param3;
-         this.kejo.fev.x += this.cobugihyh.gusat * _loc5_ + this.cobugihyh.cydop * _loc6_ + this.cobugihyh.sivy * _loc7_;
-         this.kejo.fev.y += this.cobugihyh.sig * _loc5_ + this.cobugihyh.qanezycap * _loc6_ + this.cobugihyh.wyvukog * _loc7_;
-         this.kejo.fev.z += this.cobugihyh.vug * _loc5_ + this.cobugihyh.luwym * _loc6_ + this.cobugihyh.tari * _loc7_;
+         this.state.fev.x += this.cobugihyh.gusat * _loc5_ + this.cobugihyh.cydop * _loc6_ + this.cobugihyh.sivy * _loc7_;
+         this.state.fev.y += this.cobugihyh.sig * _loc5_ + this.cobugihyh.qanezycap * _loc6_ + this.cobugihyh.wyvukog * _loc7_;
+         this.state.fev.z += this.cobugihyh.vug * _loc5_ + this.cobugihyh.luwym * _loc6_ + this.cobugihyh.tari * _loc7_;
       }
       
       public function applyWorldPseudoImpulseAtLocalPoint(param1:Vector3, param2:Vector3, param3:Number) : void
@@ -211,9 +211,9 @@ package alternativa.physics
       public function applyImpulse(param1:Vector3, param2:Number) : void
       {
          var _loc3_:Number = param2 * this.jutelycu;
-         this.kejo.zerus.x += _loc3_ * param1.x;
-         this.kejo.zerus.y += _loc3_ * param1.y;
-         this.kejo.zerus.z += _loc3_ * param1.z;
+         this.state.zerus.x += _loc3_ * param1.x;
+         this.state.zerus.y += _loc3_ * param1.y;
+         this.state.zerus.z += _loc3_ * param1.z;
       }
       
       public function addForce(param1:Vector3) : void
@@ -234,7 +234,7 @@ package alternativa.physics
          this.res.x += param4;
          this.res.y += param5;
          this.res.z += param6;
-         var _loc7_:Vector3 = this.kejo.position;
+         var _loc7_:Vector3 = this.state.position;
          _loc8_ = param1 - _loc7_.x;
          var _loc9_:Number = param2 - _loc7_.y;
          var _loc10_:Number = param3 - _loc7_.z;
@@ -246,7 +246,7 @@ package alternativa.physics
       public function addWorldForce(param1:Vector3, param2:Vector3) : void
       {
          this.res.add(param2);
-         this.wapab.add(camojaq.diff(param1,this.kejo.position).cross(param2));
+         this.wapab.add(camojaq.diff(param1,this.state.position).cross(param2));
       }
       
       public function addWorldForceScaled(param1:Vector3, param2:Vector3, param3:Number) : void
@@ -259,7 +259,7 @@ package alternativa.physics
          this.res.x += _loc4_;
          this.res.y += _loc5_;
          this.res.z += _loc6_;
-         var _loc7_:Vector3 = this.kejo.position;
+         var _loc7_:Vector3 = this.state.position;
          var _loc8_:Number = param1.x - _loc7_.x;
          var _loc9_:Number = param1.y - _loc7_.y;
          var _loc10_:Number = param1.z - _loc7_.z;
@@ -308,7 +308,7 @@ package alternativa.physics
       {
          var _loc1_:int = 0;
          var _loc2_:CollisionShape = null;
-         this.kejo.bej.toMatrix3(this.jefe);
+         this.state.bej.toMatrix3(this.jefe);
          this.cobugihyh.copy(this.wofurys).append(this.jefe).prependTransposed(this.jefe);
          if(this.hebevy != null)
          {
@@ -317,7 +317,7 @@ package alternativa.physics
             while(_loc1_ < this.kizuvam)
             {
                _loc2_ = this.hebevy[_loc1_];
-               _loc2_.wet.setFromMatrix3(this.jefe,this.kejo.position);
+               _loc2_.wet.setFromMatrix3(this.jefe,this.state.position);
                if(_loc2_.koma != null)
                {
                   _loc2_.wet.prepend(_loc2_.koma);
@@ -331,62 +331,62 @@ package alternativa.physics
       
       public function saveState() : void
       {
-         this.gomocyl.copy(this.kejo);
+         this.gomocyl.copy(this.state);
       }
       
       public function restoreState() : void
       {
-         this.kejo.copy(this.gomocyl);
+         this.state.copy(this.gomocyl);
       }
       
       public function integrateVelocity(param1:Number) : void
       {
-         this.hoqu.copy(this.kejo.zerus);
+         this.hoqu.copy(this.state.zerus);
          if(this.cozo.z < this.jagy)
          {
             this.cozo.z = this.jagy;
          }
-         this.kejo.zerus.x += this.cozo.x * param1;
-         this.kejo.zerus.y += this.cozo.y * param1;
-         this.kejo.zerus.z += this.cozo.z * param1;
-         var _loc2_:Number = Math.abs(this.kejo.zerus.z);
+         this.state.zerus.x += this.cozo.x * param1;
+         this.state.zerus.y += this.cozo.y * param1;
+         this.state.zerus.z += this.cozo.z * param1;
+         var _loc2_:Number = Math.abs(this.state.zerus.z);
          if(_loc2_ > jukolaw)
          {
-            this.kejo.zerus.z *= jukolaw / _loc2_;
+            this.state.zerus.z *= jukolaw / _loc2_;
          }
-         this.kejo.fev.x += this.tetizid.x * param1;
-         this.kejo.fev.y += this.tetizid.y * param1;
-         this.kejo.fev.z += this.tetizid.z * param1;
-         this.kejo.zerus.x *= sul;
-         this.kejo.zerus.y *= sul;
-         this.kejo.zerus.z *= sul;
-         this.kejo.fev.x *= gywo;
-         this.kejo.fev.y *= gywo;
-         this.kejo.fev.z *= gywo;
-         if(this.kejo.fev.length() > 10)
+         this.state.fev.x += this.tetizid.x * param1;
+         this.state.fev.y += this.tetizid.y * param1;
+         this.state.fev.z += this.tetizid.z * param1;
+         this.state.zerus.x *= sul;
+         this.state.zerus.y *= sul;
+         this.state.zerus.z *= sul;
+         this.state.fev.x *= gywo;
+         this.state.fev.y *= gywo;
+         this.state.fev.z *= gywo;
+         if(this.state.fev.length() > 10)
          {
-            this.kejo.fev.setLength(10);
+            this.state.fev.setLength(10);
          }
-         if(this.kejo.zerus.z - this.hoqu.z > this.qas)
+         if(this.state.zerus.z - this.hoqu.z > this.qas)
          {
-            this.kejo.zerus.z = this.hoqu.z + this.qas;
+            this.state.zerus.z = this.hoqu.z + this.qas;
          }
       }
       
       public function integratePosition(param1:Number) : void
       {
-         this.kejo.position.x += this.kejo.zerus.x * param1;
-         this.kejo.position.y += this.kejo.zerus.y * param1;
-         this.kejo.position.z += this.kejo.zerus.z * param1;
-         this.kejo.bej.addScaledVector(this.kejo.fev,param1);
+         this.state.position.x += this.state.zerus.x * param1;
+         this.state.position.y += this.state.zerus.y * param1;
+         this.state.position.z += this.state.zerus.z * param1;
+         this.state.bej.addScaledVector(this.state.fev,param1);
       }
       
       public function integratePseudoVelocity(param1:Number) : void
       {
-         this.kejo.position.x += this.jalekiwaf.x * param1;
-         this.kejo.position.y += this.jalekiwaf.y * param1;
-         this.kejo.position.z += this.jalekiwaf.z * param1;
-         this.kejo.bej.addScaledVector(this.bupu,param1);
+         this.state.position.x += this.jalekiwaf.x * param1;
+         this.state.position.y += this.jalekiwaf.y * param1;
+         this.state.position.z += this.jalekiwaf.z * param1;
+         this.state.bej.addScaledVector(this.bupu,param1);
          this.jalekiwaf.reset();
          this.bupu.reset();
       }

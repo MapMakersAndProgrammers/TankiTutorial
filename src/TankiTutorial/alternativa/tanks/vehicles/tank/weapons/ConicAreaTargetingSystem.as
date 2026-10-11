@@ -23,7 +23,7 @@ package alternativa.tanks.vehicles.tank.weapons
       
       private var zogefyv:int;
       
-      private var kymaqos:CollisionDetector;
+      private var collisionDetector:CollisionDetector;
       
       private var dugojame:ConicAreaTargetValidator;
       
@@ -50,7 +50,7 @@ package alternativa.tanks.vehicles.tank.weapons
          this.lomusipu = 0.5 * param2;
          this.wavi = param3;
          this.zogefyv = param4;
-         this.kymaqos = param5;
+         this.collisionDetector = param5;
          this.dugojame = param6;
       }
       
@@ -62,7 +62,7 @@ package alternativa.tanks.vehicles.tank.weapons
          this.pezacu = new Dictionary();
          var _loc9_:Number = param3 * param2;
          var _loc10_:Number = param2 - _loc9_;
-         if(this.kymaqos.raycast(param4,param5,sowe,param2,this.woz,this.wonuhig) && this.wonuhig.vetudozi.body == null)
+         if(this.collisionDetector.raycast(param4,param5,sowe,param2,this.woz,this.wonuhig) && this.wonuhig.vetudozi.body == null)
          {
             return;
          }
@@ -121,7 +121,7 @@ package alternativa.tanks.vehicles.tank.weapons
          var _loc4_:Number = 0;
          while(param3 > 0.1)
          {
-            if(!this.kymaqos.raycast(vyhomopog,param2,sowe,param3,this.woz,this.wonuhig))
+            if(!this.collisionDetector.raycast(vyhomopog,param2,sowe,param3,this.woz,this.wonuhig))
             {
                break;
             }

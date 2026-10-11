@@ -26,13 +26,13 @@ package alternativa.physics
       
       public const tem:Vector3 = new Vector3(0,0,-9.8);
       
-      public var kymaqos:CollisionDetector;
+      public var collisionDetector:CollisionDetector;
       
       public var cemyda:Vector.<Body> = new Vector.<Body>();
       
       public var lubyp:int;
       
-      public var lecopojen:int;
+      public var time:int;
       
       public var favobyfum:Number;
       
@@ -48,7 +48,7 @@ package alternativa.physics
       
       public function addBody(param1:Body) : void
       {
-         param1.tuce = this;
+         param1.scene = this;
          param1.wucejydy = this.cemyda.length;
          this.cemyda.push(param1);
       }
@@ -65,14 +65,14 @@ package alternativa.physics
             this.cemyda[_loc2_] = _loc4_;
             _loc4_.wucejydy = _loc2_;
             this.cemyda.length = _loc3_;
-            param1.tuce = null;
+            param1.scene = null;
          }
       }
       
       public function update(param1:int) : void
       {
          ++this.lubyp;
-         this.lecopojen += param1;
+         this.time += param1;
          this.favobyfum = param1 / 1000;
          this.applyForces();
          this.detectCollisions();
@@ -109,7 +109,7 @@ package alternativa.physics
       private function detectCollisions() : void
       {
          this.calculateBodiesDerivedData();
-         this.kymaqos.getBodyContacts(this.hikocos);
+         this.collisionDetector.getBodyContacts(this.hikocos);
       }
       
       private function calculateBodiesDerivedData() : void
@@ -225,7 +225,7 @@ package alternativa.physics
             _loc3_.calcDerivedData();
             if(_loc3_.reze && !_loc3_.vowymov)
             {
-               _loc4_ = _loc3_.kejo;
+               _loc4_ = _loc3_.state;
                if(_loc4_.zerus.length() < this.zol && _loc4_.fev.length() < this.davemapo)
                {
                   ++_loc3_.qiryk;

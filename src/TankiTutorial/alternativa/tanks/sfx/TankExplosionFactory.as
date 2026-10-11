@@ -49,11 +49,11 @@ package alternativa.tanks.sfx
       
       private static const wova:Number = 1;
       
-      private static const hobuna:EffectsManager = GameData.hobuna;
+      private static const effects:EffectsManager = GameData.effects;
       
-      private static const gov:TanksPhysicsScene = GameData.gov;
+      private static const physicsScene:TanksPhysicsScene = GameData.physicsScene;
       
-      private static const murow:ObjectPool = GameData.murow;
+      private static const objectPool:ObjectPool = GameData.objectPool;
       
       private static const bec:Vector3 = new Vector3(0,0,-1);
       
@@ -94,8 +94,8 @@ package alternativa.tanks.sfx
             pawimog = Assets.getData("tank_explosion/shockwave",TextureAnimation);
          }
          var _loc3_:Number = 500;
-         position.copy(param1.hogys.body.kejo.position);
-         var _loc4_:CollisionDetector = gov.kymaqos;
+         position.copy(param1.hogys.body.state.position);
+         var _loc4_:CollisionDetector = physicsScene.collisionDetector;
          if(_loc4_.raycastStatic(position,bec,255,_loc3_,null,wonuhig))
          {
             wonuhig.position.z += 10;
@@ -113,9 +113,9 @@ package alternativa.tanks.sfx
             zekos.normalize();
             gijalatyt.fromAxisAngle(zekos,_loc8_);
             gijalatyt.getEulerAngles(fyqynyfy);
-            _loc9_ = AnimatedPlaneEffect(murow.getObject(AnimatedPlaneEffect));
+            _loc9_ = AnimatedPlaneEffect(objectPool.getObject(AnimatedPlaneEffect));
             _loc9_.init(param2 * _loc5_,wonuhig.position,fyqynyfy,pawimog.fps,pawimog,wova);
-            hobuna.addEffect(_loc9_);
+            effects.addEffect(_loc9_);
          }
       }
       
@@ -126,12 +126,12 @@ package alternativa.tanks.sfx
             bucof = Assets.getData("tank_explosion/explosion",TextureAnimation);
          }
          position.z += 50;
-         var _loc2_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(murow.getObject(StaticObject3DPositionProvider));
+         var _loc2_:StaticObject3DPositionProvider = StaticObject3DPositionProvider(objectPool.getObject(StaticObject3DPositionProvider));
          _loc2_.init(position,gubeneb);
-         var _loc3_:AnimatedSpriteEffect = AnimatedSpriteEffect(murow.getObject(AnimatedSpriteEffect));
+         var _loc3_:AnimatedSpriteEffect = AnimatedSpriteEffect(objectPool.getObject(AnimatedSpriteEffect));
          var _loc4_:Number = tilubizy * param1;
          _loc3_.init(_loc4_,_loc4_,bucof,Math.random() * 2 * Math.PI,bucof.fps,_loc2_);
-         hobuna.addEffect(_loc3_);
+         effects.addEffect(_loc3_);
       }
       
       private static function createExplosionSmoke(param1:Number) : void
@@ -151,12 +151,12 @@ package alternativa.tanks.sfx
             zerus.x = _loc3_ * (1 - 2 * Math.random());
             zerus.y = _loc3_ * (1 - 2 * Math.random());
             zerus.z = _loc3_ * 0.5 * (1 + Math.random());
-            _loc4_ = MovingObject3DPositionProvider(murow.getObject(MovingObject3DPositionProvider));
+            _loc4_ = MovingObject3DPositionProvider(objectPool.getObject(MovingObject3DPositionProvider));
             _loc4_.init(position,zerus,nidowyje);
-            _loc5_ = AnimatedSpriteEffect(murow.getObject(AnimatedSpriteEffect));
+            _loc5_ = AnimatedSpriteEffect(objectPool.getObject(AnimatedSpriteEffect));
             _loc6_ = mudova * param1;
             _loc5_.init(_loc6_,_loc6_,gutipur,Math.random() * 2 * Math.PI,gutipur.fps,_loc4_);
-            hobuna.addEffect(_loc5_);
+            effects.addEffect(_loc5_);
             _loc2_++;
          }
       }

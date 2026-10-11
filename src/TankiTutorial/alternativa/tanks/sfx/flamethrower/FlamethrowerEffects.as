@@ -26,11 +26,11 @@ package alternativa.tanks.sfx.flamethrower
       
       private static const buku:int = 300;
       
-      private var murow:ObjectPool = GameData.murow;
+      private var objectPool:ObjectPool = GameData.objectPool;
       
-      private var hobuna:EffectsManager = GameData.hobuna;
+      private var effects:EffectsManager = GameData.effects;
       
-      private var bijatil:ISoundManager = GameData.bijatil;
+      private var soundManager:ISoundManager = GameData.soundManager;
       
       private var range:Number;
       
@@ -62,28 +62,28 @@ package alternativa.tanks.sfx.flamethrower
          var _loc7_:StreamWeaponParticlesPositionProvider = null;
          if(this.kologak == null)
          {
-            this.kologak = StreamWeaponGraphicEffect(this.murow.getObject(StreamWeaponGraphicEffect));
-            this.kologak.init(param1,this.range,this.mopojuk,FlamethrowerEffectsParams.zesim,param2,param3,this.dymojes,GameData.gov.kymaqos,FlamethrowerEffectsParams.qezizyj,FlamethrowerEffectsParams.kykihyf,FlamethrowerEffectsParams.vip,FlamethrowerEffectsParams.colarac,FlamethrowerEffectsParams.coteci,FlamethrowerEffectsParams.tasimep);
-            this.hobuna.addEffect(this.kologak);
+            this.kologak = StreamWeaponGraphicEffect(this.objectPool.getObject(StreamWeaponGraphicEffect));
+            this.kologak.init(param1,this.range,this.mopojuk,FlamethrowerEffectsParams.zesim,param2,param3,this.dymojes,GameData.physicsScene.collisionDetector,FlamethrowerEffectsParams.qezizyj,FlamethrowerEffectsParams.kykihyf,FlamethrowerEffectsParams.vip,FlamethrowerEffectsParams.colarac,FlamethrowerEffectsParams.coteci,FlamethrowerEffectsParams.tasimep);
+            this.effects.addEffect(this.kologak);
             _loc4_ = Sound3D.create(this.dymojes.mutovudi,SoundOptions.suwyc,SoundOptions.bapewa,SoundOptions.fyvilyv,FlamethrowerEffectsParams.jelymy);
             if(_loc4_ != null)
             {
-               this.tyzysala = MobileSound3DEffect(this.murow.getObject(MobileSound3DEffect));
+               this.tyzysala = MobileSound3DEffect(this.objectPool.getObject(MobileSound3DEffect));
                this.tyzysala.init(_loc4_,param3,0,2);
-               this.bijatil.addEffect(this.tyzysala);
+               this.soundManager.addEffect(this.tyzysala);
             }
-            this.gagez = OmniStreamLightEffect(this.murow.getObject(OmniStreamLightEffect));
-            _loc5_ = MuzzlePositionProvider(this.murow.getObject(MuzzlePositionProvider));
+            this.gagez = OmniStreamLightEffect(this.objectPool.getObject(OmniStreamLightEffect));
+            _loc5_ = MuzzlePositionProvider(this.objectPool.getObject(MuzzlePositionProvider));
             _loc5_.init(param3,param2,0);
             this.gagez.init(_loc5_,this.dymojes.puvulo,this.dymojes.div);
-            this.hobuna.addEffect(this.gagez);
-            this.veliqe = OmniStreamLightEffect(this.murow.getObject(OmniStreamLightEffect));
-            _loc6_ = CollisionObject3DPositionProvider(this.murow.getObject(CollisionObject3DPositionProvider));
-            _loc6_.init(param3,param2,GameData.gov.kymaqos,FlamethrowerEffectsParams.zowoma);
-            _loc7_ = StreamWeaponParticlesPositionProvider(this.murow.getObject(StreamWeaponParticlesPositionProvider));
+            this.effects.addEffect(this.gagez);
+            this.veliqe = OmniStreamLightEffect(this.objectPool.getObject(OmniStreamLightEffect));
+            _loc6_ = CollisionObject3DPositionProvider(this.objectPool.getObject(CollisionObject3DPositionProvider));
+            _loc6_.init(param3,param2,GameData.physicsScene.collisionDetector,FlamethrowerEffectsParams.zowoma);
+            _loc7_ = StreamWeaponParticlesPositionProvider(this.objectPool.getObject(StreamWeaponParticlesPositionProvider));
             _loc7_.init(this.kologak,_loc6_);
             this.veliqe.init(_loc7_,this.dymojes.jebiq,this.dymojes.defuhusyq);
-            this.hobuna.addEffect(this.veliqe);
+            this.effects.addEffect(this.veliqe);
          }
       }
       

@@ -29,7 +29,7 @@ package alternativa.tanks.sfx
       
       private var fat:Boolean;
       
-      private var lecopojen:int;
+      private var time:int;
       
       private var koc:Number;
       
@@ -49,7 +49,7 @@ package alternativa.tanks.sfx
          this.fat = false;
          this.letere = false;
          this.dalipaz = false;
-         this.lecopojen = 0;
+         this.time = 0;
          if(param1 != null)
          {
             this.koc = param1.volume;
@@ -61,9 +61,9 @@ package alternativa.tanks.sfx
       {
          if(!this.letere)
          {
-            if(this.lecopojen < this.visadawa)
+            if(this.time < this.visadawa)
             {
-               this.lecopojen += param1;
+               this.time += param1;
                return;
             }
             this.letere = true;

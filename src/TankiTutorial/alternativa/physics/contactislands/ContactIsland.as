@@ -21,7 +21,7 @@ package alternativa.physics.contactislands
       
       public const hikocos:Vector.<BodyContact> = new Vector.<BodyContact>();
       
-      private var gov:PhysicsScene;
+      private var physicsScene:PhysicsScene;
       
       private const recegalu:Vector.<ShapeContact> = new Vector.<ShapeContact>();
       
@@ -54,7 +54,7 @@ package alternativa.physics.contactislands
       
       public function dispose() : void
       {
-         this.gov = null;
+         this.physicsScene = null;
          this.hikocos.length = 0;
          this.recegalu.length = 0;
          this.kuto.length = 0;
@@ -71,7 +71,7 @@ package alternativa.physics.contactislands
          var _loc6_:Vector.<ShapeContact> = null;
          var _loc7_:int = 0;
          var _loc8_:int = 0;
-         this.gov = param1;
+         this.physicsScene = param1;
          var _loc2_:int = int(this.hikocos.length);
          var _loc3_:Vector.<ShapeContact> = this.recegalu;
          var _loc4_:int = 0;
@@ -148,7 +148,7 @@ package alternativa.physics.contactislands
                while(_loc4_ < _loc3_)
                {
                   _loc5_ = this.kuto[_loc4_];
-                  _loc5_.calcualteDynamicFrameData(this.gov.gyge,this.gov.dikaruly,this.gov.finybyle,this.gov.favobyfum);
+                  _loc5_.calcualteDynamicFrameData(this.physicsScene.gyge,this.physicsScene.dikaruly,this.physicsScene.finybyle,this.physicsScene.favobyfum);
                   _loc4_++;
                }
                this.resolveContactsForLevel(param1,this.kuto);
@@ -348,21 +348,21 @@ package alternativa.physics.contactislands
       private function calculateRelativeVelocity(param1:ShapeContact, param2:Vector3) : void
       {
          var _loc4_:Vector3 = null;
-         var _loc3_:Vector3 = param1.ciqymaciv.body.kejo.fev;
+         var _loc3_:Vector3 = param1.ciqymaciv.body.state.fev;
          _loc4_ = param1.divute;
          var _loc5_:Number = _loc3_.y * _loc4_.z - _loc3_.z * _loc4_.y;
          var _loc6_:Number = _loc3_.z * _loc4_.x - _loc3_.x * _loc4_.z;
          var _loc7_:Number = _loc3_.x * _loc4_.y - _loc3_.y * _loc4_.x;
-         _loc4_ = param1.ciqymaciv.body.kejo.zerus;
+         _loc4_ = param1.ciqymaciv.body.state.zerus;
          param2.x = _loc4_.x + _loc5_;
          param2.y = _loc4_.y + _loc6_;
          param2.z = _loc4_.z + _loc7_;
-         _loc3_ = param1.dizad.body.kejo.fev;
+         _loc3_ = param1.dizad.body.state.fev;
          _loc4_ = param1.bamod;
          _loc5_ = _loc3_.y * _loc4_.z - _loc3_.z * _loc4_.y;
          _loc6_ = _loc3_.z * _loc4_.x - _loc3_.x * _loc4_.z;
          _loc7_ = _loc3_.x * _loc4_.y - _loc3_.y * _loc4_.x;
-         _loc4_ = param1.dizad.body.kejo.zerus;
+         _loc4_ = param1.dizad.body.state.zerus;
          param2.x -= _loc4_.x + _loc5_;
          param2.y -= _loc4_.y + _loc6_;
          param2.z -= _loc4_.z + _loc7_;

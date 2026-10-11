@@ -30,20 +30,20 @@ package alternativa.tanks.vehicles.tank.weapons.twins
       
       private var nubedut:int;
       
-      private var kymaqos:CollisionDetector = GameData.kymaqos;
+      private var collisionDetector:CollisionDetector = GameData.collisionDetector;
       
-      private var murow:ObjectPool = GameData.murow;
+      private var objectPool:ObjectPool = GameData.objectPool;
       
       private var syli:WeaponSettings;
       
-      private var hobuna:PlasmaEffects;
+      private var effects:PlasmaEffects;
       
       public function PlasmaWeapon(param1:WeaponSettings, param2:CommonTargetingSystem, param3:PlasmaEffects, param4:int)
       {
          super("Plasma");
          this.syli = param1;
          this.namekazaf = param2;
-         this.hobuna = param3;
+         this.effects = param3;
          this.kafe = param4;
       }
       
@@ -66,7 +66,7 @@ package alternativa.tanks.vehicles.tank.weapons.twins
          var _loc1_:TurretData = getData();
          var _loc2_:Tank = getTank();
          _loc1_.update(_loc2_,0);
-         if(this.namekazaf.getTarget(_loc1_.fybumu,_loc1_.ruda,_loc1_.zequsir,_loc2_.hogys.body,10000000000,vimub))
+         if(this.namekazaf.getTarget(_loc1_.fybumu,_loc1_.direction,_loc1_.zequsir,_loc2_.hogys.body,10000000000,vimub))
          {
             if(vimub.body != null)
             {
@@ -84,21 +84,21 @@ package alternativa.tanks.vehicles.tank.weapons.twins
          var _loc3_:Vector3 = _loc1_.firaqe.jun[this.nubedut];
          var _loc4_:TurretData = getData();
          _loc4_.update(_loc1_,this.nubedut);
-         _loc1_.hogys.body.addWorldForceScaled(_loc4_.symamume,_loc4_.ruda,-this.syli.pocobyr);
-         this.hobuna.createShotEffects(_loc2_,_loc1_.firaqe.jun[this.nubedut]);
-         if(this.barrelCollidesWithStatic(_loc4_.fybumu,_loc4_.ruda,_loc3_.y))
+         _loc1_.hogys.body.addWorldForceScaled(_loc4_.symamume,_loc4_.direction,-this.syli.pocobyr);
+         this.effects.createShotEffects(_loc2_,_loc1_.firaqe.jun[this.nubedut]);
+         if(this.barrelCollidesWithStatic(_loc4_.fybumu,_loc4_.direction,_loc3_.y))
          {
-            qumuvup.copy(_loc4_.ruda);
+            qumuvup.copy(_loc4_.direction);
          }
-         else if(this.namekazaf.getTarget(_loc4_.fybumu,_loc4_.ruda,_loc4_.zequsir,_loc1_.hogys.body,10000000000,vimub))
+         else if(this.namekazaf.getTarget(_loc4_.fybumu,_loc4_.direction,_loc4_.zequsir,_loc1_.hogys.body,10000000000,vimub))
          {
             qumuvup.diff(vimub.wimybu,_loc4_.symamume).normalize();
          }
          else
          {
-            qumuvup.copy(_loc4_.ruda);
+            qumuvup.copy(_loc4_.direction);
          }
-         var _loc5_:PlasmaShot = PlasmaShot(this.murow.getObject(PlasmaShot));
+         var _loc5_:PlasmaShot = PlasmaShot(this.objectPool.getObject(PlasmaShot));
          _loc5_.init(this.syli.myd,this.syli.beryfitu * kuqy);
          _loc5_.addToGame(_loc4_.fybumu,_loc4_.symamume,qumuvup,_loc1_.hogys.body);
          this.nubedut = (this.nubedut + 1) % this.kafe;
@@ -106,7 +106,7 @@ package alternativa.tanks.vehicles.tank.weapons.twins
       
       private function barrelCollidesWithStatic(param1:Vector3, param2:Vector3, param3:Number) : Boolean
       {
-         return this.kymaqos.raycastStatic(param1,param2,CollisionGroup.neli,param3,null,wonuhig);
+         return this.collisionDetector.raycastStatic(param1,param2,CollisionGroup.neli,param3,null,wonuhig);
       }
    }
 }

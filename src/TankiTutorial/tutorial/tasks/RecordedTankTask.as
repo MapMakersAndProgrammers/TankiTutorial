@@ -10,47 +10,47 @@ package tutorial.tasks
    public class RecordedTankTask extends CommonEnemyTask
    {
       
-      private var jireky:Vector.<uint>;
+      private var record:Vector.<uint>;
       
-      private var pas:int;
+      private var actionIndex:int;
       
-      private var tatobuku:Boolean;
+      private var started:Boolean;
       
-      public function RecordedTankTask(param1:String, param2:String, param3:String, param4:Vector3, param5:Quaternion, param6:Vector.<uint>, param7:Number = 0, param8:Number = 1, param9:Function = null, param10:uint = 3000)
+      public function RecordedTankTask(hull:String, turret:String, color:String, position:Vector3, orientation:Quaternion, record:Vector.<uint>, health:Number = 0, damageMultiplier:Number = 1, callback:Function = null, shootDelay:uint = 3000)
       {
-         super(param1,param2,param3,param4,param5,param7,param8,param9,param10);
-         this.jireky = param6;
-         this.tatobuku = false;
+         super(hull,turret,color,position,orientation,health,damageMultiplier,callback,shootDelay);
+         this.record = record;
+         this.started = false;
       }
       
       override protected function onExecute() : void
       {
-         if(!this.tatobuku)
+         if(!this.started)
          {
             this.nextAction();
-            this.tatobuku = true;
+            this.started = true;
          }
       }
       
       private function nextAction() : void
       {
-         var _loc1_:uint = 0;
-         if(this.pas < this.jireky.length)
+         var delay:uint = 0;
+         if(this.actionIndex < this.record.length)
          {
-            _loc1_ = this.jireky[int(this.pas + 1)];
-            setTimeout(this.executeAction,_loc1_);
+            delay = this.record[int(this.actionIndex + 1)];
+            setTimeout(this.executeAction,delay);
          }
-         else if(kejo < hukozi)
+         else if(state < STATE_DEAD)
          {
-            kejo = cenebah;
+            state = STATE_IDLE;
          }
       }
       
       private function executeAction() : void
       {
-         var _loc1_:TimeData = GameData.lecopojen;
-         CommonTankController(controller).setAction(this.jireky[this.pas] | tryShoot(_loc1_.lecopojen));
-         this.pas += 2;
+         var timeData:TimeData = GameData.time;
+         CommonTankController(controller).setAction(this.record[this.actionIndex] | tryShoot(timeData.time));
+         this.actionIndex += 2;
          this.nextAction();
       }
    }

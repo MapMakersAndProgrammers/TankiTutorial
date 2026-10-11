@@ -18,7 +18,7 @@ package alternativa.tanks.bonuses
       
       private var pyp:CollisionBox;
       
-      private var zepymy:BattleRunner;
+      private var battleRunner:BattleRunner;
       
       public function BonusTrigger(param1:BattleBonus)
       {
@@ -30,19 +30,19 @@ package alternativa.tanks.bonuses
       
       public function enable(param1:BattleRunner) : void
       {
-         if(this.zepymy == null)
+         if(this.battleRunner == null)
          {
-            this.zepymy = param1;
+            this.battleRunner = param1;
             param1.addTrigger(this);
          }
       }
       
       public function disable() : void
       {
-         if(this.zepymy != null)
+         if(this.battleRunner != null)
          {
-            this.zepymy.removeTrigger(this);
-            this.zepymy = null;
+            this.battleRunner.removeTrigger(this);
+            this.battleRunner = null;
          }
       }
       
@@ -67,7 +67,7 @@ package alternativa.tanks.bonuses
          while(_loc2_ < param1.kizuvam)
          {
             _loc3_ = param1.hebevy[_loc2_];
-            if(this.zepymy.getCollisionDetector().testCollision(_loc3_,this.pyp))
+            if(this.battleRunner.getCollisionDetector().testCollision(_loc3_,this.pyp))
             {
                this.nasybugo.onTriggerActivated();
                return;

@@ -5,7 +5,7 @@ package alternativa.tanks
    public class RenderGroup
    {
       
-      private var jypadif:Vector.<Renderer> = new Vector.<Renderer>();
+      private var renderers:Vector.<Renderer> = new Vector.<Renderer>();
       
       private var jiso:int;
       
@@ -16,19 +16,19 @@ package alternativa.tanks
       
       public function addRenderer(param1:Renderer) : void
       {
-         if(this.jypadif.indexOf(param1) < 0)
+         if(this.renderers.indexOf(param1) < 0)
          {
-            this.jypadif[this.jiso++] = param1;
+            this.renderers[this.jiso++] = param1;
          }
       }
       
       public function removeRenderer(param1:Renderer) : void
       {
-         var _loc2_:int = this.jypadif.indexOf(param1);
+         var _loc2_:int = this.renderers.indexOf(param1);
          if(_loc2_ >= 0)
          {
-            this.jypadif[_loc2_] = this.jypadif[--this.jiso];
-            this.jypadif[this.jiso] = null;
+            this.renderers[_loc2_] = this.renderers[--this.jiso];
+            this.renderers[this.jiso] = null;
          }
       }
       
@@ -37,7 +37,7 @@ package alternativa.tanks
          var _loc3_:int = 0;
          while(_loc3_ < this.jiso)
          {
-            Renderer(this.jypadif[_loc3_]).render(param1,param2);
+            Renderer(this.renderers[_loc3_]).render(param1,param2);
             _loc3_++;
          }
       }

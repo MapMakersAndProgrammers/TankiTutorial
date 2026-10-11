@@ -18,14 +18,14 @@ package tutorial.tasks
          GameData.stage.addEventListener(KeyboardEvent.KEY_DOWN,this.onKeyDown);
       }
       
-      private function onKeyDown(param1:KeyboardEvent) : void
+      private function onKeyDown(keyboardEvent:KeyboardEvent) : void
       {
-         if(param1.keyCode == Keyboard.DELETE)
+         if(keyboardEvent.keyCode == Keyboard.DELETE)
          {
             this.finished = true;
             GameData.stage.removeEventListener(KeyboardEvent.KEY_DOWN,this.onKeyDown);
-            GameData.hulaf.hideMovie();
-            GameData.hulaf.showMovie(Assets.getData("help",MovieClip),StageAlign.BOTTOM_RIGHT);
+            GameData.screenMovieClipManager.hideMovie();
+            GameData.screenMovieClipManager.showMovie(Assets.getData("help",MovieClip),StageAlign.BOTTOM_RIGHT);
          }
       }
       

@@ -177,7 +177,7 @@ package alternativa.tanks.sfx
       {
          if(this.reva != null && this.dalipaz)
          {
-            neza.copy(this.reva.hogys.body.kejo.position);
+            neza.copy(this.reva.hogys.body.state.position);
             if(this.lusik)
             {
                this.fezi.update(param1,param2.position,neza,param2.memyjenut);
@@ -212,7 +212,7 @@ package alternativa.tanks.sfx
       
       public function readPosition(param1:Vector3) : void
       {
-         param1.copy(this.reva.hogys.body.kejo.position);
+         param1.copy(this.reva.hogys.body.state.position);
       }
       
       public function set enabled(param1:Boolean) : void

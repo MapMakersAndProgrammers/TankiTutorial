@@ -26,13 +26,13 @@ package tutorial.commons
          super();
       }
       
-      public static function load(param1:Function, param2:Function = null, param3:Function = null, param4:BulkLoader = null) : void
+      public static function load(completeListener:Function, progressListener:Function = null, afterCompleteListener:Function = null, bulkLoader:BulkLoader = null) : void
       {
-         InitialDataLoader.completeListener = param1;
-         InitialDataLoader.progressListener = param2;
-         InitialDataLoader.afterCompleteListener = param3;
-         loader = param4;
-         if(param4 == null)
+         InitialDataLoader.completeListener = completeListener;
+         InitialDataLoader.progressListener = progressListener;
+         InitialDataLoader.afterCompleteListener = afterCompleteListener;
+         loader = bulkLoader;
+         if(bulkLoader == null)
          {
             loader = new BulkLoader();
          }
@@ -140,39 +140,39 @@ package tutorial.commons
          bmpURLs.push("resources/map/library2/landscape/low/grass3_3_3.jpg");
          bmpURLs.push("resources/map/library2/landscape/low/concrete_3.jpg");
          bmpURLs.push("resources/map/library2/landscape/low/bridge_1.jpg");
-         var _loc5_:LoaderContext = new LoaderContext();
-         var _loc6_:int = 0;
-         while(_loc6_ < bmpURLs.length)
+         var context:LoaderContext = new LoaderContext();
+         var i:int = 0;
+         while(i < bmpURLs.length)
          {
-            loader.add(bmpURLs[_loc6_],{
-               "id":_loc6_,
-               "context":_loc5_
+            loader.add(bmpURLs[i],{
+               "id":i,
+               "context":context
             });
-            _loc6_++;
+            i++;
          }
          loader.start();
       }
       
-      private static function onLoadingProgress(param1:BulkProgressEvent) : void
+      private static function onLoadingProgress(bulkProgressEvent:BulkProgressEvent) : void
       {
-         progressListener(param1.ratioLoaded);
+         progressListener(bulkProgressEvent.ratioLoaded);
       }
       
-      private static function onAllItemsLoaded(param1:BulkProgressEvent) : void
+      private static function onAllItemsLoaded(bulkProgressEvent:BulkProgressEvent) : void
       {
-         var _loc3_:BitmapData = null;
+         var bitmapData:BitmapData = null;
          loader.removeEventListener(BulkLoader.PROGRESS,onLoadingProgress);
          loader.removeEventListener(BulkLoader.COMPLETE,onAllItemsLoaded);
-         var _loc2_:int = 0;
-         while(_loc2_ < bmpURLs.length)
+         var i:int = 0;
+         while(i < bmpURLs.length)
          {
-            _loc3_ = loader.getBitmapData(_loc2_);
-            Assets.saveData(bmpURLs[_loc2_],_loc3_,BitmapData);
-            if(bmpURLs[_loc2_].indexOf("skybox/") < 0)
+            bitmapData = loader.getBitmapData(i);
+            Assets.saveData(bmpURLs[i],bitmapData,BitmapData);
+            if(bmpURLs[i].indexOf("skybox/") < 0)
             {
-               textures[_loc3_] = true;
+               textures[bitmapData] = true;
             }
-            _loc2_++;
+            i++;
          }
          Assets.initialDataIsSaved = true;
          completeListener();

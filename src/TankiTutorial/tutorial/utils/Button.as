@@ -9,37 +9,37 @@ package tutorial.utils
    public class Button extends Sprite
    {
       
-      private var lefugefo:DisplayObject;
+      private var normal:DisplayObject;
       
-      private var sac:DisplayObject;
+      private var over:DisplayObject;
       
-      private var fiki:DisplayObject;
+      private var down:DisplayObject;
       
-      private var zewucadiz:DisplayObject;
+      private var current:DisplayObject;
       
-      private var komopin:TextField;
+      private var textField:TextField;
       
-      private var kejocebil:Number;
+      private var textY:Number;
       
-      public function Button(param1:Form, param2:Form, param3:Form, param4:String)
+      public function Button(normal:Form, over:Form, down:Form, label:String)
       {
          super();
          buttonMode = true;
          useHandCursor = true;
          mouseChildren = false;
          tabEnabled = false;
-         this.lefugefo = addChild(param1);
-         this.sac = addChild(param2);
-         this.fiki = addChild(param3);
-         param2.visible = false;
-         param3.visible = false;
-         if(param4 != null)
+         this.normal = addChild(normal);
+         this.over = addChild(over);
+         this.down = addChild(down);
+         over.visible = false;
+         down.visible = false;
+         if(label != null)
          {
-            this.komopin = Text.getTextField(param4,22,param1.width,"center");
-            this.komopin.filters = [new DropShadowFilter(1,45,0,1,1,1,1.5)];
-            addChild(this.komopin);
-            this.komopin.y = (param1.height - this.komopin.textHeight) * 0.5 - 4;
-            this.kejocebil = this.komopin.y;
+            this.textField = Text.getTextField(label,22,normal.width,"center");
+            this.textField.filters = [new DropShadowFilter(1,45,0,1,1,1,1.5)];
+            addChild(this.textField);
+            this.textField.y = (normal.height - this.textField.textHeight) * 0.5 - 4;
+            this.textY = this.textField.y;
          }
          addEventListener(MouseEvent.MOUSE_OVER,this.onOver);
          addEventListener(MouseEvent.MOUSE_OUT,this.onOut);
@@ -47,43 +47,43 @@ package tutorial.utils
          addEventListener(MouseEvent.MOUSE_UP,this.onUp);
       }
       
-      private function onUp(param1:MouseEvent) : void
+      private function onUp(mouseEvent:MouseEvent) : void
       {
-         this.zewucadiz.visible = true;
-         this.fiki.visible = false;
-         if(this.komopin != null)
+         this.current.visible = true;
+         this.down.visible = false;
+         if(this.textField != null)
          {
-            this.komopin.y = this.kejocebil;
+            this.textField.y = this.textY;
          }
       }
       
-      private function onDown(param1:MouseEvent) : void
+      private function onDown(mouseEvent:MouseEvent) : void
       {
-         this.zewucadiz.visible = false;
-         this.fiki.visible = true;
-         if(this.komopin != null)
+         this.current.visible = false;
+         this.down.visible = true;
+         if(this.textField != null)
          {
-            this.komopin.y = this.kejocebil + 1;
+            this.textField.y = this.textY + 1;
          }
       }
       
-      private function onOver(param1:MouseEvent) : void
+      private function onOver(mouseEvent:MouseEvent) : void
       {
-         this.lefugefo.visible = false;
-         this.sac.visible = true;
-         this.zewucadiz = this.sac;
+         this.normal.visible = false;
+         this.over.visible = true;
+         this.current = this.over;
       }
       
-      private function onOut(param1:MouseEvent) : void
+      private function onOut(mouseEvent:MouseEvent) : void
       {
-         this.lefugefo.visible = true;
-         this.sac.visible = false;
-         this.fiki.visible = false;
-         if(this.komopin != null)
+         this.normal.visible = true;
+         this.over.visible = false;
+         this.down.visible = false;
+         if(this.textField != null)
          {
-            this.komopin.y = this.kejocebil;
+            this.textField.y = this.textY;
          }
-         this.zewucadiz = this.lefugefo;
+         this.current = this.normal;
       }
    }
 }

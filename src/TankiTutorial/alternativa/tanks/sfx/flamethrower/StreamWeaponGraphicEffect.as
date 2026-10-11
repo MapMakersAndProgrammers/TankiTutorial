@@ -36,7 +36,7 @@ package alternativa.tanks.sfx.flamethrower
       
       private static const fybumu:Vector3 = new Vector3();
       
-      private static const ruda:Vector3 = new Vector3();
+      private static const direction:Vector3 = new Vector3();
       
       private static const rygapyv:Vector3 = new Vector3();
       
@@ -58,7 +58,7 @@ package alternativa.tanks.sfx.flamethrower
       
       private var dymojes:StreamWeaponSFXData;
       
-      private var kymaqos:CollisionDetector;
+      private var collisionDetector:CollisionDetector;
       
       private var kygipiz:Vector.<StreamWeaponParticle> = new Vector.<StreamWeaponParticle>(migeru);
       
@@ -66,13 +66,13 @@ package alternativa.tanks.sfx.flamethrower
       
       private var qyz:Number;
       
-      private var lecopojen:int;
+      private var time:int;
       
       private var bumypaz:int;
       
       private var gutebovu:int;
       
-      private var danewazam:Object3DContainer;
+      private var container:Object3DContainer;
       
       private var huzoqeq:Boolean;
       
@@ -103,7 +103,7 @@ package alternativa.tanks.sfx.flamethrower
          this.toqumyc.copy(param5);
          this.firaqe = param6;
          this.dymojes = param7;
-         this.kymaqos = param8;
+         this.collisionDetector = param8;
          this.molehyzuv = param11;
          this.binijosom = param12;
          this.nel = param13;
@@ -113,7 +113,7 @@ package alternativa.tanks.sfx.flamethrower
          this.jadeqy = 2 * (param12 - param11) / param2;
          this.qyz = 1000 * param2 / (migeru * param4);
          this.gutebovu = 0;
-         this.lecopojen = this.bumypaz = getTimer();
+         this.time = this.bumypaz = getTimer();
          this.initMuzzlePlane(param7);
          this.huzoqeq = false;
       }
@@ -151,11 +151,11 @@ package alternativa.tanks.sfx.flamethrower
          }
          this.fyqih.removeFromParent();
          this.fyqih.clear();
-         this.danewazam = null;
+         this.container = null;
          this.taramuty = null;
          this.firaqe = null;
          this.dymojes = null;
-         this.kymaqos = null;
+         this.collisionDetector = null;
          recycle();
       }
       
@@ -167,7 +167,7 @@ package alternativa.tanks.sfx.flamethrower
          var _loc7_:Number = NaN;
          this.calculateParameters();
          _loc3_ = param1 / 1000;
-         if(this.kymaqos.raycastStatic(fybumu,ruda,CollisionGroup.neli,this.toqumyc.y + this.fyqih.length,null,tefydiw))
+         if(this.collisionDetector.raycastStatic(fybumu,direction,CollisionGroup.neli,this.toqumyc.y + this.fyqih.length,null,tefydiw))
          {
             this.fyqih.visible = false;
          }
@@ -175,9 +175,9 @@ package alternativa.tanks.sfx.flamethrower
          {
             this.fyqih.visible = true;
             this.fyqih.update(_loc3_,this.dymojes.tazequd.fps);
-            SFXUtils.alignObjectPlaneToView(this.fyqih,rinego,ruda,param2.position);
+            SFXUtils.alignObjectPlaneToView(this.fyqih,rinego,direction,param2.position);
          }
-         if(!this.huzoqeq && this.gutebovu < migeru && this.lecopojen >= this.bumypaz)
+         if(!this.huzoqeq && this.gutebovu < migeru && this.time >= this.bumypaz)
          {
             this.bumypaz += this.qyz;
             this.addParticle();
@@ -189,7 +189,7 @@ package alternativa.tanks.sfx.flamethrower
             dizecoca.x = _loc5_.x;
             dizecoca.y = _loc5_.y;
             dizecoca.z = _loc5_.z;
-            if(_loc5_.hyn > this.judawohof || Boolean(this.kymaqos.raycastStatic(dizecoca,_loc5_.zerus,CollisionGroup.WEAPON,_loc3_,null,tefydiw)))
+            if(_loc5_.hyn > this.judawohof || Boolean(this.collisionDetector.raycastStatic(dizecoca,_loc5_.zerus,CollisionGroup.WEAPON,_loc3_,null,tefydiw)))
             {
                this.removeParticle(_loc4_--);
             }
@@ -214,7 +214,7 @@ package alternativa.tanks.sfx.flamethrower
             }
             _loc4_++;
          }
-         this.lecopojen += param1;
+         this.time += param1;
          return !this.huzoqeq || this.gutebovu > 0;
       }
       
@@ -229,7 +229,7 @@ package alternativa.tanks.sfx.flamethrower
       
       public function addedToScene(param1:Object3DContainer) : void
       {
-         this.danewazam = param1;
+         this.container = param1;
          param1.addChild(this.fyqih);
       }
       
@@ -240,14 +240,14 @@ package alternativa.tanks.sfx.flamethrower
          rygapyv.x = bul.gusat;
          rygapyv.y = bul.sig;
          rygapyv.z = bul.vug;
-         ruda.x = bul.cydop;
-         ruda.y = bul.qanezycap;
-         ruda.z = bul.luwym;
+         direction.x = bul.cydop;
+         direction.y = bul.qanezycap;
+         direction.z = bul.luwym;
          bul.transformVector(this.toqumyc,rinego);
          _loc1_ = Number(this.toqumyc.y);
-         fybumu.x = rinego.x - _loc1_ * ruda.x;
-         fybumu.y = rinego.y - _loc1_ * ruda.y;
-         fybumu.z = rinego.z - _loc1_ * ruda.z;
+         fybumu.x = rinego.x - _loc1_ * direction.x;
+         fybumu.y = rinego.y - _loc1_ * direction.y;
+         fybumu.z = rinego.z - _loc1_ * direction.z;
       }
       
       private function addParticle() : void
@@ -261,18 +261,18 @@ package alternativa.tanks.sfx.flamethrower
          _loc2_.setAnimationData(this.dymojes.qywyr);
          _loc2_.rotation = Math.random() * Math.PI * 2;
          _loc2_.tyfu = Math.random() * _loc2_.getNumFrames();
-         this.getParticleFlightDirection(ruda);
-         _loc2_.zerus.x = this.niq * ruda.x;
-         _loc2_.zerus.y = this.niq * ruda.y;
-         _loc2_.zerus.z = this.niq * ruda.z;
-         _loc2_.zerus.add(this.taramuty.kejo.zerus);
+         this.getParticleFlightDirection(direction);
+         _loc2_.zerus.x = this.niq * direction.x;
+         _loc2_.zerus.y = this.niq * direction.y;
+         _loc2_.zerus.z = this.niq * direction.z;
+         _loc2_.zerus.add(this.taramuty.state.zerus);
          _loc2_.hyn = _loc1_;
-         _loc2_.x = rinego.x + _loc1_ * ruda.x;
-         _loc2_.y = rinego.y + _loc1_ * ruda.y;
-         _loc2_.z = rinego.z + _loc1_ * ruda.z;
+         _loc2_.x = rinego.x + _loc1_ * direction.x;
+         _loc2_.y = rinego.y + _loc1_ * direction.y;
+         _loc2_.z = rinego.z + _loc1_ * direction.z;
          _loc2_.huved = Math.random() < 0.5 ? 1 : -1;
          this.kygipiz[this.gutebovu++] = _loc2_;
-         this.danewazam.addChild(_loc2_);
+         this.container.addChild(_loc2_);
       }
       
       private function removeParticle(param1:int) : void

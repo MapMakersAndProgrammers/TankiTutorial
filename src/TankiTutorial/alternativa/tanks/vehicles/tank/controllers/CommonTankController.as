@@ -22,12 +22,12 @@ package alternativa.tanks.vehicles.tank.controllers
       
       public var dalipaz:Boolean = true;
       
-      public var citacir:Tank;
+      public var tank:Tank;
       
       public function CommonTankController(param1:Tank)
       {
          super();
-         this.citacir = param1;
+         this.tank = param1;
       }
       
       public function get enabled() : Boolean
@@ -111,15 +111,15 @@ package alternativa.tanks.vehicles.tank.controllers
       {
          var _loc5_:int = 0;
          var _loc6_:int = 0;
-         var _loc4_:Weapon = this.citacir.getWeapon();
-         if(this.citacir.kat)
+         var _loc4_:Weapon = this.tank.getWeapon();
+         if(this.tank.kat)
          {
             _loc5_ = this.getInput(cyjeruqa,pycyje);
             _loc6_ = this.getInput(dudazodol,qij);
             if(_loc5_ < 0)
             {
             }
-            this.citacir.setMovementParams(_loc5_,_loc6_,false);
+            this.tank.setMovementParams(_loc5_,_loc6_,false);
             if(_loc4_ != null)
             {
                if((this.ses & 1 << syfysu) == 0)
@@ -134,7 +134,7 @@ package alternativa.tanks.vehicles.tank.controllers
          }
          else
          {
-            this.citacir.setMovementParams(0,0,false);
+            this.tank.setMovementParams(0,0,false);
             if(_loc4_ != null)
             {
                _loc4_.stop();

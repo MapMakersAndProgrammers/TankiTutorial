@@ -40,7 +40,7 @@ package alternativa.physics
       {
          super();
          this.secakesem = new TanksCollisionDetector();
-         kymaqos = this.secakesem;
+         collisionDetector = this.secakesem;
          this.kodasy = new Vector.<CollisionShape>();
       }
       
@@ -71,18 +71,18 @@ package alternativa.physics
       override public function addBody(param1:Body) : void
       {
          super.addBody(param1);
-         if(param1.gepocivaj != null)
+         if(param1.name != null)
          {
-            this.kagehi[param1.gepocivaj] = param1;
+            this.kagehi[param1.name] = param1;
          }
       }
       
       override public function removeBody(param1:Body) : void
       {
          super.removeBody(param1);
-         if(param1.gepocivaj != null)
+         if(param1.name != null)
          {
-            delete this.kagehi[param1.gepocivaj];
+            delete this.kagehi[param1.name];
          }
       }
       
@@ -182,13 +182,13 @@ package alternativa.physics
          super.update(param1);
          if(this.isPlayerTankAlive())
          {
-            this.nykoto.check(GameData.jifom.hogys.body);
+            this.nykoto.check(GameData.playerTank.hogys.body);
          }
       }
       
       private function isPlayerTankAlive() : Boolean
       {
-         return Boolean(GameData.jifom) && Boolean(GameData.jifom.hogys) && Boolean(GameData.jifom.kat);
+         return Boolean(GameData.playerTank) && Boolean(GameData.playerTank.hogys) && Boolean(GameData.playerTank.kat);
       }
       
       private function runPhysicsControllers(param1:Number) : void

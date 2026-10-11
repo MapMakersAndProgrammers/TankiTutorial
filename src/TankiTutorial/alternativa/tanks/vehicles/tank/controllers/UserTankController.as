@@ -43,7 +43,7 @@ package alternativa.tanks.vehicles.tank.controllers
       private function onMouse(param1:MouseEvent) : void
       {
          var _loc2_:int = 0;
-         if(GameData.kumiteva && Boolean(Tank(citacir).turretController.isNotLocked()))
+         if(GameData.kumiteva && Boolean(Tank(tank).turretController.isNotLocked()))
          {
             _loc2_ = this.onKeyFire(param1.type == MouseEvent.MOUSE_DOWN);
             if(_loc2_ != ses)
@@ -69,8 +69,8 @@ package alternativa.tanks.vehicles.tank.controllers
          {
             ses = 0;
          }
-         var _loc4_:Tank = citacir;
-         if(_loc4_.kakow == null || !Tank(citacir).turretController.isNotLocked())
+         var _loc4_:Tank = tank;
+         if(_loc4_.kakow == null || !Tank(tank).turretController.isNotLocked())
          {
             ses &= ~(1 << syfysu);
          }

@@ -12,57 +12,57 @@ package tutorial.loader
    public class TanksLoader extends BaseLoader
    {
       
-      protected var bita:ImageLoader = new ImageLoader();
+      protected var imageLoader:ImageLoader = new ImageLoader();
       
-      protected var pomagu:XML;
+      protected var xml:XML;
       
-      protected var hon:Function;
+      protected var callback:Function;
       
       public function TanksLoader()
       {
          super();
       }
       
-      public static function createLoader(param1:Function, param2:Function, param3:Function = null) : Loader
+      public static function createLoader(completeListener:Function, errorListener:Function, progressListener:Function = null) : Loader
       {
-         var _loc4_:Loader = new Loader();
-         _loc4_.contentLoaderInfo.addEventListener(Event.COMPLETE,param1);
-         if(param3 != null)
+         var loader:Loader = new Loader();
+         loader.contentLoaderInfo.addEventListener(Event.COMPLETE,completeListener);
+         if(progressListener != null)
          {
-            _loc4_.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS,param3);
+            loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS,progressListener);
          }
-         _loc4_.contentLoaderInfo.addEventListener(ErrorEvent.ERROR,param2);
-         _loc4_.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,param2);
-         _loc4_.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR,param2);
-         return _loc4_;
+         loader.contentLoaderInfo.addEventListener(ErrorEvent.ERROR,errorListener);
+         loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,errorListener);
+         loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR,errorListener);
+         return loader;
       }
       
-      public static function createURLLoader(param1:Function, param2:Function, param3:Function = null) : URLLoader
+      public static function createURLLoader(completeListener:Function, errorListener:Function, progressListener:Function = null) : URLLoader
       {
-         var _loc4_:URLLoader = new URLLoader();
-         _loc4_.addEventListener(Event.COMPLETE,param1);
-         if(param3 != null)
+         var urlLoader:URLLoader = new URLLoader();
+         urlLoader.addEventListener(Event.COMPLETE,completeListener);
+         if(progressListener != null)
          {
-            _loc4_.addEventListener(ProgressEvent.PROGRESS,param3);
+            urlLoader.addEventListener(ProgressEvent.PROGRESS,progressListener);
          }
-         _loc4_.addEventListener(ErrorEvent.ERROR,param2);
-         _loc4_.addEventListener(IOErrorEvent.IO_ERROR,param2);
-         _loc4_.addEventListener(SecurityErrorEvent.SECURITY_ERROR,param2);
-         return _loc4_;
+         urlLoader.addEventListener(ErrorEvent.ERROR,errorListener);
+         urlLoader.addEventListener(IOErrorEvent.IO_ERROR,errorListener);
+         urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR,errorListener);
+         return urlLoader;
       }
       
-      public function check(param1:XML) : Boolean
+      public function check(sceneXML:XML) : Boolean
       {
          return false;
       }
       
-      public function load(param1:String, param2:XML, param3:Function) : void
+      public function load(sceneURL:String, sceneXML:XML, completeListener:Function) : void
       {
       }
       
-      protected function onError(param1:ErrorEvent) : void
+      protected function onError(errorEvent:ErrorEvent) : void
       {
-         Shared.tracker.trackEvent("Tutorial_ERROR","LoadError",param1.text + " " + julicoj);
+         Shared.tracker.trackEvent("Tutorial_ERROR","LoadError",errorEvent.text + " " + currentURL);
          this.nextItem();
       }
       

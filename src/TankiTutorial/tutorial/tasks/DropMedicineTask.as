@@ -14,45 +14,45 @@ package tutorial.tasks
    public class DropMedicineTask extends DropBonusTask
    {
       
-      private static var buhisuko:BattleBonusData;
+      private static var battleBonusData:BattleBonusData;
       
-      private static const jegys:Long = Long.getNext();
+      private static const bonusObjectId:Long = Long.getNext();
       
-      public function DropMedicineTask(param1:Vector3)
+      public function DropMedicineTask(position:Vector3)
       {
-         super(param1);
+         super(position);
       }
       
       override protected function getBattleBonusData() : BattleBonusData
       {
-         if(buhisuko == null)
+         if(battleBonusData == null)
          {
-            buhisuko = this.createBattleBonusData();
+            battleBonusData = this.createBattleBonusData();
          }
-         return buhisuko;
+         return battleBonusData;
       }
       
       private function createBattleBonusData() : BattleBonusData
       {
-         var _loc1_:BattleBonusData = new BattleBonusData();
-         _loc1_.tipi = Assets.getData("med",Mesh);
-         _loc1_.vukuzub = Assets.getData("parachute",Mesh);
-         _loc1_.berav = Assets.getData("parachute_inner",Mesh);
-         _loc1_.zerow = new TextureMaterial(Assets.getData("cords",BitmapData));
-         _loc1_.wym = int.MAX_VALUE;
-         _loc1_.ruzy = Assets.getData("bonus",Sound);
-         return _loc1_;
+         var bonusData:BattleBonusData = new BattleBonusData();
+         bonusData.tipi = Assets.getData("med",Mesh);
+         bonusData.vukuzub = Assets.getData("parachute",Mesh);
+         bonusData.berav = Assets.getData("parachute_inner",Mesh);
+         bonusData.zerow = new TextureMaterial(Assets.getData("cords",BitmapData));
+         bonusData.wym = int.MAX_VALUE;
+         bonusData.ruzy = Assets.getData("bonus",Sound);
+         return bonusData;
       }
       
       override protected function getBonusObjectId() : Long
       {
-         return jegys;
+         return bonusObjectId;
       }
       
-      override protected function onTankCollision(param1:BattleBonus) : void
+      override protected function onTankCollision(bonus:BattleBonus) : void
       {
-         super.onTankCollision(param1);
-         GameData.jifom.heal();
+         super.onTankCollision(bonus);
+         GameData.playerTank.heal();
       }
    }
 }

@@ -6,9 +6,9 @@ package tutorial
    public class BrowserBlackList
    {
       
-      private static const narit:String = "StandAlone";
+      private static const STAND_ALONE:String = "StandAlone";
       
-      public static const huvygetu:Array = [{
+      public static const blackList:Array = [{
          "browser":"Chrome",
          "os":"Windows"
       },{
@@ -35,74 +35,74 @@ package tutorial
       
       public static function checkIfMouseDisabled() : Boolean
       {
-         var _loc4_:Object = null;
+         var entry:Object = null;
          if(!isMouseControlAvailable())
          {
             return true;
          }
-         if(Capabilities.playerType == narit)
+         if(Capabilities.playerType == STAND_ALONE)
          {
             return false;
          }
-         var _loc1_:String = getBrowserName();
-         var _loc2_:String = Capabilities.os;
-         var _loc3_:int = 0;
-         while(_loc3_ < BrowserBlackList.huvygetu.length)
+         var browserName:String = getBrowserName();
+         var os:String = Capabilities.os;
+         var i:int = 0;
+         while(i < BrowserBlackList.blackList.length)
          {
-            _loc4_ = BrowserBlackList.huvygetu[_loc3_];
-            if(_loc1_.indexOf(_loc4_.browser) > -1 && _loc2_.indexOf(_loc4_.os) > -1)
+            entry = BrowserBlackList.blackList[i];
+            if(browserName.indexOf(entry.browser) > -1 && os.indexOf(entry.os) > -1)
             {
                return true;
             }
-            _loc3_++;
+            i++;
          }
          return false;
       }
       
       private static function isMouseControlAvailable() : Boolean
       {
-         var _loc1_:Array = getFlashVersion();
-         return int(_loc1_[0]) == 11 && int(_loc1_[1]) >= 3 || int(_loc1_[0]) > 11;
+         var version:Array = getFlashVersion();
+         return int(version[0]) == 11 && int(version[1]) >= 3 || int(version[0]) > 11;
       }
       
       private static function getBrowserName() : String
       {
          var toRadians:String = null;
-         var doqe:String = null;
+         var browserName:String = null;
          try
          {
             toRadians = ExternalInterface.call("window.navigator.userAgent.toString");
-            doqe = "[Unknown Browser]";
+            browserName = "[Unknown Browser]";
             if(toRadians.indexOf("Safari") != -1)
             {
-               doqe = "Safari";
+               browserName = "Safari";
             }
             if(toRadians.indexOf("Firefox") != -1)
             {
-               doqe = "Firefox";
+               browserName = "Firefox";
             }
             if(toRadians.indexOf("Chrome") != -1)
             {
-               doqe = "Chrome";
+               browserName = "Chrome";
             }
             if(toRadians.indexOf("MSIE") != -1)
             {
-               doqe = "IE";
+               browserName = "IE";
             }
             if(toRadians.indexOf("Opera") != -1)
             {
-               doqe = "Opera";
+               browserName = "Opera";
             }
             if(toRadians.indexOf("YaBrowser") != -1)
             {
-               doqe = "Yandex";
+               browserName = "Yandex";
             }
          }
          catch(e:Error)
          {
             return "[No ExternalInterface]";
          }
-         return doqe;
+         return browserName;
       }
       
       private static function getFlashVersion() : Array

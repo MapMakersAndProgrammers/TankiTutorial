@@ -132,7 +132,7 @@ package alternativa.tanks.vehicles.tank
       
       private function adjustSuspensionSpringCoeff() : void
       {
-         var _loc1_:Number = this.body.tuce.tem.length() * this.body.tuwykus;
+         var _loc1_:Number = this.body.scene.tem.length() * this.body.tuwykus;
          this.gobo.jakopunu = _loc1_ / (2 * TankConst.nybi * (this.gobo.tovudov - this.gobo.vocuqih));
       }
       
@@ -173,8 +173,8 @@ package alternativa.tanks.vehicles.tank
          var _loc35_:Number = NaN;
          var _loc4_:int = this.dajy ? 0 : this.rucumopak;
          var _loc5_:int = this.dajy ? 0 : this.wuzyvodew;
-         var _loc6_:Vector3 = this.body.kejo.zerus;
-         _loc7_ = this.body.kejo.fev;
+         var _loc6_:Vector3 = this.body.state.zerus;
+         _loc7_ = this.body.state.fev;
          _loc8_ = this.body.jefe;
          dibi.x = _loc8_.gusat;
          dibi.y = _loc8_.sig;
@@ -469,7 +469,7 @@ package alternativa.tanks.vehicles.tank
          if(this.mof.jim >= this.mof.wavi >> 1 || this.vapal.jim >= this.vapal.wavi >> 1)
          {
             _loc1_ = this.body.jefe;
-            _loc2_ = this.body.tuce.tem;
+            _loc2_ = this.body.scene.tem;
             _loc3_ = _loc2_.x * _loc1_.sivy + _loc2_.y * _loc1_.wyvukog + _loc2_.z * _loc1_.tari;
             _loc4_ = _loc2_.length();
             _loc5_ = Math.SQRT1_2 * _loc4_;

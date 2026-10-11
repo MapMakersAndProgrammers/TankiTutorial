@@ -48,36 +48,36 @@ package tutorial.commons
          return lang;
       }
       
-      public static function getText(param1:Vector.<String>) : String
+      public static function getText(texts:Vector.<String>) : String
       {
-         var _loc2_:int = 0;
+         var index:int = 0;
          switch(lang)
          {
             case EN:
-               _loc2_ = 0;
+               index = 0;
                break;
             case DE:
-               _loc2_ = 1;
+               index = 1;
                break;
             case RU:
-               _loc2_ = 2;
+               index = 2;
                break;
             case CN:
-               _loc2_ = 3;
+               index = 3;
                break;
             case PT_BR:
-               _loc2_ = 4;
+               index = 4;
                break;
             case PL:
-               _loc2_ = 5;
+               index = 5;
                break;
             case ES:
-               _loc2_ = 6;
+               index = 6;
                break;
             default:
-               _loc2_ = 0;
+               index = 0;
          }
-         return param1[_loc2_];
+         return texts[index];
       }
       
       public static function get embedFonts() : Boolean

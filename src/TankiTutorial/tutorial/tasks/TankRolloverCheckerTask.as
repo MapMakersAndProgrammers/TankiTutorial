@@ -11,9 +11,9 @@ package tutorial.tasks
    public class TankRolloverCheckerTask extends Task
    {
       
-      private static const hevarer:Number = 0.1;
+      private static const threshold:Number = 0.1;
       
-      private var gadiv:int;
+      private var rolledOverTime:int;
       
       public function TankRolloverCheckerTask()
       {
@@ -22,12 +22,12 @@ package tutorial.tasks
       
       override public function process() : Boolean
       {
-         var _loc1_:TimeData = null;
+         var timeData:TimeData = null;
          if(this.isRolledOver())
          {
-            _loc1_ = GameData.lecopojen;
-            this.gadiv += _loc1_.rud;
-            if(this.gadiv > 4000)
+            timeData = GameData.time;
+            this.rolledOverTime += timeData.deltaTimeMs;
+            if(this.rolledOverTime > 4000)
             {
                this.showSuicideHelp();
                return true;
@@ -35,19 +35,19 @@ package tutorial.tasks
          }
          else
          {
-            this.gadiv = 0;
+            this.rolledOverTime = 0;
          }
          return false;
       }
       
       private function isRolledOver() : Boolean
       {
-         var _loc1_:Tank = GameData.jifom;
-         if(_loc1_.hogys == null)
+         var tank:Tank = GameData.playerTank;
+         if(tank.hogys == null)
          {
             return false;
          }
-         return _loc1_.hogys.body.jefe.tari < hevarer;
+         return tank.hogys.body.jefe.tari < threshold;
       }
       
       private function showSuicideHelp() : void
@@ -56,8 +56,8 @@ package tutorial.tasks
          {
             return;
          }
-         GameData.hulaf.showMovie(Assets.getData("delete_help",MovieClip),StageAlign.TOP);
-         GameData.namab.addTask(new HideSuicideHelpTask());
+         GameData.screenMovieClipManager.showMovie(Assets.getData("delete_help",MovieClip),StageAlign.TOP);
+         GameData.taskGroup.addTask(new HideSuicideHelpTask());
       }
    }
 }

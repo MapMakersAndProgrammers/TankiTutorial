@@ -10,79 +10,79 @@ package tutorial.loader
    public class PropLibsLoader extends TanksLoader
    {
       
-      private var ryv:Vector.<String>;
+      private var urls:Vector.<String>;
       
-      private var guz:Vector.<int>;
+      private var priorities:Vector.<int>;
       
-      private var luwuqap:String;
+      private var baseURL:String;
       
-      private var dodycoli:int;
+      private var index:int;
       
-      private var wija:URLLoader;
+      private var urlLoader:URLLoader;
       
       public function PropLibsLoader()
       {
          super();
       }
       
-      override public function check(param1:XML) : Boolean
+      override public function check(sceneXML:XML) : Boolean
       {
-         return param1.proplibs.length() > 0;
+         return sceneXML.proplibs.length() > 0;
       }
       
-      override public function load(param1:String, param2:XML, param3:Function) : void
+      override public function load(sceneURL:String, sceneXML:XML, completeListener:Function) : void
       {
-         var _loc5_:XML = null;
-         this.pomagu = param2.proplibs[0];
-         this.hon = param3;
-         this.luwuqap = param1 + pomagu.@baseURL;
-         this.ryv = new Vector.<String>();
-         this.guz = new Vector.<int>();
-         this.dodycoli = 0;
-         var _loc4_:int = 0;
-         for each(_loc5_ in pomagu.elements("proplib"))
+         var proplibXML:XML = null;
+         this.xml = sceneXML.proplibs[0];
+         this.callback = completeListener;
+         this.baseURL = sceneURL + xml.@baseURL;
+         this.urls = new Vector.<String>();
+         this.priorities = new Vector.<int>();
+         this.index = 0;
+         var i:int = 0;
+         for each(proplibXML in xml.elements("proplib"))
          {
-            this.ryv[_loc4_] = this.luwuqap + XMLUtils.getAttributeAsString(_loc5_,"url");
-            this.guz[_loc4_] = XMLUtils.getAttributeAsInt(_loc5_,"priority");
-            _loc4_++;
+            this.urls[i] = this.baseURL + XMLUtils.getAttributeAsString(proplibXML,"url");
+            this.priorities[i] = XMLUtils.getAttributeAsInt(proplibXML,"priority");
+            i++;
          }
          this.loadLib();
       }
       
-      private function loadLib(param1:Event = null) : void
+      private function loadLib(e:Event = null) : void
       {
-         if(param1 != null)
+         if(e != null)
          {
-            this.parse(XML(this.wija.data));
-            ++this.dodycoli;
+            this.parse(XML(this.urlLoader.data));
+            ++this.index;
          }
-         if(this.dodycoli < this.ryv.length)
+         if(this.index < this.urls.length)
          {
-            julicoj = this.ryv[this.dodycoli] + "library.xml";
-            if(Assets.hasData(julicoj,XML))
+            currentURL = this.urls[this.index] + "library.xml";
+            if(Assets.hasData(currentURL,XML))
             {
-               this.parse(Assets.getData(julicoj,XML));
-               ++this.dodycoli;
+               this.parse(Assets.getData(currentURL,XML));
+               ++this.index;
                this.loadLib();
             }
             else
             {
-               this.wija = createURLLoader(this.loadLib,onError,onProgress);
-               this.wija.load(new URLRequest(this.ryv[this.dodycoli] + "library.xml"));
+               this.urlLoader = createURLLoader(this.loadLib,onError,onProgress);
+               this.urlLoader.load(new URLRequest(this.urls[this.index] + "library.xml"));
             }
          }
          else
          {
-            this.wija = null;
-            hon();
+            this.urlLoader = null;
+            callback();
          }
       }
       
-      private function parse(param1:XML) : void
+      private function parse(libraryXML:XML) : void
       {
-         var _loc2_:PropLibrary = new PropLibrary(param1,this.ryv[this.dodycoli]);
-         _loc2_.gohigewam = this.guz[this.dodycoli];
-         Assets.saveData(_loc2_.gepocivaj,_loc2_,PropLibrary);
+         var library:PropLibrary = new PropLibrary(libraryXML,this.urls[this.index]);
+         library.priority = this.priorities[this.index];
+         Assets.saveData(library.name,library,PropLibrary);
       }
    }
 }

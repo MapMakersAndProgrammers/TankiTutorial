@@ -29,7 +29,7 @@ package alternativa.tanks.sound
       
       private var fesiwu:Number;
       
-      private var hobuna:Vector.<SoundEffectData> = new Vector.<SoundEffectData>();
+      private var effects:Vector.<SoundEffectData> = new Vector.<SoundEffectData>();
       
       private var riwo:int;
       
@@ -108,7 +108,7 @@ package alternativa.tanks.sound
          if(this.canAddEffect(param1))
          {
             param1.enabled = true;
-            this.hobuna.push(SoundEffectData.create(0,param1));
+            this.effects.push(SoundEffectData.create(0,param1));
             ++this.riwo;
             return true;
          }
@@ -126,12 +126,12 @@ package alternativa.tanks.sound
          var _loc2_:int = 0;
          while(_loc2_ < this.riwo)
          {
-            _loc3_ = this.hobuna[_loc2_];
+            _loc3_ = this.effects[_loc2_];
             if(_loc3_.nyniqadi == param1)
             {
                param1.destroy();
                SoundEffectData.destroy(_loc3_);
-               this.hobuna.splice(_loc2_,1);
+               this.effects.splice(_loc2_,1);
                --this.riwo;
                return;
             }
@@ -142,9 +142,9 @@ package alternativa.tanks.sound
       public function removeAllEffects() : void
       {
          var _loc1_:SoundEffectData = null;
-         while(this.hobuna.length > 0)
+         while(this.effects.length > 0)
          {
-            _loc1_ = this.hobuna.pop();
+            _loc1_ = this.effects.pop();
             _loc1_.nyniqadi.destroy();
             SoundEffectData.destroy(_loc1_);
          }
@@ -201,13 +201,13 @@ package alternativa.tanks.sound
          _loc5_ = 0;
          while(_loc5_ < this.riwo)
          {
-            _loc3_ = this.hobuna[_loc5_];
+            _loc3_ = this.effects[_loc5_];
             _loc6_ = int(_loc3_.nyniqadi.numSounds);
             if(_loc6_ == 0)
             {
                _loc3_.nyniqadi.destroy();
                SoundEffectData.destroy(_loc3_);
-               this.hobuna.splice(_loc5_,1);
+               this.effects.splice(_loc5_,1);
                --this.riwo;
                _loc5_--;
             }
@@ -232,13 +232,13 @@ package alternativa.tanks.sound
          var _loc2_:int = param1;
          while(_loc2_ < this.riwo)
          {
-            _loc3_ = this.hobuna[_loc2_];
+            _loc3_ = this.effects[_loc2_];
             _loc3_.nyniqadi.enabled = false;
             if(_loc3_.nyniqadi.numSounds == 0)
             {
                _loc3_.nyniqadi.destroy();
                SoundEffectData.destroy(_loc3_);
-               this.hobuna.splice(_loc2_,1);
+               this.effects.splice(_loc2_,1);
                --this.riwo;
                _loc2_--;
             }
@@ -272,7 +272,7 @@ package alternativa.tanks.sound
          var _loc2_:int = 0;
          while(_loc2_ < this.riwo)
          {
-            _loc3_ = this.hobuna[_loc2_];
+            _loc3_ = this.effects[_loc2_];
             if(_loc3_.nyniqadi == param1)
             {
                return _loc2_;
@@ -300,7 +300,7 @@ package alternativa.tanks.sound
          _loc2_ = 0;
          while(_loc2_ < this.riwo)
          {
-            _loc8_ = this.hobuna[_loc2_];
+            _loc8_ = this.effects[_loc2_];
             _loc8_.nyniqadi.readPosition(duv);
             _loc11_ = param1.x - duv.x;
             _loc12_ = param1.y - duv.y;
@@ -319,26 +319,26 @@ package alternativa.tanks.sound
          {
             _loc3_ = _loc5_ = this.cimaw[--_loc6_];
             _loc2_ = _loc4_ = this.cimaw[--_loc6_];
-            _loc14_ = this.hobuna[_loc5_ + _loc4_ >> 1];
+            _loc14_ = this.effects[_loc5_ + _loc4_ >> 1];
             _loc7_ = Number(_loc14_.pyvyg);
             do
             {
-               _loc9_ = this.hobuna[_loc2_];
+               _loc9_ = this.effects[_loc2_];
                while(_loc9_.pyvyg < _loc7_)
                {
                   _loc2_++;
-                  _loc9_ = this.hobuna[_loc2_];
+                  _loc9_ = this.effects[_loc2_];
                }
-               _loc10_ = this.hobuna[_loc3_];
+               _loc10_ = this.effects[_loc3_];
                while(_loc10_.pyvyg > _loc7_)
                {
                   _loc3_--;
-                  _loc10_ = this.hobuna[_loc3_];
+                  _loc10_ = this.effects[_loc3_];
                }
                if(_loc2_ <= _loc3_)
                {
-                  this.hobuna[_loc2_++] = _loc10_;
-                  this.hobuna[_loc3_--] = _loc9_;
+                  this.effects[_loc2_++] = _loc10_;
+                  this.effects[_loc3_--] = _loc9_;
                }
             }
             while(_loc2_ <= _loc3_);

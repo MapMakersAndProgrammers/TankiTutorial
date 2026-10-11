@@ -11,7 +11,7 @@ package alternativa.tanks.vehicles.tank
       
       public var sasi:Number;
       
-      public var wiciqy:Number;
+      public var speed:Number;
       
       public var cozo:Number;
       

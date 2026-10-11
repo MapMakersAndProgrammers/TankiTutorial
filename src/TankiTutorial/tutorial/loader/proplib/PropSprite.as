@@ -7,36 +7,36 @@ package tutorial.loader.proplib
    public class PropSprite
    {
       
-      public var gepocivaj:String;
+      public var name:String;
       
-      private var zuqu:String;
+      private var url:String;
       
-      private var luwuqap:String;
+      private var baseURL:String;
       
-      private var niqybyga:Sprite3D;
+      private var _sprite:Sprite3D;
       
-      public function PropSprite(param1:XML, param2:String)
+      public function PropSprite(xml:XML, baseURL:String)
       {
          super();
-         this.luwuqap = param2;
-         this.zuqu = param2 + XMLUtils.getAttributeAsString(param1,"file");
-         var _loc3_:TextureMaterial = new TextureMaterial(null,false,true,MipMapping.PER_PIXEL,5);
-         _loc3_.diffuseMapURL = this.zuqu;
-         this.niqybyga = new Sprite3D(1,1,_loc3_);
-         this.niqybyga.autoSize = true;
-         this.niqybyga.originX = XMLUtils.getAttributeAsNumber(param1,"origin-x",0.5);
-         this.niqybyga.originY = XMLUtils.getAttributeAsNumber(param1,"origin-y",0.5);
-         var _loc4_:Number = XMLUtils.getAttributeAsNumber(param1,"scale",1);
-         this.niqybyga.scaleX = _loc4_;
-         this.niqybyga.scaleY = _loc4_;
-         this.niqybyga.scaleZ = _loc4_;
-         this.niqybyga.softAttenuation = 150;
-         this.niqybyga.name = "bush";
+         this.baseURL = baseURL;
+         this.url = baseURL + XMLUtils.getAttributeAsString(xml,"file");
+         var material:TextureMaterial = new TextureMaterial(null,false,true,MipMapping.PER_PIXEL,5);
+         material.diffuseMapURL = this.url;
+         this._sprite = new Sprite3D(1,1,material);
+         this._sprite.autoSize = true;
+         this._sprite.originX = XMLUtils.getAttributeAsNumber(xml,"origin-x",0.5);
+         this._sprite.originY = XMLUtils.getAttributeAsNumber(xml,"origin-y",0.5);
+         var scale:Number = XMLUtils.getAttributeAsNumber(xml,"scale",1);
+         this._sprite.scaleX = scale;
+         this._sprite.scaleY = scale;
+         this._sprite.scaleZ = scale;
+         this._sprite.softAttenuation = 150;
+         this._sprite.name = "bush";
       }
       
       public function get sprite() : Sprite3D
       {
-         return this.niqybyga;
+         return this._sprite;
       }
    }
 }

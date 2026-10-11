@@ -5,37 +5,37 @@ package tutorial.loader.proplib
    public class PropLibrary extends BaseLoader
    {
       
-      public var gepocivaj:String;
+      public var name:String;
       
-      private var pomagu:XML;
+      private var xml:XML;
       
-      private var qynihevu:Object;
+      private var groups:Object;
       
-      private var luwuqap:String;
+      private var baseURL:String;
       
-      public var gohigewam:int;
+      public var priority:int;
       
-      public function PropLibrary(param1:XML, param2:String)
+      public function PropLibrary(xml:XML, baseURL:String)
       {
-         var _loc3_:XML = null;
-         var _loc4_:PropGroup = null;
-         this.qynihevu = new Object();
+         var groupXML:XML = null;
+         var group:PropGroup = null;
+         this.groups = new Object();
          super();
-         this.pomagu = param1;
-         this.luwuqap = param2;
-         this.gepocivaj = XMLUtils.getAttributeAsString(param1,"name");
+         this.xml = xml;
+         this.baseURL = baseURL;
+         this.name = XMLUtils.getAttributeAsString(xml,"name");
          onFinishLoad();
-         for each(_loc3_ in param1.elements("prop-group"))
+         for each(groupXML in xml.elements("prop-group"))
          {
-            _loc4_ = new PropGroup(_loc3_,param2);
-            this.qynihevu[_loc4_.gepocivaj] = _loc4_;
+            group = new PropGroup(groupXML,baseURL);
+            this.groups[group.name] = group;
          }
       }
       
-      public function loadObject(param1:String, param2:String, param3:String, param4:Function) : void
+      public function loadObject(groupName:String, propName:String, textureName:String, callback:Function) : void
       {
-         var _loc5_:PropGroup = this.qynihevu[param1];
-         _loc5_.loadProp(param2,param3,param4);
+         var group:PropGroup = this.groups[groupName];
+         group.loadProp(propName,textureName,callback);
       }
    }
 }

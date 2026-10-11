@@ -23,161 +23,161 @@ package tutorial.loader
    public class TurretsLoader extends TanksLoader
    {
       
-      private var paqowom:Vector.<XML>;
+      private var turrets:Vector.<XML>;
       
-      private var wucejydy:String;
+      private var id:String;
       
-      private var luwuqap:String;
+      private var baseURL:String;
       
-      private var dodycoli:int;
+      private var index:int;
       
-      private var zewucadiz:TankTurret;
+      private var current:TankTurret;
       
       public function TurretsLoader()
       {
          super();
       }
       
-      override public function check(param1:XML) : Boolean
+      override public function check(sceneXML:XML) : Boolean
       {
-         return param1.turrets.length() > 0;
+         return sceneXML.turrets.length() > 0;
       }
       
-      override public function load(param1:String, param2:XML, param3:Function) : void
+      override public function load(sceneURL:String, sceneXML:XML, completeListener:Function) : void
       {
-         var _loc5_:XML = null;
-         this.pomagu = param2.turrets[0];
-         this.hon = param3;
-         this.paqowom = new Vector.<XML>();
-         this.dodycoli = 0;
-         this.luwuqap = param1 + pomagu.@baseURL;
-         var _loc4_:int = 0;
-         for each(_loc5_ in pomagu.elements("turret"))
+         var turretXML:XML = null;
+         this.xml = sceneXML.turrets[0];
+         this.callback = completeListener;
+         this.turrets = new Vector.<XML>();
+         this.index = 0;
+         this.baseURL = sceneURL + xml.@baseURL;
+         var i:int = 0;
+         for each(turretXML in xml.elements("turret"))
          {
-            this.paqowom[_loc4_] = _loc5_;
-            _loc4_++;
+            this.turrets[i] = turretXML;
+            i++;
          }
          this.loadTurret();
       }
       
-      private function loadTurret(param1:BitmapData = null) : void
+      private function loadTurret(details:BitmapData = null) : void
       {
-         var _loc2_:XML = null;
-         var _loc3_:URLLoader = null;
-         if(param1 != null)
+         var turretXML:XML = null;
+         var urlLoader:URLLoader = null;
+         if(details != null)
          {
-            this.zewucadiz.vypupital = param1;
-            this.zewucadiz = null;
-            ++this.dodycoli;
+            this.current.vypupital = details;
+            this.current = null;
+            ++this.index;
          }
-         if(this.dodycoli < this.paqowom.length)
+         if(this.index < this.turrets.length)
          {
-            _loc2_ = this.paqowom[this.dodycoli];
-            this.wucejydy = _loc2_.@id.toString();
-            julicoj = this.luwuqap + _loc2_.@url.toString();
-            if(!Assets.hasData(julicoj,ByteArray))
+            turretXML = this.turrets[this.index];
+            this.id = turretXML.@id.toString();
+            currentURL = this.baseURL + turretXML.@url.toString();
+            if(!Assets.hasData(currentURL,ByteArray))
             {
-               _loc3_ = new URLLoader();
-               _loc3_.addEventListener(Event.COMPLETE,this.loadLightmap);
-               _loc3_.addEventListener(ProgressEvent.PROGRESS,onProgress);
-               _loc3_.dataFormat = URLLoaderDataFormat.BINARY;
-               _loc3_.load(new URLRequest(julicoj));
+               urlLoader = new URLLoader();
+               urlLoader.addEventListener(Event.COMPLETE,this.loadLightmap);
+               urlLoader.addEventListener(ProgressEvent.PROGRESS,onProgress);
+               urlLoader.dataFormat = URLLoaderDataFormat.BINARY;
+               urlLoader.load(new URLRequest(currentURL));
             }
             else
             {
-               this.parse(Assets.getData(julicoj,ByteArray));
-               this.zewucadiz.sut = Assets.getData(this.luwuqap + _loc2_.@lightmap.toString(),BitmapData);
-               this.zewucadiz.vypupital = Assets.getData(this.luwuqap + _loc2_.@details.toString(),BitmapData);
-               this.zewucadiz = null;
-               ++this.dodycoli;
+               this.parse(Assets.getData(currentURL,ByteArray));
+               this.current.sut = Assets.getData(this.baseURL + turretXML.@lightmap.toString(),BitmapData);
+               this.current.vypupital = Assets.getData(this.baseURL + turretXML.@details.toString(),BitmapData);
+               this.current = null;
+               ++this.index;
                this.loadTurret();
             }
          }
-         else if(hon != null)
+         else if(callback != null)
          {
-            hon();
+            callback();
          }
       }
       
-      private function parse(param1:ByteArray) : XML
+      private function parse(data:ByteArray) : XML
       {
-         this.zewucadiz = this.parseTurret(param1);
-         Turrets.leqib[this.wucejydy] = this.zewucadiz;
-         var _loc2_:XML = this.paqowom[this.dodycoli];
-         this.zewucadiz.qupi = _loc2_.@turnAcceleration;
-         this.zewucadiz.gejebuke = _loc2_.@maxTurnSpeed;
-         this.zewucadiz.beryfitu = _loc2_.@damage;
-         return _loc2_;
+         this.current = this.parseTurret(data);
+         Turrets.objects[this.id] = this.current;
+         var turretXML:XML = this.turrets[this.index];
+         this.current.qupi = turretXML.@turnAcceleration;
+         this.current.gejebuke = turretXML.@maxTurnSpeed;
+         this.current.beryfitu = turretXML.@damage;
+         return turretXML;
       }
       
-      private function loadLightmap(param1:Event) : void
+      private function loadLightmap(e:Event) : void
       {
-         var _loc2_:URLLoader = URLLoader(param1.target);
-         _loc2_.removeEventListener(Event.COMPLETE,this.loadLightmap);
-         _loc2_.removeEventListener(ProgressEvent.PROGRESS,onProgress);
-         var _loc3_:XML = this.parse(_loc2_.data);
-         var _loc4_:String = this.luwuqap + _loc3_.@lightmap.toString();
-         var _loc5_:Loader = new Loader();
-         _loc5_.contentLoaderInfo.addEventListener(Event.COMPLETE,this.loadDetails);
-         _loc5_.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS,onProgress);
-         _loc5_.load(new URLRequest(_loc4_));
+         var urlLoader:URLLoader = URLLoader(e.target);
+         urlLoader.removeEventListener(Event.COMPLETE,this.loadLightmap);
+         urlLoader.removeEventListener(ProgressEvent.PROGRESS,onProgress);
+         var turretXML:XML = this.parse(urlLoader.data);
+         var lightmapURL:String = this.baseURL + turretXML.@lightmap.toString();
+         var loader:Loader = new Loader();
+         loader.contentLoaderInfo.addEventListener(Event.COMPLETE,this.loadDetails);
+         loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS,onProgress);
+         loader.load(new URLRequest(lightmapURL));
       }
       
-      private function loadDetails(param1:Event) : void
+      private function loadDetails(e:Event) : void
       {
-         var _loc2_:LoaderInfo = LoaderInfo(param1.target);
-         this.zewucadiz.sut = Bitmap(_loc2_.content).bitmapData;
-         _loc2_.removeEventListener(Event.COMPLETE,this.loadDetails);
-         _loc2_.removeEventListener(ProgressEvent.PROGRESS,onProgress);
-         var _loc3_:XML = this.paqowom[this.dodycoli];
-         var _loc4_:String = this.luwuqap + _loc3_.@details.toString();
-         bita.load(_loc4_,this.loadTurret);
+         var loaderInfo:LoaderInfo = LoaderInfo(e.target);
+         this.current.sut = Bitmap(loaderInfo.content).bitmapData;
+         loaderInfo.removeEventListener(Event.COMPLETE,this.loadDetails);
+         loaderInfo.removeEventListener(ProgressEvent.PROGRESS,onProgress);
+         var turretXML:XML = this.turrets[this.index];
+         var detailsURL:String = this.baseURL + turretXML.@details.toString();
+         imageLoader.load(detailsURL,this.loadTurret);
       }
       
-      private function parseTurret(param1:ByteArray) : TankTurret
+      private function parseTurret(data:ByteArray) : TankTurret
       {
-         var _loc6_:Mesh = null;
-         var _loc7_:String = null;
-         var _loc8_:Vector3D = null;
-         var _loc2_:Parser3DS = new Parser3DS();
-         if(julicoj.indexOf(".3dz") > 0)
+         var mesh:Mesh = null;
+         var objectName:String = null;
+         var position:Vector3D = null;
+         var parser:Parser3DS = new Parser3DS();
+         if(currentURL.indexOf(".3dz") > 0)
          {
-            param1.uncompress();
+            data.uncompress();
          }
-         _loc2_.parse(param1);
-         var _loc3_:TankTurret = new TankTurret();
-         _loc3_.gepocivaj = this.wucejydy;
-         var _loc4_:int = int(_loc2_.objects.length);
-         var _loc5_:int = 0;
-         while(_loc5_ < _loc4_)
+         parser.parse(data);
+         var turret:TankTurret = new TankTurret();
+         turret.name = this.id;
+         var len:int = int(parser.objects.length);
+         var i:int = 0;
+         while(i < len)
          {
-            _loc6_ = _loc2_.objects[_loc5_] as Mesh;
-            if(_loc6_ != null)
+            mesh = parser.objects[i] as Mesh;
+            if(mesh != null)
             {
-               _loc7_ = _loc6_.name.toLowerCase();
-               if(_loc7_.indexOf("turret") == 0)
+               objectName = mesh.name.toLowerCase();
+               if(objectName.indexOf("turret") == 0)
                {
-                  _loc3_.kuca = _loc6_;
-                  _loc6_.sorting = Sorting.DYNAMIC_BSP;
-                  _loc6_.optimizeForDynamicBSP();
-                  _loc6_.calculateVerticesNormalsByAngle(GameData.qusejov,GameData.hevarer);
+                  turret.kuca = mesh;
+                  mesh.sorting = Sorting.DYNAMIC_BSP;
+                  mesh.optimizeForDynamicBSP();
+                  mesh.calculateVerticesNormalsByAngle(GameData.angle,GameData.threshold);
                }
-               else if(_loc7_.indexOf("fmnt") == 0)
+               else if(objectName.indexOf("fmnt") == 0)
                {
-                  _loc8_ = _loc6_.matrix.position;
-                  _loc3_.luru.x = _loc8_.x;
-                  _loc3_.luru.y = _loc8_.y;
-                  _loc3_.luru.z = _loc8_.z;
+                  position = mesh.matrix.position;
+                  turret.luru.x = position.x;
+                  turret.luru.y = position.y;
+                  turret.luru.z = position.z;
                }
-               else if(_loc7_.indexOf("muzzle") == 0)
+               else if(objectName.indexOf("muzzle") == 0)
                {
-                  _loc8_ = _loc6_.matrix.position;
-                  _loc3_.jun.push(new Vector3(_loc8_.x,_loc8_.y,_loc8_.z));
+                  position = mesh.matrix.position;
+                  turret.jun.push(new Vector3(position.x,position.y,position.z));
                }
             }
-            _loc5_++;
+            i++;
          }
-         return _loc3_;
+         return turret;
       }
    }
 }

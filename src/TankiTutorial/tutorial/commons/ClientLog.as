@@ -18,18 +18,18 @@ package tutorial.commons
          autoSize = TextFieldAutoSize.LEFT;
       }
       
-      public function addLine(param1:String) : void
+      public function addLine(line:String) : void
       {
-         var _loc2_:String = null;
-         this.lines.push(param1);
+         var entry:String = null;
+         this.lines.push(line);
          if(this.lines.length >= this.maxLines)
          {
             this.lines.shift();
          }
          this.text = "";
-         for each(_loc2_ in this.lines)
+         for each(entry in this.lines)
          {
-            appendText("> " + _loc2_ + "\n");
+            appendText("> " + entry + "\n");
          }
       }
    }

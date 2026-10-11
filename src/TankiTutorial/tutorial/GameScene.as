@@ -12,220 +12,220 @@ package tutorial
    public class GameScene
    {
       
-      private var leqib:Vector.<Object3D> = new Vector.<Object3D>();
+      private var objects:Vector.<Object3D> = new Vector.<Object3D>();
       
-      private var bemevem:Vector.<Object3D> = new Vector.<Object3D>();
+      private var dynamics:Vector.<Object3D> = new Vector.<Object3D>();
       
-      private var lucubegul:Vector.<Occluder> = new Vector.<Occluder>();
+      private var occluders:Vector.<Occluder> = new Vector.<Occluder>();
       
-      private var dyb:Object = new Object();
+      private var namedObjects:Object = new Object();
       
-      private var juzote:Boolean = false;
+      private var changed:Boolean = false;
       
-      private var woju:HelperMesh;
+      private var helperMesh:HelperMesh;
       
       public function GameScene()
       {
          super();
       }
       
-      public function addObject(param1:Object3D) : void
+      public function addObject(object:Object3D) : void
       {
-         this.leqib.push(param1);
-         if(param1.name != null)
+         this.objects.push(object);
+         if(object.name != null)
          {
-            this.dyb[param1.name] = param1;
+            this.namedObjects[object.name] = object;
          }
-         this.juzote = true;
+         this.changed = true;
       }
       
-      public function addOccluder(param1:Occluder) : void
+      public function addOccluder(occluder:Occluder) : void
       {
-         this.lucubegul.push(param1);
+         this.occluders.push(occluder);
       }
       
-      public function addDynamic(param1:Object3D) : void
+      public function addDynamic(object:Object3D) : void
       {
-         this.bemevem.push(param1);
-         if(param1.name != null)
+         this.dynamics.push(object);
+         if(object.name != null)
          {
-            this.dyb[param1.name] = param1;
+            this.namedObjects[object.name] = object;
          }
-         this.juzote = true;
+         this.changed = true;
       }
       
-      public function getObject(param1:String) : Object3D
+      public function getObject(name:String) : Object3D
       {
-         return this.dyb[param1];
+         return this.namedObjects[name];
       }
       
-      public function buildKDTree(param1:KDContainer) : void
+      public function buildKDTree(kdContainer:KDContainer) : void
       {
-         var _loc2_:Object = null;
-         var _loc3_:Mesh = null;
-         var _loc4_:int = 0;
-         var _loc5_:int = 0;
-         var _loc6_:Object3D = null;
-         var _loc7_:Face = null;
-         var _loc8_:BSP = null;
-         if(this.juzote)
+         var smoothed:Object = null;
+         var mesh:Mesh = null;
+         var i:int = 0;
+         var len:int = 0;
+         var object:Object3D = null;
+         var face:Face = null;
+         var bsp:BSP = null;
+         if(this.changed)
          {
-            _loc2_ = new Object();
-            _loc2_["hang_1"] = true;
-            _loc2_["hang_2"] = true;
-            _loc2_["hang_3"] = true;
-            _loc2_["SmHouse008"] = true;
-            _loc2_["wall_broke_1"] = true;
-            _loc2_["wall_broke_2"] = true;
-            _loc2_["Bk_roof1"] = true;
-            _loc2_["Bk_roof2"] = true;
-            _loc2_["Tree01"] = true;
-            _loc2_["Tree02"] = true;
-            _loc2_["tube_1"] = true;
-            _loc2_["tube_2"] = true;
-            _loc2_["tube_3"] = true;
-            _loc2_["tube_cor"] = true;
-            _loc2_["cliff_3"] = true;
-            _loc2_["cliff_1"] = true;
-            _loc2_["cliff_2"] = true;
-            _loc2_["cliff_4"] = true;
-            _loc2_["cliff_inco"] = true;
-            _loc2_["cliff_cor"] = true;
-            _loc2_["cliff_r2"] = true;
-            _loc2_["cliff_ri"] = true;
-            _loc2_["Big_Rock04"] = true;
-            _loc2_["Big_Rock"] = true;
-            _loc2_["Change01"] = true;
-            _loc2_["Change02"] = true;
-            _loc2_["Corn1"] = true;
-            _loc2_["Corn2"] = true;
-            _loc2_["Corn3"] = true;
-            _loc2_["Corn4"] = true;
-            _loc2_["Corn_B"] = true;
-            _loc2_["crater"] = true;
-            _loc2_["Land02"] = true;
-            _loc2_["Land03"] = true;
-            _loc2_["Land04"] = true;
-            _loc2_["Land05"] = true;
-            _loc2_["Land06"] = true;
-            _loc2_["Land07"] = true;
-            _loc2_["Land08"] = true;
-            _loc2_["Land09"] = true;
-            _loc2_["Land22"] = true;
-            _loc2_["Land33"] = true;
-            _loc2_["Line"] = true;
-            _loc2_["Med_Rock"] = true;
-            _loc2_["rise_g1"] = true;
-            _loc2_["rise_g2"] = true;
-            _loc2_["rise_g3"] = true;
-            _loc2_["rise_g4"] = true;
-            _loc2_["rise_g5"] = true;
-            _loc2_["rise_g6"] = true;
-            _loc2_["Rise_gr1"] = true;
-            _loc2_["Rise_gr2"] = true;
-            _loc2_["rise_r1"] = true;
-            _loc2_["sm_rock1"] = true;
-            _loc2_["sm_rock2"] = true;
-            _loc2_["up_Brock"] = true;
-            _loc2_["Up_Rock"] = true;
-            _loc2_["Up_Rock1"] = true;
-            _loc2_["Up_Rock2"] = true;
-            _loc2_["Up_Rock14"] = true;
-            for each(_loc3_ in this.leqib)
+            smoothed = new Object();
+            smoothed["hang_1"] = true;
+            smoothed["hang_2"] = true;
+            smoothed["hang_3"] = true;
+            smoothed["SmHouse008"] = true;
+            smoothed["wall_broke_1"] = true;
+            smoothed["wall_broke_2"] = true;
+            smoothed["Bk_roof1"] = true;
+            smoothed["Bk_roof2"] = true;
+            smoothed["Tree01"] = true;
+            smoothed["Tree02"] = true;
+            smoothed["tube_1"] = true;
+            smoothed["tube_2"] = true;
+            smoothed["tube_3"] = true;
+            smoothed["tube_cor"] = true;
+            smoothed["cliff_3"] = true;
+            smoothed["cliff_1"] = true;
+            smoothed["cliff_2"] = true;
+            smoothed["cliff_4"] = true;
+            smoothed["cliff_inco"] = true;
+            smoothed["cliff_cor"] = true;
+            smoothed["cliff_r2"] = true;
+            smoothed["cliff_ri"] = true;
+            smoothed["Big_Rock04"] = true;
+            smoothed["Big_Rock"] = true;
+            smoothed["Change01"] = true;
+            smoothed["Change02"] = true;
+            smoothed["Corn1"] = true;
+            smoothed["Corn2"] = true;
+            smoothed["Corn3"] = true;
+            smoothed["Corn4"] = true;
+            smoothed["Corn_B"] = true;
+            smoothed["crater"] = true;
+            smoothed["Land02"] = true;
+            smoothed["Land03"] = true;
+            smoothed["Land04"] = true;
+            smoothed["Land05"] = true;
+            smoothed["Land06"] = true;
+            smoothed["Land07"] = true;
+            smoothed["Land08"] = true;
+            smoothed["Land09"] = true;
+            smoothed["Land22"] = true;
+            smoothed["Land33"] = true;
+            smoothed["Line"] = true;
+            smoothed["Med_Rock"] = true;
+            smoothed["rise_g1"] = true;
+            smoothed["rise_g2"] = true;
+            smoothed["rise_g3"] = true;
+            smoothed["rise_g4"] = true;
+            smoothed["rise_g5"] = true;
+            smoothed["rise_g6"] = true;
+            smoothed["Rise_gr1"] = true;
+            smoothed["Rise_gr2"] = true;
+            smoothed["rise_r1"] = true;
+            smoothed["sm_rock1"] = true;
+            smoothed["sm_rock2"] = true;
+            smoothed["up_Brock"] = true;
+            smoothed["Up_Rock"] = true;
+            smoothed["Up_Rock1"] = true;
+            smoothed["Up_Rock2"] = true;
+            smoothed["Up_Rock14"] = true;
+            for each(mesh in this.objects)
             {
-               if(_loc2_[_loc3_.name] == undefined)
+               if(smoothed[mesh.name] == undefined)
                {
-                  for each(_loc7_ in _loc3_.faces)
+                  for each(face in mesh.faces)
                   {
-                     _loc7_.smoothingGroups = 0;
+                     face.smoothingGroups = 0;
                   }
                }
             }
-            Mesh.calculateVerticesNormalsBySmoothingGroupsForMeshList(this.leqib,0.01);
-            _loc4_ = 0;
-            _loc5_ = int(this.leqib.length);
-            while(_loc4_ < _loc5_)
+            Mesh.calculateVerticesNormalsBySmoothingGroupsForMeshList(this.objects,0.01);
+            i = 0;
+            len = int(this.objects.length);
+            while(i < len)
             {
-               _loc3_ = this.leqib[_loc4_] as Mesh;
-               if(GameData.bisoga && _loc3_.name == "bilboard")
+               mesh = this.objects[i] as Mesh;
+               if(GameData.bisoga && mesh.name == "bilboard")
                {
-                  this.cutBillboard(_loc3_);
+                  this.cutBillboard(mesh);
                }
-               _loc8_ = new BSP();
-               _loc8_.createTree(_loc3_,true);
-               _loc8_.name = _loc3_.name;
-               _loc8_.matrix = _loc3_.matrix;
-               this.leqib[_loc4_] = _loc8_;
-               _loc4_++;
+               bsp = new BSP();
+               bsp.createTree(mesh,true);
+               bsp.name = mesh.name;
+               bsp.matrix = mesh.matrix;
+               this.objects[i] = bsp;
+               i++;
             }
-            if(this.woju == null)
+            if(this.helperMesh == null)
             {
-               this.woju = new HelperMesh();
-               this.leqib.push(this.woju);
+               this.helperMesh = new HelperMesh();
+               this.objects.push(this.helperMesh);
             }
-            param1.createTree(this.leqib,this.lucubegul);
-            for each(_loc6_ in this.bemevem)
+            kdContainer.createTree(this.objects,this.occluders);
+            for each(object in this.dynamics)
             {
-               param1.addChild(_loc6_);
+               kdContainer.addChild(object);
             }
-            this.juzote = false;
+            this.changed = false;
          }
       }
       
-      private function cutBillboard(param1:Mesh) : void
+      private function cutBillboard(mesh:Mesh) : void
       {
-         var _loc3_:Vertex = null;
-         var _loc4_:Vertex = null;
-         var _loc5_:Vertex = null;
-         var _loc6_:Vertex = null;
-         var _loc8_:Vertex = null;
-         var _loc2_:Number = 1;
-         var _loc7_:Material = param1.faces[0].material;
-         for each(_loc8_ in param1.vertices)
+         var a:Vertex = null;
+         var b:Vertex = null;
+         var c:Vertex = null;
+         var d:Vertex = null;
+         var vertex:Vertex = null;
+         var threshold:Number = 1;
+         var material:Material = mesh.faces[0].material;
+         for each(vertex in mesh.vertices)
          {
-            if(_loc8_.z > _loc2_)
+            if(vertex.z > threshold)
             {
-               param1.removeVertex(_loc8_);
+               mesh.removeVertex(vertex);
             }
-            else if(_loc8_.x < param1.boundMinX + _loc2_)
+            else if(vertex.x < mesh.boundMinX + threshold)
             {
-               if(_loc8_.y < param1.boundMinY + _loc2_)
+               if(vertex.y < mesh.boundMinY + threshold)
                {
-                  _loc3_ = _loc8_;
+                  a = vertex;
                }
-               else if(_loc8_.y > param1.boundMaxY - _loc2_)
+               else if(vertex.y > mesh.boundMaxY - threshold)
                {
-                  _loc6_ = _loc8_;
+                  d = vertex;
                }
                else
                {
-                  param1.removeVertex(_loc8_);
+                  mesh.removeVertex(vertex);
                }
             }
-            else if(_loc8_.x > param1.boundMaxX - _loc2_)
+            else if(vertex.x > mesh.boundMaxX - threshold)
             {
-               if(_loc8_.y < param1.boundMinY + _loc2_)
+               if(vertex.y < mesh.boundMinY + threshold)
                {
-                  _loc4_ = _loc8_;
+                  b = vertex;
                }
-               else if(_loc8_.y > param1.boundMaxY - _loc2_)
+               else if(vertex.y > mesh.boundMaxY - threshold)
                {
-                  _loc5_ = _loc8_;
+                  c = vertex;
                }
                else
                {
-                  param1.removeVertex(_loc8_);
+                  mesh.removeVertex(vertex);
                }
             }
             else
             {
-               param1.removeVertex(_loc8_);
+               mesh.removeVertex(vertex);
             }
          }
-         param1.addQuadFace(_loc3_,_loc4_,_loc5_,_loc6_,_loc7_);
-         param1.calculateFacesNormals();
-         param1.calculateVerticesNormals();
-         param1.calculateBounds();
+         mesh.addQuadFace(a,b,c,d,material);
+         mesh.calculateFacesNormals();
+         mesh.calculateVerticesNormals();
+         mesh.calculateBounds();
       }
    }
 }

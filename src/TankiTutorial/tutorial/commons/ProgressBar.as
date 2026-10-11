@@ -12,7 +12,7 @@ package tutorial.commons
       
       public function ProgressBar()
       {
-         var _loc4_:Bitmap = null;
+         var bitmap:Bitmap = null;
          super();
          this.maskSP = new Sprite();
          this.maskSP.graphics.beginFill(0,1);
@@ -21,27 +21,27 @@ package tutorial.commons
          this.maskSP.width = this.WIDTH;
          this.maskSP.height = 24;
          addChild(this.maskSP);
-         var _loc1_:Form = new Form(this.WIDTH + 6,Shared.stub,Shared.stub);
-         _loc1_.x = -3;
-         _loc1_.y = -3;
-         addChild(_loc1_);
-         var _loc2_:Sprite = new Sprite();
-         addChild(_loc2_);
-         var _loc3_:int = 0;
-         while(_loc3_ < 34)
+         var form:Form = new Form(this.WIDTH + 6,Shared.stub,Shared.stub);
+         form.x = -3;
+         form.y = -3;
+         addChild(form);
+         var sprite:Sprite = new Sprite();
+         addChild(sprite);
+         var i:int = 0;
+         while(i < 34)
          {
-            _loc4_ = new Bitmap(Shared.stub);
-            _loc4_.x = _loc3_ * 17;
-            _loc2_.addChild(_loc4_);
-            _loc3_++;
+            bitmap = new Bitmap(Shared.stub);
+            bitmap.x = i * 17;
+            sprite.addChild(bitmap);
+            i++;
          }
-         _loc2_.mask = this.maskSP;
+         sprite.mask = this.maskSP;
          this.setProgress(0);
       }
       
-      public function setProgress(param1:Number) : void
+      public function setProgress(progress:Number) : void
       {
-         this.maskSP.scaleX = param1;
+         this.maskSP.scaleX = progress;
       }
    }
 }

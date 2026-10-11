@@ -7,7 +7,7 @@ package alternativa.tanks.utils.objectpool
       
       private var dyrog:Class;
       
-      private var leqib:Vector.<Object> = new Vector.<Object>();
+      private var objects:Vector.<Object> = new Vector.<Object>();
       
       public function Pool(param1:Class)
       {
@@ -26,8 +26,8 @@ package alternativa.tanks.utils.objectpool
          {
             return new this.dyrog(this);
          }
-         var _loc1_:Object = this.leqib[--this.dosomez];
-         this.leqib[this.dosomez] = null;
+         var _loc1_:Object = this.objects[--this.dosomez];
+         this.objects[this.dosomez] = null;
          return _loc1_;
       }
       
@@ -37,12 +37,12 @@ package alternativa.tanks.utils.objectpool
          {
             throw new ArgumentError();
          }
-         this.leqib[this.dosomez++] = param1;
+         this.objects[this.dosomez++] = param1;
       }
       
       final public function clear() : void
       {
-         this.leqib.length = 0;
+         this.objects.length = 0;
          this.dosomez = 0;
       }
    }
