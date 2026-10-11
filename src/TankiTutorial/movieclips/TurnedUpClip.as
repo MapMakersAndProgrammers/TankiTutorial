@@ -53,11 +53,11 @@ package movieclips
          this.tf3.x = this.pictogram.x + this.pictogram.width + 20;
          this.tf3.y = 65;
          addChild(this.tf3);
-         var _loc1_:Number = -Math.min(this.tf1.x,this.tf2.x);
-         this.tf1.x += _loc1_;
-         this.pictogram.x += _loc1_;
-         this.tf2.x += _loc1_;
-         this.tf3.x += _loc1_;
+         var dx:Number = -Math.min(this.tf1.x,this.tf2.x);
+         this.tf1.x += dx;
+         this.pictogram.x += dx;
+         this.tf2.x += dx;
+         this.tf3.x += dx;
       }
    }
 }
