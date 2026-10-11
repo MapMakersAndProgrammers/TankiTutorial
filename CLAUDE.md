@@ -90,8 +90,10 @@ Taken from the recovered method names, and applying to new names:
 
 - A new local or parameter name must not match another local or parameter of the same function (nested closures included), a member of the class or its superclasses, a class or package-level function used in the file, or an AS3 keyword or top-level name.
 - A new member name must not match another member of the class, its superclasses or its subclasses, or a local or parameter of any function that references the member.
+- No new name may match a top-level package name (`tutorial`, `alternativa`, `embed`, `movieclips`, `flash`, `mx`, `br`, `org`).
 - **Private members:** rename within the declaring class only. The same word in another file is a different symbol.
 - **Non-private members:** search for the whole word across `src/` and account for every declaration and reference. If the word is declared in more than one class, treat the declarations as one family: one name that fits all of them, or no rename. Update all references in the same change.
+- After editing, search `src/` again for each renamed non-private member's old name; no references should remain.
 - Stop and report, without renaming, if the word occurs inside a string literal, or if a reference to it sits in an excluded directory.
 - Replace whole identifiers only, never substrings.
 
