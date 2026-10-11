@@ -279,7 +279,7 @@ package tutorial.loader
          var mesh:Mesh = this.parseBSP(object as Mesh,prop.priority,matrix3D) as Mesh;
          this.scene.addObject(mesh);
          var face:Face = mesh.faces[0];
-         var collisionGroup:int = face.material == null ? CollisionGroup.neli : 255;
+         var collisionGroup:int = face.material == null ? CollisionGroup.STATIC : 255;
          for each(shape in prop.collisionShapes)
          {
             matrix4.setMatrix(position.x,position.y,position.z,0,0,rotationZ);

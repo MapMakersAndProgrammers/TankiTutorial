@@ -179,7 +179,7 @@ package alternativa.tanks.sfx
       
       private function updateEffectiveVolume() : void
       {
-         this.tuc = SoundManager.tacacihob * this.bato;
+         this.tuc = SoundManager.baseVolume * this.bato;
       }
    }
 }

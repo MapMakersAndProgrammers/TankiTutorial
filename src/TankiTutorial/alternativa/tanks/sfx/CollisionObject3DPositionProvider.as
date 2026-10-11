@@ -76,7 +76,7 @@ package alternativa.tanks.sfx
       {
          this.calculateParameters();
          var _loc2_:Number = this.gog * this.cyrare;
-         if(this.collisionDetector.raycastStatic(fybumu,direction,CollisionGroup.neli,this.gog,null,tefydiw))
+         if(this.collisionDetector.raycastStatic(fybumu,direction,CollisionGroup.STATIC,this.gog,null,tefydiw))
          {
             _loc2_ = Vector3.distanceBetween(fybumu,tefydiw.position) * this.cyrare;
          }

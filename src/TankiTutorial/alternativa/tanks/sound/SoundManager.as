@@ -13,13 +13,13 @@ package alternativa.tanks.sound
    public class SoundManager implements ISoundManager
    {
       
-      private static const jewawulef:int = 10;
+      private static const MAX_SOUNDS:int = 10;
       
-      private static const kenuqoz:int = 20;
+      private static const MAX_EFFECT_SOUNDS:int = 20;
       
-      private static const duv:Vector3 = new Vector3();
+      private static const position:Vector3 = new Vector3();
       
-      public static var tacacihob:Number = 0;
+      public static var baseVolume:Number = 0;
       
       public static var wiwoginut:Number = 0;
       
@@ -27,138 +27,138 @@ package alternativa.tanks.sound
       
       private var jahobyva:Number = 0.07;
       
-      private var fesiwu:Number;
+      private var maxDistanceSqr:Number;
       
       private var effects:Vector.<SoundEffectData> = new Vector.<SoundEffectData>();
       
-      private var riwo:int;
+      private var numEffects:int;
       
-      private var jugar:Dictionary = new Dictionary();
+      private var channels:Dictionary = new Dictionary();
       
       private var numSounds:int;
       
-      private var cimaw:Vector.<int> = new Vector.<int>();
+      private var stack:Vector.<int> = new Vector.<int>();
       
-      private var tehewym:Boolean = false;
+      private var muted:Boolean = false;
       
       public function SoundManager()
       {
          super();
       }
       
-      public static function createSoundManager(param1:Sound) : ISoundManager
+      public static function createSoundManager(sound:Sound) : ISoundManager
       {
-         var _loc2_:SoundChannel = param1.play(0,1,new SoundTransform(0));
-         if(_loc2_ != null)
+         var channel:SoundChannel = sound.play(0,1,new SoundTransform(0));
+         if(channel != null)
          {
-            _loc2_.stop();
+            channel.stop();
             return new SoundManager();
          }
          return new DummySoundManager();
       }
       
-      public function set maxDistance(param1:Number) : void
+      public function set maxDistance(value:Number) : void
       {
-         this.fesiwu = param1 * param1;
+         this.maxDistanceSqr = value * value;
       }
       
-      public function setMute(param1:Boolean) : void
+      public function setMute(mute:Boolean) : void
       {
-         this.tehewym = param1;
+         this.muted = mute;
       }
       
-      public function playSound(param1:Sound, param2:int = 0, param3:int = 0, param4:SoundTransform = null) : SoundChannel
+      public function playSound(sound:Sound, startTime:int = 0, loops:int = 0, soundTransform:SoundTransform = null) : SoundChannel
       {
-         if(this.cannotPlaySound(param1))
+         if(this.cannotPlaySound(sound))
          {
             return null;
          }
-         var _loc5_:SoundChannel = param1.play(param2,param3,param4);
-         if(_loc5_ != null)
+         var channel:SoundChannel = sound.play(startTime,loops,soundTransform);
+         if(channel != null)
          {
-            this.addSoundChannel(_loc5_);
+            this.addSoundChannel(channel);
          }
-         return _loc5_;
+         return channel;
       }
       
-      private function cannotPlaySound(param1:Sound) : Boolean
+      private function cannotPlaySound(sound:Sound) : Boolean
       {
-         return this.tehewym || this.numSounds == jewawulef || param1 == null;
+         return this.muted || this.numSounds == MAX_SOUNDS || sound == null;
       }
       
-      public function stopSound(param1:SoundChannel) : void
+      public function stopSound(channel:SoundChannel) : void
       {
-         if(param1 != null || this.jugar[param1] != null)
+         if(channel != null || this.channels[channel] != null)
          {
-            this.removeSoundChannel(param1);
+            this.removeSoundChannel(channel);
          }
       }
       
       public function stopAllSounds() : void
       {
-         var _loc1_:* = undefined;
-         for(_loc1_ in this.jugar)
+         var channel:* = undefined;
+         for(channel in this.channels)
          {
-            this.removeSoundChannel(_loc1_ as SoundChannel);
+            this.removeSoundChannel(channel as SoundChannel);
          }
       }
       
-      public function addEffect(param1:ISound3DEffect) : Boolean
+      public function addEffect(effect:ISound3DEffect) : Boolean
       {
-         if(this.canAddEffect(param1))
+         if(this.canAddEffect(effect))
          {
-            param1.enabled = true;
-            this.effects.push(SoundEffectData.create(0,param1));
-            ++this.riwo;
+            effect.enabled = true;
+            this.effects.push(SoundEffectData.create(0,effect));
+            ++this.numEffects;
             return true;
          }
          return false;
       }
       
-      private function canAddEffect(param1:ISound3DEffect) : Boolean
+      private function canAddEffect(effect:ISound3DEffect) : Boolean
       {
-         return !this.tehewym && param1 != null && this.getEffectIndex(param1) < 0;
+         return !this.muted && effect != null && this.getEffectIndex(effect) < 0;
       }
       
-      public function removeEffect(param1:ISound3DEffect) : void
+      public function removeEffect(effect:ISound3DEffect) : void
       {
-         var _loc3_:SoundEffectData = null;
-         var _loc2_:int = 0;
-         while(_loc2_ < this.riwo)
+         var effectData:SoundEffectData = null;
+         var i:int = 0;
+         while(i < this.numEffects)
          {
-            _loc3_ = this.effects[_loc2_];
-            if(_loc3_.nyniqadi == param1)
+            effectData = this.effects[i];
+            if(effectData.effect == effect)
             {
-               param1.destroy();
-               SoundEffectData.destroy(_loc3_);
-               this.effects.splice(_loc2_,1);
-               --this.riwo;
+               effect.destroy();
+               SoundEffectData.destroy(effectData);
+               this.effects.splice(i,1);
+               --this.numEffects;
                return;
             }
-            _loc2_++;
+            i++;
          }
       }
       
       public function removeAllEffects() : void
       {
-         var _loc1_:SoundEffectData = null;
+         var effectData:SoundEffectData = null;
          while(this.effects.length > 0)
          {
-            _loc1_ = this.effects.pop();
-            _loc1_.nyniqadi.destroy();
-            SoundEffectData.destroy(_loc1_);
+            effectData = this.effects.pop();
+            effectData.effect.destroy();
+            SoundEffectData.destroy(effectData);
          }
-         this.riwo = 0;
+         this.numEffects = 0;
       }
       
-      public function updateSoundEffects(param1:int, param2:GameCamera) : void
+      public function updateSoundEffects(deltaTime:int, camera:GameCamera) : void
       {
-         var _loc3_:int = 0;
-         if(this.riwo > 0)
+         var index:int = 0;
+         if(this.numEffects > 0)
          {
-            this.sortEffects(param2.position);
-            _loc3_ = this.processEffectsInActiveRange(param1,param2);
-            this.deactivateRemainingEffects(_loc3_);
+            this.sortEffects(camera.position);
+            index = this.processEffectsInActiveRange(deltaTime,camera);
+            this.deactivateRemainingEffects(index);
          }
          this.switchBaseVolume();
       }
@@ -189,168 +189,168 @@ package alternativa.tanks.sound
                nad = Shared.volume;
             }
          }
-         tacacihob = wiwoginut * nad;
+         baseVolume = wiwoginut * nad;
       }
       
-      private function processEffectsInActiveRange(param1:int, param2:GameCamera) : int
+      private function processEffectsInActiveRange(deltaTime:int, camera:GameCamera) : int
       {
-         var _loc3_:SoundEffectData = null;
-         var _loc5_:int = 0;
-         var _loc6_:int = 0;
-         var _loc4_:int = 0;
-         _loc5_ = 0;
-         while(_loc5_ < this.riwo)
+         var effectData:SoundEffectData = null;
+         var i:int = 0;
+         var numEffectSounds:int = 0;
+         var numActiveSounds:int = 0;
+         i = 0;
+         while(i < this.numEffects)
          {
-            _loc3_ = this.effects[_loc5_];
-            _loc6_ = int(_loc3_.nyniqadi.numSounds);
-            if(_loc6_ == 0)
+            effectData = this.effects[i];
+            numEffectSounds = int(effectData.effect.numSounds);
+            if(numEffectSounds == 0)
             {
-               _loc3_.nyniqadi.destroy();
-               SoundEffectData.destroy(_loc3_);
-               this.effects.splice(_loc5_,1);
-               --this.riwo;
-               _loc5_--;
+               effectData.effect.destroy();
+               SoundEffectData.destroy(effectData);
+               this.effects.splice(i,1);
+               --this.numEffects;
+               i--;
             }
             else
             {
-               if(_loc3_.pyvyg > this.fesiwu || _loc4_ + _loc6_ > kenuqoz)
+               if(effectData.distanceSqr > this.maxDistanceSqr || numActiveSounds + numEffectSounds > MAX_EFFECT_SOUNDS)
                {
                   break;
                }
-               _loc3_.nyniqadi.enabled = true;
-               _loc3_.nyniqadi.play(param1,param2);
-               _loc4_ += _loc6_;
+               effectData.effect.enabled = true;
+               effectData.effect.play(deltaTime,camera);
+               numActiveSounds += numEffectSounds;
             }
-            _loc5_++;
+            i++;
          }
-         return _loc5_;
+         return i;
       }
       
-      private function deactivateRemainingEffects(param1:int) : void
+      private function deactivateRemainingEffects(index:int) : void
       {
-         var _loc3_:SoundEffectData = null;
-         var _loc2_:int = param1;
-         while(_loc2_ < this.riwo)
+         var effectData:SoundEffectData = null;
+         var i:int = index;
+         while(i < this.numEffects)
          {
-            _loc3_ = this.effects[_loc2_];
-            _loc3_.nyniqadi.enabled = false;
-            if(_loc3_.nyniqadi.numSounds == 0)
+            effectData = this.effects[i];
+            effectData.effect.enabled = false;
+            if(effectData.effect.numSounds == 0)
             {
-               _loc3_.nyniqadi.destroy();
-               SoundEffectData.destroy(_loc3_);
-               this.effects.splice(_loc2_,1);
-               --this.riwo;
-               _loc2_--;
+               effectData.effect.destroy();
+               SoundEffectData.destroy(effectData);
+               this.effects.splice(i,1);
+               --this.numEffects;
+               i--;
             }
-            _loc2_++;
+            i++;
          }
       }
       
-      private function addSoundChannel(param1:SoundChannel) : void
+      private function addSoundChannel(channel:SoundChannel) : void
       {
-         param1.addEventListener(Event.SOUND_COMPLETE,this.onSoundComplete);
-         this.jugar[param1] = true;
+         channel.addEventListener(Event.SOUND_COMPLETE,this.onSoundComplete);
+         this.channels[channel] = true;
          ++this.numSounds;
       }
       
-      private function removeSoundChannel(param1:SoundChannel) : void
+      private function removeSoundChannel(channel:SoundChannel) : void
       {
-         param1.stop();
-         param1.removeEventListener(Event.SOUND_COMPLETE,this.onSoundComplete);
-         delete this.jugar[param1];
+         channel.stop();
+         channel.removeEventListener(Event.SOUND_COMPLETE,this.onSoundComplete);
+         delete this.channels[channel];
          --this.numSounds;
       }
       
-      private function onSoundComplete(param1:Event) : void
+      private function onSoundComplete(e:Event) : void
       {
-         this.stopSound(param1.target as SoundChannel);
+         this.stopSound(e.target as SoundChannel);
       }
       
-      private function getEffectIndex(param1:ISound3DEffect) : int
+      private function getEffectIndex(effect:ISound3DEffect) : int
       {
-         var _loc3_:SoundEffectData = null;
-         var _loc2_:int = 0;
-         while(_loc2_ < this.riwo)
+         var effectData:SoundEffectData = null;
+         var i:int = 0;
+         while(i < this.numEffects)
          {
-            _loc3_ = this.effects[_loc2_];
-            if(_loc3_.nyniqadi == param1)
+            effectData = this.effects[i];
+            if(effectData.effect == effect)
             {
-               return _loc2_;
+               return i;
             }
-            _loc2_++;
+            i++;
          }
          return -1;
       }
       
-      private function sortEffects(param1:Vector3) : void
+      private function sortEffects(cameraPosition:Vector3) : void
       {
-         var _loc2_:int = 0;
-         var _loc3_:int = 0;
-         var _loc6_:int = 0;
-         var _loc7_:Number = NaN;
-         var _loc8_:SoundEffectData = null;
-         var _loc9_:SoundEffectData = null;
-         var _loc10_:SoundEffectData = null;
-         var _loc11_:Number = NaN;
-         var _loc12_:Number = NaN;
-         var _loc13_:Number = NaN;
-         var _loc14_:SoundEffectData = null;
-         var _loc4_:int = 0;
-         var _loc5_:int = this.riwo - 1;
-         _loc2_ = 0;
-         while(_loc2_ < this.riwo)
+         var i:int = 0;
+         var j:int = 0;
+         var stackSize:int = 0;
+         var pivot:Number = NaN;
+         var effectData:SoundEffectData = null;
+         var a:SoundEffectData = null;
+         var b:SoundEffectData = null;
+         var dx:Number = NaN;
+         var dy:Number = NaN;
+         var dz:Number = NaN;
+         var pivotData:SoundEffectData = null;
+         var left:int = 0;
+         var right:int = this.numEffects - 1;
+         i = 0;
+         while(i < this.numEffects)
          {
-            _loc8_ = this.effects[_loc2_];
-            _loc8_.nyniqadi.readPosition(duv);
-            _loc11_ = param1.x - duv.x;
-            _loc12_ = param1.y - duv.y;
-            _loc13_ = param1.z - duv.z;
-            _loc8_.pyvyg = _loc11_ * _loc11_ + _loc12_ * _loc12_ + _loc13_ * _loc13_;
-            _loc2_++;
+            effectData = this.effects[i];
+            effectData.effect.readPosition(position);
+            dx = cameraPosition.x - position.x;
+            dy = cameraPosition.y - position.y;
+            dz = cameraPosition.z - position.z;
+            effectData.distanceSqr = dx * dx + dy * dy + dz * dz;
+            i++;
          }
-         if(this.riwo == 1)
+         if(this.numEffects == 1)
          {
             return;
          }
-         this.cimaw[0] = _loc4_;
-         this.cimaw[1] = _loc5_;
-         _loc6_ = 2;
-         while(_loc6_ > 0)
+         this.stack[0] = left;
+         this.stack[1] = right;
+         stackSize = 2;
+         while(stackSize > 0)
          {
-            _loc3_ = _loc5_ = this.cimaw[--_loc6_];
-            _loc2_ = _loc4_ = this.cimaw[--_loc6_];
-            _loc14_ = this.effects[_loc5_ + _loc4_ >> 1];
-            _loc7_ = Number(_loc14_.pyvyg);
+            j = right = this.stack[--stackSize];
+            i = left = this.stack[--stackSize];
+            pivotData = this.effects[right + left >> 1];
+            pivot = Number(pivotData.distanceSqr);
             do
             {
-               _loc9_ = this.effects[_loc2_];
-               while(_loc9_.pyvyg < _loc7_)
+               a = this.effects[i];
+               while(a.distanceSqr < pivot)
                {
-                  _loc2_++;
-                  _loc9_ = this.effects[_loc2_];
+                  i++;
+                  a = this.effects[i];
                }
-               _loc10_ = this.effects[_loc3_];
-               while(_loc10_.pyvyg > _loc7_)
+               b = this.effects[j];
+               while(b.distanceSqr > pivot)
                {
-                  _loc3_--;
-                  _loc10_ = this.effects[_loc3_];
+                  j--;
+                  b = this.effects[j];
                }
-               if(_loc2_ <= _loc3_)
+               if(i <= j)
                {
-                  this.effects[_loc2_++] = _loc10_;
-                  this.effects[_loc3_--] = _loc9_;
+                  this.effects[i++] = b;
+                  this.effects[j--] = a;
                }
             }
-            while(_loc2_ <= _loc3_);
-            if(_loc4_ < _loc3_)
+            while(i <= j);
+            if(left < j)
             {
-               this.cimaw[_loc6_++] = _loc4_;
-               this.cimaw[_loc6_++] = _loc3_;
+               this.stack[stackSize++] = left;
+               this.stack[stackSize++] = j;
             }
-            if(_loc2_ < _loc5_)
+            if(i < right)
             {
-               this.cimaw[_loc6_++] = _loc2_;
-               this.cimaw[_loc6_++] = _loc5_;
+               this.stack[stackSize++] = i;
+               this.stack[stackSize++] = right;
             }
          }
       }

@@ -25,7 +25,7 @@ package alternativa.tanks.bonuses
          super();
          this.nasybugo = param1;
          var _loc2_:Number = BonusConst.numij;
-         this.pyp = new CollisionBox(new Vector3(_loc2_,_loc2_,_loc2_),CollisionGroup.nuqa,PhysicsMaterial.defaultMaterial);
+         this.pyp = new CollisionBox(new Vector3(_loc2_,_loc2_,_loc2_),CollisionGroup.BONUS,PhysicsMaterial.defaultMaterial);
       }
       
       public function enable(param1:BattleRunner) : void

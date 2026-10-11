@@ -14,16 +14,16 @@ package alternativa.tanks.sound
          super();
       }
       
-      public function set maxDistance(param1:Number) : void
+      public function set maxDistance(value:Number) : void
       {
       }
       
-      public function playSound(param1:Sound, param2:int = 0, param3:int = 0, param4:SoundTransform = null) : SoundChannel
+      public function playSound(sound:Sound, startTime:int = 0, loops:int = 0, soundTransform:SoundTransform = null) : SoundChannel
       {
          return null;
       }
       
-      public function stopSound(param1:SoundChannel) : void
+      public function stopSound(channel:SoundChannel) : void
       {
       }
       
@@ -31,12 +31,12 @@ package alternativa.tanks.sound
       {
       }
       
-      public function addEffect(param1:ISound3DEffect) : Boolean
+      public function addEffect(effect:ISound3DEffect) : Boolean
       {
          return false;
       }
       
-      public function removeEffect(param1:ISound3DEffect) : void
+      public function removeEffect(effect:ISound3DEffect) : void
       {
       }
       
@@ -44,11 +44,11 @@ package alternativa.tanks.sound
       {
       }
       
-      public function updateSoundEffects(param1:int, param2:GameCamera) : void
+      public function updateSoundEffects(deltaTime:int, camera:GameCamera) : void
       {
       }
       
-      public function setMute(param1:Boolean) : void
+      public function setMute(mute:Boolean) : void
       {
       }
    }

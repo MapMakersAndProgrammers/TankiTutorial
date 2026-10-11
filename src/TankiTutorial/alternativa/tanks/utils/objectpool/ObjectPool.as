@@ -5,37 +5,37 @@ package alternativa.tanks.utils.objectpool
    public class ObjectPool
    {
       
-      private var racekuwyl:Dictionary = new Dictionary();
+      private var pools:Dictionary = new Dictionary();
       
       public function ObjectPool()
       {
          super();
       }
       
-      public function getObject(param1:Class) : Object
+      public function getObject(objectClass:Class) : Object
       {
-         return this.getPoolForClass(param1).getObject();
+         return this.getPoolForClass(objectClass).getObject();
       }
       
       public function clear() : void
       {
-         var _loc1_:* = undefined;
-         for(_loc1_ in this.racekuwyl)
+         var objectClass:* = undefined;
+         for(objectClass in this.pools)
          {
-            Pool(this.racekuwyl[_loc1_]).clear();
-            delete this.racekuwyl[_loc1_];
+            Pool(this.pools[objectClass]).clear();
+            delete this.pools[objectClass];
          }
       }
       
-      private function getPoolForClass(param1:Class) : Pool
+      private function getPoolForClass(objectClass:Class) : Pool
       {
-         var _loc2_:Pool = this.racekuwyl[param1];
-         if(_loc2_ == null)
+         var pool:Pool = this.pools[objectClass];
+         if(pool == null)
          {
-            _loc2_ = new Pool(param1);
-            this.racekuwyl[param1] = _loc2_;
+            pool = new Pool(objectClass);
+            this.pools[objectClass] = pool;
          }
-         return _loc2_;
+         return pool;
       }
    }
 }

@@ -230,7 +230,7 @@ package alternativa.tanks.vehicles.tank
             this.createBody(this.tuwykus,_loc4_);
             this.createChassis(_loc4_,_loc2_);
             this.setOptimalZCorrection(_loc4_);
-            this.setBodyCollisionGroup(CollisionGroup.pisyse | CollisionGroup.bywowe | CollisionGroup.WEAPON | CollisionGroup.nuqa);
+            this.setBodyCollisionGroup(CollisionGroup.pisyse | CollisionGroup.bywowe | CollisionGroup.WEAPON | CollisionGroup.BONUS);
             this.setTracksCollisionGroup(CollisionGroup.bywowe);
          }
       }

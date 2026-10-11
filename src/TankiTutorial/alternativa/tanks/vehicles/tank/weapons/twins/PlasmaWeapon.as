@@ -106,7 +106,7 @@ package alternativa.tanks.vehicles.tank.weapons.twins
       
       private function barrelCollidesWithStatic(param1:Vector3, param2:Vector3, param3:Number) : Boolean
       {
-         return this.collisionDetector.raycastStatic(param1,param2,CollisionGroup.neli,param3,null,wonuhig);
+         return this.collisionDetector.raycastStatic(param1,param2,CollisionGroup.STATIC,param3,null,wonuhig);
       }
    }
 }

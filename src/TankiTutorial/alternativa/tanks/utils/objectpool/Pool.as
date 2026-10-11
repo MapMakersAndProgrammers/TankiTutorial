@@ -3,47 +3,47 @@ package alternativa.tanks.utils.objectpool
    public class Pool
    {
       
-      private var dosomez:int;
+      private var numObjects:int;
       
-      private var dyrog:Class;
+      private var objectClass:Class;
       
       private var objects:Vector.<Object> = new Vector.<Object>();
       
-      public function Pool(param1:Class)
+      public function Pool(objectClass:Class)
       {
          super();
-         this.dyrog = param1;
+         this.objectClass = objectClass;
       }
       
       final public function getNumObjects() : int
       {
-         return this.dosomez;
+         return this.numObjects;
       }
       
       final public function getObject() : Object
       {
-         if(this.dosomez == 0)
+         if(this.numObjects == 0)
          {
-            return new this.dyrog(this);
+            return new this.objectClass(this);
          }
-         var _loc1_:Object = this.objects[--this.dosomez];
-         this.objects[this.dosomez] = null;
-         return _loc1_;
+         var object:Object = this.objects[--this.numObjects];
+         this.objects[this.numObjects] = null;
+         return object;
       }
       
-      final public function putObject(param1:Object) : void
+      final public function putObject(object:Object) : void
       {
-         if(this.dyrog != param1.constructor)
+         if(this.objectClass != object.constructor)
          {
             throw new ArgumentError();
          }
-         this.objects[this.dosomez++] = param1;
+         this.objects[this.numObjects++] = object;
       }
       
       final public function clear() : void
       {
          this.objects.length = 0;
-         this.dosomez = 0;
+         this.numObjects = 0;
       }
    }
 }

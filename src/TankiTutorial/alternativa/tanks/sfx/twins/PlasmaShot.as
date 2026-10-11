@@ -360,7 +360,7 @@ package alternativa.tanks.sfx.twins
          hifoca.copy(this.guripovec);
          var _loc2_:Number = japycepef;
          hifoca.z += _loc2_;
-         if(param1.raycast(hifoca,Vector3.down,CollisionGroup.neli,_loc2_,null,wonuhig))
+         if(param1.raycast(hifoca,Vector3.down,CollisionGroup.STATIC,_loc2_,null,wonuhig))
          {
             this.applyImpact(null,wonuhig.position,null,0);
             this.destroy();

@@ -7,7 +7,7 @@ package alternativa.tanks.utils
    public class Utils3D
    {
       
-      private static const fyqynyfy:Vector3 = new Vector3();
+      private static const eulerAngles:Vector3 = new Vector3();
       
       public static const neputi:Vector3 = new Vector3();
       
@@ -16,15 +16,15 @@ package alternativa.tanks.utils
          super();
       }
       
-      public static function setObjectTransform(param1:Object3D, param2:Matrix4) : void
+      public static function setObjectTransform(object:Object3D, matrix:Matrix4) : void
       {
-         param2.getEulerAngles(fyqynyfy);
-         param1.x = param2.md;
-         param1.y = param2.mh;
-         param1.z = param2.ml;
-         param1.rotationX = fyqynyfy.x;
-         param1.rotationY = fyqynyfy.y;
-         param1.rotationZ = fyqynyfy.z;
+         matrix.getEulerAngles(eulerAngles);
+         object.x = matrix.md;
+         object.y = matrix.mh;
+         object.z = matrix.ml;
+         object.rotationX = eulerAngles.x;
+         object.rotationY = eulerAngles.y;
+         object.rotationZ = eulerAngles.z;
       }
    }
 }

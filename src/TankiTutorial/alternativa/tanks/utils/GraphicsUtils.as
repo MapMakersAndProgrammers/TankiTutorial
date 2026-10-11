@@ -16,62 +16,62 @@ package alternativa.tanks.utils
          super();
       }
       
-      public static function setObjectTransform(param1:Object3D, param2:Vector3, param3:Vector3) : void
+      public static function setObjectTransform(object:Object3D, position:Vector3, rotation:Vector3) : void
       {
-         param1.x = param2.x;
-         param1.y = param2.y;
-         param1.z = param2.z;
-         param1.rotationX = param3.x;
-         param1.rotationY = param3.y;
-         param1.rotationZ = param3.z;
+         object.x = position.x;
+         object.y = position.y;
+         object.z = position.z;
+         object.rotationX = rotation.x;
+         object.rotationY = rotation.y;
+         object.rotationZ = rotation.z;
       }
       
-      public static function getSquareUVFramesFromTexture(param1:BitmapData, param2:int = 0) : Vector.<UVFrame>
+      public static function getSquareUVFramesFromTexture(bitmapData:BitmapData, numFrames:int = 0) : Vector.<UVFrame>
       {
-         var _loc3_:int = param1.height;
-         return getUVFramesFromTexture(param1,_loc3_,_loc3_,param2);
+         var frameSize:int = bitmapData.height;
+         return getUVFramesFromTexture(bitmapData,frameSize,frameSize,numFrames);
       }
       
-      public static function getUVFramesFromTexture(param1:BitmapData, param2:int, param3:int, param4:int = 0) : Vector.<UVFrame>
+      public static function getUVFramesFromTexture(bitmapData:BitmapData, frameWidth:int, frameHeight:int, numFrames:int = 0) : Vector.<UVFrame>
       {
-         var _loc15_:int = 0;
-         var _loc16_:int = 0;
-         var _loc17_:int = 0;
-         var _loc18_:int = 0;
-         var _loc19_:int = 0;
-         var _loc5_:int = param1.width;
-         var _loc6_:int = Math.min(param2,_loc5_);
-         var _loc7_:int = _loc5_ / _loc6_;
-         var _loc8_:int = param1.height;
-         var _loc9_:int = Math.min(param3,_loc8_);
-         var _loc10_:int = _loc8_ / _loc9_;
-         var _loc11_:int = _loc7_ * _loc10_;
-         if(param4 > 0 && _loc11_ > param4)
+         var top:int = 0;
+         var bottom:int = 0;
+         var j:int = 0;
+         var left:int = 0;
+         var right:int = 0;
+         var textureWidth:int = bitmapData.width;
+         var _loc6_:int = Math.min(frameWidth,textureWidth);
+         var numColumns:int = textureWidth / _loc6_;
+         var textureHeight:int = bitmapData.height;
+         var _loc9_:int = Math.min(frameHeight,textureHeight);
+         var numRows:int = textureHeight / _loc9_;
+         var totalFrames:int = numColumns * numRows;
+         if(numFrames > 0 && totalFrames > numFrames)
          {
-            _loc11_ = param4;
+            totalFrames = numFrames;
          }
-         var _loc12_:Vector.<UVFrame> = new Vector.<UVFrame>(_loc11_);
-         var _loc13_:int = 0;
-         var _loc14_:int = 0;
-         while(_loc14_ < _loc10_)
+         var frames:Vector.<UVFrame> = new Vector.<UVFrame>(totalFrames);
+         var index:int = 0;
+         var i:int = 0;
+         while(i < numRows)
          {
-            _loc15_ = _loc14_ * _loc9_;
-            _loc16_ = _loc15_ + _loc9_;
-            _loc17_ = 0;
-            while(_loc17_ < _loc7_)
+            top = i * _loc9_;
+            bottom = top + _loc9_;
+            j = 0;
+            while(j < numColumns)
             {
-               _loc18_ = _loc17_ * _loc6_;
-               _loc19_ = _loc18_ + _loc6_;
-               _loc12_[_loc13_++] = new UVFrame(_loc18_ / _loc5_,_loc15_ / _loc8_,_loc19_ / _loc5_,_loc16_ / _loc8_);
-               if(_loc13_ == _loc11_)
+               left = j * _loc6_;
+               right = left + _loc6_;
+               frames[index++] = new UVFrame(left / textureWidth,top / textureHeight,right / textureWidth,bottom / textureHeight);
+               if(index == totalFrames)
                {
-                  return _loc12_;
+                  return frames;
                }
-               _loc17_++;
+               j++;
             }
-            _loc14_++;
+            i++;
          }
-         return _loc12_;
+         return frames;
       }
    }
 }

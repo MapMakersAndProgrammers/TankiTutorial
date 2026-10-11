@@ -167,7 +167,7 @@ package alternativa.tanks.sfx.flamethrower
          var _loc7_:Number = NaN;
          this.calculateParameters();
          _loc3_ = param1 / 1000;
-         if(this.collisionDetector.raycastStatic(fybumu,direction,CollisionGroup.neli,this.toqumyc.y + this.fyqih.length,null,tefydiw))
+         if(this.collisionDetector.raycastStatic(fybumu,direction,CollisionGroup.STATIC,this.toqumyc.y + this.fyqih.length,null,tefydiw))
          {
             this.fyqih.visible = false;
          }

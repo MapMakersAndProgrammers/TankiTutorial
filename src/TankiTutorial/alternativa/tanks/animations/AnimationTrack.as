@@ -3,49 +3,49 @@ package alternativa.tanks.animations
    public class AnimationTrack
    {
       
-      private var mal:Vector.<Number>;
+      private var times:Vector.<Number>;
       
-      private var maduze:Vector.<Number>;
+      private var values:Vector.<Number>;
       
-      private var nomupiz:int;
+      private var numFrames:int;
       
-      private var giwiqy:Number;
+      private var minTime:Number;
       
-      private var davaqymev:Number;
+      private var maxTime:Number;
       
-      public function AnimationTrack(param1:Vector.<Number>, param2:Vector.<Number>)
+      public function AnimationTrack(times:Vector.<Number>, values:Vector.<Number>)
       {
          super();
-         this.mal = param1;
-         this.maduze = param2;
-         this.nomupiz = param1.length;
-         this.giwiqy = param1[0];
-         this.davaqymev = param1[this.nomupiz - 1];
+         this.times = times;
+         this.values = values;
+         this.numFrames = times.length;
+         this.minTime = times[0];
+         this.maxTime = times[this.numFrames - 1];
       }
       
-      public function getFrameTime(param1:int) : Number
+      public function getFrameTime(frameIndex:int) : Number
       {
-         return this.mal[param1];
+         return this.times[frameIndex];
       }
       
       public function getNumFrames() : int
       {
-         return this.nomupiz;
+         return this.numFrames;
       }
       
       public function getMinTime() : Number
       {
-         return this.giwiqy;
+         return this.minTime;
       }
       
       public function getMaxTime() : Number
       {
-         return this.davaqymev;
+         return this.maxTime;
       }
       
-      public function getFrameValue(param1:int) : Number
+      public function getFrameValue(frameIndex:int) : Number
       {
-         return this.maduze[param1];
+         return this.values[frameIndex];
       }
    }
 }

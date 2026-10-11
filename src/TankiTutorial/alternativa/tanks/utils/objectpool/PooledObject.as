@@ -3,17 +3,17 @@ package alternativa.tanks.utils.objectpool
    public class PooledObject
    {
       
-      private var hybuhy:Pool;
+      private var pool:Pool;
       
-      public function PooledObject(param1:Pool)
+      public function PooledObject(pool:Pool)
       {
          super();
-         this.hybuhy = param1;
+         this.pool = pool;
       }
       
       public function recycle() : void
       {
-         this.hybuhy.putObject(this);
+         this.pool.putObject(this);
       }
    }
 }
