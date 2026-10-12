@@ -3,6 +3,8 @@
 	"compilerOptions": {
 		"source-path": [
 			".",
+			"../Alternativa3DHardware",
+
 			"../../external/BulkLoader/src",
 			"../../external/as3-signals/src"
 		],
