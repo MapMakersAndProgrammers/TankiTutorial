@@ -4,7 +4,7 @@ Decompilation and deobfuscation of the last Tanki Online flash tutorial
 TODO
 
 ## Status
-***Still WIP***, the application freezes entirely due to decompilation errors.
+***Still WIP***
 
 ## Build from source
 TODO
