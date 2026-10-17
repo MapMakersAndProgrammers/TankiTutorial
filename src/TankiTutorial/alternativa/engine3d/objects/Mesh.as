@@ -399,36 +399,30 @@ package alternativa.engine3d.objects
          for(var f:Face = this.faceList; f != null; )
          {
             nf = f.next;
-            w = f.wrapper;
-            while(true)
+            for(w = f.wrapper; w != null; w = w.next)
             {
-               if(w != null)
+               if(w.vertex == v)
                {
-                  if(w.vertex != v)
-                  {
-                     continue;
-                  }
+                  break;
                }
-               if(w != null)
+            }
+            if(w != null)
+            {
+               if(pf != null)
                {
-                  if(pf != null)
-                  {
-                     pf.next = nf;
-                  }
-                  else
-                  {
-                     this.faceList = nf;
-                  }
-                  f.next = null;
+                  pf.next = nf;
                }
                else
                {
-                  pf = f;
+                  this.faceList = nf;
                }
-               f = nf;
-               break;
-               w = w.next;
+               f.next = null;
             }
+            else
+            {
+               pf = f;
+            }
+            f = nf;
          }
          return v;
       }
@@ -469,36 +463,30 @@ package alternativa.engine3d.objects
          for(var f:Face = this.faceList; f != null; )
          {
             nf = f.next;
-            w = f.wrapper;
-            while(true)
+            for(w = f.wrapper; w != null; w = w.next)
             {
-               if(w != null)
+               if(w.vertex == v)
                {
-                  if(w.vertex != v)
-                  {
-                     continue;
-                  }
+                  break;
                }
-               if(w != null)
+            }
+            if(w != null)
+            {
+               if(pf != null)
                {
-                  if(pf != null)
-                  {
-                     pf.next = nf;
-                  }
-                  else
-                  {
-                     this.faceList = nf;
-                  }
-                  f.next = null;
+                  pf.next = nf;
                }
                else
                {
-                  pf = f;
+                  this.faceList = nf;
                }
-               f = nf;
-               break;
-               w = w.next;
+               f.next = null;
             }
+            else
+            {
+               pf = f;
+            }
+            f = nf;
          }
          return v;
       }
@@ -1210,6 +1198,7 @@ package alternativa.engine3d.objects
             {
                face = key;
                delete faceSet[key];
+               break;
             }
             if(face == null)
             {
@@ -2168,7 +2157,7 @@ package alternativa.engine3d.objects
          for(var i:int = 0; i < iterations; )
          {
             prev = null;
-            for(face = list; face != null; )
+            for(face = list; face != null; face = face.next)
             {
                normalX = face.normalX;
                normalY = face.normalY;
@@ -2177,38 +2166,8 @@ package alternativa.engine3d.objects
                offsetMin = offset - this.threshold;
                offsetMax = offset + this.threshold;
                splits = 0;
-               f = list;
-               loop2:
-               while(true)
+               for(f = list; f != null; f = f.next)
                {
-                  if(f == null)
-                  {
-                     if(f == null)
-                     {
-                        if(prev != null)
-                        {
-                           prev.next = face.next;
-                        }
-                        else
-                        {
-                           list = face.next;
-                        }
-                        if(last != null)
-                        {
-                           last.next = face;
-                        }
-                        else
-                        {
-                           this.faceList = face;
-                        }
-                        last = face;
-                     }
-                     else
-                     {
-                        prev = face;
-                     }
-                     face = face.next;
-                  }
                   if(f != face)
                   {
                      w = f.wrapper;
@@ -2223,46 +2182,60 @@ package alternativa.engine3d.objects
                      co = c.x * normalX + c.y * normalY + c.z * normalZ;
                      behind = ao < offsetMin || bo < offsetMin || co < offsetMin;
                      infront = ao > offsetMax || bo > offsetMax || co > offsetMax;
-                     while(true)
+                     for(; w != null; w = w.next)
                      {
-                        if(w != null)
+                        v = w.vertex;
+                        vo = v.x * normalX + v.y * normalY + v.z * normalZ;
+                        if(vo < offsetMin)
                         {
-                           v = w.vertex;
-                           vo = v.x * normalX + v.y * normalY + v.z * normalZ;
-                           if(vo < offsetMin)
+                           behind = true;
+                           if(infront)
                            {
-                              behind = true;
-                              if(!infront)
-                              {
-                                 continue;
-                              }
-                           }
-                           else
-                           {
-                              if(vo <= offsetMax)
-                              {
-                                 continue;
-                              }
-                              infront = true;
-                              if(!behind)
-                              {
-                                 continue;
-                              }
+                              break;
                            }
                         }
-                        if(!(infront && behind))
+                        else if(vo > offsetMax)
                         {
-                           continue loop2;
+                           infront = true;
+                           if(behind)
+                           {
+                              break;
+                           }
                         }
+                     }
+                     if(infront && behind)
+                     {
                         splits++;
-                        if(splits <= i)
+                        if(splits > i)
                         {
-                           continue loop2;
+                           break;
                         }
-                        w = w.next;
                      }
                   }
-                  f = f.next;
+               }
+               if(f == null)
+               {
+                  if(prev != null)
+                  {
+                     prev.next = face.next;
+                  }
+                  else
+                  {
+                     list = face.next;
+                  }
+                  if(last != null)
+                  {
+                     last.next = face;
+                  }
+                  else
+                  {
+                     this.faceList = face;
+                  }
+                  last = face;
+               }
+               else
+               {
+                  prev = face;
                }
             }
             if(list == null)
@@ -2332,41 +2305,35 @@ package alternativa.engine3d.objects
                      cx = ox + dx * time;
                      cy = oy + dy * time;
                      cz = oz + dz * time;
-                     wrapper = face.wrapper;
-                     while(true)
+                     for(wrapper = face.wrapper; wrapper != null; wrapper = wrapper.next)
                      {
-                        if(wrapper != null)
+                        a = wrapper.vertex;
+                        b = wrapper.next != null ? wrapper.next.vertex : face.wrapper.vertex;
+                        abx = b.x - a.x;
+                        aby = b.y - a.y;
+                        abz = b.z - a.z;
+                        acx = cx - a.x;
+                        acy = cy - a.y;
+                        acz = cz - a.z;
+                        if((acz * aby - acy * abz) * normalX + (acx * abz - acz * abx) * normalY + (acy * abx - acx * aby) * normalZ < 0)
                         {
-                           a = wrapper.vertex;
-                           b = wrapper.next != null ? wrapper.next.vertex : face.wrapper.vertex;
-                           abx = b.x - a.x;
-                           aby = b.y - a.y;
-                           abz = b.z - a.z;
-                           acx = cx - a.x;
-                           acy = cy - a.y;
-                           acz = cz - a.z;
-                           if((acz * aby - acy * abz) * normalX + (acx * abz - acz * abx) * normalY + (acy * abx - acx * aby) * normalZ >= 0)
-                           {
-                              continue;
-                           }
+                           break;
                         }
-                        if(wrapper == null)
+                     }
+                     if(wrapper == null)
+                     {
+                        if(time < minTime)
                         {
-                           if(time < minTime)
+                           minTime = time;
+                           if(point == null)
                            {
-                              minTime = time;
-                              if(point == null)
-                              {
-                                 point = new Vector3D();
-                              }
-                              point.x = cx;
-                              point.y = cy;
-                              point.z = cz;
-                              nearFace = face;
+                              point = new Vector3D();
                            }
+                           point.x = cx;
+                           point.y = cy;
+                           point.z = cz;
+                           nearFace = face;
                         }
-                        break;
-                        wrapper = wrapper.next;
                      }
                   }
                }
@@ -2422,30 +2389,24 @@ package alternativa.engine3d.objects
                      cx = ox + dx * time;
                      cy = oy + dy * time;
                      cz = oz + dz * time;
-                     wrapper = face.wrapper;
-                     while(true)
+                     for(wrapper = face.wrapper; wrapper != null; wrapper = wrapper.next)
                      {
-                        if(wrapper != null)
+                        a = wrapper.vertex;
+                        b = wrapper.next != null ? wrapper.next.vertex : face.wrapper.vertex;
+                        abx = b.x - a.x;
+                        aby = b.y - a.y;
+                        abz = b.z - a.z;
+                        acx = cx - a.x;
+                        acy = cy - a.y;
+                        acz = cz - a.z;
+                        if((acz * aby - acy * abz) * normalX + (acx * abz - acz * abx) * normalY + (acy * abx - acx * aby) * normalZ < 0)
                         {
-                           a = wrapper.vertex;
-                           b = wrapper.next != null ? wrapper.next.vertex : face.wrapper.vertex;
-                           abx = b.x - a.x;
-                           aby = b.y - a.y;
-                           abz = b.z - a.z;
-                           acx = cx - a.x;
-                           acy = cy - a.y;
-                           acz = cz - a.z;
-                           if((acz * aby - acy * abz) * normalX + (acx * abz - acz * abx) * normalY + (acy * abx - acx * aby) * normalZ >= 0)
-                           {
-                              continue;
-                           }
+                           break;
                         }
-                        if(wrapper == null)
-                        {
-                           return true;
-                        }
-                        break;
-                        wrapper = wrapper.next;
+                     }
+                     if(wrapper == null)
+                     {
+                        return true;
                      }
                   }
                }

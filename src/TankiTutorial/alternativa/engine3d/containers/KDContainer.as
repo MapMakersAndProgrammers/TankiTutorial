@@ -2033,251 +2033,200 @@ package alternativa.engine3d.containers
          {
             if(bound.boundMinX > minX + threshold)
             {
-               j = 0;
-               while(true)
+               for(j = 0; j < numSplitCoordsX; j++)
                {
-                  if(j < numSplitCoordsX)
+                  if(bound.boundMinX >= splitCoordsX[j] - threshold && bound.boundMinX <= splitCoordsX[j] + threshold)
                   {
-                     if(!(bound.boundMinX >= splitCoordsX[j] - threshold && bound.boundMinX <= splitCoordsX[j] + threshold))
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(j == numSplitCoordsX)
-                  {
-                     splitCoordsX[numSplitCoordsX++] = bound.boundMinX;
-                  }
-                  j++;
                }
-               continue;
+               if(j == numSplitCoordsX)
+               {
+                  splitCoordsX[numSplitCoordsX++] = bound.boundMinX;
+               }
             }
             if(bound.boundMaxX < maxX - threshold)
             {
-               j = 0;
-               while(true)
+               for(j = 0; j < numSplitCoordsX; j++)
                {
-                  if(j < numSplitCoordsX)
+                  if(bound.boundMaxX >= splitCoordsX[j] - threshold && bound.boundMaxX <= splitCoordsX[j] + threshold)
                   {
-                     if(!(bound.boundMaxX >= splitCoordsX[j] - threshold && bound.boundMaxX <= splitCoordsX[j] + threshold))
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(j == numSplitCoordsX)
-                  {
-                     splitCoordsX[numSplitCoordsX++] = bound.boundMaxX;
-                  }
-                  j++;
                }
-               continue;
+               if(j == numSplitCoordsX)
+               {
+                  splitCoordsX[numSplitCoordsX++] = bound.boundMaxX;
+               }
             }
             if(bound.boundMinY > minY + threshold)
             {
-               j = 0;
-               while(true)
+               for(j = 0; j < numSplitCoordsY; j++)
                {
-                  if(j < numSplitCoordsY)
+                  if(bound.boundMinY >= splitCoordsY[j] - threshold && bound.boundMinY <= splitCoordsY[j] + threshold)
                   {
-                     if(!(bound.boundMinY >= splitCoordsY[j] - threshold && bound.boundMinY <= splitCoordsY[j] + threshold))
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(j == numSplitCoordsY)
-                  {
-                     splitCoordsY[numSplitCoordsY++] = bound.boundMinY;
-                  }
-                  j++;
                }
-               continue;
+               if(j == numSplitCoordsY)
+               {
+                  splitCoordsY[numSplitCoordsY++] = bound.boundMinY;
+               }
             }
             if(bound.boundMaxY < maxY - threshold)
             {
-               j = 0;
-               while(true)
+               for(j = 0; j < numSplitCoordsY; j++)
                {
-                  if(j < numSplitCoordsY)
+                  if(bound.boundMaxY >= splitCoordsY[j] - threshold && bound.boundMaxY <= splitCoordsY[j] + threshold)
                   {
-                     if(!(bound.boundMaxY >= splitCoordsY[j] - threshold && bound.boundMaxY <= splitCoordsY[j] + threshold))
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(j == numSplitCoordsY)
-                  {
-                     splitCoordsY[numSplitCoordsY++] = bound.boundMaxY;
-                  }
-                  j++;
                }
-               continue;
+               if(j == numSplitCoordsY)
+               {
+                  splitCoordsY[numSplitCoordsY++] = bound.boundMaxY;
+               }
             }
             if(bound.boundMinZ > minZ + threshold)
             {
-               j = 0;
-               while(true)
+               for(j = 0; j < numSplitCoordsZ; j++)
                {
-                  if(j < numSplitCoordsZ)
+                  if(bound.boundMinZ >= splitCoordsZ[j] - threshold && bound.boundMinZ <= splitCoordsZ[j] + threshold)
                   {
-                     if(!(bound.boundMinZ >= splitCoordsZ[j] - threshold && bound.boundMinZ <= splitCoordsZ[j] + threshold))
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(j == numSplitCoordsZ)
-                  {
-                     splitCoordsZ[numSplitCoordsZ++] = bound.boundMinZ;
-                  }
-                  j++;
                }
-               continue;
+               if(j == numSplitCoordsZ)
+               {
+                  splitCoordsZ[numSplitCoordsZ++] = bound.boundMinZ;
+               }
             }
             if(bound.boundMaxZ < maxZ - threshold)
             {
-               j = 0;
-               while(true)
+               for(j = 0; j < numSplitCoordsZ; j++)
                {
-                  if(j < numSplitCoordsZ)
+                  if(bound.boundMaxZ >= splitCoordsZ[j] - threshold && bound.boundMaxZ <= splitCoordsZ[j] + threshold)
                   {
-                     if(!(bound.boundMaxZ >= splitCoordsZ[j] - threshold && bound.boundMaxZ <= splitCoordsZ[j] + threshold))
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(j == numSplitCoordsZ)
-                  {
-                     splitCoordsZ[numSplitCoordsZ++] = bound.boundMaxZ;
-                  }
-                  break;
-                  j++;
+               }
+               if(j == numSplitCoordsZ)
+               {
+                  splitCoordsZ[numSplitCoordsZ++] = bound.boundMaxZ;
                }
             }
          }
          var splitAxis:int = -1;
          var bestCost:Number = 1e+22;
          area = (maxY - minY) * (maxZ - minZ);
-         for(i = 0; i < numSplitCoordsX; )
+         for(i = 0; i < numSplitCoordsX; i++)
          {
             coord = splitCoordsX[i];
             areaNegative = area * (coord - minX);
             areaPositive = area * (maxX - coord);
             numNegative = 0;
             numPositive = 0;
-            bound = objectBoundList;
-            while(true)
+            for(bound = objectBoundList; bound != null; bound = bound.next)
             {
-               if(bound != null)
+               if(bound.boundMaxX <= coord + threshold)
                {
-                  if(bound.boundMaxX <= coord + threshold)
+                  if(bound.boundMinX < coord - threshold)
                   {
-                     if(bound.boundMinX < coord - threshold)
-                     {
-                        numNegative++;
-                     }
-                     continue;
-                  }
-                  if(bound.boundMinX >= coord - threshold)
-                  {
-                     numPositive++;
-                     continue;
+                     numNegative++;
                   }
                }
-               if(bound == null)
+               else if(bound.boundMinX >= coord - threshold)
                {
-                  cost = areaNegative * numNegative + areaPositive * numPositive;
-                  if(cost < bestCost)
-                  {
-                     bestCost = cost;
-                     splitAxis = 0;
-                     splitCoord = coord;
-                  }
+                  numPositive++;
                }
-               i++;
-               break;
-               bound = bound.next;
+               else
+               {
+                  break;
+               }
+            }
+            if(bound == null)
+            {
+               cost = areaNegative * numNegative + areaPositive * numPositive;
+               if(cost < bestCost)
+               {
+                  bestCost = cost;
+                  splitAxis = 0;
+                  splitCoord = coord;
+               }
             }
          }
          area = (maxX - minX) * (maxZ - minZ);
-         for(i = 0; i < numSplitCoordsY; )
+         for(i = 0; i < numSplitCoordsY; i++)
          {
             coord = splitCoordsY[i];
             areaNegative = area * (coord - minY);
             areaPositive = area * (maxY - coord);
             numNegative = 0;
             numPositive = 0;
-            bound = objectBoundList;
-            while(true)
+            for(bound = objectBoundList; bound != null; bound = bound.next)
             {
-               if(bound != null)
+               if(bound.boundMaxY <= coord + threshold)
                {
-                  if(bound.boundMaxY <= coord + threshold)
+                  if(bound.boundMinY < coord - threshold)
                   {
-                     if(bound.boundMinY < coord - threshold)
-                     {
-                        numNegative++;
-                     }
-                     continue;
-                  }
-                  if(bound.boundMinY >= coord - threshold)
-                  {
-                     numPositive++;
-                     continue;
+                     numNegative++;
                   }
                }
-               if(bound == null)
+               else if(bound.boundMinY >= coord - threshold)
                {
-                  cost = areaNegative * numNegative + areaPositive * numPositive;
-                  if(cost < bestCost)
-                  {
-                     bestCost = cost;
-                     splitAxis = 1;
-                     splitCoord = coord;
-                  }
+                  numPositive++;
                }
-               i++;
-               break;
-               bound = bound.next;
+               else
+               {
+                  break;
+               }
+            }
+            if(bound == null)
+            {
+               cost = areaNegative * numNegative + areaPositive * numPositive;
+               if(cost < bestCost)
+               {
+                  bestCost = cost;
+                  splitAxis = 1;
+                  splitCoord = coord;
+               }
             }
          }
          area = (maxX - minX) * (maxY - minY);
-         for(i = 0; i < numSplitCoordsZ; )
+         for(i = 0; i < numSplitCoordsZ; i++)
          {
             coord = splitCoordsZ[i];
             areaNegative = area * (coord - minZ);
             areaPositive = area * (maxZ - coord);
             numNegative = 0;
             numPositive = 0;
-            bound = objectBoundList;
-            while(true)
+            for(bound = objectBoundList; bound != null; bound = bound.next)
             {
-               if(bound != null)
+               if(bound.boundMaxZ <= coord + threshold)
                {
-                  if(bound.boundMaxZ <= coord + threshold)
+                  if(bound.boundMinZ < coord - threshold)
                   {
-                     if(bound.boundMinZ < coord - threshold)
-                     {
-                        numNegative++;
-                     }
-                     continue;
-                  }
-                  if(bound.boundMinZ >= coord - threshold)
-                  {
-                     numPositive++;
-                     continue;
+                     numNegative++;
                   }
                }
-               if(bound == null)
+               else if(bound.boundMinZ >= coord - threshold)
                {
-                  cost = areaNegative * numNegative + areaPositive * numPositive;
-                  if(cost < bestCost)
-                  {
-                     bestCost = cost;
-                     splitAxis = 2;
-                     splitCoord = coord;
-                  }
+                  numPositive++;
                }
-               i++;
-               break;
-               bound = bound.next;
+               else
+               {
+                  break;
+               }
+            }
+            if(bound == null)
+            {
+               cost = areaNegative * numNegative + areaPositive * numPositive;
+               if(cost < bestCost)
+               {
+                  bestCost = cost;
+                  splitAxis = 2;
+                  splitCoord = coord;
+               }
             }
          }
          if(splitAxis < 0)
@@ -3734,91 +3683,325 @@ class KDNode
                   }
                   wrapper = wrapper.next;
                }
-               wrapper = face.wrapper;
-               loop2:
-               while(true)
+               for(wrapper = face.wrapper; wrapper != null; wrapper = wrapper.next)
                {
-                  if(wrapper != null)
+                  if(wrapper.vertex.cameraX > decal.boundMinX)
                   {
-                     if(wrapper.vertex.cameraX <= decal.boundMinX)
+                     break;
+                  }
+               }
+               if(wrapper != null)
+               {
+                  for(wrapper = face.wrapper; wrapper != null; wrapper = wrapper.next)
+                  {
+                     if(wrapper.vertex.cameraX < decal.boundMaxX)
                      {
-                        continue;
+                        break;
                      }
                   }
                   if(wrapper != null)
                   {
-                     wrapper = face.wrapper;
-                     while(true)
+                     for(wrapper = face.wrapper; wrapper != null; wrapper = wrapper.next)
                      {
-                        if(wrapper != null)
+                        if(wrapper.vertex.cameraY > decal.boundMinY)
                         {
-                           if(wrapper.vertex.cameraX >= decal.boundMaxX)
+                           break;
+                        }
+                     }
+                     if(wrapper != null)
+                     {
+                        for(wrapper = face.wrapper; wrapper != null; wrapper = wrapper.next)
+                        {
+                           if(wrapper.vertex.cameraY < decal.boundMaxY)
                            {
-                              continue;
+                              break;
                            }
                         }
                         if(wrapper != null)
                         {
-                           wrapper = face.wrapper;
-                           while(true)
+                           for(wrapper = face.wrapper; wrapper != null; wrapper = wrapper.next)
                            {
-                              if(wrapper != null)
+                              if(wrapper.vertex.cameraZ > decal.boundMinZ)
                               {
-                                 if(wrapper.vertex.cameraY <= decal.boundMinY)
+                                 break;
+                              }
+                           }
+                           if(wrapper != null)
+                           {
+                              for(wrapper = face.wrapper; wrapper != null; wrapper = wrapper.next)
+                              {
+                                 if(wrapper.vertex.cameraZ < decal.boundMaxZ)
                                  {
-                                    continue;
+                                    break;
                                  }
                               }
                               if(wrapper != null)
                               {
-                                 wrapper = face.wrapper;
-                                 while(true)
+                                 vFirst = null;
+                                 vLast = null;
+                                 for(wrapper = face.wrapper; wrapper != null; wrapper = wrapper.next)
                                  {
-                                    if(wrapper != null)
+                                    vertex = wrapper.vertex;
+                                    v = new Vertex();
+                                    v.x = vertex.cameraX;
+                                    v.y = vertex.cameraY;
+                                    v.z = vertex.cameraZ;
+                                    v.normalX = object.ma * vertex.normalX + object.mb * vertex.normalY + object.mc * vertex.normalZ;
+                                    v.normalY = object.me * vertex.normalX + object.mf * vertex.normalY + object.mg * vertex.normalZ;
+                                    v.normalZ = object.mi * vertex.normalX + object.mj * vertex.normalY + object.mk * vertex.normalZ;
+                                    if(vLast != null)
                                     {
-                                       if(wrapper.vertex.cameraY >= decal.boundMaxY)
-                                       {
-                                          continue;
-                                       }
+                                       vLast.next = v;
                                     }
-                                    if(wrapper != null)
+                                    else
                                     {
-                                       wrapper = face.wrapper;
-                                       while(true)
+                                       vFirst = v;
+                                    }
+                                    vLast = v;
+                                 }
+                                 a = vLast;
+                                 b = vFirst;
+                                 vFirst = null;
+                                 vLast = null;
+                                 while(b != null)
+                                 {
+                                    vNext = b.next;
+                                    b.next = null;
+                                    if(b.z > decal.boundMinZ && a.z <= decal.boundMinZ || b.z <= decal.boundMinZ && a.z > decal.boundMinZ)
+                                    {
+                                       t = (decal.boundMinZ - a.z) / (b.z - a.z);
+                                       v = new Vertex();
+                                       v.x = a.x + (b.x - a.x) * t;
+                                       v.y = a.y + (b.y - a.y) * t;
+                                       v.z = a.z + (b.z - a.z) * t;
+                                       v.normalX = a.normalX + (b.normalX - a.normalX) * t;
+                                       v.normalY = a.normalY + (b.normalY - a.normalY) * t;
+                                       v.normalZ = a.normalZ + (b.normalZ - a.normalZ) * t;
+                                       if(vLast != null)
                                        {
-                                          if(wrapper != null)
+                                          vLast.next = v;
+                                       }
+                                       else
+                                       {
+                                          vFirst = v;
+                                       }
+                                       vLast = v;
+                                    }
+                                    if(b.z > decal.boundMinZ)
+                                    {
+                                       if(vLast != null)
+                                       {
+                                          vLast.next = b;
+                                       }
+                                       else
+                                       {
+                                          vFirst = b;
+                                       }
+                                       vLast = b;
+                                    }
+                                    a = b;
+                                    b = vNext;
+                                 }
+                                 if(vFirst != null)
+                                 {
+                                    a = vLast;
+                                    b = vFirst;
+                                    vFirst = null;
+                                    vLast = null;
+                                    while(b != null)
+                                    {
+                                       vNext = b.next;
+                                       b.next = null;
+                                       if(b.z < decal.boundMaxZ && a.z >= decal.boundMaxZ || b.z >= decal.boundMaxZ && a.z < decal.boundMaxZ)
+                                       {
+                                          t = (decal.boundMaxZ - a.z) / (b.z - a.z);
+                                          v = new Vertex();
+                                          v.x = a.x + (b.x - a.x) * t;
+                                          v.y = a.y + (b.y - a.y) * t;
+                                          v.z = a.z + (b.z - a.z) * t;
+                                          v.normalX = a.normalX + (b.normalX - a.normalX) * t;
+                                          v.normalY = a.normalY + (b.normalY - a.normalY) * t;
+                                          v.normalZ = a.normalZ + (b.normalZ - a.normalZ) * t;
+                                          if(vLast != null)
                                           {
-                                             if(wrapper.vertex.cameraZ <= decal.boundMinZ)
-                                             {
-                                                continue;
-                                             }
+                                             vLast.next = v;
                                           }
-                                          if(wrapper != null)
+                                          else
                                           {
-                                             wrapper = face.wrapper;
-                                             while(true)
+                                             vFirst = v;
+                                          }
+                                          vLast = v;
+                                       }
+                                       if(b.z < decal.boundMaxZ)
+                                       {
+                                          if(vLast != null)
+                                          {
+                                             vLast.next = b;
+                                          }
+                                          else
+                                          {
+                                             vFirst = b;
+                                          }
+                                          vLast = b;
+                                       }
+                                       a = b;
+                                       b = vNext;
+                                    }
+                                    if(vFirst != null)
+                                    {
+                                       a = vLast;
+                                       b = vFirst;
+                                       vFirst = null;
+                                       vLast = null;
+                                       while(b != null)
+                                       {
+                                          vNext = b.next;
+                                          b.next = null;
+                                          if(b.x > decal.boundMinX && a.x <= decal.boundMinX || b.x <= decal.boundMinX && a.x > decal.boundMinX)
+                                          {
+                                             t = (decal.boundMinX - a.x) / (b.x - a.x);
+                                             v = new Vertex();
+                                             v.x = a.x + (b.x - a.x) * t;
+                                             v.y = a.y + (b.y - a.y) * t;
+                                             v.z = a.z + (b.z - a.z) * t;
+                                             v.normalX = a.normalX + (b.normalX - a.normalX) * t;
+                                             v.normalY = a.normalY + (b.normalY - a.normalY) * t;
+                                             v.normalZ = a.normalZ + (b.normalZ - a.normalZ) * t;
+                                             if(vLast != null)
                                              {
-                                                if(wrapper != null)
+                                                vLast.next = v;
+                                             }
+                                             else
+                                             {
+                                                vFirst = v;
+                                             }
+                                             vLast = v;
+                                          }
+                                          if(b.x > decal.boundMinX)
+                                          {
+                                             if(vLast != null)
+                                             {
+                                                vLast.next = b;
+                                             }
+                                             else
+                                             {
+                                                vFirst = b;
+                                             }
+                                             vLast = b;
+                                          }
+                                          a = b;
+                                          b = vNext;
+                                       }
+                                       if(vFirst != null)
+                                       {
+                                          a = vLast;
+                                          b = vFirst;
+                                          vFirst = null;
+                                          vLast = null;
+                                          while(b != null)
+                                          {
+                                             vNext = b.next;
+                                             b.next = null;
+                                             if(b.x < decal.boundMaxX && a.x >= decal.boundMaxX || b.x >= decal.boundMaxX && a.x < decal.boundMaxX)
+                                             {
+                                                t = (decal.boundMaxX - a.x) / (b.x - a.x);
+                                                v = new Vertex();
+                                                v.x = a.x + (b.x - a.x) * t;
+                                                v.y = a.y + (b.y - a.y) * t;
+                                                v.z = a.z + (b.z - a.z) * t;
+                                                v.normalX = a.normalX + (b.normalX - a.normalX) * t;
+                                                v.normalY = a.normalY + (b.normalY - a.normalY) * t;
+                                                v.normalZ = a.normalZ + (b.normalZ - a.normalZ) * t;
+                                                if(vLast != null)
                                                 {
-                                                   if(wrapper.vertex.cameraZ >= decal.boundMaxZ)
-                                                   {
-                                                      continue;
-                                                   }
+                                                   vLast.next = v;
                                                 }
-                                                if(wrapper != null)
+                                                else
                                                 {
-                                                   vFirst = null;
-                                                   vLast = null;
-                                                   for(wrapper = face.wrapper; wrapper != null; wrapper = wrapper.next)
+                                                   vFirst = v;
+                                                }
+                                                vLast = v;
+                                             }
+                                             if(b.x < decal.boundMaxX)
+                                             {
+                                                if(vLast != null)
+                                                {
+                                                   vLast.next = b;
+                                                }
+                                                else
+                                                {
+                                                   vFirst = b;
+                                                }
+                                                vLast = b;
+                                             }
+                                             a = b;
+                                             b = vNext;
+                                          }
+                                          if(vFirst != null)
+                                          {
+                                             a = vLast;
+                                             b = vFirst;
+                                             vFirst = null;
+                                             vLast = null;
+                                             while(b != null)
+                                             {
+                                                vNext = b.next;
+                                                b.next = null;
+                                                if(b.y > decal.boundMinY && a.y <= decal.boundMinY || b.y <= decal.boundMinY && a.y > decal.boundMinY)
+                                                {
+                                                   t = (decal.boundMinY - a.y) / (b.y - a.y);
+                                                   v = new Vertex();
+                                                   v.x = a.x + (b.x - a.x) * t;
+                                                   v.y = a.y + (b.y - a.y) * t;
+                                                   v.z = a.z + (b.z - a.z) * t;
+                                                   v.normalX = a.normalX + (b.normalX - a.normalX) * t;
+                                                   v.normalY = a.normalY + (b.normalY - a.normalY) * t;
+                                                   v.normalZ = a.normalZ + (b.normalZ - a.normalZ) * t;
+                                                   if(vLast != null)
                                                    {
-                                                      vertex = wrapper.vertex;
+                                                      vLast.next = v;
+                                                   }
+                                                   else
+                                                   {
+                                                      vFirst = v;
+                                                   }
+                                                   vLast = v;
+                                                }
+                                                if(b.y > decal.boundMinY)
+                                                {
+                                                   if(vLast != null)
+                                                   {
+                                                      vLast.next = b;
+                                                   }
+                                                   else
+                                                   {
+                                                      vFirst = b;
+                                                   }
+                                                   vLast = b;
+                                                }
+                                                a = b;
+                                                b = vNext;
+                                             }
+                                             if(vFirst != null)
+                                             {
+                                                a = vLast;
+                                                b = vFirst;
+                                                vFirst = null;
+                                                vLast = null;
+                                                while(b != null)
+                                                {
+                                                   vNext = b.next;
+                                                   b.next = null;
+                                                   if(b.y < decal.boundMaxY && a.y >= decal.boundMaxY || b.y >= decal.boundMaxY && a.y < decal.boundMaxY)
+                                                   {
+                                                      t = (decal.boundMaxY - a.y) / (b.y - a.y);
                                                       v = new Vertex();
-                                                      v.x = vertex.cameraX;
-                                                      v.y = vertex.cameraY;
-                                                      v.z = vertex.cameraZ;
-                                                      v.normalX = object.ma * vertex.normalX + object.mb * vertex.normalY + object.mc * vertex.normalZ;
-                                                      v.normalY = object.me * vertex.normalX + object.mf * vertex.normalY + object.mg * vertex.normalZ;
-                                                      v.normalZ = object.mi * vertex.normalX + object.mj * vertex.normalY + object.mk * vertex.normalZ;
+                                                      v.x = a.x + (b.x - a.x) * t;
+                                                      v.y = a.y + (b.y - a.y) * t;
+                                                      v.z = a.z + (b.z - a.z) * t;
+                                                      v.normalX = a.normalX + (b.normalX - a.normalX) * t;
+                                                      v.normalY = a.normalY + (b.normalY - a.normalY) * t;
+                                                      v.normalZ = a.normalZ + (b.normalZ - a.normalZ) * t;
                                                       if(vLast != null)
                                                       {
                                                          vLast.next = v;
@@ -3829,334 +4012,58 @@ class KDNode
                                                       }
                                                       vLast = v;
                                                    }
-                                                   a = vLast;
-                                                   b = vFirst;
-                                                   vFirst = null;
-                                                   vLast = null;
-                                                   while(b != null)
+                                                   if(b.y < decal.boundMaxY)
                                                    {
-                                                      vNext = b.next;
-                                                      b.next = null;
-                                                      if(b.z > decal.boundMinZ && a.z <= decal.boundMinZ || b.z <= decal.boundMinZ && a.z > decal.boundMinZ)
+                                                      if(vLast != null)
                                                       {
-                                                         t = (decal.boundMinZ - a.z) / (b.z - a.z);
-                                                         v = new Vertex();
-                                                         v.x = a.x + (b.x - a.x) * t;
-                                                         v.y = a.y + (b.y - a.y) * t;
-                                                         v.z = a.z + (b.z - a.z) * t;
-                                                         v.normalX = a.normalX + (b.normalX - a.normalX) * t;
-                                                         v.normalY = a.normalY + (b.normalY - a.normalY) * t;
-                                                         v.normalZ = a.normalZ + (b.normalZ - a.normalZ) * t;
-                                                         if(vLast != null)
-                                                         {
-                                                            vLast.next = v;
-                                                         }
-                                                         else
-                                                         {
-                                                            vFirst = v;
-                                                         }
-                                                         vLast = v;
+                                                         vLast.next = b;
                                                       }
-                                                      if(b.z > decal.boundMinZ)
+                                                      else
                                                       {
-                                                         if(vLast != null)
-                                                         {
-                                                            vLast.next = b;
-                                                         }
-                                                         else
-                                                         {
-                                                            vFirst = b;
-                                                         }
-                                                         vLast = b;
+                                                         vFirst = b;
                                                       }
-                                                      a = b;
-                                                      b = vNext;
+                                                      vLast = b;
                                                    }
-                                                   if(vFirst != null)
-                                                   {
-                                                      a = vLast;
-                                                      b = vFirst;
-                                                      vFirst = null;
-                                                      vLast = null;
-                                                      while(b != null)
-                                                      {
-                                                         vNext = b.next;
-                                                         b.next = null;
-                                                         if(b.z < decal.boundMaxZ && a.z >= decal.boundMaxZ || b.z >= decal.boundMaxZ && a.z < decal.boundMaxZ)
-                                                         {
-                                                            t = (decal.boundMaxZ - a.z) / (b.z - a.z);
-                                                            v = new Vertex();
-                                                            v.x = a.x + (b.x - a.x) * t;
-                                                            v.y = a.y + (b.y - a.y) * t;
-                                                            v.z = a.z + (b.z - a.z) * t;
-                                                            v.normalX = a.normalX + (b.normalX - a.normalX) * t;
-                                                            v.normalY = a.normalY + (b.normalY - a.normalY) * t;
-                                                            v.normalZ = a.normalZ + (b.normalZ - a.normalZ) * t;
-                                                            if(vLast != null)
-                                                            {
-                                                               vLast.next = v;
-                                                            }
-                                                            else
-                                                            {
-                                                               vFirst = v;
-                                                            }
-                                                            vLast = v;
-                                                         }
-                                                         if(b.z < decal.boundMaxZ)
-                                                         {
-                                                            if(vLast != null)
-                                                            {
-                                                               vLast.next = b;
-                                                            }
-                                                            else
-                                                            {
-                                                               vFirst = b;
-                                                            }
-                                                            vLast = b;
-                                                         }
-                                                         a = b;
-                                                         b = vNext;
-                                                      }
-                                                      if(vFirst != null)
-                                                      {
-                                                         a = vLast;
-                                                         b = vFirst;
-                                                         vFirst = null;
-                                                         vLast = null;
-                                                         while(b != null)
-                                                         {
-                                                            vNext = b.next;
-                                                            b.next = null;
-                                                            if(b.x > decal.boundMinX && a.x <= decal.boundMinX || b.x <= decal.boundMinX && a.x > decal.boundMinX)
-                                                            {
-                                                               t = (decal.boundMinX - a.x) / (b.x - a.x);
-                                                               v = new Vertex();
-                                                               v.x = a.x + (b.x - a.x) * t;
-                                                               v.y = a.y + (b.y - a.y) * t;
-                                                               v.z = a.z + (b.z - a.z) * t;
-                                                               v.normalX = a.normalX + (b.normalX - a.normalX) * t;
-                                                               v.normalY = a.normalY + (b.normalY - a.normalY) * t;
-                                                               v.normalZ = a.normalZ + (b.normalZ - a.normalZ) * t;
-                                                               if(vLast != null)
-                                                               {
-                                                                  vLast.next = v;
-                                                               }
-                                                               else
-                                                               {
-                                                                  vFirst = v;
-                                                               }
-                                                               vLast = v;
-                                                            }
-                                                            if(b.x > decal.boundMinX)
-                                                            {
-                                                               if(vLast != null)
-                                                               {
-                                                                  vLast.next = b;
-                                                               }
-                                                               else
-                                                               {
-                                                                  vFirst = b;
-                                                               }
-                                                               vLast = b;
-                                                            }
-                                                            a = b;
-                                                            b = vNext;
-                                                         }
-                                                         if(vFirst != null)
-                                                         {
-                                                            a = vLast;
-                                                            b = vFirst;
-                                                            vFirst = null;
-                                                            vLast = null;
-                                                            while(b != null)
-                                                            {
-                                                               vNext = b.next;
-                                                               b.next = null;
-                                                               if(b.x < decal.boundMaxX && a.x >= decal.boundMaxX || b.x >= decal.boundMaxX && a.x < decal.boundMaxX)
-                                                               {
-                                                                  t = (decal.boundMaxX - a.x) / (b.x - a.x);
-                                                                  v = new Vertex();
-                                                                  v.x = a.x + (b.x - a.x) * t;
-                                                                  v.y = a.y + (b.y - a.y) * t;
-                                                                  v.z = a.z + (b.z - a.z) * t;
-                                                                  v.normalX = a.normalX + (b.normalX - a.normalX) * t;
-                                                                  v.normalY = a.normalY + (b.normalY - a.normalY) * t;
-                                                                  v.normalZ = a.normalZ + (b.normalZ - a.normalZ) * t;
-                                                                  if(vLast != null)
-                                                                  {
-                                                                     vLast.next = v;
-                                                                  }
-                                                                  else
-                                                                  {
-                                                                     vFirst = v;
-                                                                  }
-                                                                  vLast = v;
-                                                               }
-                                                               if(b.x < decal.boundMaxX)
-                                                               {
-                                                                  if(vLast != null)
-                                                                  {
-                                                                     vLast.next = b;
-                                                                  }
-                                                                  else
-                                                                  {
-                                                                     vFirst = b;
-                                                                  }
-                                                                  vLast = b;
-                                                               }
-                                                               a = b;
-                                                               b = vNext;
-                                                            }
-                                                            if(vFirst != null)
-                                                            {
-                                                               a = vLast;
-                                                               b = vFirst;
-                                                               vFirst = null;
-                                                               vLast = null;
-                                                               while(b != null)
-                                                               {
-                                                                  vNext = b.next;
-                                                                  b.next = null;
-                                                                  if(b.y > decal.boundMinY && a.y <= decal.boundMinY || b.y <= decal.boundMinY && a.y > decal.boundMinY)
-                                                                  {
-                                                                     t = (decal.boundMinY - a.y) / (b.y - a.y);
-                                                                     v = new Vertex();
-                                                                     v.x = a.x + (b.x - a.x) * t;
-                                                                     v.y = a.y + (b.y - a.y) * t;
-                                                                     v.z = a.z + (b.z - a.z) * t;
-                                                                     v.normalX = a.normalX + (b.normalX - a.normalX) * t;
-                                                                     v.normalY = a.normalY + (b.normalY - a.normalY) * t;
-                                                                     v.normalZ = a.normalZ + (b.normalZ - a.normalZ) * t;
-                                                                     if(vLast != null)
-                                                                     {
-                                                                        vLast.next = v;
-                                                                     }
-                                                                     else
-                                                                     {
-                                                                        vFirst = v;
-                                                                     }
-                                                                     vLast = v;
-                                                                  }
-                                                                  if(b.y > decal.boundMinY)
-                                                                  {
-                                                                     if(vLast != null)
-                                                                     {
-                                                                        vLast.next = b;
-                                                                     }
-                                                                     else
-                                                                     {
-                                                                        vFirst = b;
-                                                                     }
-                                                                     vLast = b;
-                                                                  }
-                                                                  a = b;
-                                                                  b = vNext;
-                                                               }
-                                                               if(vFirst != null)
-                                                               {
-                                                                  a = vLast;
-                                                                  b = vFirst;
-                                                                  vFirst = null;
-                                                                  vLast = null;
-                                                                  while(b != null)
-                                                                  {
-                                                                     vNext = b.next;
-                                                                     b.next = null;
-                                                                     if(b.y < decal.boundMaxY && a.y >= decal.boundMaxY || b.y >= decal.boundMaxY && a.y < decal.boundMaxY)
-                                                                     {
-                                                                        t = (decal.boundMaxY - a.y) / (b.y - a.y);
-                                                                        v = new Vertex();
-                                                                        v.x = a.x + (b.x - a.x) * t;
-                                                                        v.y = a.y + (b.y - a.y) * t;
-                                                                        v.z = a.z + (b.z - a.z) * t;
-                                                                        v.normalX = a.normalX + (b.normalX - a.normalX) * t;
-                                                                        v.normalY = a.normalY + (b.normalY - a.normalY) * t;
-                                                                        v.normalZ = a.normalZ + (b.normalZ - a.normalZ) * t;
-                                                                        if(vLast != null)
-                                                                        {
-                                                                           vLast.next = v;
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                           vFirst = v;
-                                                                        }
-                                                                        vLast = v;
-                                                                     }
-                                                                     if(b.y < decal.boundMaxY)
-                                                                     {
-                                                                        if(vLast != null)
-                                                                        {
-                                                                           vLast.next = b;
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                           vFirst = b;
-                                                                        }
-                                                                        vLast = b;
-                                                                     }
-                                                                     a = b;
-                                                                     b = vNext;
-                                                                  }
-                                                                  if(vFirst != null)
-                                                                  {
-                                                                     face = new Face();
-                                                                     wLast = null;
-                                                                     for(vertex = vFirst; vertex != null; vertex = vNext)
-                                                                     {
-                                                                        vNext = vertex.next;
-                                                                        vertex.next = decal.vertexList;
-                                                                        decal.vertexList = vertex;
-                                                                        vertex.u = (vertex.x - decal.boundMinX) / (decal.boundMaxX - decal.boundMinX);
-                                                                        vertex.v = (vertex.y - decal.boundMinY) / (decal.boundMaxY - decal.boundMinY);
-                                                                        if(wLast != null)
-                                                                        {
-                                                                           wLast.next = new Wrapper();
-                                                                           wLast = wLast.next;
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                           face.wrapper = new Wrapper();
-                                                                           wLast = face.wrapper;
-                                                                        }
-                                                                        wLast.vertex = vertex;
-                                                                     }
-                                                                     face.calculateBestSequenceAndNormal();
-                                                                     face.next = decal.faceList;
-                                                                     decal.faceList = face;
-                                                                  }
-                                                               }
-                                                            }
-                                                         }
-                                                      }
-                                                   }
+                                                   a = b;
+                                                   b = vNext;
                                                 }
-                                                break loop2;
-                                                wrapper = wrapper.next;
+                                                if(vFirst != null)
+                                                {
+                                                   face = new Face();
+                                                   wLast = null;
+                                                   for(vertex = vFirst; vertex != null; vertex = vNext)
+                                                   {
+                                                      vNext = vertex.next;
+                                                      vertex.next = decal.vertexList;
+                                                      decal.vertexList = vertex;
+                                                      vertex.u = (vertex.x - decal.boundMinX) / (decal.boundMaxX - decal.boundMinX);
+                                                      vertex.v = (vertex.y - decal.boundMinY) / (decal.boundMaxY - decal.boundMinY);
+                                                      if(wLast != null)
+                                                      {
+                                                         wLast.next = new Wrapper();
+                                                         wLast = wLast.next;
+                                                      }
+                                                      else
+                                                      {
+                                                         face.wrapper = new Wrapper();
+                                                         wLast = face.wrapper;
+                                                      }
+                                                      wLast.vertex = vertex;
+                                                   }
+                                                   face.calculateBestSequenceAndNormal();
+                                                   face.next = decal.faceList;
+                                                   decal.faceList = face;
+                                                }
                                              }
-                                             break;
                                           }
-                                          break loop2;
-                                          wrapper = wrapper.next;
                                        }
-                                       break;
                                     }
-                                    break loop2;
-                                    wrapper = wrapper.next;
                                  }
-                                 break;
                               }
-                              break loop2;
-                              wrapper = wrapper.next;
                            }
-                           break;
                         }
-                        break loop2;
-                        wrapper = wrapper.next;
                      }
-                     break;
                   }
-                  break;
-                  wrapper = wrapper.next;
                }
             }
          }

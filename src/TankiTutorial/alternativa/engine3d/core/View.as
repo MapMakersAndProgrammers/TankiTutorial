@@ -439,27 +439,20 @@ package alternativa.engine3d.core
          {
             this.propagateEvent(MouseEvent3D.MOUSE_OUT,this.overedTarget,overedBranch,true,this.target);
             changedBranchLength = 0;
-            for(i = 0; i < overedBranchLength; )
+            for(i = 0; i < overedBranchLength; i++)
             {
                object = overedBranch[i];
-               j = 0;
-               while(true)
+               for(j = 0; j < branchLength; j++)
                {
-                  if(j < branchLength)
+                  if(object == branch[j])
                   {
-                     if(object != branch[j])
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(j == branchLength)
-                  {
-                     changedBranch[changedBranchLength] = object;
-                     changedBranchLength++;
-                  }
-                  i++;
-                  break;
-                  j++;
+               }
+               if(j == branchLength)
+               {
+                  changedBranch[changedBranchLength] = object;
+                  changedBranchLength++;
                }
             }
             if(changedBranchLength > 0)
@@ -471,27 +464,20 @@ package alternativa.engine3d.core
          if(this.target != null)
          {
             changedBranchLength = 0;
-            for(i = 0; i < branchLength; )
+            for(i = 0; i < branchLength; i++)
             {
                object = branch[i];
-               j = 0;
-               while(true)
+               for(j = 0; j < overedBranchLength; j++)
                {
-                  if(j < overedBranchLength)
+                  if(object == overedBranch[j])
                   {
-                     if(object != overedBranch[j])
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(j == overedBranchLength)
-                  {
-                     changedBranch[changedBranchLength] = object;
-                     changedBranchLength++;
-                  }
-                  i++;
-                  break;
-                  j++;
+               }
+               if(j == overedBranchLength)
+               {
+                  changedBranch[changedBranchLength] = object;
+                  changedBranchLength++;
                }
             }
             if(changedBranchLength > 0)
@@ -624,68 +610,62 @@ package alternativa.engine3d.core
          mouse.x = mouseEvent.localX;
          mouse.y = mouseEvent.localY;
          var displayObjects:Array = stage != null ? stage.getObjectsUnderPoint(localToGlobal(mouse)) : super.getObjectsUnderPoint(mouse);
-         loop0:
-         for(var i:int = displayObjects.length - 1; i >= 0; )
+         for(var i:int = displayObjects.length - 1; i >= 0; i--)
          {
             canvas = null;
             displayObject = displayObjects[i];
-            while(true)
+            while(displayObject.parent != stage)
             {
-               if(displayObject.parent != stage)
-               {
-                  canvas = displayObject as Canvas;
-                  if(canvas == null)
-                  {
-                     continue;
-                  }
-               }
+               canvas = displayObject as Canvas;
                if(canvas != null)
                {
-                  if(object != null)
+                  break;
+               }
+               displayObject = displayObject.parent;
+            }
+            if(canvas != null)
+            {
+               if(object != null)
+               {
+                  t = null;
+                  for(o = object; o != null; o = o._parent)
                   {
-                     t = null;
-                     for(o = object; o != null; o = o._parent)
+                     if(o is Object3DContainer && !Object3DContainer(o).mouseChildren)
                      {
-                        if(o is Object3DContainer && !Object3DContainer(o).mouseChildren)
+                        t = null;
+                     }
+                     if(t == null && o.mouseEnabled)
+                     {
+                        t = o;
+                     }
+                  }
+                  if(t != null)
+                  {
+                     if(this.target != null)
+                     {
+                        for(o = t; o != null; )
                         {
-                           t = null;
-                        }
-                        if(t == null && o.mouseEnabled)
-                        {
-                           t = o;
+                           if(o == this.target)
+                           {
+                              source = object;
+                              this.target = t;
+                              break;
+                           }
+                           o = o._parent;
                         }
                      }
-                     if(t != null)
+                     else
                      {
-                        if(this.target != null)
-                        {
-                           for(o = t; o != null; )
-                           {
-                              if(o == this.target)
-                              {
-                                 source = object;
-                                 this.target = t;
-                                 break;
-                              }
-                              o = o._parent;
-                           }
-                        }
-                        else
-                        {
-                           source = object;
-                           this.target = t;
-                        }
-                        if(source == this.target)
-                        {
-                           break loop0;
-                        }
+                        source = object;
+                        this.target = t;
+                     }
+                     if(source == this.target)
+                     {
+                        break;
                      }
                   }
                }
-               break;
-               displayObject = displayObject.parent;
             }
-            i--;
          }
       }
       

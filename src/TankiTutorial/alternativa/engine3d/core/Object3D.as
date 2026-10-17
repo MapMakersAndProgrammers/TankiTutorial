@@ -1425,36 +1425,23 @@ package alternativa.engine3d.core
          {
             for(i = 0; i < numOccluders; )
             {
-               plane = camera.occluders[i];
-               loop8:
-               while(true)
+               for(plane = camera.occluders[i]; plane != null; plane = plane.next)
                {
-                  if(plane != null)
+                  for(vertex = boundVertexList; vertex != null; vertex = vertex.next)
                   {
-                     vertex = boundVertexList;
-                     while(true)
+                     if(plane.cameraX * vertex.cameraX + plane.cameraY * vertex.cameraY + plane.cameraZ * vertex.cameraZ >= 0)
                      {
-                        if(vertex != null)
-                        {
-                           if(plane.cameraX * vertex.cameraX + plane.cameraY * vertex.cameraY + plane.cameraZ * vertex.cameraZ < 0)
-                           {
-                              continue;
-                           }
-                        }
-                        if(vertex == null)
-                        {
-                           continue loop8;
-                        }
-                        vertex = vertex.next;
+                        break;
                      }
-                     continue;
                   }
-                  if(plane == null)
+                  if(vertex != null)
                   {
-                     return -1;
+                     break;
                   }
-                  break;
-                  plane = plane.next;
+               }
+               if(plane == null)
+               {
+                  return -1;
                }
                i++;
             }
