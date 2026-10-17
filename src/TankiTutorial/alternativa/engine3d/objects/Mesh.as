@@ -2305,41 +2305,35 @@ package alternativa.engine3d.objects
                      cx = ox + dx * time;
                      cy = oy + dy * time;
                      cz = oz + dz * time;
-                     wrapper = face.wrapper;
-                     while(true)
+                     for(wrapper = face.wrapper; wrapper != null; wrapper = wrapper.next)
                      {
-                        if(wrapper != null)
+                        a = wrapper.vertex;
+                        b = wrapper.next != null ? wrapper.next.vertex : face.wrapper.vertex;
+                        abx = b.x - a.x;
+                        aby = b.y - a.y;
+                        abz = b.z - a.z;
+                        acx = cx - a.x;
+                        acy = cy - a.y;
+                        acz = cz - a.z;
+                        if((acz * aby - acy * abz) * normalX + (acx * abz - acz * abx) * normalY + (acy * abx - acx * aby) * normalZ < 0)
                         {
-                           a = wrapper.vertex;
-                           b = wrapper.next != null ? wrapper.next.vertex : face.wrapper.vertex;
-                           abx = b.x - a.x;
-                           aby = b.y - a.y;
-                           abz = b.z - a.z;
-                           acx = cx - a.x;
-                           acy = cy - a.y;
-                           acz = cz - a.z;
-                           if((acz * aby - acy * abz) * normalX + (acx * abz - acz * abx) * normalY + (acy * abx - acx * aby) * normalZ >= 0)
-                           {
-                              continue;
-                           }
+                           break;
                         }
-                        if(wrapper == null)
+                     }
+                     if(wrapper == null)
+                     {
+                        if(time < minTime)
                         {
-                           if(time < minTime)
+                           minTime = time;
+                           if(point == null)
                            {
-                              minTime = time;
-                              if(point == null)
-                              {
-                                 point = new Vector3D();
-                              }
-                              point.x = cx;
-                              point.y = cy;
-                              point.z = cz;
-                              nearFace = face;
+                              point = new Vector3D();
                            }
+                           point.x = cx;
+                           point.y = cy;
+                           point.z = cz;
+                           nearFace = face;
                         }
-                        break;
-                        wrapper = wrapper.next;
                      }
                   }
                }
@@ -2395,30 +2389,24 @@ package alternativa.engine3d.objects
                      cx = ox + dx * time;
                      cy = oy + dy * time;
                      cz = oz + dz * time;
-                     wrapper = face.wrapper;
-                     while(true)
+                     for(wrapper = face.wrapper; wrapper != null; wrapper = wrapper.next)
                      {
-                        if(wrapper != null)
+                        a = wrapper.vertex;
+                        b = wrapper.next != null ? wrapper.next.vertex : face.wrapper.vertex;
+                        abx = b.x - a.x;
+                        aby = b.y - a.y;
+                        abz = b.z - a.z;
+                        acx = cx - a.x;
+                        acy = cy - a.y;
+                        acz = cz - a.z;
+                        if((acz * aby - acy * abz) * normalX + (acx * abz - acz * abx) * normalY + (acy * abx - acx * aby) * normalZ < 0)
                         {
-                           a = wrapper.vertex;
-                           b = wrapper.next != null ? wrapper.next.vertex : face.wrapper.vertex;
-                           abx = b.x - a.x;
-                           aby = b.y - a.y;
-                           abz = b.z - a.z;
-                           acx = cx - a.x;
-                           acy = cy - a.y;
-                           acz = cz - a.z;
-                           if((acz * aby - acy * abz) * normalX + (acx * abz - acz * abx) * normalY + (acy * abx - acx * aby) * normalZ >= 0)
-                           {
-                              continue;
-                           }
+                           break;
                         }
-                        if(wrapper == null)
-                        {
-                           return true;
-                        }
-                        break;
-                        wrapper = wrapper.next;
+                     }
+                     if(wrapper == null)
+                     {
+                        return true;
                      }
                   }
                }
