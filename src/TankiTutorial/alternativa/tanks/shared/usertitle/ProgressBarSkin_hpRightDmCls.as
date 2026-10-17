@@ -3,6 +3,7 @@ package alternativa.tanks.shared.usertitle
    import mx.core.BitmapAsset;
    
    [ExcludeClass]
+   [Embed(source="/_assets/70_ProgressBarSkin_hpRightDmCls.png")]
    public class ProgressBarSkin_hpRightDmCls extends BitmapAsset
    {
       
