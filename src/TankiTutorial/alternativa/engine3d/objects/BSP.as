@@ -1393,8 +1393,7 @@ package alternativa.engine3d.objects
          if(this.splitAnalysis && list.next != null)
          {
             bestSplits = 2147483647;
-            loop0:
-            for(face = list; face != null; )
+            for(face = list; face != null; face = face.next)
             {
                normalX = face.normalX;
                normalY = face.normalY;
@@ -1403,80 +1402,62 @@ package alternativa.engine3d.objects
                offsetMin = offset - this.threshold;
                offsetMax = offset + this.threshold;
                splits = 0;
-               f = list;
-               loop1:
-               while(true)
+               for(f = list; f != null; f = f.next)
                {
-                  if(f != null)
+                  if(f != face)
                   {
-                     if(f != face)
+                     w = f.wrapper;
+                     a = w.vertex;
+                     w = w.next;
+                     b = w.vertex;
+                     w = w.next;
+                     c = w.vertex;
+                     w = w.next;
+                     ao = a.x * normalX + a.y * normalY + a.z * normalZ;
+                     bo = b.x * normalX + b.y * normalY + b.z * normalZ;
+                     co = c.x * normalX + c.y * normalY + c.z * normalZ;
+                     behind = ao < offsetMin || bo < offsetMin || co < offsetMin;
+                     infront = ao > offsetMax || bo > offsetMax || co > offsetMax;
+                     for(; w != null; w = w.next)
                      {
-                        w = f.wrapper;
-                        a = w.vertex;
-                        w = w.next;
-                        b = w.vertex;
-                        w = w.next;
-                        c = w.vertex;
-                        w = w.next;
-                        ao = a.x * normalX + a.y * normalY + a.z * normalZ;
-                        bo = b.x * normalX + b.y * normalY + b.z * normalZ;
-                        co = c.x * normalX + c.y * normalY + c.z * normalZ;
-                        behind = ao < offsetMin || bo < offsetMin || co < offsetMin;
-                        infront = ao > offsetMax || bo > offsetMax || co > offsetMax;
-                        while(true)
+                        v = w.vertex;
+                        vo = v.x * normalX + v.y * normalY + v.z * normalZ;
+                        if(vo < offsetMin)
                         {
-                           if(w != null)
+                           behind = true;
+                           if(infront)
                            {
-                              v = w.vertex;
-                              vo = v.x * normalX + v.y * normalY + v.z * normalZ;
-                              if(vo < offsetMin)
-                              {
-                                 behind = true;
-                                 if(!infront)
-                                 {
-                                    continue;
-                                 }
-                              }
-                              else
-                              {
-                                 if(vo <= offsetMax)
-                                 {
-                                    continue;
-                                 }
-                                 infront = true;
-                                 if(!behind)
-                                 {
-                                    continue;
-                                 }
-                              }
+                              break;
                            }
-                           if(!(infront && behind))
+                        }
+                        else if(vo > offsetMax)
+                        {
+                           infront = true;
+                           if(behind)
                            {
-                              continue loop1;
+                              break;
                            }
-                           splits++;
-                           if(splits < bestSplits)
-                           {
-                              continue loop1;
-                           }
-                           w = w.next;
                         }
                      }
-                     continue;
-                  }
-                  if(splits < bestSplits)
-                  {
-                     splitter = face;
-                     bestSplits = splits;
-                     if(bestSplits == 0)
+                     if(infront && behind)
                      {
-                        break loop0;
+                        splits++;
+                        if(splits >= bestSplits)
+                        {
+                           break;
+                        }
                      }
                   }
-                  break;
-                  f = f.next;
                }
-               face = face.next;
+               if(splits < bestSplits)
+               {
+                  splitter = face;
+                  bestSplits = splits;
+                  if(bestSplits == 0)
+                  {
+                     break;
+                  }
+               }
             }
          }
          var splitterLast:Face = splitter;
