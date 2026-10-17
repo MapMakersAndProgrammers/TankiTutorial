@@ -1927,7 +1927,6 @@ package alternativa.engine3d.core
          var far:Number = this.farClipping;
          var needX:Boolean = c4 || c8;
          var needY:Boolean = c16 || c32;
-         loop0:
          for(var face:Face = list; face != null; face = next)
          {
             next = face.processNext;
@@ -1958,137 +1957,99 @@ package alternativa.engine3d.core
                if(az <= near || bz <= near || cz <= near)
                {
                   face.processNext = null;
+                  continue;
                }
-               else
+               for(w = d; w != null; w = w.next)
                {
-                  w = d;
-                  while(true)
+                  if(w.vertex.cameraZ <= near)
                   {
-                     if(w != null)
-                     {
-                        if(w.vertex.cameraZ > near)
-                        {
-                           continue;
-                        }
-                     }
-                     if(w != null)
-                     {
-                        face.processNext = null;
-                        continue loop0;
-                     }
-                     w = w.next;
+                     break;
                   }
                }
-               continue;
+               if(w != null)
+               {
+                  face.processNext = null;
+                  continue;
+               }
             }
             if(c2 && az >= far && bz >= far && cz >= far)
             {
-               w = d;
-               while(true)
+               for(w = d; w != null; w = w.next)
                {
-                  if(w != null)
+                  if(w.vertex.cameraZ < far)
                   {
-                     if(w.vertex.cameraZ >= far)
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(w == null)
-                  {
-                     face.processNext = null;
-                     continue loop0;
-                  }
-                  w = w.next;
                }
-               continue;
+               if(w == null)
+               {
+                  face.processNext = null;
+                  continue;
+               }
             }
             if(c4 && az <= -ax && bz <= -bx && cz <= -cx)
             {
-               w = d;
-               while(true)
+               for(w = d; w != null; w = w.next)
                {
-                  if(w != null)
+                  v = w.vertex;
+                  if(-v.cameraX < v.cameraZ)
                   {
-                     v = w.vertex;
-                     if(-v.cameraX >= v.cameraZ)
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(w == null)
-                  {
-                     face.processNext = null;
-                     continue loop0;
-                  }
-                  w = w.next;
                }
-               continue;
+               if(w == null)
+               {
+                  face.processNext = null;
+                  continue;
+               }
             }
             if(c8 && az <= ax && bz <= bx && cz <= cx)
             {
-               w = d;
-               while(true)
+               for(w = d; w != null; w = w.next)
                {
-                  if(w != null)
+                  v = w.vertex;
+                  if(v.cameraX < v.cameraZ)
                   {
-                     v = w.vertex;
-                     if(v.cameraX >= v.cameraZ)
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(w == null)
-                  {
-                     face.processNext = null;
-                     continue loop0;
-                  }
-                  w = w.next;
                }
-               continue;
+               if(w == null)
+               {
+                  face.processNext = null;
+                  continue;
+               }
             }
             if(c16 && az <= -ay && bz <= -by && cz <= -cy)
             {
-               w = d;
-               while(true)
+               for(w = d; w != null; w = w.next)
                {
-                  if(w != null)
+                  v = w.vertex;
+                  if(-v.cameraY < v.cameraZ)
                   {
-                     v = w.vertex;
-                     if(-v.cameraY >= v.cameraZ)
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(w == null)
-                  {
-                     face.processNext = null;
-                     continue loop0;
-                  }
-                  w = w.next;
                }
-               continue;
+               if(w == null)
+               {
+                  face.processNext = null;
+                  continue;
+               }
             }
             if(c32 && az <= ay && bz <= by && cz <= cy)
             {
-               w = d;
-               while(true)
+               for(w = d; w != null; w = w.next)
                {
-                  if(w != null)
+                  v = w.vertex;
+                  if(v.cameraY < v.cameraZ)
                   {
-                     v = w.vertex;
-                     if(v.cameraY >= v.cameraZ)
-                     {
-                        continue;
-                     }
+                     break;
                   }
-                  if(w == null)
-                  {
-                     face.processNext = null;
-                     continue loop0;
-                  }
-                  w = w.next;
                }
-               continue;
+               if(w == null)
+               {
+                  face.processNext = null;
+                  continue;
+               }
             }
             if(first != null)
             {
@@ -2156,7 +2117,6 @@ package alternativa.engine3d.core
          far = this.farClipping;
          needX = c4 || c8;
          needY = c16 || c32;
-         loop0:
          for(face = list; face != null; face = next)
          {
             next = face.processNext;
@@ -2187,27 +2147,21 @@ package alternativa.engine3d.core
             {
                if(az <= near && bz <= near && cz <= near)
                {
-                  w = d;
-                  while(true)
+                  for(w = d; w != null; w = w.next)
                   {
-                     if(w != null)
+                     if(w.vertex.cameraZ > near)
                      {
-                        if(w.vertex.cameraZ <= near)
-                        {
-                           continue;
-                        }
                         faceCulling |= 1;
+                        break;
                      }
-                     if(w == null)
-                     {
-                        face.processNext = null;
-                        continue loop0;
-                     }
-                     w = w.next;
                   }
-                  continue;
+                  if(w == null)
+                  {
+                     face.processNext = null;
+                     continue;
+                  }
                }
-               if(az > near && bz > near && cz > near)
+               else if(az > near && bz > near && cz > near)
                {
                   for(w = d; w != null; )
                   {
@@ -2228,27 +2182,21 @@ package alternativa.engine3d.core
             {
                if(az >= far && bz >= far && cz >= far)
                {
-                  w = d;
-                  while(true)
+                  for(w = d; w != null; w = w.next)
                   {
-                     if(w != null)
+                     if(w.vertex.cameraZ < far)
                      {
-                        if(w.vertex.cameraZ >= far)
-                        {
-                           continue;
-                        }
                         faceCulling |= 2;
+                        break;
                      }
-                     if(w == null)
-                     {
-                        face.processNext = null;
-                        continue loop0;
-                     }
-                     w = w.next;
                   }
-                  continue;
+                  if(w == null)
+                  {
+                     face.processNext = null;
+                     continue;
+                  }
                }
-               if(az < far && bz < far && cz < far)
+               else if(az < far && bz < far && cz < far)
                {
                   for(w = d; w != null; )
                   {
@@ -2269,28 +2217,22 @@ package alternativa.engine3d.core
             {
                if(az <= -ax && bz <= -bx && cz <= -cx)
                {
-                  w = d;
-                  while(true)
+                  for(w = d; w != null; w = w.next)
                   {
-                     if(w != null)
+                     v = w.vertex;
+                     if(-v.cameraX < v.cameraZ)
                      {
-                        v = w.vertex;
-                        if(-v.cameraX >= v.cameraZ)
-                        {
-                           continue;
-                        }
                         faceCulling |= 4;
+                        break;
                      }
-                     if(w == null)
-                     {
-                        face.processNext = null;
-                        continue loop0;
-                     }
-                     w = w.next;
                   }
-                  continue;
+                  if(w == null)
+                  {
+                     face.processNext = null;
+                     continue;
+                  }
                }
-               if(az > -ax && bz > -bx && cz > -cx)
+               else if(az > -ax && bz > -bx && cz > -cx)
                {
                   for(w = d; w != null; )
                   {
@@ -2312,28 +2254,22 @@ package alternativa.engine3d.core
             {
                if(az <= ax && bz <= bx && cz <= cx)
                {
-                  w = d;
-                  while(true)
+                  for(w = d; w != null; w = w.next)
                   {
-                     if(w != null)
+                     v = w.vertex;
+                     if(v.cameraX < v.cameraZ)
                      {
-                        v = w.vertex;
-                        if(v.cameraX >= v.cameraZ)
-                        {
-                           continue;
-                        }
                         faceCulling |= 8;
+                        break;
                      }
-                     if(w == null)
-                     {
-                        face.processNext = null;
-                        continue loop0;
-                     }
-                     w = w.next;
                   }
-                  continue;
+                  if(w == null)
+                  {
+                     face.processNext = null;
+                     continue;
+                  }
                }
-               if(az > ax && bz > bx && cz > cx)
+               else if(az > ax && bz > bx && cz > cx)
                {
                   for(w = d; w != null; )
                   {
@@ -2355,28 +2291,22 @@ package alternativa.engine3d.core
             {
                if(az <= -ay && bz <= -by && cz <= -cy)
                {
-                  w = d;
-                  while(true)
+                  for(w = d; w != null; w = w.next)
                   {
-                     if(w != null)
+                     v = w.vertex;
+                     if(-v.cameraY < v.cameraZ)
                      {
-                        v = w.vertex;
-                        if(-v.cameraY >= v.cameraZ)
-                        {
-                           continue;
-                        }
                         faceCulling |= 16;
+                        break;
                      }
-                     if(w == null)
-                     {
-                        face.processNext = null;
-                        continue loop0;
-                     }
-                     w = w.next;
                   }
-                  continue;
+                  if(w == null)
+                  {
+                     face.processNext = null;
+                     continue;
+                  }
                }
-               if(az > -ay && bz > -by && cz > -cy)
+               else if(az > -ay && bz > -by && cz > -cy)
                {
                   for(w = d; w != null; )
                   {
@@ -2398,28 +2328,22 @@ package alternativa.engine3d.core
             {
                if(az <= ay && bz <= by && cz <= cy)
                {
-                  w = d;
-                  while(true)
+                  for(w = d; w != null; w = w.next)
                   {
-                     if(w != null)
+                     v = w.vertex;
+                     if(v.cameraY < v.cameraZ)
                      {
-                        v = w.vertex;
-                        if(v.cameraY >= v.cameraZ)
-                        {
-                           continue;
-                        }
                         faceCulling |= 32;
+                        break;
                      }
-                     if(w == null)
-                     {
-                        face.processNext = null;
-                        continue loop0;
-                     }
-                     w = w.next;
                   }
-                  continue;
+                  if(w == null)
+                  {
+                     face.processNext = null;
+                     continue;
+                  }
                }
-               if(az > ay && bz > by && cz > cy)
+               else if(az > ay && bz > by && cz > cy)
                {
                   for(w = d; w != null; )
                   {

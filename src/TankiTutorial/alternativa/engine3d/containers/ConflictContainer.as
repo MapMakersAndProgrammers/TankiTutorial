@@ -103,203 +103,152 @@ package alternativa.engine3d.containers
          var positive:VG = null;
          var min:Number = NaN;
          var max:Number = NaN;
-         loop0:
-         for(var current:VG = geometry; current != null; )
+         for(var current:VG = geometry; current != null; current = current.next)
          {
             coord = current.boundMinX;
             coordMin = coord - this.threshold;
             coordMax = coord + this.threshold;
             outside = false;
-            compared = geometry;
-            loop1:
-            while(true)
+            for(compared = geometry; compared != null; compared = compared.next)
             {
-               if(compared != null)
+               if(current != compared)
                {
-                  if(current == compared)
-                  {
-                     continue;
-                  }
                   if(compared.boundMaxX <= coordMax)
                   {
                      outside = true;
-                     continue;
                   }
+                  else if(compared.boundMinX < coordMin)
+                  {
+                     break;
+                  }
+               }
+            }
+            if(compared == null && outside)
+            {
+               axisX = true;
+               axisY = false;
+               break;
+            }
+            coord = current.boundMaxX;
+            coordMin = coord - this.threshold;
+            coordMax = coord + this.threshold;
+            outside = false;
+            for(compared = geometry; compared != null; compared = compared.next)
+            {
+               if(current != compared)
+               {
                   if(compared.boundMinX >= coordMin)
                   {
-                     continue;
+                     outside = true;
                   }
-               }
-               if(compared == null && outside)
-               {
-                  axisX = true;
-                  axisY = false;
-                  break loop0;
-               }
-               coord = current.boundMaxX;
-               coordMin = coord - this.threshold;
-               coordMax = coord + this.threshold;
-               outside = false;
-               compared = geometry;
-               while(true)
-               {
-                  if(compared != null)
+                  else if(compared.boundMaxX > coordMax)
                   {
-                     if(current == compared)
-                     {
-                        continue;
-                     }
-                     if(compared.boundMinX >= coordMin)
-                     {
-                        outside = true;
-                        continue;
-                     }
-                     if(compared.boundMaxX <= coordMax)
-                     {
-                        continue;
-                     }
-                  }
-                  if(compared == null && outside)
-                  {
-                     axisX = true;
-                     axisY = false;
-                     break loop0;
-                  }
-                  coord = current.boundMinY;
-                  coordMin = coord - this.threshold;
-                  coordMax = coord + this.threshold;
-                  outside = false;
-                  compared = geometry;
-                  while(true)
-                  {
-                     if(compared != null)
-                     {
-                        if(current == compared)
-                        {
-                           continue;
-                        }
-                        if(compared.boundMaxY <= coordMax)
-                        {
-                           outside = true;
-                           continue;
-                        }
-                        if(compared.boundMinY >= coordMin)
-                        {
-                           continue;
-                        }
-                     }
-                     if(compared == null && outside)
-                     {
-                        axisX = false;
-                        axisY = true;
-                        break loop0;
-                     }
-                     coord = current.boundMaxY;
-                     coordMin = coord - this.threshold;
-                     coordMax = coord + this.threshold;
-                     outside = false;
-                     compared = geometry;
-                     while(true)
-                     {
-                        if(compared != null)
-                        {
-                           if(current == compared)
-                           {
-                              continue;
-                           }
-                           if(compared.boundMinY >= coordMin)
-                           {
-                              outside = true;
-                              continue;
-                           }
-                           if(compared.boundMaxY <= coordMax)
-                           {
-                              continue;
-                           }
-                        }
-                        if(compared == null && outside)
-                        {
-                           axisX = false;
-                           axisY = true;
-                           break loop0;
-                        }
-                        coord = current.boundMinZ;
-                        coordMin = coord - this.threshold;
-                        coordMax = coord + this.threshold;
-                        outside = false;
-                        compared = geometry;
-                        while(true)
-                        {
-                           if(compared != null)
-                           {
-                              if(current == compared)
-                              {
-                                 continue;
-                              }
-                              if(compared.boundMaxZ <= coordMax)
-                              {
-                                 outside = true;
-                                 continue;
-                              }
-                              if(compared.boundMinZ >= coordMin)
-                              {
-                                 continue;
-                              }
-                           }
-                           if(compared == null && outside)
-                           {
-                              axisX = false;
-                              axisY = false;
-                              break loop0;
-                           }
-                           coord = current.boundMaxZ;
-                           coordMin = coord - this.threshold;
-                           coordMax = coord + this.threshold;
-                           outside = false;
-                           compared = geometry;
-                           while(true)
-                           {
-                              if(compared != null)
-                              {
-                                 if(current == compared)
-                                 {
-                                    continue;
-                                 }
-                                 if(compared.boundMinZ >= coordMin)
-                                 {
-                                    outside = true;
-                                    continue;
-                                 }
-                                 if(compared.boundMaxZ <= coordMax)
-                                 {
-                                    continue;
-                                 }
-                              }
-                              if(compared == null && outside)
-                              {
-                                 axisX = false;
-                                 axisY = false;
-                                 break loop0;
-                              }
-                              break loop1;
-                              compared = compared.next;
-                           }
-                           break;
-                           compared = compared.next;
-                        }
-                        break;
-                        compared = compared.next;
-                     }
                      break;
-                     compared = compared.next;
                   }
-                  break;
-                  compared = compared.next;
                }
-               break;
-               compared = compared.next;
             }
-            current = current.next;
+            if(compared == null && outside)
+            {
+               axisX = true;
+               axisY = false;
+               break;
+            }
+            coord = current.boundMinY;
+            coordMin = coord - this.threshold;
+            coordMax = coord + this.threshold;
+            outside = false;
+            for(compared = geometry; compared != null; compared = compared.next)
+            {
+               if(current != compared)
+               {
+                  if(compared.boundMaxY <= coordMax)
+                  {
+                     outside = true;
+                  }
+                  else if(compared.boundMinY < coordMin)
+                  {
+                     break;
+                  }
+               }
+            }
+            if(compared == null && outside)
+            {
+               axisX = false;
+               axisY = true;
+               break;
+            }
+            coord = current.boundMaxY;
+            coordMin = coord - this.threshold;
+            coordMax = coord + this.threshold;
+            outside = false;
+            for(compared = geometry; compared != null; compared = compared.next)
+            {
+               if(current != compared)
+               {
+                  if(compared.boundMinY >= coordMin)
+                  {
+                     outside = true;
+                  }
+                  else if(compared.boundMaxY > coordMax)
+                  {
+                     break;
+                  }
+               }
+            }
+            if(compared == null && outside)
+            {
+               axisX = false;
+               axisY = true;
+               break;
+            }
+            coord = current.boundMinZ;
+            coordMin = coord - this.threshold;
+            coordMax = coord + this.threshold;
+            outside = false;
+            for(compared = geometry; compared != null; compared = compared.next)
+            {
+               if(current != compared)
+               {
+                  if(compared.boundMaxZ <= coordMax)
+                  {
+                     outside = true;
+                  }
+                  else if(compared.boundMinZ < coordMin)
+                  {
+                     break;
+                  }
+               }
+            }
+            if(compared == null && outside)
+            {
+               axisX = false;
+               axisY = false;
+               break;
+            }
+            coord = current.boundMaxZ;
+            coordMin = coord - this.threshold;
+            coordMax = coord + this.threshold;
+            outside = false;
+            for(compared = geometry; compared != null; compared = compared.next)
+            {
+               if(current != compared)
+               {
+                  if(compared.boundMinZ >= coordMin)
+                  {
+                     outside = true;
+                  }
+                  else if(compared.boundMaxZ > coordMax)
+                  {
+                     break;
+                  }
+               }
+            }
+            if(compared == null && outside)
+            {
+               axisX = false;
+               axisY = false;
+               break;
+            }
          }
          if(current != null)
          {
@@ -427,160 +376,129 @@ package alternativa.engine3d.containers
          var negative:VG = null;
          var middle:VG = null;
          var positive:VG = null;
-         loop0:
-         for(current = geometry; current != null; )
+         for(current = geometry; current != null; current = current.next)
          {
             if(current.viewAligned)
             {
                planeOffset = current.object.ml;
-               compared = geometry;
-               loop2:
-               while(true)
+               for(compared = geometry; compared != null; compared = compared.next)
                {
-                  if(compared != null)
+                  if(!compared.viewAligned)
                   {
-                     if(!compared.viewAligned)
+                     behind = false;
+                     infront = false;
+                     for(vertex = compared.boundVertexList; vertex != null; vertex = vertex.next)
                      {
-                        behind = false;
-                        infront = false;
-                        vertex = compared.boundVertexList;
-                        while(true)
+                        if(vertex.cameraZ > planeOffset)
                         {
-                           if(vertex != null)
+                           if(behind)
                            {
-                              if(vertex.cameraZ > planeOffset)
-                              {
-                                 if(!behind)
-                                 {
-                                    infront = true;
-                                    continue;
-                                 }
-                              }
-                              else if(!infront)
-                              {
-                                 behind = true;
-                                 continue;
-                              }
+                              break;
                            }
-                           if(vertex == null)
+                           infront = true;
+                        }
+                        else
+                        {
+                           if(infront)
                            {
-                              continue loop2;
+                              break;
                            }
-                           vertex = vertex.next;
+                           behind = true;
                         }
                      }
-                     continue;
+                     if(vertex != null)
+                     {
+                        break;
+                     }
                   }
-                  if(compared == null)
-                  {
-                     break loop0;
-                  }
+               }
+               if(compared == null)
+               {
                   break;
-                  compared = compared.next;
                }
             }
             else
             {
-               plane = current.boundPlaneList;
-               loop1:
-               while(true)
+               for(plane = current.boundPlaneList; plane != null; plane = plane.next)
                {
-                  if(plane != null)
+                  planeX = plane.cameraX;
+                  planeY = plane.cameraY;
+                  planeZ = plane.cameraZ;
+                  planeOffset = plane.offset;
+                  outside = false;
+                  for(compared = geometry; compared != null; compared = compared.next)
                   {
-                     planeX = plane.cameraX;
-                     planeY = plane.cameraY;
-                     planeZ = plane.cameraZ;
-                     planeOffset = plane.offset;
-                     outside = false;
-                     compared = geometry;
-                     loop3:
-                     while(true)
+                     if(current != compared)
                      {
-                        if(compared != null)
+                        behind = false;
+                        infront = false;
+                        if(compared.viewAligned)
                         {
-                           if(current != compared)
+                           for(wrapper = compared.faceStruct.wrapper; wrapper != null; wrapper = wrapper.next)
                            {
-                              behind = false;
-                              infront = false;
-                              if(compared.viewAligned)
+                              vertex = wrapper.vertex;
+                              if(vertex.cameraX * planeX + vertex.cameraY * planeY + vertex.cameraZ * planeZ >= planeOffset - this.threshold)
                               {
-                                 wrapper = compared.faceStruct.wrapper;
-                                 while(true)
+                                 if(behind)
                                  {
-                                    if(wrapper != null)
-                                    {
-                                       vertex = wrapper.vertex;
-                                       if(vertex.cameraX * planeX + vertex.cameraY * planeY + vertex.cameraZ * planeZ >= planeOffset - this.threshold)
-                                       {
-                                          if(!behind)
-                                          {
-                                             outside = true;
-                                             infront = true;
-                                             continue;
-                                          }
-                                       }
-                                       else if(!infront)
-                                       {
-                                          behind = true;
-                                          continue;
-                                       }
-                                    }
-                                    if(wrapper == null)
-                                    {
-                                       continue loop3;
-                                    }
-                                    wrapper = wrapper.next;
+                                    break;
                                  }
+                                 outside = true;
+                                 infront = true;
                               }
                               else
                               {
-                                 vertex = compared.boundVertexList;
-                                 while(true)
+                                 if(infront)
                                  {
-                                    if(vertex != null)
-                                    {
-                                       if(vertex.cameraX * planeX + vertex.cameraY * planeY + vertex.cameraZ * planeZ >= planeOffset - this.threshold)
-                                       {
-                                          if(!behind)
-                                          {
-                                             outside = true;
-                                             infront = true;
-                                             continue;
-                                          }
-                                       }
-                                       else if(!infront)
-                                       {
-                                          behind = true;
-                                          continue;
-                                       }
-                                    }
-                                    if(vertex == null)
-                                    {
-                                       continue loop3;
-                                    }
-                                    vertex = vertex.next;
+                                    break;
                                  }
+                                 behind = true;
                               }
                            }
-                           continue;
+                           if(wrapper != null)
+                           {
+                              break;
+                           }
                         }
-                        if(!(compared == null && outside))
+                        else
                         {
-                           continue loop1;
+                           for(vertex = compared.boundVertexList; vertex != null; vertex = vertex.next)
+                           {
+                              if(vertex.cameraX * planeX + vertex.cameraY * planeY + vertex.cameraZ * planeZ >= planeOffset - this.threshold)
+                              {
+                                 if(behind)
+                                 {
+                                    break;
+                                 }
+                                 outside = true;
+                                 infront = true;
+                              }
+                              else
+                              {
+                                 if(infront)
+                                 {
+                                    break;
+                                 }
+                                 behind = true;
+                              }
+                           }
+                           if(vertex != null)
+                           {
+                              break;
+                           }
                         }
-                        compared = compared.next;
                      }
-                     continue;
                   }
-                  if(plane != null)
+                  if(compared == null && outside)
                   {
-                     break loop0;
+                     break;
                   }
+               }
+               if(plane != null)
+               {
                   break;
-                  plane = plane.next;
                }
             }
-            current = current.next;
          }
          if(current != null)
          {
@@ -610,34 +528,26 @@ package alternativa.engine3d.containers
                   }
                   else
                   {
-                     vertex = geometry.boundVertexList;
-                     while(true)
+                     for(vertex = geometry.boundVertexList; vertex != null; vertex = vertex.next)
                      {
-                        if(vertex != null)
+                        o = vertex.cameraZ - planeOffset;
+                        if(o < -this.threshold)
                         {
-                           o = vertex.cameraZ - planeOffset;
-                           if(o < -this.threshold)
-                           {
-                              geometry.next = positive;
-                              positive = geometry;
-                           }
-                           else
-                           {
-                              if(o <= this.threshold)
-                              {
-                                 continue;
-                              }
-                              geometry.next = negative;
-                              negative = geometry;
-                           }
+                           geometry.next = positive;
+                           positive = geometry;
+                           break;
                         }
-                        if(vertex == null)
+                        if(o > this.threshold)
                         {
-                           geometry.next = middle;
-                           middle = geometry;
+                           geometry.next = negative;
+                           negative = geometry;
+                           break;
                         }
-                        break;
-                        vertex = vertex.next;
+                     }
+                     if(vertex == null)
+                     {
+                        geometry.next = middle;
+                        middle = geometry;
                      }
                   }
                   geometry = next;
@@ -650,67 +560,51 @@ package alternativa.engine3d.containers
                   next = geometry.next;
                   if(geometry.viewAligned)
                   {
-                     wrapper = geometry.faceStruct.wrapper;
-                     while(true)
+                     for(wrapper = geometry.faceStruct.wrapper; wrapper != null; wrapper = wrapper.next)
                      {
-                        if(wrapper != null)
+                        vertex = wrapper.vertex;
+                        o = vertex.cameraX * planeX + vertex.cameraY * planeY + vertex.cameraZ * planeZ - planeOffset;
+                        if(o < -this.threshold)
                         {
-                           vertex = wrapper.vertex;
-                           o = vertex.cameraX * planeX + vertex.cameraY * planeY + vertex.cameraZ * planeZ - planeOffset;
-                           if(o < -this.threshold)
-                           {
-                              geometry.next = negative;
-                              negative = geometry;
-                           }
-                           else
-                           {
-                              if(o <= this.threshold)
-                              {
-                                 continue;
-                              }
-                              geometry.next = positive;
-                              positive = geometry;
-                           }
+                           geometry.next = negative;
+                           negative = geometry;
+                           break;
                         }
-                        if(wrapper == null)
+                        if(o > this.threshold)
                         {
-                           geometry.next = middle;
-                           middle = geometry;
+                           geometry.next = positive;
+                           positive = geometry;
+                           break;
                         }
-                        break;
-                        wrapper = wrapper.next;
+                     }
+                     if(wrapper == null)
+                     {
+                        geometry.next = middle;
+                        middle = geometry;
                      }
                   }
                   else
                   {
-                     vertex = geometry.boundVertexList;
-                     while(true)
+                     for(vertex = geometry.boundVertexList; vertex != null; vertex = vertex.next)
                      {
-                        if(vertex != null)
+                        o = vertex.cameraX * planeX + vertex.cameraY * planeY + vertex.cameraZ * planeZ - planeOffset;
+                        if(o < -this.threshold)
                         {
-                           o = vertex.cameraX * planeX + vertex.cameraY * planeY + vertex.cameraZ * planeZ - planeOffset;
-                           if(o < -this.threshold)
-                           {
-                              geometry.next = negative;
-                              negative = geometry;
-                           }
-                           else
-                           {
-                              if(o <= this.threshold)
-                              {
-                                 continue;
-                              }
-                              geometry.next = positive;
-                              positive = geometry;
-                           }
+                           geometry.next = negative;
+                           negative = geometry;
+                           break;
                         }
-                        if(vertex == null)
+                        if(o > this.threshold)
                         {
-                           geometry.next = middle;
-                           middle = geometry;
+                           geometry.next = positive;
+                           positive = geometry;
+                           break;
                         }
-                        break;
-                        vertex = vertex.next;
+                     }
+                     if(vertex == null)
+                     {
+                        geometry.next = middle;
+                        middle = geometry;
                      }
                   }
                   geometry = next;
