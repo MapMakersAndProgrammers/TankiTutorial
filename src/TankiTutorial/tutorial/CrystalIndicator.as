@@ -14,7 +14,7 @@ package tutorial
       
       public function CrystalIndicator()
       {
-         var toRadians:int;
+         var frame:int;
          var stopClip:Function = null;
          this.crystalClass = CrystalIndicator_crystalClass;
          super();
@@ -25,11 +25,11 @@ package tutorial
          this.clip = new this.crystalClass() as MovieClip;
          addChild(this.clip);
          this.setValue(0);
-         toRadians = 0;
-         while(toRadians < 60)
+         frame = 0;
+         while(frame < 60)
          {
-            this.clip.addFrameScript(8 + 10 * toRadians,stopClip);
-            toRadians++;
+            this.clip.addFrameScript(8 + 10 * frame,stopClip);
+            frame++;
          }
       }
       

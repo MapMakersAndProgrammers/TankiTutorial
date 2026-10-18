@@ -67,33 +67,33 @@ package tutorial
       
       private static function getBrowserName() : String
       {
-         var toRadians:String = null;
+         var userAgent:String = null;
          var browserName:String = null;
          try
          {
-            toRadians = ExternalInterface.call("window.navigator.userAgent.toString");
+            userAgent = ExternalInterface.call("window.navigator.userAgent.toString");
             browserName = "[Unknown Browser]";
-            if(toRadians.indexOf("Safari") != -1)
+            if(userAgent.indexOf("Safari") != -1)
             {
                browserName = "Safari";
             }
-            if(toRadians.indexOf("Firefox") != -1)
+            if(userAgent.indexOf("Firefox") != -1)
             {
                browserName = "Firefox";
             }
-            if(toRadians.indexOf("Chrome") != -1)
+            if(userAgent.indexOf("Chrome") != -1)
             {
                browserName = "Chrome";
             }
-            if(toRadians.indexOf("MSIE") != -1)
+            if(userAgent.indexOf("MSIE") != -1)
             {
                browserName = "IE";
             }
-            if(toRadians.indexOf("Opera") != -1)
+            if(userAgent.indexOf("Opera") != -1)
             {
                browserName = "Opera";
             }
-            if(toRadians.indexOf("YaBrowser") != -1)
+            if(userAgent.indexOf("YaBrowser") != -1)
             {
                browserName = "Yandex";
             }
