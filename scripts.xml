@@ -1,0 +1,177 @@
+﻿<scripts>
+	<script name="HangarTutorial" dependencies="propmap,tutorial,viking,thunder">
+		<step>
+			<camera.matrix matrix="-0.79398,-0.60793,0,0,-0.19610,0.2561245858669281,-0.9465421438217163,0,0.5754351019859314,-0.7515427470207214,-0.32258009910583496,0,2244.8798828125,-4245.9716796875,457.0333251953125,1"/>
+			<player.spawn hull="viking" health="5000" turret="thunder" color="green" healthMultiplier="5"
+			              position="2999 -5169 110" orientation="1 0 0 0"/>
+		</step>
+		<step name="start_game">
+			<fadeout time="1"/>
+		</step>
+		<step name="start_move">
+			<movie.show id="help" align="BR"/>
+            <arrow-glow.show/>
+			<camera.controller/>
+			<player.controller/>
+			<adaptiveFPS/>
+			<wait time="3000"/>
+		</step>
+		<step name="hangar_door">
+			<waypoint x="2559" y="-3824" z="0"/>
+		</step>
+	</script>
+
+	<script name="ThunderTutorial" dependencies="hornet,enemy,tank_death,bonuses,skybox">
+		<step name="hangar_out">
+			<camera.angle t="0" speed="2"/>
+			<open-door/>
+			<waypoint x="2545" y="-2747" z="0"/>
+			<title/>
+			<player.canSuicide/>
+		</step>
+		<step name="first_enemy">
+            <arrow-glow.hide/>
+            <space-glow.show/>
+			<enemy hull="hornet" turret="thunder" color="red" startShootDelay="6700" position="327 -205 200" orientation="-0.7239 0 0 0.689950">
+				<waypoint x="1811" y="-178" z="0"/>
+				<waypoint x="2604" y="-1276" z="0"/>
+				<waypoint x="3101" y="-1343" z="0"/>
+			</enemy>
+		</step>
+		<step name="checkpoint_uphill">
+            <space-glow.hide/>
+			<waywall x1="960" y1="-1128" z1="0" x2="5571" y2="-1128" z2="0" indicatorX="3125" indicatorY="-1128" indicatorZ="0"/>
+		</step>
+		<step>
+			<camera.angle t="0.2" speed="2"/>
+			<!--close-door/-->
+			<wait time="1500"/>
+		</step>
+		<step name="checkpoint_downhill">
+            <waywall x1="2035" y1="2336" z1="0" x2="5114" y2="-235" z2="0" indicatorX="3462" indicatorY="1274" indicatorZ="-600"/>
+			<wait time="2000"/>
+		</step>
+	</script>
+
+	<script name="TwinsTutorial" dependencies="twins">
+		<step name="first_checkpoint">
+			<medicine x="4419.391" y="1243.220" z="-600.000"/>
+		</step>
+		<step name="second_checkpoint">
+            <waywall x1="6017" y1="2167" z1="0" x2="8571" y2="514" z2="0" indicatorX="7576" indicatorY="1379" indicatorZ="-1200"/>
+		</step>
+		<step name="2twins">
+			<enemy hull="hornet" turret="twins" color="blue" position="10238.4312 3171.4801 -1000" orientation="-0.7244 -0.0000 -0.0000 -0.689330">
+				<waypoint x="8382.665" y="3261.671" z="-1200.000"/>
+			</enemy>
+			 <enemy hull="hornet" turret="twins" color="blue" position="5063.1355 3927.6674 -1000" orientation="0.6641 0.0000 -0.0000 -0.747666">
+				<waypoint x="6740.683" y="3642.235" z="-1200.000"/>
+			</enemy>
+		</step>
+		<step>
+			<medicine x="1700.834" y="6758.536" z="-600.000"/>
+            <waywall x1="3730" y1="2990" z1="-600" x2="6376" y2="7203" z2="-600" indicatorX="5262.205" indicatorY="5471.109" indicatorZ="-1200.000"/>
+		</step>
+		<step name="change_to_twins">
+			<change turret="twins"/>
+		</step>
+		<step name="checkpoint_before_before_ambush">
+            <waywall x1="2938" y1="4026" z1="-600" x2="2774" y2="9995" z2="-600" indicatorX="2880.567" indicatorY="5814.860" indicatorZ="-600"/>
+		</step>
+		<step name="checkpoint_before_ambush">
+            <waywall x1="-959" y1="3867" z1="0." x2="4399" y2="10058" z2="0." indicatorX="1657.468" indicatorY="6905.437" indicatorZ="-600"/>
+		</step>
+		<step name="ambush">
+			<enemy hull="hornet" turret="twins" color="red" position="2999.0845 9712.5370 -450" orientation="0.7141 -0.0000 -0.0000 0.700060">
+				<waypoint x="1498.615" y="9769.365" z="-600.000"/>
+				<waypoint x="1245.631" y="9452.452" z="-600.000"/>
+			</enemy>
+			<enemy hull="viking" turret="thunder" color="red" position="-1346.8315 8633.0297 -450" orientation="-0.7266 -0.0000 0.0000 0.687084" data=" 4 1000 36 1333 32 200 0 300"/>
+		</step>
+		<step>
+			<medicine x="566.122" y="8976.391" z="-600.000"/>
+			<wait time="1500"/>
+		</step>
+	</script>
+
+	<script  name="FlamethrowerTutorial" dependencies="mammoth,flamethrower">
+		<step name="after_ambush">
+			<enemy hull="hornet" turret="flamethrower" color="blue" position="-1498.5966 13325.6089 85.5140" orientation="0.7292 0.0000 -0.0000 -0.684312" data="">
+				<waypoint x="712.178" y="13463.731" z="0.000"/>
+				<waypoint x="508.153" y="12693.879" z="0.000"/>
+			</enemy>
+            <waywall x1="-2545" y1="10368" z1="-600" x2="2011" y2="10409" z2="-600" indicatorX="229.684" indicatorY="10327.383" indicatorZ="-600"/>
+		</step>
+		<step name="after_flame">
+			<waypoint x="890" y="13381" z="0"/>
+		</step>
+		<step name="2thunders">
+			<enemy hull="viking" turret="thunder" color="red" startShootDelay="4500" position="2692 14784 83" orientation="0.6849 0.0018 0.0019 0.728625" data=" 4 227 20 1126 16 436 20 457 4 70 0 28"/>
+			<enemy hull="viking" turret="thunder" color="red" position="244 15247 82" orientation="-0.6598 -0.0000 0.0000 0.751476" data=" 4 338 36 1038 32 169 36 546 4 134 36 394 32 128 0 0"/>
+		</step>
+		<step>
+			<medicine x="2211.694" y="15811.613" z="0.000"/>
+            <waywall x1="2256" y1="17170" z1="0." x2="3607" y2="15163" z2="0." indicatorX="2783.215" indicatorY="16310.286" indicatorZ="0"/>
+		</step>
+		<step name="change_to_flamethrower">
+			<change turret="flamethrower"/>
+		</step>
+		<step>
+			<!-- Смена пушки на твинс -->
+		</step>
+		<step name="checkpoint_tunnel_start">
+            <waywall x1="5611" y1="17998" z1="600" x2="5570" y2="14411" z2="600" indicatorX="5873.779" indicatorY="17275.218" indicatorZ="600"/>
+		</step>
+		<step name="lemmings">
+			<!-- Волна -->
+			<camera.angle t="0" speed="2"/>
+			<enemy hull="hornet" turret="flamethrower" color="blue" position="15008.9413 14038.3884 1350" orientation="0.9995 0.0000 -0.0000 0.032939">
+				<waypoint x="14790.109" y="16593.459" z="1200.000"/>
+				<waypoint x="6896.951" y="17885.360" z="600.000"/>
+			</enemy>
+			<enemy hull="hornet" turret="flamethrower" color="blue" position="11466.9556 14680.1486 1350" orientation="0.9998 -0.0000 0.0000 -0.018224">
+				<waypoint x="11554.470" y="17276.381" z="600.000"/>
+				<waypoint x="5747.934" y="17251.035" z="600.000"/>
+			</enemy>
+		</step>
+		<step name="checkpoint_before_jump">
+            <waywall x1="14576" y1="14739" z1="1200" x2="17613" y2="15995" z2="1200" indicatorX="16251.888" indicatorY="15520.662" indicatorZ="1200.000"/>
+			<camera.angle t="0.2" speed="2"/>
+		</step>
+		<step name="checkpoint_jump">
+			<change hull="hornet"/>
+            <waywall x1="16885" y1="10524" z1="1492" x2="15617" y2="10525" z2="1492" indicatorX="16252.701" indicatorY="10515.382" indicatorZ="1494.873"/>
+		</step>
+		<step name="checkpoint_landed">
+            <waywall x1="16852" y1="5890" z1="0." x2="14869" y2="8234" z2="600" indicatorX="16233.522" indicatorY="6267.677" indicatorZ="0"/>
+		</step>
+		<step name="checkpoint_before_boss">
+            <waywall x1="11500" y1="4611" z1="376" x2="15546" y2="2039" z2="0." indicatorX="13884.407" indicatorY="3158.990" indicatorZ="0"/>
+		</step>
+	</script>
+
+    <script  name="Boss" dependencies="finish,sounds">
+        <step name="big_bad_boss">
+            <change hull="mammoth" turret="thunder"/>
+            <medicine x="14932.346" y="-195.838" z="0.000"/>
+            <medicine x="9986.021" y="284.808" z="0.000"/>
+            <medicine x="12163.092" y="6325.466" z="0.000"/>
+            <medicine x="15966.564" y="5922.429" z="0.000"/>
+            <enemy required="true" hull="mammoth" health="1000" cycled="true" startShootDelay="6000" turret="thunder" color="black"
+                   position="10694.7103 73.1270 150" orientation="-0.9995 0.0000 -0.0000 -0.030109">
+                <waypoint x="10891.869" y="1445.657" z="0.000"/>
+                <waypoint x="12478.201" y="2112.713" z="0.000"/>
+                <waypoint x="12525.828" y="6134.378" z="0.000"/>
+                <waypoint x="15044.010" y="6004.161" z="0.000"/>
+                <waypoint x="14966.048" y="2854.417" z="0.000"/>
+                <waypoint x="14771.965" y="-202.223" z="0.000"/>
+                <waypoint x="10489.882" y="-370.340" z="0.000"/>
+            </enemy>
+        </step>
+        <step>
+              <movie.hide/>
+              <bitmap.hide/>
+        </step>
+    </script>
+
+</scripts>
